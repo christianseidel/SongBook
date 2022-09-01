@@ -21,14 +21,17 @@ public class SongCollectionService {
     }
 
     public void addCollection(Path path, String nextFile) {
-
         SongCollection additionalCollection = new SongCollection(path, nextFile);
-
         for (int i = 0; i < additionalCollection.getLength(); i++) {
             String next = additionalCollection.getSingleLine(i);
             collection.addSingleLine(next);
         }
-
     }
 
+    public String findTitle(String string) {
+        collection.findTitle(string);
+        String title = "noch nicht";
+
+        return title;
+    }
 }

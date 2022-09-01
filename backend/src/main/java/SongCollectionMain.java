@@ -7,15 +7,17 @@ public class SongCollectionMain {
 
         Path path = Paths.get("backend\\src\\main\\java\\source-files");
         SongCollectionService songCollection = new SongCollectionService(path);
-
+/*
         System.out.println("\n" + songCollection.getSingleLine(108));
         System.out.println("\nTotal number of songs listed: " + songCollection.getLength());
-
+*/
         songCollection.addCollection(path, "Liederbuecher");
-
+/*
         System.out.println("\n" + songCollection.getSingleLine(731));
         System.out.println("\nTotal number of songs listed: " + songCollection.getLength());
-
+*/
+        songCollection.findTitle("wasser" +
+                "");
     }
 
 }

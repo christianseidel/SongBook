@@ -5,7 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
+import java.util.*;
 
 public class SongCollection {
 
@@ -35,6 +35,19 @@ public class SongCollection {
 
     public int getLength() {
         return songCollection.size();
+    }
+
+    public String findTitle(String string) {
+
+        List<String> result = songCollection.stream()
+                .filter(element -> element.toLowerCase().contains(string.toLowerCase()))
+                .toList();
+
+        for (String s : result) {
+            System.out.println(s);
+        }
+
+        return "fertig";
     }
 
 }

@@ -38,7 +38,7 @@ public class SongCollectionServiceTest {
 
     @Test
     void shouldAddOneTitle() {
-        String newTitle = "Never to be Heard Song; The Daily Ukulele (Yellow)";
+        String newTitle = "Never to be Heard Song; The Daily Ukulele (Green)";
         int collectionLength = service.getLength();
         service.addSingleLine(newTitle);
         assertEquals(collectionLength + 1, service.getLength());
