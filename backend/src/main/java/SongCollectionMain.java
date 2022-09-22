@@ -10,7 +10,6 @@ public class SongCollectionMain {
 
         Path path = Paths.get("backend\\src\\main\\java\\source-files");
         SongCollectionService collectionService = new SongCollectionService(path, "TheDailyUkulele");
-        collectionService.addCollection(path, "serviceTest_WrongPageFormat");
 /*
         System.out.println("\n" + collectionService.getSingleLine(108));
         System.out.println("\nTotal number of songs listed: " + collectionService.getLength());
@@ -21,9 +20,13 @@ public class SongCollectionMain {
         System.out.println("\nTotal number of songs listed: " + collectionService.getLength());
 */
 
-        List<Reference> result = collectionService.getReferenceBySearchWord("greensleeves");
+        List<Reference> result = collectionService.getReferenceBySearchWord("blowin");
         for (Reference reference : result) {
-            System.out.println(reference.title);
+            if (reference.page > 0) {
+                System.out.println(reference.title + ", " + reference.volume + ", " + reference.page);
+            } else {
+                System.out.println(reference.title + ", " + reference.volume);
+            }
         }
     }
 
