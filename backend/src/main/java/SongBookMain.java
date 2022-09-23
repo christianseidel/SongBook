@@ -34,7 +34,7 @@ public class SongBookMain {
         }
 
         if (result.size() == 0) {
-            System.out.println("\nEs wurde kein Songtitel mit diesem Suchwort gefunden.");
+            System.out.println("\nEs wurde kein Titel mit diesem Suchwort gefunden.");
         }
     }
 

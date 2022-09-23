@@ -1,3 +1,4 @@
+import collections.exceptions.FileNotFoundException;
 import collections.exceptions.IllegalPageFormatException;
 import collections.exceptions.IllegalReferenceVolumeException;
 import collections.models.Reference;
@@ -22,17 +23,6 @@ public class SongCollectionServiceTest {
     @BeforeEach
     public void initEach() {
         this.service = new SongCollectionService(path, "TheDailyUkulele");
-    }
-
-    private final ByteArrayOutputStream out = new ByteArrayOutputStream();
-    private final ByteArrayOutputStream err = new ByteArrayOutputStream();
-    private final PrintStream originalOut = System.out;
-    private final PrintStream originalErr = System.err;
-
-    @BeforeEach
-    public void setStreams() {
-        System.setOut(new PrintStream(out));
-        System.setErr(new PrintStream(err));
     }
 
     @Test
@@ -85,10 +75,13 @@ public class SongCollectionServiceTest {
     }
 
     @Test
-    void shouldThrowNoSuchFileException() {
-        new SongCollection(path, "gehtGarNicht");
-        String result = err.toString();
-        assertEquals("NoSuchFileException: Die Datei wurde nicht gefunden.\r\n", result);
+    void shouldThrowFileNotFoundException() {
+        Exception exception = Assertions.assertThrows(FileNotFoundException.class,
+                ()-> {
+                    new SongCollection(path, "MichGibtsNicht");
+                });
+        assertEquals("FileNotFoundException", exception.getClass().getSimpleName());
+        assertEquals("Die Datei \"MichGibtsNicht\" wurde nicht gefunden.", exception.getMessage());
     }
 
     @Test
@@ -109,11 +102,5 @@ public class SongCollectionServiceTest {
                 });
         assertEquals("IllegalPageFormatException", exception.getClass().getSimpleName());
         assertEquals("Die Zeichenfolge \" ab12\" in der Liedersammlung \"serviceTest_WrongPageFormat\" ist keine gültige Seitenangabe.", exception.getMessage());
-    }
-
-    @AfterEach
-    public void restoreInitialStreams() {
-        System.setOut(originalOut);
-        System.setErr(originalErr);
     }
 }

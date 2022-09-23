@@ -1,3 +1,4 @@
+import collections.exceptions.FileNotFoundException;
 import collections.exceptions.IllegalPageFormatException;
 import collections.exceptions.IllegalReferenceVolumeException;
 import collections.models.Reference;
@@ -69,14 +70,14 @@ public class SongCollection {
                 .toList();
     }
 
-    private List<String> importList(Path path, String fileName) {
+    private List<String> importList(Path path, String fileName) throws FileNotFoundException {
         Path finalPath = Paths.get(path + "\\" + fileName + "_import.txt");
         List<String> listOfSongs = List.of();
         try {
             listOfSongs = Files.readAllLines(finalPath, StandardCharsets.UTF_16BE);
             return listOfSongs;
         } catch (NoSuchFileException e) {
-            System.err.println(e.getClass().getSimpleName() + ": Die Datei wurde nicht gefunden.");
+            throw new FileNotFoundException(fileName);
         } catch (MalformedInputException e) {
             System.err.println(e.getClass().getSimpleName() + ": Die Datei \"" + fileName + "\" wurde gefunden, kann aber nicht gelesen werden. Stellen Sie sicher, dass sie in der Codierung \"UTF-16 BE\" gespeichert wurde.");
         } catch (IOException e) {
