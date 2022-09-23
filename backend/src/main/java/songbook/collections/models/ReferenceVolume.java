@@ -1,4 +1,4 @@
-package collections.models;
+package songbook.collections.models;
 
 public enum ReferenceVolume {
     TheDailyUkulele_Yellow,

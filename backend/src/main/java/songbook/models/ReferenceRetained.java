@@ -1,6 +1,6 @@
-package models;
+package songbook.models;
 
-import collections.models.ReferenceVolume;
+import songbook.collections.models.ReferenceVolume;
 
 public class ReferenceRetained {
     public String title;

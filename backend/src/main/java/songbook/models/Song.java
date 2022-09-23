@@ -1,7 +1,4 @@
-package models;
-
-import collections.models.Reference;
-import collections.models.ReferenceVolume;
+package songbook.models;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,7 @@
-import collections.models.Reference;
+package songbook;
+
+import songbook.collections.SongCollectionService;
+import songbook.collections.models.Reference;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -9,7 +12,7 @@ public class SongBookMain {
 
     public static void main(String[] args) {
 
-        Path path = Paths.get("backend\\src\\main\\java\\collections\\source-files");
+        Path path = Paths.get("backend\\src\\main\\java\\songbook\\collections\\source-files");
         SongCollectionService collectionService = new SongCollectionService(path, "TheDailyUkulele");
 /*
         System.out.println("\n" + collectionService.getSingleLine(108));
@@ -17,8 +20,6 @@ public class SongBookMain {
 */
         collectionService.addCollection(path, "Liederbuecher_a");
         collectionService.addCollection(path, "Liederbuecher_b");
-
-        collectionService.addCollection(path, "serviceTest_EmptyFile");
 
 /*
         System.out.println("\n" + collectionService.getSingleLine(731));

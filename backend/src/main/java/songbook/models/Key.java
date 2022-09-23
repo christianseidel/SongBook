@@ -1,4 +1,4 @@
-package models;
+package songbook.models;
 
 public enum Key {
     C,

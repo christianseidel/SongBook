@@ -1,6 +1,8 @@
-import collections.exceptions.*;
-import collections.models.Reference;
-import collections.models.ReferenceVolume;
+package songbook.collections;
+
+import songbook.collections.exceptions.*;
+import songbook.collections.models.Reference;
+import songbook.collections.models.ReferenceVolume;
 
 import java.io.IOException;
 import java.nio.charset.MalformedInputException;
@@ -11,12 +13,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
-import static collections.models.ReferenceVolume.*;
+import static songbook.collections.models.ReferenceVolume.*;
 
 public class SongCollection {
 
-    private ArrayList<Reference> songCollection;
-
+    private final ArrayList<Reference> songCollection;
     public SongCollection(Path path, String fileName) {
         List<String> listOfSongs = importList(path, fileName);
         ArrayList<Reference> collection = new ArrayList<>();
@@ -40,15 +41,12 @@ public class SongCollection {
         }
         this.songCollection = collection;
     }
-
     public Reference getReferenceByIndex(int index) {
         return songCollection.get(index);
     }
-
     public void addSingleReference(String title) {
         songCollection.add(new Reference(title));
     }
-
     public void addSingleReference(String title, short page) {
         songCollection.add(new Reference(title, page));
     }
@@ -56,18 +54,15 @@ public class SongCollection {
     public void addSingleReference(Reference item) {
         songCollection.add(item);
     }
-
     public int getLength() {
         return songCollection.size();
     }
-
     public List<Reference> getReferenceBySearchWord(String string) {
         return songCollection.stream()
                 .filter(element -> element.title.toLowerCase()
                         .contains(string.toLowerCase()))
                 .toList();
     }
-
     private List<String> importList(Path path, String fileName) throws FileNotFoundException {
         Path finalPath = Paths.get(path + "\\" + fileName + "_import.txt");
         List<String> listOfSongs = List.of();
@@ -85,7 +80,6 @@ public class SongCollection {
             throw new UnableToLoadFileException();
         }
     }
-
     private ReferenceVolume mapReferenceVolume(String proposal) {
         String trimmedProposal = proposal.toLowerCase().trim();
         return switch (trimmedProposal) {

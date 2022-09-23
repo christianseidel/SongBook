@@ -1,4 +1,4 @@
-package collections.exceptions;
+package songbook.collections.exceptions;
 
 public class MalformedFileException extends RuntimeException {
 

@@ -1,12 +1,11 @@
-import collections.exceptions.*;
-import collections.models.Reference;
-import org.junit.jupiter.api.AfterEach;
+import songbook.collections.SongCollection;
+import songbook.collections.SongCollectionService;
+import songbook.collections.exceptions.*;
+import songbook.collections.models.Reference;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -16,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class SongCollectionServiceTest {
 
     SongCollectionService service;
-    Path path = Paths.get("src\\main\\java\\collections\\source-files");
+    Path path = Paths.get("src\\main\\java\\songbook\\collections\\source-files");
 
     @BeforeEach
     public void initEach() {
