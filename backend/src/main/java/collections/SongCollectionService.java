@@ -1,4 +1,7 @@
-import models.Reference;
+package collections;
+
+import collections.SongCollection;
+import collections.models.Reference;
 
 import java.nio.file.Path;
 import java.util.List;

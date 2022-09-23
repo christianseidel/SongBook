@@ -1,26 +1,30 @@
-import models.Reference;
+import collections.SongCollectionService;
+import collections.models.Reference;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Scanner;
 
-public class SongCollectionMain {
+public class SongBookMain {
 
     public static void main(String[] args) {
 
-        Path path = Paths.get("backend\\src\\main\\java\\source-files");
+        Path path = Paths.get("backend\\src\\main\\java\\collections\\source-files");
         SongCollectionService collectionService = new SongCollectionService(path, "TheDailyUkulele");
 /*
         System.out.println("\n" + collectionService.getSingleLine(108));
         System.out.println("\nTotal number of songs listed: " + collectionService.getLength());
 */
         collectionService.addCollection(path, "Liederbuecher_a");
+        collectionService.addCollection(path, "serviceTest_WrongVolume");
 /*
         System.out.println("\n" + collectionService.getSingleLine(731));
         System.out.println("\nTotal number of songs listed: " + collectionService.getLength());
 */
+        String searchWord = new Scanner(System.in).nextLine();
+        List<Reference> result = collectionService.getReferenceBySearchWord(searchWord);
 
-        List<Reference> result = collectionService.getReferenceBySearchWord("blowin");
         for (Reference reference : result) {
             if (reference.page > 0) {
                 System.out.println(reference.title + ", " + reference.volume + ", " + reference.page);

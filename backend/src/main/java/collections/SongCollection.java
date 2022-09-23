@@ -1,5 +1,9 @@
-import models.Reference;
-import models.ReferenceVolume;
+package collections;
+
+import collections.exceptions.IllegalPageFormatException;
+import collections.exceptions.IllegalReferenceVolumeException;
+import collections.models.Reference;
+import collections.models.ReferenceVolume;
 
 import java.io.IOException;
 import java.nio.charset.MalformedInputException;
@@ -10,7 +14,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
-import static models.ReferenceVolume.*;
+import static collections.models.ReferenceVolume.*;
 
 public class SongCollection {
 
@@ -25,16 +29,14 @@ public class SongCollection {
             Reference item = new Reference(elements[0]);
             try {
                 item.volume = mapReferenceVolume(elements[1]);
-            } catch (IllegalArgumentException e) {
-                System.err.println(e.getClass().getSimpleName() + ": " + e.getMessage());
+            } catch (IllegalReferenceVolumeException e) {
+                throw e;
             }
             if (elements.length > 2) {
                 try {
                     item.page = Short.parseShort(elements[2].trim());
-                } catch (NumberFormatException e) {
-                    throw new IllegalArgumentException("Die Zeichenfolge \""
-                            + elements[2] + "\" in der Liedersammlung \""
-                            + fileName + "\" ist keine gültige Seitenangabe.");
+                } catch (IllegalArgumentException e) {
+                    throw new IllegalPageFormatException(elements[2], fileName);
                 }
             }
             collection.add(item);
@@ -87,9 +89,9 @@ public class SongCollection {
         // What happens if file is empty?
     }
 
-    private ReferenceVolume mapReferenceVolume(String propsal) throws IllegalArgumentException {
-        propsal = propsal.toLowerCase().trim();
-        return switch (propsal) {
+    private ReferenceVolume mapReferenceVolume(String proposal) {
+        String trimmedProposal = proposal.toLowerCase().trim();
+        return switch (trimmedProposal) {
             case "the daily ukulele (yellow)" -> TheDailyUkulele_Yellow;
             case "the daily ukulele (blue)" -> TheDailyUkulele_Blue;
             case "liederbuch" -> Liederbuch_1;
@@ -107,8 +109,7 @@ public class SongCollection {
             case "liederzug" -> Liederzug_13;
             case "liederwelt" -> Liederwelt_14;
             case "liederfest" -> Liederfest_15;
-            default -> throw new IllegalArgumentException("Die Liedersammlung \""
-                    + propsal + "\" ist nicht bekannt.");
+            default -> throw new IllegalReferenceVolumeException(proposal.trim());
         };
     }
 }

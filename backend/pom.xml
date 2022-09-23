@@ -4,12 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.github.christianseidel</groupId>
-        <artifactId>00-song-library-parent</artifactId>
+        <artifactId>0_song-library-parent</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <artifactId>00-song-library-backend</artifactId>
+    <artifactId>0_song-library-backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>00-song-library-backend</name>
+    <name>0_song-library-backend</name>
     <description>Library of Songs</description>
     <dependencies>
         <dependency>

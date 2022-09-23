@@ -1,4 +1,4 @@
-package models;
+package collections.models;
 
 public enum ReferenceVolume {
     TheDailyUkulele_Yellow,

@@ -1,5 +1,8 @@
-import models.Reference;
-import models.ReferenceVolume;
+import collections.SongCollection;
+import collections.SongCollectionService;
+import collections.exceptions.IllegalPageFormatException;
+import collections.exceptions.IllegalReferenceVolumeException;
+import collections.models.Reference;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class SongCollectionServiceTest {
 
     SongCollectionService service;
-    Path path = Paths.get("src\\main\\java\\source-files");
+    Path path = Paths.get("src\\main\\java\\collections\\source-files");
 
     @BeforeEach
     public void initEach() {
@@ -91,18 +94,22 @@ public class SongCollectionServiceTest {
     }
 
     @Test
-    void shouldThrowNoSuchVolumeException() {
-        service.addCollection(path, "serviceTest_WrongVolume");
-        String result = err.toString();
-        assertEquals("IllegalArgumentException: Die Liedersammlung \"the daily ukulele (green)\" ist nicht bekannt.\r\n", result);
+    void shouldThrowIllegalReferenceVolumeException() {
+        Exception exception = Assertions.assertThrows(IllegalReferenceVolumeException.class,
+                () -> {
+                    service.addCollection(path, "serviceTest_WrongVolume");
+                });
+        assertEquals("IllegalReferenceVolumeException", exception.getClass().getSimpleName());
+        assertEquals("Die Liedersammlung \"The Daily Ukulele (Green)\" ist nicht bekannt.", exception.getMessage());
     }
 
     @Test
-    void shouldThrowWrongPageFormatException() {
-        Exception exception = Assertions.assertThrows(IllegalArgumentException.class,
+    void shouldThrowIllegalPageFormatException() {
+        Exception exception = Assertions.assertThrows(IllegalPageFormatException.class,
                 () -> {
                     service.addCollection(path, "serviceTest_WrongPageFormat");
                 });
+        assertEquals("IllegalPageFormatException", exception.getClass().getSimpleName());
         assertEquals("Die Zeichenfolge \" ab12\" in der Liedersammlung \"serviceTest_WrongPageFormat\" ist keine gültige Seitenangabe.", exception.getMessage());
     }
 

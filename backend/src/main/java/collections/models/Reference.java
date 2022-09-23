@@ -1,10 +1,11 @@
-package models;
+package collections.models;
 
 public class Reference {
 
     public String title;
-    public short page;
     public ReferenceVolume volume;
+    public short page;
+    public String author;
 
     public Reference(String title) {
         this.title = title;
