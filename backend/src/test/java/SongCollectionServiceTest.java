@@ -1,6 +1,4 @@
-import collections.exceptions.FileNotFoundException;
-import collections.exceptions.IllegalPageFormatException;
-import collections.exceptions.IllegalReferenceVolumeException;
+import collections.exceptions.*;
 import collections.models.Reference;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -101,6 +99,30 @@ public class SongCollectionServiceTest {
                     service.addCollection(path, "serviceTest_WrongPageFormat");
                 });
         assertEquals("IllegalPageFormatException", exception.getClass().getSimpleName());
-        assertEquals("Die Zeichenfolge \" ab12\" in der Liedersammlung \"serviceTest_WrongPageFormat\" ist keine gültige Seitenangabe.", exception.getMessage());
+        assertEquals("Die Zeichenfolge \" ab12\" in der Liedersammlung \"serviceTest_WrongPageFormat\" " +
+                "ist keine gültige Seitenangabe.", exception.getMessage());
     }
+
+    @Test
+    void shouldThrowMalformedFileException() {
+        Exception exception = Assertions.assertThrows(MalformedFileException.class,
+                () -> {
+                    service.addCollection(path, "serviceTest_WrongFileFormat");
+                });
+        assertEquals("MalformedFileException", exception.getClass().getSimpleName());
+        assertEquals("Die Datei \"serviceTest_WrongFileFormat\" wurde gefunden,\n\tkann aber nicht gelesen " +
+                "werden. Stellen Sie sicher, dass sie in der Codierung \"UTF-16 BE\" gespeichert wurde!",
+                exception.getMessage());
+    }
+
+    @Test
+    void shouldThrowEmptyFileException() {
+        Exception exception = Assertions.assertThrows(EmptyFileException.class,
+                () -> {
+                    service.addCollection(path, "serviceTest_EmptyFile");
+                });
+        assertEquals("EmptyFileException", exception.getClass().getSimpleName());
+        assertEquals("Die Datei \"serviceTest_EmptyFile\" ist leer.", exception.getMessage());
+    }
+
 }

@@ -1,6 +1,4 @@
-import collections.exceptions.FileNotFoundException;
-import collections.exceptions.IllegalPageFormatException;
-import collections.exceptions.IllegalReferenceVolumeException;
+import collections.exceptions.*;
 import collections.models.Reference;
 import collections.models.ReferenceVolume;
 
@@ -75,17 +73,17 @@ public class SongCollection {
         List<String> listOfSongs = List.of();
         try {
             listOfSongs = Files.readAllLines(finalPath, StandardCharsets.UTF_16BE);
+            if (listOfSongs.size() == 1 && listOfSongs.get(0).length() == 1) {
+                throw new EmptyFileException(fileName);
+            }
             return listOfSongs;
         } catch (NoSuchFileException e) {
             throw new FileNotFoundException(fileName);
         } catch (MalformedInputException e) {
-            System.err.println(e.getClass().getSimpleName() + ": Die Datei \"" + fileName + "\" wurde gefunden, kann aber nicht gelesen werden. Stellen Sie sicher, dass sie in der Codierung \"UTF-16 BE\" gespeichert wurde.");
+            throw new MalformedFileException(fileName);
         } catch (IOException e) {
-            System.err.println(e.getClass().getSimpleName() + ": Die Datei konnte nicht geladen werden.");
+            throw new UnableToLoadFileException();
         }
-        return listOfSongs;
-        // Todo:
-        // What happens if file is empty?
     }
 
     private ReferenceVolume mapReferenceVolume(String proposal) {

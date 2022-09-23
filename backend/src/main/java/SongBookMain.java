@@ -17,11 +17,14 @@ public class SongBookMain {
 */
         collectionService.addCollection(path, "Liederbuecher_a");
         collectionService.addCollection(path, "Liederbuecher_b");
+
+        collectionService.addCollection(path, "serviceTest_EmptyFile");
+
 /*
         System.out.println("\n" + collectionService.getSingleLine(731));
         System.out.println("\nTotal number of songs listed: " + collectionService.getLength());
 */
-        System.out.print("\nBitte gib ein Suchwort ein: " );
+        System.out.print("\nBitte gib ein Suchwort ein: ");
         String searchWord = new Scanner(System.in).nextLine();
         List<Reference> result = collectionService.getReferenceBySearchWord(searchWord);
 
@@ -37,5 +40,4 @@ public class SongBookMain {
             System.out.println("\nEs wurde kein Titel mit diesem Suchwort gefunden.");
         }
     }
-
 }
