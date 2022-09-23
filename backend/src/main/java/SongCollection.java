@@ -1,5 +1,3 @@
-package collections;
-
 import collections.exceptions.IllegalPageFormatException;
 import collections.exceptions.IllegalReferenceVolumeException;
 import collections.models.Reference;
@@ -104,11 +102,11 @@ public class SongCollection {
             case "liedersonne" -> Liedersonne_8;
             case "liederstern" -> Liederstern_9;
             case "liederstrauss" -> Liederstrauss_10;
-            case "liederballon" -> Liederballon_11;
-            case "liedergarten" -> Liedergarten_12;
-            case "liederzug" -> Liederzug_13;
-            case "liederwelt" -> Liederwelt_14;
-            case "liederfest" -> Liederfest_15;
+            case "liederballon_11" -> Liederballon_11;
+            case "liedergarten_12" -> Liedergarten_12;
+            case "liederzug_13" -> Liederzug_13;
+            case "liederwelt_14" -> Liederwelt_14;
+            case "liederfest_15" -> Liederfest_15;
             default -> throw new IllegalReferenceVolumeException(proposal.trim());
         };
     }

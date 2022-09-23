@@ -9,9 +9,9 @@
 		<relativePath/>
 	</parent>
 	<groupId>com.github.christianseidel</groupId>
-	<artifactId>0_song-library-parent</artifactId>
+	<artifactId>0_SongBook-parent</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>0_song-library-parent</name>
+	<name>0_SongBook-parent</name>
 	<packaging>pom</packaging>
 	
 	<properties>
