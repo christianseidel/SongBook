@@ -1,5 +1,7 @@
+package songbook;
+
 import songbook.collections.SongCollection;
-import songbook.collections.SongCollectionService;
+import songbook.collections.ReferencesService;
 import songbook.collections.exceptions.*;
 import songbook.collections.models.Reference;
 import org.junit.jupiter.api.Assertions;
@@ -12,17 +14,18 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class SongCollectionServiceTest {
-
-    SongCollectionService service;
+public class ReferencesServiceTest {
+/*
+    ReferencesService service;
     Path path = Paths.get("src\\main\\java\\songbook\\collections\\source-files");
 
     @BeforeEach
     public void initEach() {
-        this.service = new SongCollectionService(path, "TheDailyUkulele");
+        this.service = new ReferencesService(path, "TheDailyUkulele");
     }
 
     @Test
+    @Disabled // siehe JavaBootcamp, 76
     void shouldReturnSongTitleFoundByIndex() {
         Reference reference = service.getReferenceByIndex(108);
         assertEquals("Can't Help Falling In Love; TheDailyUkulele_Yellow", reference.title + "; " + reference.volume);
@@ -123,5 +126,5 @@ public class SongCollectionServiceTest {
         assertEquals("EmptyFileException", exception.getClass().getSimpleName());
         assertEquals("Die Datei \"serviceTest_EmptyFile\" ist leer.", exception.getMessage());
     }
-
+*/
 }

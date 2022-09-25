@@ -41,6 +41,7 @@ public class SongCollection {
         }
         this.songCollection = collection;
     }
+
     public Reference getReferenceByIndex(int index) {
         return songCollection.get(index);
     }

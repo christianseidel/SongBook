@@ -1,6 +1,6 @@
 package songbook;
 
-import songbook.collections.SongCollectionService;
+import songbook.collections.ReferencesService;
 import songbook.collections.models.Reference;
 
 import java.nio.file.Path;
@@ -12,19 +12,12 @@ public class SongBookMain {
 
     public static void main(String[] args) {
 
-        Path path = Paths.get("backend\\src\\main\\java\\songbook\\collections\\source-files");
-        SongCollectionService collectionService = new SongCollectionService(path, "TheDailyUkulele");
-/*
-        System.out.println("\n" + collectionService.getSingleLine(108));
-        System.out.println("\nTotal number of songs listed: " + collectionService.getLength());
-*/
+/*        Path path = Paths.get("backend\\src\\main\\java\\songbook\\collections\\source-files");
+        ReferencesService collectionService = new ReferencesService(path, "TheDailyUkulele");
+
         collectionService.addCollection(path, "Liederbuecher_a");
         collectionService.addCollection(path, "Liederbuecher_b");
 
-/*
-        System.out.println("\n" + collectionService.getSingleLine(731));
-        System.out.println("\nTotal number of songs listed: " + collectionService.getLength());
-*/
         System.out.print("\nBitte gib ein Suchwort ein: ");
         String searchWord = new Scanner(System.in).nextLine();
         List<Reference> result = collectionService.getReferenceBySearchWord(searchWord);
@@ -40,5 +33,7 @@ public class SongBookMain {
         if (result.size() == 0) {
             System.out.println("\nEs wurde kein Titel mit diesem Suchwort gefunden.");
         }
+
+ */
     }
 }

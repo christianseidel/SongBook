@@ -11,4 +11,7 @@ import java.util.Collection;
 public interface SongsRepository extends MongoRepository<Song, String> {
 
     Collection<Song> findAllByTitle(String title);
+
+    @Override
+    <S extends Song> S save(S entity);
 }
