@@ -61,7 +61,7 @@ function SongItemDetails(props: SongItemProps) {
                         <label>Title:</label> <span className={'title'}> {props.song.title}</span>
                         <span onClick={() => deleteItem(props.song.id)}>[ X ]</span>
                     </div>
-                    <label>By:</label> <span className={'author'}> {props.song.author}</span><br/>
+                    {props.song.author && <label>By:</label>} {props.song.author && <span className={'author'}> {props.song.author}</span>}<br/>
                 </div>
                 :
                 <div>

@@ -3,6 +3,7 @@ import './styles/landingPage.css'
 import {Song, SongsDTO, Status} from "./models";
 import SongItem from "./SongItem";
 import SongItemDetails from "./SongItemDetails";
+import ukulele from "./images/ukulele.png";
 
 function App() {
 
@@ -72,10 +73,14 @@ function App() {
 
     return (
         <div>
-            <h1>My Song Book</h1>
+            <h1><img src={ukulele} alt="Ukulele" id={'ukulele'} /> My Song Book</h1>
             <div className={"flex-parent"}>
 
                 <div className={"flex-child"}>
+                    <div onClick={createItem}>
+                        <span id={"addNewSong"}>+ add new song</span>
+                    </div>
+
                     {songsDTO.songList
                         ? songsDTO.songList.map(item =>
                             <SongItem key={item.id} song={item}
@@ -83,10 +88,6 @@ function App() {
                             />)
                         : <span>... loading</span>
                     }
-
-                    <div onClick={createItem}>
-                        <span id={"addNewSong"}>+ add new song</span>
-                    </div>
                 </div>
 
                 <div className={"flex-child"}>

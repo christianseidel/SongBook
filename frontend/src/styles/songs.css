@@ -32,6 +32,7 @@ input:focus {
 }
 
 button {
+    margin-top: 2px;
     background-color: blanchedalmond;
     border-color: goldenrod;
     border-radius: 4px;
