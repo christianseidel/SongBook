@@ -1,21 +1,24 @@
-import React, {useState, useEffect, FormEvent} from 'react';
+import React, {useEffect, useState} from 'react';
 import './styles/landingPage.css'
-import {Song, SongsDTO} from "./models";
+import {Song, SongsDTO, Status} from "./models";
 import SongItem from "./SongItem";
-import SongDetails from "./SongDetails";
+import SongItemDetails from "./SongItemDetails";
 
 function App() {
 
     const [songsDTO, setSongsDTO] = useState({} as SongsDTO);
-    const [songChosen, setSongChosen] = useState({} as Song)
+    let [songChosen, setSongChosen] = useState({} as Song)
     const [error, setError] = useState('')
+    const [message, setMessage] = useState('')
 
 
     useEffect(() => {
         fetch('/api/songbook', {
             method: 'GET',
         })
-            .then(response => {return response.json()})
+            .then(response => {
+                return response.json()
+            })
             .then((responseBody: SongsDTO) => setSongsDTO(responseBody))
     }, []);
 
@@ -41,57 +44,55 @@ function App() {
         fetch('/api/songbook', {
             method: 'GET',
         })
-            .then(response => {return response.json()})
+            .then(response => {
+                return response.json()
+            })
             .then((responseBody: SongsDTO) => setSongsDTO(responseBody))
             .then(() => setSongChosen({} as Song));
     }
 
+    let newSong: Song = {title: "no title yet", author: "no author yet", id: "", status: Status.write};
+
     function createItem() {
-        alert('ok, ok')
+        setSongChosen(newSong);
     }
 
-    function cancelCreate() {
-        alert('mal gucken')
-    }
-
-    const createSong = (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        alert ('kpommt')
-    }
 
     return (
         <div>
-        <h1>My Song Book</h1>
-        <div className={"songWrapper"}>
-            <div className={"songName"}>
-                {songsDTO.songList
-                    ? songsDTO.songList.map(item => <SongItem key={item.id} song={item}
-                                         onItemMarked={displayItemChosen}
-                    />)
-                    : <span>... loading</span>
-                }
+            <h1>My Song Book</h1>
+            <div className={"flex-parent"}>
 
-                <div onClick={createItem}> - + - </div>
-            </div>
-            <div className={"songDetails"}>
-                {songChosen.title
-                    ? <SongDetails song={songChosen} onItemDeletion={fetchAllItems}/>
-                    : <span>&#129172; &nbsp; please choose a song</span>
-                }
-            </div>
-            <div className={"songDetails"}>
-                <form onSubmit={ev => createSong(ev)}>
-                    <input type="text" placeholder={'title'} required />
-                    <input type="text" placeholder={'author'} />
-                    <button id={"button-create-do"} type="submit"> &#10004; create </button>
-                    <div>
-                        <button id={"button-create-cancel"} type="submit" onClick={cancelCreate}> &#10008; cancel </button>
+                <div className={"flex-child"}>
+                    {songsDTO.songList
+                        ? songsDTO.songList.map(item =>
+                            <SongItem key={item.id} song={item}
+                                      onItemMarked={displayItemChosen}
+                            />)
+                        : <span>... loading</span>
+                    }
+
+                    <div onClick={createItem}>
+                        <span id={"addNewSong"}>+ add new song</span>
                     </div>
-                </form>
+                </div>
+
+                <div className={"flex-child"}>
+                    {
+                        songChosen.title
+                            ? <SongItemDetails song={songChosen}
+                                               onItemDeletion={fetchAllItems}
+                                               onItemCreation={(message: string) => {
+                                                   setMessage(message);
+                                                   fetchAllItems()}}/>
+                            : <span>&#129172; &nbsp; please choose a song</span>
+                    }
+                </div>
 
             </div>
-
-        </div>
+            <div className={"message"}>
+                {message && <span>{message}</span>}
+            </div>
         </div>
     );
 }

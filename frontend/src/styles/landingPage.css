@@ -1,46 +1,49 @@
 body {
-    border: 1px solid darkmagenta;
-    border-radius: 8px;
     background-color: #EABA5E;
     padding: 15px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
+    border: 1px solid darkmagenta;
+    border-radius: 8px;
 }
 
 h1 {
     margin-top: 0;
 }
 
-.songWrapper {
-    border: 1px solid darkorchid;
-    border-radius: 8px;
-    padding: 15px;
+.flex-parent {
     display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    width: 200%;
+    width: 100%;
+    gap: 28px;
 }
-.songName {
-    margin-right: 12px;
+
+.flex-child {
+    flex: 1;
     border: 1px solid blue;
     border-radius: 8px;
     padding: 15px;
     color: darkred;
-    width: 50%;
+
+}
+#addNewSong {
+    display: inline-block;
+    margin-top: 10px;
+    margin-left: -3px;
+    color: darkgreen;
+    font-style: italic;
+
 }
 
-.songDetails {
-    margin-left: 12px;
-    border: 1px solid blue;
-    border-radius: 8px;
-    padding: 15px;
+.flex-child:first-child {
     color: green;
-    width: 50%;
 }
 
 span {
     font-family: Verdana, Trebuchet MS, Lucida Sans Unicode, Lucida Grande, Lucida Sans, Arial, sans-serif;
     font-size: 10pt;
     margin-left: 20px;
+}
+
+.message {
+    margin-left: 11px;
+    margin-top: 26px;
+    color: red;
 }

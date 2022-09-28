@@ -1,6 +1,5 @@
 import {Song} from './models'
 import './styles/songs.css'
-import {useState} from "react";
 
 interface SongItemProps {
     song: Song
@@ -8,8 +7,6 @@ interface SongItemProps {
 }
 
 function SongItem(props: SongItemProps) {
-
-    const [song, setSong] = useState({} as Song)
 
     const chooseSong = () => props.onItemMarked(props.song.id);
 

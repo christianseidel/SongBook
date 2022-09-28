@@ -1,7 +1,28 @@
-body {
-    background-color: #EABA5E;
+form {
+    line-height: 2;
 }
 
-span {
+label {
+    color: black;
+    font-weight: bold;
+}
 
+input {
+    width: 280px;
+}
+
+#inputTitle {
+    margin-left: 12px;
+}
+
+#inputAuthor {
+    margin-left: 25px;
+}
+
+#buttonCreate {
+    margin-left: 23px;
+}
+
+#buttonCancel {
+    margin-left: 49px;
 }
