@@ -2,11 +2,12 @@ package songbook;
 
 import org.springframework.web.bind.annotation.*;
 import songbook.models.Song;
+import songbook.models.SongsDTO;
 
 import java.util.Optional;
 
 @RestController
-@RequestMapping("api/songbook")
+@RequestMapping("/api/songbook")
 @CrossOrigin
 public class SongBookController {
 
@@ -14,11 +15,6 @@ public class SongBookController {
 
     public SongBookController(SongBookService songBookService) {
         this.songBookService = songBookService;
-    }
-
-    @GetMapping(path = ("/test"), produces = "text/plain")
-    public String test() {
-        return "Test erfolgreich!";
     }
 
     @PostMapping
@@ -36,6 +32,15 @@ public class SongBookController {
         return songBookService.editSong(id, song);
     }
 
+    @GetMapping
+    public SongsDTO getAllSongs() {
+        return new SongsDTO(songBookService.getAllSongs());
+    }
+
+    @GetMapping("/{id}")
+    public Optional<Song> getSingleSong(@PathVariable String id) {
+        return songBookService.getSingleSong(id);
+    }
 
     Song countryRoads = new Song("Take Me Home, Country Roads");
 
@@ -46,4 +51,5 @@ public class SongBookController {
     public void importSongCollection(String fileName) {
         // referencesService.importSongCollection(fileName);
     }
+
 }

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import songbook.models.Song;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.Mockito.verify;
@@ -60,6 +61,28 @@ class SongBookServiceTest {
         Assertions.assertThat(actual).contains(song01edited);
     }
 
+    @Test
+    void retrieveAllSongs() {
+        SongsRepository repo = Mockito.mock(SongsRepository.class);
+        SongBookService songBookService = new SongBookService(repo);
 
+        Song song01 = new Song("testSong 1", "Alphonse");
+        song01.id = "123456_1";
+        Song song02 = new Song("testSong 2", "Bertrand");
+        song02.id = "123456_2";
+        Song song03 = new Song("testSong 1", "Claude");
+        song03.id = "123456_3";
+
+        List<Song> songList = List.of(song01, song02, song03);
+        List<Song> songListX = List.of(song01, song03);
+
+        Mockito.when(repo.findAll()).thenReturn(songList);
+
+        // when
+        List<Song> actual = songBookService.getAllSongs();
+
+        // then
+        Assertions.assertThat(actual).isEqualTo(songListX);
+    }
 
 }

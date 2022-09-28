@@ -3,6 +3,7 @@ package songbook;
 import org.springframework.stereotype.Service;
 import songbook.models.Song;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -38,5 +39,11 @@ public class SongBookService {
         }
     }
 
+    public List<Song> getAllSongs() {
+        return songsRepository.findAll();
+    }
 
+    public Optional<Song> getSingleSong(String id) {
+        return songsRepository.findById(id);
+    }
 }

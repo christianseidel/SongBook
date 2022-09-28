@@ -16,7 +16,7 @@ function SongItem(props: SongItemProps) {
     return (
         <div>
             <div onClick={chooseSong}>
-                &#8226; {props.song.title}
+                &#129174; {props.song.title}
             </div>
         </div>
     )
