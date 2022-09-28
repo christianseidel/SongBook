@@ -9,8 +9,6 @@ function App() {
     const [songsDTO, setSongsDTO] = useState({} as SongsDTO);
     let [songChosen, setSongChosen] = useState({} as Song)
     const [error, setError] = useState('')
-    const [message, setMessage] = useState('')
-
 
     useEffect(() => {
         fetch('/api/songbook', {
@@ -58,6 +56,20 @@ function App() {
     }
 
 
+    function setMessage(message: string) {
+
+            const displayMessage = document.getElementById('displayMessage');
+            const p = document.createElement("p");
+            p.textContent = message;
+            p.style.marginTop = "3px";
+            p.style.marginBottom = "3px";
+            displayMessage?.appendChild(p);
+        setTimeout(function () {
+            displayMessage?.removeChild(p);
+        }, 2000);
+    }
+
+
     return (
         <div>
             <h1>My Song Book</h1>
@@ -81,18 +93,21 @@ function App() {
                     {
                         songChosen.title
                             ? <SongItemDetails song={songChosen}
-                                               onItemDeletion={fetchAllItems}
+                                               onItemDeletion={(message: string) => {
+                                                   setMessage(message);
+                                                   fetchAllItems();
+                                               }}
                                                onItemCreation={(message: string) => {
                                                    setMessage(message);
-                                                   fetchAllItems()}}/>
+                                                   fetchAllItems();
+                                               }}
+                            onCancel={fetchAllItems}/>
                             : <span>&#129172; &nbsp; please choose a song</span>
                     }
                 </div>
 
             </div>
-            <div className={"message"}>
-                {message && <span>{message}</span>}
-            </div>
+            <div id={"displayMessage"}></div>
         </div>
     );
 }

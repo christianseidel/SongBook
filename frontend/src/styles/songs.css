@@ -1,5 +1,9 @@
 form {
-    line-height: 2;
+    line-height: 24px;
+}
+
+.header {
+    line-height: 24px;
 }
 
 label {
@@ -7,20 +11,40 @@ label {
     font-weight: bold;
 }
 
-input {
-    width: 280px;
-}
-
-#inputTitle {
+.title {
     margin-left: 12px;
 }
-
-#inputAuthor {
+.author {
     margin-left: 25px;
 }
 
+input {
+    width: 280px;
+    background-color: blanchedalmond;
+    border-color: goldenrod;
+    transition: 0.5s;
+}
+
+input:focus {
+    background-color: lightyellow;
+    border-color: goldenrod;
+    outline: none;
+}
+
+button {
+    background-color: blanchedalmond;
+    border-color: goldenrod;
+    border-radius: 4px;
+    outline: none;
+}
+
+button:focus {
+    background-color: lightyellow;
+    outline: none;
+}
+
 #buttonCreate {
-    margin-left: 23px;
+    margin-left: 49px;
 }
 
 #buttonCancel {

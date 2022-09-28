@@ -4,8 +4,9 @@ import React, {FormEvent, useState} from "react";
 
 interface SongItemProps {
     song: Song
-    onItemDeletion: () => void;
+    onItemDeletion: (message: string) => void;
     onItemCreation: (message: string) => void;
+    onCancel: () => void;
 }
 
 function SongItemDetails(props: SongItemProps) {
@@ -20,12 +21,11 @@ function SongItemDetails(props: SongItemProps) {
         })
             .then(response => {
                 if (response.ok) {
-
+                    props.onItemDeletion("Your song was deleted!")
                 } else {
                     throw Error("An item with Id no. " + id + " could not be found.")
                 }
             })
-            .then(() => props.onItemDeletion())
             .catch(e => setError(e.message));
     }
 
@@ -40,7 +40,6 @@ function SongItemDetails(props: SongItemProps) {
                     title: title,
                     author: author,
                 })
-
         })
             .then(response => {
                 if (response.ok) {
@@ -52,35 +51,33 @@ function SongItemDetails(props: SongItemProps) {
             .catch(e => setError(e.message));
     }
 
-    function cancelCreateSong() {
-        alert('gecancelt')
-
-    }
-
 
     return (
         <div>
             {(props.song.status != Status.write)
                 ?
                 <div>
-                    <div>
-                        {props.song.title}
-                        <span onClick={() => deleteItem(props.song.id)}>- X -</span>
+                    <div className={'header'}>
+                        <label>Title:</label> <span className={'title'}> {props.song.title}</span>
+                        <span onClick={() => deleteItem(props.song.id)}>[ X ]</span>
                     </div>
-                    by: {props.song.author} <br/>
+                    <label>By:</label> <span className={'author'}> {props.song.author}</span><br/>
                 </div>
                 :
                 <div>
                     <form onSubmit={ev => doCreateSong(ev)}>
-                        <label>Title:</label>
-                            <input id={"inputTitle"} type="text" value={title} placeholder={'Title'}
+                        <div className={'header'}>
+                            <label>Title:</label>
+                            <input className={"title"} id={'inputTitle'} type="text" value={title} placeholder={'Title'}
                                    onChange={ev => setTitle(ev.target.value)} autoFocus required/><br/>
                         <label>By:</label>
-                            <input id={"inputAuthor"} type="text" placeholder={'Author'}
+                            <input className={"author"} type="text" placeholder={'Author'}
                                     onChange={ev => setAuthor(ev.target.value)}/><br/>
-                        <button id={"buttonCancel"} type="submit" onClick={cancelCreateSong}> &#10008; cancel</button>
+                        </div>
+
                         <button id={"buttonCreate"} type="submit"> &#10004; create</button>
                     </form>
+                    <button id={"buttonCancel"} type="submit" onClick={props.onCancel}> &#10008; cancel</button>
                 </div>
             }
         </div>
