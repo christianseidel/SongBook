@@ -1,7 +1,9 @@
 ## My Collection of Song Titles
 
 This app will eventually allow to manage a collection of song titles. 
-Most titles will be imported from a defined set of sources. 
 
-However, the user will  be able to add new titles to the database. The user will also be able to add comments and 
-pieces of information related to each title.
+The user may either import new items from a given set of song collections 
+(with their respective indexes imported) or create own items. 
+
+He or she will then be able to beef up these items with further resources 
+and pieces of information.
