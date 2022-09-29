@@ -21,8 +21,6 @@ public class Song {
 
     // public List<ReferenceRetained> references = new ArrayList<>();
 
-    // @Todo add date
-
     public Song(String title) {
         this.id = UUID.randomUUID().toString();
         this.title = title;
