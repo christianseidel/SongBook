@@ -3,6 +3,8 @@ package songbook;
 import org.springframework.stereotype.Service;
 import songbook.models.Song;
 
+import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +18,7 @@ public class SongBookService {
     }
 
     public Song createSong(Song song) {
+        song.setDateCreated(LocalDate.now());
         return songsRepository.save(song);
     }
 
@@ -40,7 +43,7 @@ public class SongBookService {
     }
 
     public List<Song> getAllSongs() {
-        return songsRepository.findAll();
+        return songsRepository.findAll().stream().sorted(Comparator.comparing(Song::getTitle)).toList();
     }
 
     public Optional<Song> getSingleSong(String id) {

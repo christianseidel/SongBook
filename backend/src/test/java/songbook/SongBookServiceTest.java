@@ -70,11 +70,10 @@ class SongBookServiceTest {
         song01.id = "123456_1";
         Song song02 = new Song("testSong 2", "Bertrand");
         song02.id = "123456_2";
-        Song song03 = new Song("testSong 1", "Claude");
+        Song song03 = new Song("testSong 3", "Claude");
         song03.id = "123456_3";
 
         List<Song> songList = List.of(song01, song02, song03);
-        List<Song> songListX = List.of(song01, song03);
 
         Mockito.when(repo.findAll()).thenReturn(songList);
 
@@ -82,7 +81,7 @@ class SongBookServiceTest {
         List<Song> actual = songBookService.getAllSongs();
 
         // then
-        Assertions.assertThat(actual).isEqualTo(songListX);
+        Assertions.assertThat(actual).isEqualTo(songList);
     }
 
 }

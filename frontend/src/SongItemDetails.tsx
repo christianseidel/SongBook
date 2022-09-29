@@ -9,6 +9,7 @@ interface SongItemProps {
     onCancel: () => void;
 }
 
+
 function SongItemDetails(props: SongItemProps) {
 
     const [error, setError] = useState('');
@@ -54,7 +55,7 @@ function SongItemDetails(props: SongItemProps) {
 
     return (
         <div>
-            {(props.song.status != Status.write)
+            {(props.song.status !== Status.write)
                 ?
                 <div>
                     <div className={'header'}>
@@ -62,6 +63,13 @@ function SongItemDetails(props: SongItemProps) {
                         <span onClick={() => deleteItem(props.song.id)}>[ X ]</span>
                     </div>
                     {props.song.author && <label>By:</label>} {props.song.author && <span className={'author'}> {props.song.author}</span>}<br/>
+
+                    <div className={'dateCreated'}>
+                        <label id={"dateCreated"}>created:</label>
+                        <span className={'dateCreated'}>{props.song.dayOfCreation.day}.{props.song.dayOfCreation.month}.{props.song.dayOfCreation.year}</span>
+
+                    </div>
+
                 </div>
                 :
                 <div>

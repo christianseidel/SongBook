@@ -1,23 +1,19 @@
 package songbook;
 
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.repository.query.FluentQuery;
-import songbook.collections.ReferencesRepository;
-import songbook.collections.ReferencesService;
-import songbook.collections.models.Reference;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Function;
+import songbook.models.Song;
 
 public class SongBookNewMain {
 
     public static void main(String[] args) {
+
+        String title = "My Way";
+        String author = "Almighty";
+        Song mySong = new Song(title, author);
+
+        System.out.println(mySong);
+
+        System.out.println(mySong.getDateCreated());
+
 
 //        ReferencesService service = new ReferencesService();
 //        service.importSongCollection("serviceTest_twoPerfectLines");

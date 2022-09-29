@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import './styles/landingPage.css'
-import {Song, SongsDTO, Status} from "./models";
+import {Song, SongsDTO, Status, DayOfCreation} from "./models";
 import SongItem from "./SongItem";
 import SongItemDetails from "./SongItemDetails";
 import ukulele from "./images/ukulele.png";
@@ -35,7 +35,10 @@ function App() {
                     throw Error("An Item with Id no. " + id + " could not be found.")
                 }
             })
-            .then((responseBody: Song) => setSongChosen(responseBody))
+            .then((responseBody: Song) => {
+                responseBody.dayOfCreation = new DayOfCreation(responseBody.dateCreated as string);
+                setSongChosen(responseBody);
+            })
             .catch(e => setError(e.message));
     }
 
@@ -50,15 +53,15 @@ function App() {
             .then(() => setSongChosen({} as Song));
     }
 
-    let newSong: Song = {title: "no title yet", author: "no author yet", id: "", status: Status.write};
 
+    let newSong: Song = {title: "no title yet", author: "no author yet", id: "", dateCreated: "22-09-29",
+        dayOfCreation: new DayOfCreation("22-09-29"), status: Status.write};
     function createItem() {
         setSongChosen(newSong);
     }
 
 
     function setMessage(message: string) {
-
             const displayMessage = document.getElementById('displayMessage');
             const p = document.createElement("p");
             p.textContent = message;
@@ -102,7 +105,8 @@ function App() {
                                                    setMessage(message);
                                                    fetchAllItems();
                                                }}
-                            onCancel={fetchAllItems}/>
+                                               onCancel={fetchAllItems}
+                                               />
                             : <span>&#129172; &nbsp; please choose a song</span>
                     }
                 </div>
