@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import './styles/landingPage.css'
+import './styles/landingPage.css';
 import {Song, SongsDTO, Status, DayOfCreation} from "./models";
 import SongItem from "./SongItem";
 import SongItemDetails from "./SongItemDetails";
 import ukulele from "./images/ukulele.png";
+import References from "./references/References";
 
 function App() {
 
@@ -81,7 +82,7 @@ function App() {
 
                 <div className={"flex-child"}>
                     <div onClick={createItem}>
-                        <span id={"addNewSong"}>+ add new song</span>
+                        <span id={"addNewSong"} className={"doSomething"} >+ add new song</span>
                     </div>
 
                     {songsDTO.songList
@@ -107,12 +108,17 @@ function App() {
                                                }}
                                                onCancel={fetchAllItems}
                                                />
-                            : <span>&#129172; &nbsp; please choose a song</span>
+                            : <span id={"chooseASong"}>&#129172; &nbsp; please choose a song</span>
                     }
                 </div>
 
             </div>
             <div id={"displayMessage"}></div>
+
+            <div>
+                <References />
+            </div>
+
         </div>
     );
 }

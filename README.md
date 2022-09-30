@@ -1,4 +1,4 @@
-## My Collection of Song Titles
+## MY SONG BOOK: Your Private Collection of Song Titles
 
 This app will eventually allow to manage a collection of song titles. 
 

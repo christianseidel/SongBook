@@ -3,6 +3,11 @@ body {
     padding: 15px;
 }
 
+html {
+    margin: 0;
+    padding: 0;
+}
+
 h1 {
     margin-top: 0;
     margin-bottom: 42px;
@@ -28,15 +33,26 @@ h1 {
     border-radius: 8px;
     padding: 15px;
     color: darkred;
-
 }
 
-#addNewSong {
+.doSomething  {
     display: inline-block;
     margin-bottom: 12px;
     margin-left: -3px;
     color: darkred;
     font-style: italic;
+}
+
+#addNewSong, #addNewCollection {
+    cursor: pointer;
+}
+
+#searchForASong {
+    cursor: default;
+}
+
+#chooseASong {
+    cursor: url("../images/left-arrow-32.png") 0 14,  default;
 }
 
 .flex-child:first-child {
@@ -47,6 +63,7 @@ span {
     font-family: Verdana, Trebuchet MS, Lucida Sans Unicode, Lucida Grande, Lucida Sans, Arial, sans-serif;
     font-size: 11pt;
     margin-left: 20px;
+
 }
 
 #displayMessage {
