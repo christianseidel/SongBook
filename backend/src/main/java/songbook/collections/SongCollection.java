@@ -18,6 +18,7 @@ import static songbook.collections.models.ReferenceVolume.*;
 public class SongCollection {
 
     private final ArrayList<Reference> songCollection;
+
     public SongCollection(Path path, String fileName) {
         List<String> listOfSongs = importList(path, fileName);
         ArrayList<Reference> collection = new ArrayList<>();
@@ -65,10 +66,10 @@ public class SongCollection {
                 .toList();
     }
     private List<String> importList(Path path, String fileName) throws FileNotFoundException {
-        Path finalPath = Paths.get(path + "\\" + fileName + "_import.txt");
+        Path fileImport = Paths.get(path + "\\" + fileName + "_import.txt");
         List<String> listOfSongs = List.of();
         try {
-            listOfSongs = Files.readAllLines(finalPath, StandardCharsets.UTF_16BE);
+            listOfSongs = Files.readAllLines(fileImport, StandardCharsets.UTF_16BE);
             if (listOfSongs.size() == 1 && listOfSongs.get(0).length() == 1) {
                 throw new EmptyFileException(fileName);
             }

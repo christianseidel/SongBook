@@ -6,3 +6,38 @@
 #addNewCollection {
     margin-top: 36px;
 }
+
+#formChooseFile {
+    margin-top: 12px;
+}
+
+#inputChooseFile {
+    margin-left: 58px;
+    margin-top: 6px;
+    border-radius: 4px;
+    color: #EABA5E;
+    background-color: #EABA5E;
+
+}
+/*
+#buttonUpload {
+    margin-left: 58px;
+}
+*/
+
+#inputChooseFile::file-selector-button {
+    margin-right: 8px;
+    padding-left: 6px;
+
+
+    background-color: blanchedalmond;
+    border-color: goldenrod;
+    border-radius: 4px;
+    outline: none;
+    transition: 0.5s;
+}
+
+#labelChooseFile:hover {
+    cursor: help;
+}
+/* todo: Add Info Field with Requirements*/

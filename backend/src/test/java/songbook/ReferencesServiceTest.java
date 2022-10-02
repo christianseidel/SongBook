@@ -1,17 +1,5 @@
 package songbook;
 
-import songbook.collections.SongCollection;
-import songbook.collections.ReferencesService;
-import songbook.collections.exceptions.*;
-import songbook.collections.models.Reference;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ReferencesServiceTest {

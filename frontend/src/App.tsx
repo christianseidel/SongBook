@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import './styles/landingPage.css';
+import './styles/commons.css';
 import {Song, SongsDTO, Status, DayOfCreation} from "./models";
 import SongItem from "./SongItem";
 import SongItemDetails from "./SongItemDetails";
@@ -55,8 +56,9 @@ function App() {
     }
 
 
-    let newSong: Song = {title: "no title yet", author: "no author yet", id: "", dateCreated: "22-09-29",
+    let newSong: Song = {title: "no title", author: "", id: "", dateCreated: "22-09-29",
         dayOfCreation: new DayOfCreation("22-09-29"), status: Status.write};
+
     function createItem() {
         setSongChosen(newSong);
     }

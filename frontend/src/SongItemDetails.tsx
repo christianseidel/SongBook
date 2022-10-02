@@ -1,4 +1,5 @@
 import {Song, Status} from './models'
+import './styles/commons.css'
 import './styles/songs.css'
 import React, {FormEvent, useState} from "react";
 

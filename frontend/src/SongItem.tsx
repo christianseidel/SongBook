@@ -1,5 +1,4 @@
 import {Song} from './models'
-import './styles/songs.css'
 
 interface SongItemProps {
     song: Song

@@ -35,14 +35,6 @@ h1 {
     color: darkred;
 }
 
-.doSomething  {
-    display: inline-block;
-    margin-bottom: 12px;
-    margin-left: -3px;
-    color: darkred;
-    font-style: italic;
-}
-
 #addNewSong, #addNewCollection {
     cursor: pointer;
 }

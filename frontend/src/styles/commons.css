@@ -1,0 +1,48 @@
+form {
+    line-height: 24px;
+}
+
+.header {
+    line-height: 24px;
+}
+
+label {
+    color: black;
+    font-weight: bold;
+}
+
+input {
+    width: 280px;
+    background-color: blanchedalmond;
+    border-color: goldenrod;
+    transition: 0.5s;
+}
+
+input:focus {
+    background-color: lightyellow;
+    border-color: goldenrod;
+    outline: none;
+}
+
+
+.doSomething  {
+    display: inline-block;
+    margin-bottom: 12px;
+    margin-left: -3px;
+    color: darkred;
+    font-style: italic;
+}
+
+button {
+    margin-top: 2px;
+    background-color: blanchedalmond;
+    border-color: goldenrod;
+    border-radius: 4px;
+    outline: none;
+    transition: 0.5s;
+}
+
+button:focus {
+    background-color: lightyellow;
+    outline: none;
+}

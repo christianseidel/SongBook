@@ -1,57 +1,64 @@
 import '../styles/references.css';
-import '../styles/landingPage.css';
+import '../styles/commons.css';
 import React, {FormEvent, useState} from "react";
-import {upload} from "@testing-library/user-event/dist/upload";
 
 function References() {
 
     const [searchWord, setSearchWord] = useState('');
-    let toggleUpload = false;
+    const [toggleUpload, setToggleUpload] = useState(true);
 
-    const searchSong = (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
 
-        alert('oups, dann schaue ich mal nach: \"' + searchWord + '\"');
+    const searchSong = (ev: FormEvent<HTMLFormElement>) => {
+        ev.preventDefault();
+
+        alert('oups, dann schaue ich mal nach:"' + searchWord + '"');
         setSearchWord('');
 
         const uploader = document.createElement("div");
-        const form =
+
 
         // @ts-ignore
         document.getElementById('uploadNewCollection').appendChild(uploader)
     }
-/*
-    function getFiles(ev) {
-        let files = ev.target.files;
 
-        for (let i = 0, f; f = files[i]; i++) {
-            if (!f.type.match('text/plain')) {
-                continue;
-            }
-
-            let reader = new FileReader();
-
-            reader.onload = (function(theFile) {
-                return function(e) {
-                    // creates thumbnails
-                    let preview = document.createElement('p');
-                    preview.className = 'thumb';
-                    preview.src = e.target.result;
-                    preview.title = theFile.name;
-                        document.getElementById('uploadNewCollection').insertBefore(preview, null);
-                };
-            })(f);
-
-            // Bilder als Data URL auslesen.
-            reader.readAsDataURL(f);
-        }
-
-    // Auf neue Auswahl reagieren und gegebenenfalls Funktion dateiauswahl neu ausführen.
-    document.getElementById('uploadNewCollection').addEventListener('change', getFiles, false);
-
-
+    const openUpload = () => {
+        toggleUpload
+            ? setToggleUpload(false)
+            : setToggleUpload(true);
     }
-*/
+
+    function uploadFile(files: FileList | null) {
+
+        if (files === null) {
+            alert('Wow, this didn\'t work. It never happened bevor!')
+        } else if (!files[0].name.endsWith('.txt')) {
+            alert('Sorry, the file "' + files[0].name + '" will not work...\nPlease, choose a regular text file instead.')
+
+        } else {
+        console.log('"' + files[0].name + '" was sent to backend!')
+
+        fetch('api/collections/upload/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'text/plain',
+            },
+            body: files[0],
+            })
+            .then((response) => {
+                if (response.status === 404) {
+                    alert('Sorry, the server is unable to respond to your request.')}
+                else if (response.status === 200) {
+                    alert("ERFOLG!!");
+                }else if (response.status === 500) {
+                    alert('Sorry, the server is unable to handle your request (Internal Server Error).');
+                } else {
+                        alert("naja: " + response.status + " – " + response.statusText)
+                }
+                });
+        }
+    }
+
+
     return (
         <div>
 
@@ -78,12 +85,17 @@ function References() {
                         </form>
                     </div>
 
-                    <span id={"addNewCollection"} className={"doSomething"}>+ add new collection</span>
-                    {toggleUpload &&
-                    <div>
-                        <span id={'uploadNewCollection'}>upload</span>
+                    <span id={"addNewCollection"} className={"doSomething"} onClick={openUpload}>+ add a new collection</span>
+
+                    <div>{toggleUpload &&
+                        <form id={'formChooseFile'} encType={'multipart/form-data'}>
+                            <label id={'labelChooseFile'}>Choose your file: </label><br />
+                            <input type={'file'}  id={'inputChooseFile'}
+                                   onChange={event => uploadFile(event.target.files)}/>
+                        </form>}
                     </div>
-                    }
+
+
                 </div>
             </div>
         </div>
