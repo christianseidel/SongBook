@@ -15,8 +15,8 @@ h1 {
 }
 
 #ukulele {
+    height: 62px;
     width: 62px;
-    length: 62px;
     position: relative;
     top: 12px;
 }
@@ -58,7 +58,7 @@ span {
 
 }
 
-#displayMessage {
+#displayMessage, #displayMessageReferences {
     margin-left: 11px;
     margin-top: 26px;
     color: black;

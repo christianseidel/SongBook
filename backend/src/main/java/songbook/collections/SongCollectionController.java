@@ -20,10 +20,9 @@ public class SongCollectionController {
     }
 
     @PostMapping(path = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> uploadCollection(@RequestParam("file") MultipartFile file) throws IOException {
+    public String uploadCollection(@RequestParam("file") MultipartFile file) throws IOException {
 
-
-
+        // instead try: ResponseEntity<String>
 
         System.out.println("\nReceived file with Content Type: \"" + file.getContentType() + "\"");
         System.out.println("and File Name: \"" + file.getName() + "\"");
@@ -69,7 +68,8 @@ public class SongCollectionController {
 */
         String response = "Es wurden alle 300 von 300 Einträgen eingelesen";
 
-    return new ResponseEntity<>(response, HttpStatus.OK);
+        return response;
+    // return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 }

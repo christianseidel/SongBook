@@ -44,7 +44,8 @@ public class SongCollectionService {
         File storedSongCollection = new File(path);
 
         // storedSongCollection.createNewFile();
-        file.transferTo(storedSongCollection);
+        // >>>>>>>>>>> THIS IS THE CORRECT PATH!!!!!!!!!
+        // file.transferTo(storedSongCollection);
 
         /*
         Source:
@@ -54,6 +55,8 @@ public class SongCollectionService {
 
 
          */
+
+
     }
 
     public Reference createReference(Reference reference) {

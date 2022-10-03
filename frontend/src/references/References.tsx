@@ -30,32 +30,48 @@ function References() {
     function uploadFile(files: FileList | null) {
 
         if (files === null) {
-            alert('Wow, this didn\'t work. It never happened bevor!')
+            alert('Somehow the FormData Object did not work properly.')
         } else if (!files[0].name.endsWith('.txt')) {
-            alert('Sorry, the file "' + files[0].name + '" will not work...\nPlease, choose a regular text file instead.')
-
+            alert('Sorry, the file "' + files[0].name + '" will not work...\nPlease, choose a regular text file.')
         } else {
-        console.log('"' + files[0].name + '" was sent to backend!')
 
-        fetch('api/collections/upload/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'text/plain',
-            },
-            body: files[0],
+            const formData = new FormData();
+            formData.append('file', files[0]);
+
+            let message = '';
+
+            fetch('api/collections/upload/', {
+                method: 'POST',
+                body: formData,
             })
-            .then((response) => {
-                if (response.status === 404) {
-                    alert('Sorry, the server is unable to respond to your request.')}
-                else if (response.status === 200) {
-                    alert("ERFOLG!!");
-                }else if (response.status === 500) {
-                    alert('Sorry, the server is unable to handle your request (Internal Server Error).');
-                } else {
-                        alert("naja: " + response.status + " – " + response.statusText)
-                }
+                .then((response) => {
+                    if (response.status === 400) {
+                        message = ('Sorry, the server does not accept your request (Bad Request).')
+                    } else if (response.status === 404) {
+                        message = ('Sorry, the server is unable to respond to your request.')
+                    } else if (response.status === 500) {
+                        message = ('Sorry, the server is unable to handle your request (Internal Server Error).');
+                    } else if (response.status !== 200) {
+                        message = ('Unfortunately, something went wrong.')
+                    } else {
+                        message = ('Success! Your file "' + files[0].name + '" was received by backend!');
+                        console.log('Your file "' + files[0].name + '" successfully received by backend!');
+                    }
+                    setMessage(message);
                 });
         }
+    }
+
+    function setMessage(message: string) {
+        const displayMessage = document.getElementById('displayMessageReferences');
+        const p = document.createElement("p");
+        p.textContent = message;
+        p.style.marginTop = "3px";
+        p.style.marginBottom = "3px";
+        displayMessage?.appendChild(p);
+        setTimeout(function () {
+            displayMessage?.removeChild(p);
+        }, 7500);
     }
 
 
@@ -88,11 +104,12 @@ function References() {
                     <span id={"addNewCollection"} className={"doSomething"} onClick={openUpload}>+ add a new collection</span>
 
                     <div>{toggleUpload &&
-                        <form id={'formChooseFile'} encType={'multipart/form-data'}>
-                            <label id={'labelChooseFile'}>Choose your file: </label><br />
-                            <input type={'file'}  id={'inputChooseFile'}
+                        <form id={'formAddFile'} encType={'multipart/form-data'}>
+                            <label id={'labelAddFile'}>Choose your file: </label><br />
+                            <input type={'file'}  id={'inputAddFile'}
                                    onChange={event => uploadFile(event.target.files)}/>
                         </form>}
+                        <div id={"displayMessageReferences"}></div>
                     </div>
 
 
