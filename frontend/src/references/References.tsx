@@ -51,12 +51,18 @@ function References() {
                         message = ('Sorry, the server is unable to respond to your request.')
                     } else if (response.status === 500) {
                         message = ('Sorry, the server is unable to handle your request (Internal Server Error).');
-                    } else if (response.status !== 200) {
+                    } else if (response.status !== 201) {
                         message = ('Unfortunately, something went wrong.')
                     } else {
-                        message = ('Success! Your file "' + files[0].name + '" was received by backend!');
-                        console.log('Your file "' + files[0].name + '" successfully received by backend!');
-                    }
+                        return response.json();
+                    }})
+                .then ((responseBody) => {
+                    message = ('Backend received your file "' + files[0].name + '\".\n' +
+                        responseBody.message);
+                    alert(message);
+                    console.log('Your file "' + files[0].name + '" successfully received by backend!');
+
+
                     setMessage(message);
                 });
         }

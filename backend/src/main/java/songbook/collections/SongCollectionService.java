@@ -43,7 +43,7 @@ public class SongCollectionService {
         System.out.println(path);
         File storedSongCollection = new File(path);
 
-        // storedSongCollection.createNewFile();
+        storedSongCollection.createNewFile();
         // >>>>>>>>>>> THIS IS THE CORRECT PATH!!!!!!!!!
         // file.transferTo(storedSongCollection);
 
@@ -55,7 +55,19 @@ public class SongCollectionService {
 
 
          */
-
+        try {
+            Path path1 = Paths.get(path);
+            Files.delete(path1);
+        } catch (IOException e) {
+            System.out.println("Could not delete file" + storedSongCollection.getName() + ".");
+            throw  new RuntimeException("File \"" + storedSongCollection.getName() + "\" could not be deleted.");
+        }
+        try {
+            Files.delete(temporaryDirectory);
+            System.out.println("Directory \"" + temporaryDirectory + "\" deleted.");
+        } catch (IOException e) {
+            System.out.println("Could not delete temporary directory.");
+        }
 
     }
 
