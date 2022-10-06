@@ -44,7 +44,7 @@ h1 {
 }
 
 #chooseASong {
-    cursor: url("../images/left-arrow-32.png") 0 14,  default;
+    cursor: pointer;
 }
 
 .flex-child:first-child {
@@ -67,5 +67,9 @@ span {
     background-color: #fee449;
     padding: 0 12px;
     width: fit-content;
+}
+
+.songItem {
+    transition: 0.1s;
 }
 

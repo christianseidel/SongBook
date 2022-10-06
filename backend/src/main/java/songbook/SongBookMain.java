@@ -1,8 +1,30 @@
 package songbook;
 
+import java.io.File;
+import java.net.URL;
+import java.nio.file.Paths;
+
 public class SongBookMain {
 
     public static void main(String[] args) {
+
+        //Wo bin ich:
+
+        String basePath = new File("").getAbsolutePath();
+        System.out.println(basePath);
+
+        //Wo bin ich zwei:
+
+        System.out.println(Paths.get("").toAbsolutePath());
+
+        System.out.println();
+
+        URL resource1 = SongBookMain.class.getResource("."); //
+        URL resource2 = SongBookMain.class.getResource("/");
+        System.out.println(resource1);
+        System.out.println(resource2);
+
+
 
 /*        Path path = Paths.get("backend\\src\\main\\java\\songbook\\collections\\source-files");
         ReferencesService collectionService = new ReferencesService(path, "TheDailyUkulele");

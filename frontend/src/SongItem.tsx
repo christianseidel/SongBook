@@ -11,7 +11,7 @@ function SongItem(props: SongItemProps) {
 
     return (
         <div>
-            <div onClick={chooseSong}>
+            <div id={props.song.id} className={'songItem'} onClick={chooseSong}>
                 &#129174; {props.song.title}
             </div>
         </div>

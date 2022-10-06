@@ -60,3 +60,4 @@ yarn-debug.log*
 yarn-error.log*
 
 /README_oldVersion.md
+/temporary/

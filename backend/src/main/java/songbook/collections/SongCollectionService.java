@@ -1,6 +1,5 @@
 package songbook.collections;
 
-import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import songbook.collections.models.Reference;
@@ -20,32 +19,32 @@ public class SongCollectionService {
         this.referencesRepository = referencesRepository;
     }
 
-    public void processMultipartFile(MultipartFile file) throws IOException {
+    public String processMultipartFile(MultipartFile file) throws IOException {
 
+        // get my root
+        String rootDirWithSlash = SongCollectionService.class.getResource("/").getPath();
+        String rootDir = rootDirWithSlash.substring(1);
+        System.out.println("-> Root dir: \"" + rootDir + "\"");
 
-        Path basis = Paths.get("backend\\src\\main\\java\\songbook\\collections");
-
-
-        Path temporaryDirectory = basis.resolve("source-files\\temporary");
+        Path rootPath = Paths.get(rootDir);
+        Path tempPath = rootPath.resolve("temporary");
 
         try {
-            Files.createDirectory(temporaryDirectory);
-            System.out.println("Directory created.");
+            Files.createDirectory(tempPath);
+            System.out.println("-> Directory created.");
         } catch (IOException e) {
-            System.out.println("Could not create temporary directory.");
+            System.out.println("Could not create temporary directory!");
+            throw new RuntimeException("The server could not create the temporary directory needed.");
         }
 
         String basePath = new File("").getAbsolutePath();
+        String pathBasisToString = rootPath.toString();
 
-        String basisString = basis.toString();
-        String path = basePath + "\\" + basisString + "\\source-files\\temporary\\" + file.getOriginalFilename();
+        String fileLocation = rootDir + "\\temporary\\" + file.getOriginalFilename();
 
-        System.out.println(path);
-        File storedSongCollection = new File(path);
-
-        storedSongCollection.createNewFile();
-        // >>>>>>>>>>> THIS IS THE CORRECT PATH!!!!!!!!!
-        // file.transferTo(storedSongCollection);
+        File storedSongCollection = new File(fileLocation);
+        file.transferTo(storedSongCollection);
+        System.out.println("-> File created: " + file.getOriginalFilename());
 
         /*
         Source:
@@ -56,20 +55,22 @@ public class SongCollectionService {
 
          */
         try {
-            Path path1 = Paths.get(path);
-            Files.delete(path1);
+            Files.delete(Paths.get(fileLocation));
         } catch (IOException e) {
             System.out.println("Could not delete file" + storedSongCollection.getName() + ".");
             throw  new RuntimeException("File \"" + storedSongCollection.getName() + "\" could not be deleted.");
         }
         try {
-            Files.delete(temporaryDirectory);
-            System.out.println("Directory \"" + temporaryDirectory + "\" deleted.");
+            Files.delete(tempPath);
+            System.out.println("-> Directory: \"" + tempPath + "\" deleted.");
         } catch (IOException e) {
             System.out.println("Could not delete temporary directory.");
         }
 
+        String feedback = "Es wurden alle 300 von 300 Einträgen eingelesen.";
+        return feedback;
     }
+
 
     public Reference createReference(Reference reference) {
         return referencesRepository.save(reference);
@@ -79,14 +80,14 @@ public class SongCollectionService {
 
 //  IMPORT ONE SONG COLLECTION //
 
-    public void importSongCollection() {
+    public void importSongCollection(Path filePath) {
         String basePath = new File("").getAbsolutePath();
         System.out.println(basePath);
 
         Path path = Paths.get("backend\\src\\main\\java\\songbook\\collections\\source-files");
         String fileName = "serviceTest_twoPerfectLines";
 
-        SongCollection additionalCollection = new SongCollection(path, fileName);
+        SongCollection additionalCollection = new SongCollection(filePath, fileName);
         for (short i = 0; i < additionalCollection.getLength(); i++) {
             Reference item = additionalCollection.getReferenceByIndex(i);
             referencesRepository.save(item);

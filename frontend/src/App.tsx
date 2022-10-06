@@ -76,6 +76,44 @@ function App() {
         }, 2000);
     }
 
+    const hintToList = document.getElementById('chooseASong') as HTMLSpanElement | null;
+        // ToDo: Reactivate This After Item Deletion or New Creation
+    if (hintToList != null ) {
+        hintToList.addEventListener('mouseover', showSongsToChooseFrom)
+    }
+
+    function showSongsToChooseFrom() {
+        //  ToDo: Shorten This Function
+        let i: number = -1;
+        let top: number = Math.min(songsDTO.songList.length, 6) - 1;
+
+        let rotationInterval = setInterval(function () {
+            i++;
+            const singleSongToHighlight = document.getElementById(songsDTO.songList[i].id) as HTMLDivElement | null;
+            if (singleSongToHighlight != null) {
+                singleSongToHighlight.style.color = "yellow";
+                singleSongToHighlight.style.position = "relative";
+                singleSongToHighlight.style.left = "7px";
+            }
+            const singleSongNotToHighlight = document.getElementById(songsDTO.songList[i - 1].id) as HTMLDivElement | null;
+            if (singleSongNotToHighlight != null) {
+                singleSongNotToHighlight.style.color = "unset";
+                singleSongNotToHighlight.style.left = "0";
+            }
+
+            if (i === top) {
+                clearInterval(rotationInterval);
+                setTimeout(function () {
+                    const LastSingleSongNotToHighlight = document.getElementById(songsDTO.songList[i].id) as HTMLDivElement | null;
+                    if (LastSingleSongNotToHighlight != null) {
+                        LastSingleSongNotToHighlight.style.color = "unset";
+                        LastSingleSongNotToHighlight.style.left = "0";
+                    }
+                }, 110);
+            }
+        }, 100);
+    }
+
 
     return (
         <div>

@@ -59,8 +59,7 @@ function References() {
                 .then ((responseBody) => {
                     message = ('Backend received your file "' + files[0].name + '\".\n' +
                         responseBody.message);
-                    alert(message);
-                    console.log('Your file "' + files[0].name + '" successfully received by backend!');
+                    console.log('-> Your file "' + files[0].name + '" successfully received by backend!');
 
 
                     setMessage(message);
@@ -77,7 +76,7 @@ function References() {
         displayMessage?.appendChild(p);
         setTimeout(function () {
             displayMessage?.removeChild(p);
-        }, 7500);
+        }, 9000);
     }
 
 
