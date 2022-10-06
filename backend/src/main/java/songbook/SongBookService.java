@@ -1,5 +1,6 @@
 package songbook;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import songbook.models.Song;
 
@@ -9,13 +10,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class SongBookService {
 
     private final SongsRepository songsRepository;
-
-    public SongBookService(SongsRepository songsRepository) {
-        this.songsRepository = songsRepository;
-    }
 
     public Song createSong(Song song) {
         song.setDateCreated(LocalDate.now());

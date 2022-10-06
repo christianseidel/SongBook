@@ -1,16 +1,25 @@
 package songbook;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import songbook.collections.ReferencesRepository;
+import songbook.collections.SongCollectionService;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ReferencesServiceTest {
-/*
-    ReferencesService service;
-    Path path = Paths.get("src\\main\\java\\songbook\\collections\\source-files");
+public class SongCollectionServiceTest {
+
+    private SongCollectionService service;
 
     @BeforeEach
     public void initEach() {
-        this.service = new ReferencesService(path, "TheDailyUkulele");
+        ReferencesRepository repo = Mockito.mock(ReferencesRepository.class);
+        SongCollectionService collectionService = Mockito.mock(SongCollectionService.class);
     }
+/*
+
+    Path path = Paths.get("src\\main\\java\\songbook\\collections\\source-files");
 
     @Test
     @Disabled // siehe JavaBootcamp, 76
@@ -25,7 +34,8 @@ public class ReferencesServiceTest {
         String actual = listReturned.get(0).title;
         assertEquals("Moon River", actual);
     }
-
+*/
+    /*
     @Test
     void shouldAddOneTitle() {
         Reference myReference = new Reference("Never to be Heard Song; The Daily Ukulele (Green)");
@@ -33,10 +43,13 @@ public class ReferencesServiceTest {
         service.addSingleReference(myReference);
         assertEquals(collectionLength + 1, service.getLength());
 
+
         Reference lastReference = service.getReferenceByIndex(collectionLength);
         assertEquals(myReference, lastReference);
     }
 
+     */
+/*
     @Test
     void shouldAddOneTitleWithPage() {
         Reference myReference = new Reference("Never to be Heard Song", (short) 1033);

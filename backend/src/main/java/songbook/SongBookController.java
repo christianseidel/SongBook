@@ -1,5 +1,6 @@
 package songbook;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import songbook.models.Song;
 import songbook.models.SongsDTO;
@@ -9,13 +10,10 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/songbook")
 @CrossOrigin
+@RequiredArgsConstructor
 public class SongBookController {
 
     private final SongBookService songBookService;
-
-    public SongBookController(SongBookService songBookService) {
-        this.songBookService = songBookService;
-    }
 
     @PostMapping
     public Song createSong(@RequestBody Song song) {
