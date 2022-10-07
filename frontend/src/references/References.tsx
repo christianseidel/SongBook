@@ -1,24 +1,35 @@
 import '../styles/references.css';
 import '../styles/commons.css';
-import React, {FormEvent, useState} from "react";
+import React, {FormEvent, useEffect, useState} from "react";
+import ReferenceItem from "./ReferenceItem";
+import {ReferencesDTO} from "./ReferenceModels";
 
 function References() {
 
     const [searchWord, setSearchWord] = useState('');
     const [toggleUpload, setToggleUpload] = useState(true);
 
+    const [referencesDTO, setReferencesDTO] = useState({} as ReferencesDTO);
 
-    const searchSong = (ev: FormEvent<HTMLFormElement>) => {
-        ev.preventDefault();
+    useEffect(() => {
+        fetch('api/collections/', {
+            method: 'GET',
+        })
+            .then(response => response.json())
+            .then((responseBody: ReferencesDTO) => setReferencesDTO(responseBody))
+    }, []);
 
-        alert('oups, dann schaue ich mal nach:"' + searchWord + '"');
+    const searchSong = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        fetch('api/collections/' + searchWord, {
+            method: 'GET',
+        })
+            .then(response => response.json())
+            .then((responseBody: ReferencesDTO) => setReferencesDTO(responseBody))
+            .then(() => {
+
+            })
         setSearchWord('');
-
-        const uploader = document.createElement("div");
-
-
-        // @ts-ignore
-        document.getElementById('uploadNewCollection').appendChild(uploader)
     }
 
     const openUpload = () => {
@@ -57,7 +68,7 @@ function References() {
                         return response.json();
                     }})
                 .then ((responseBody) => {
-                    message = ('Backend received your file "' + files[0].name + '\".\n' +
+                    message = ('Backend received your file "' + files[0].name + '".\n' +
                         responseBody.message);
                     console.log('-> Your file "' + files[0].name + '" successfully received by backend!');
 
@@ -85,25 +96,28 @@ function References() {
 
             <div className={'flex-parent'}>
                 <div className={'flex-child'}>
-
                     <h2>Song Collections</h2>
-                    <div className={'forAStarter'}>
-                        Hier steht jetzt schon mal was
-                    </div>
-
                 </div>
 
                 <div className={'flex-child'}>
-                    <span id={"searchForASong"} className={"doSomething"} >&ndash;&#129174; search for a song</span>
+
                     <div>
                         <form onSubmit={ev => searchSong(ev)}>
                             <div className={'header'}>
                                 <input className={"title"} id={'inputSearchWord'} type="text" value={searchWord} placeholder={'your search word here...'}
                                        onChange={ev => setSearchWord(ev.target.value)} required/><br/>
-
                             </div>
-
                         </form>
+                    </div>
+
+                    <div>
+                        {referencesDTO.referenceList
+                            ? referencesDTO.referenceList.map(item =>
+                                <ReferenceItem key={item.id} reference={item}
+                                />)
+                            : <span>... loading</span>
+                        }
+
                     </div>
 
                     <span id={"addNewCollection"} className={"doSomething"} onClick={openUpload}>+ add a new collection</span>

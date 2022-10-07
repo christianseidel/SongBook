@@ -18,6 +18,7 @@ public class Song {
     public String title;
     public String author;
     private LocalDate dateCreated;
+    public String year;
 
     // public List<ReferenceRetained> references = new ArrayList<>();
 

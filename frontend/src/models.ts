@@ -2,9 +2,11 @@ export interface Song {
     id: string;
     title: string;
     author: string;
+    year?: number;
     status?: Status;
     dateCreated?: string;
     dayOfCreation: DayOfCreation;
+
 }
 
 export class DayOfCreation {

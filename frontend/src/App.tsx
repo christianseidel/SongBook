@@ -146,6 +146,10 @@ function App() {
                                                    setMessage(message);
                                                    fetchAllItems();
                                                }}
+                                               onItemRevision={(message: string) => {
+                                                   setMessage(message);
+                                                   fetchAllItems();
+                                               }}
                                                onCancel={fetchAllItems}
                                                />
                             : <span id={"chooseASong"}>&#129172; &nbsp; please choose a song</span>

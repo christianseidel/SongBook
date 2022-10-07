@@ -7,6 +7,7 @@ interface SongItemProps {
     song: Song
     onItemDeletion: (message: string) => void;
     onItemCreation: (message: string) => void;
+    onItemRevision: (message: string) => void;
     onCancel: () => void;
 }
 
@@ -16,6 +17,7 @@ function SongItemDetails(props: SongItemProps) {
     const [error, setError] = useState('');
     const [title, setTitle] = useState('');
     const [author, setAuthor] = useState('');
+    const [year, setYear] = useState('');
 
     function deleteItem(id: string) {
         fetch('/api/songbook/' + id, {
@@ -31,6 +33,34 @@ function SongItemDetails(props: SongItemProps) {
             .catch(e => setError(e.message));
     }
 
+    const editItem = (id: string) => {
+
+    }
+
+    const doEditItem = (event: FormEvent<HTMLFormElement>) => {
+    /*    event.preventDefault();
+        fetch('api/songbook/{id}' + eventxxx, {
+            method: 'PUT',
+            body: JSON.stringify({
+                title: title,
+                author: author,
+                year: year,
+            }),
+            headers: {
+                'ContentType': 'application/json'
+            }
+        })
+            .then(response => {
+                if (response.ok) {
+                    props.onItemRevision("Your song was updated!")
+                } else {
+                    throw Error("An item with Id no. " + id + "count not be found.")
+                }
+            })
+            .catch(e => setError(e.message));
+            */
+    }
+
     const doCreateSong = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         fetch('api/songbook', {
@@ -41,6 +71,7 @@ function SongItemDetails(props: SongItemProps) {
                 {
                     title: title,
                     author: author,
+                    year: year,
                 })
         })
             .then(response => {
@@ -61,9 +92,11 @@ function SongItemDetails(props: SongItemProps) {
                 <div>
                     <div className={'header'}>
                         <label>Title:</label> <span className={'title'}> {props.song.title}</span>
+                        <span onClick={() => editItem(props.song.id)}>[ ... ]</span>
                         <span onClick={() => deleteItem(props.song.id)}>[ X ]</span>
                     </div>
-                    {props.song.author && <label>By:</label>} {props.song.author && <span className={'author'}> {props.song.author}</span>}<br/>
+                    <div>{props.song.author && <label>By:</label>} {props.song.author && <span className={'author'}> {props.song.author} </span>}
+                        {props.song.year && <span>(<label>Year:</label></span>} {props.song.year && <span className={'year'}> {props.song.year})</span>}</div>
 
                     <div className={'dateCreated'}>
                         <label id={"dateCreated"}>created:</label>
@@ -79,9 +112,12 @@ function SongItemDetails(props: SongItemProps) {
                             <label>Title:</label>
                             <input className={"title"} id={'inputTitle'} type="text" value={title} placeholder={'Title'}
                                    onChange={ev => setTitle(ev.target.value)} autoFocus required/><br/>
-                        <label>By:</label>
+                            <label>By:</label>
                             <input className={"author"} type="text" placeholder={'Author'}
                                     onChange={ev => setAuthor(ev.target.value)}/><br/>
+                            <label>Year:</label>
+                            <input className={"year"} type="text" placeholder={'Year of Creation'}
+                                   onChange={ev => setYear(ev.target.value)}/><br/>
                         </div>
 
                         <button id={"buttonCreate"} type="submit"> &#10004; create</button>

@@ -39,9 +39,6 @@ h1 {
     cursor: pointer;
 }
 
-#searchForASong {
-    cursor: default;
-}
 
 #chooseASong {
     cursor: pointer;
@@ -55,7 +52,6 @@ span {
     font-family: Verdana, Trebuchet MS, Lucida Sans Unicode, Lucida Grande, Lucida Sans, Arial, sans-serif;
     font-size: 11pt;
     margin-left: 20px;
-
 }
 
 #displayMessage, #displayMessageReferences {

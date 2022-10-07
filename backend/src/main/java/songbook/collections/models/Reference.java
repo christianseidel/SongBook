@@ -20,6 +20,7 @@ public class Reference {
     public ReferenceVolume volume;
     public short page;
     public String author;
+    public int year;
 
     public Reference(String title) {
         this.id = UUID.randomUUID().toString();

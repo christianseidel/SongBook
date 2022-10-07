@@ -1,11 +1,14 @@
 package songbook.collections;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.mongodb.util.BsonUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import songbook.collections.exceptions.*;
 import songbook.collections.models.Reference;
 import songbook.collections.models.ReferenceVolume;
+import songbook.collections.models.ReferencesDTO;
+import songbook.models.Song;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,6 +19,7 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -70,6 +74,20 @@ public class SongCollectionService {
         }
 
         return newSongCollection;
+    }
+
+    public ReferencesDTO getAllReferences() {
+        List<Reference> list = referencesRepository.findAll().stream()
+                .sorted(Comparator.comparing(Reference::getTitle))
+                .toList();
+        return new ReferencesDTO(list);
+    }
+
+    public ReferencesDTO getReferencesByTitle(String title) {
+        List<Reference> list = referencesRepository.findAll().stream()
+                .filter(element -> element.title.toLowerCase().contains(title.toLowerCase()))
+                .toList();
+        return new ReferencesDTO(list);
     }
 
 

@@ -10,10 +10,13 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/songbook")
 @CrossOrigin
-@RequiredArgsConstructor
 public class SongBookController {
 
     private final SongBookService songBookService;
+
+    public SongBookController(SongBookService songBookService) {
+        this.songBookService = songBookService;
+    }
 
     @PostMapping
     public Song createSong(@RequestBody Song song) {
@@ -27,6 +30,7 @@ public class SongBookController {
 
     @PutMapping("/{id}")
     public Optional<Song> editSong(@PathVariable String id, @RequestBody Song song) {
+        System.out.println("-> request received");
         return songBookService.editSong(id, song);
     }
 

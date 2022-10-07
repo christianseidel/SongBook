@@ -33,3 +33,12 @@
     cursor: help;
 }
 /* todo: Add Info Field with Requirements*/
+
+.referenceItem {
+    font-family: Verdana, Trebuchet MS, Lucida Sans Unicode, Lucida Grande, Lucida Sans, Arial, sans-serif;
+    font-size: 8pt;
+    margin-left: 24px;
+    color: black;
+    margin-top: 2px;
+    padding: 1px;
+}

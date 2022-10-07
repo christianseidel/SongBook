@@ -7,7 +7,6 @@ import songbook.collections.models.Reference;
 import java.util.ArrayList;
 
 @Data
-@AllArgsConstructor
 public class NewSongCollection {
     short numberOfReferencesCreated;
     short numberOfReferencesRejected;
