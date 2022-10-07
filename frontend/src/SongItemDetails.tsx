@@ -20,6 +20,7 @@ function SongItemDetails(props: SongItemProps) {
     const [year, setYear] = useState('');
 
     function deleteItem(id: string) {
+        // ToDo: Install Confirm Box
         fetch('/api/songbook/' + id, {
             method: 'DELETE'
         })
@@ -34,6 +35,7 @@ function SongItemDetails(props: SongItemProps) {
     }
 
     const editItem = (id: string) => {
+        alert("Da muss ich noch ran! It n°: " + id)
 
     }
 
@@ -92,8 +94,8 @@ function SongItemDetails(props: SongItemProps) {
                 <div>
                     <div className={'header'}>
                         <label>Title:</label> <span className={'title'}> {props.song.title}</span>
-                        <span onClick={() => editItem(props.song.id)}>[ ... ]</span>
-                        <span onClick={() => deleteItem(props.song.id)}>[ X ]</span>
+                        <span id={'buttonEditSong'}><button onClick={() => editItem(props.song.id)}>&#8734; edit &nbsp;</button></span>
+                        <span id={'buttonDeleteSong'}><button onClick={() => deleteItem(props.song.id)}>&#10008; delete</button></span>
                     </div>
                     <div>{props.song.author && <label>By:</label>} {props.song.author && <span className={'author'}> {props.song.author} </span>}
                         {props.song.year && <span>(<label>Year:</label></span>} {props.song.year && <span className={'year'}> {props.song.year})</span>}</div>
@@ -114,8 +116,8 @@ function SongItemDetails(props: SongItemProps) {
                                    onChange={ev => setTitle(ev.target.value)} autoFocus required/><br/>
                             <label>By:</label>
                             <input className={"author"} type="text" placeholder={'Author'}
-                                    onChange={ev => setAuthor(ev.target.value)}/><br/>
-                            <label>Year:</label>
+                                    onChange={ev => setAuthor(ev.target.value)}/>
+                            <label id={'labelYear'}>Year:</label>
                             <input className={"year"} type="text" placeholder={'Year of Creation'}
                                    onChange={ev => setYear(ev.target.value)}/><br/>
                         </div>

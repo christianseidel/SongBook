@@ -1,6 +1,54 @@
-.h2 {
-    color: palevioletred;
-    font-weight: bold;
+h2 {}
+
+#searchForm {
+    display: inline-flex;
+}
+
+#undoSearch {
+    margin-left: 12px;
+}
+
+#inputSearchWord {
+    margin-bottom: 8px;
+}
+
+.referenceItem {
+    font-family: Verdana, Trebuchet MS, Lucida Sans Unicode, Lucida Grande, Lucida Sans, Arial, sans-serif;
+    font-size: 8pt;
+    margin-left: 24px;
+    color: black;
+    margin-top: 2px;
+    margin-bottom: 1px;
+    padding: 1px;
+}
+
+.referenceItem:hover {
+    transition: 100ms;
+    transition-timing-function: ease-out;
+    background-color: lightyellow;
+    border-style: solid;
+    border-width: 2px;
+    border-color: darkgoldenrod;
+    border-radius: 2px;
+    width: fit-content;
+    box-shadow: 3px 3px darkgoldenrod;
+}
+
+.referenceItemDetails {
+    font-family: Verdana, Trebuchet MS, Lucida Sans Unicode, Lucida Grande, Lucida Sans, Arial, sans-serif;
+    font-size: 8pt;
+    margin-top: 2px;
+    margin-bottom: 1px;
+    padding: 1px;
+    color: darkslategray;
+    display: inline;
+    margin-left: 6px;
+    font-style: italic;
+}
+
+.referenceItemDetailsPage {
+    all: inherit;
+    margin-left: 0;
 }
 
 #addNewCollection {
@@ -34,11 +82,3 @@
 }
 /* todo: Add Info Field with Requirements*/
 
-.referenceItem {
-    font-family: Verdana, Trebuchet MS, Lucida Sans Unicode, Lucida Grande, Lucida Sans, Arial, sans-serif;
-    font-size: 8pt;
-    margin-left: 24px;
-    color: black;
-    margin-top: 2px;
-    padding: 1px;
-}

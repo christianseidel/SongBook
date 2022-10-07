@@ -18,7 +18,7 @@ public class Reference {
     public String id;
     public String title;
     public ReferenceVolume volume;
-    public short page;
+    public int page;
     public String author;
     public int year;
 

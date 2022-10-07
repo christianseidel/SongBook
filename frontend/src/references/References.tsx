@@ -7,17 +7,21 @@ import {ReferencesDTO} from "./ReferenceModels";
 function References() {
 
     const [searchWord, setSearchWord] = useState('');
-    const [toggleUpload, setToggleUpload] = useState(true);
+    const [toggleUpload, setToggleUpload] = useState(false);
 
     const [referencesDTO, setReferencesDTO] = useState({} as ReferencesDTO);
 
     useEffect(() => {
+        getAllReferences()
+    }, []);
+
+    const getAllReferences = () => {
         fetch('api/collections/', {
             method: 'GET',
         })
             .then(response => response.json())
             .then((responseBody: ReferencesDTO) => setReferencesDTO(responseBody))
-    }, []);
+    };
 
     const searchSong = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -25,10 +29,12 @@ function References() {
             method: 'GET',
         })
             .then(response => response.json())
-            .then((responseBody: ReferencesDTO) => setReferencesDTO(responseBody))
-            .then(() => {
+            .then((responseBody: ReferencesDTO) => setReferencesDTO(responseBody));
+        setSearchWord('');
+    }
 
-            })
+    const undoSearch = () => {
+        getAllReferences();
         setSearchWord('');
     }
 
@@ -66,8 +72,9 @@ function References() {
                         message = ('Unfortunately, something went wrong.')
                     } else {
                         return response.json();
-                    }})
-                .then ((responseBody) => {
+                    }
+                })
+                .then((responseBody) => {
                     message = ('Backend received your file "' + files[0].name + '".\n' +
                         responseBody.message);
                     console.log('-> Your file "' + files[0].name + '" successfully received by backend!');
@@ -101,16 +108,30 @@ function References() {
 
                 <div className={'flex-child'}>
 
-                    <div>
+                    <div id={'searchForm'}>
                         <form onSubmit={ev => searchSong(ev)}>
                             <div className={'header'}>
-                                <input className={"title"} id={'inputSearchWord'} type="text" value={searchWord} placeholder={'your search word here...'}
-                                       onChange={ev => setSearchWord(ev.target.value)} required/><br/>
+                                <input className={"title"} id={'inputSearchWord'} type="text" value={searchWord}
+                                       placeholder={'your search word here...'}
+                                       onChange={(ev) =>
+                                           setSearchWord(ev.target.value)
+                                       }
+                                       onKeyDown={(event) => {
+                                           if (event.key === "Escape") {
+                                               undoSearch()
+                                           }}
+                                       }
+                                       required/>
                             </div>
                         </form>
+                        <div>
+                            <button id={'undoSearch'} onClick={undoSearch}
+                            onKeyDown={(event) => {if (event.key === "Enter") {
+                                undoSearch()}}}>clear</button>
+                        </div>
                     </div>
 
-                    <div>
+                    <div id={"referenceSearchResult"}>
                         {referencesDTO.referenceList
                             ? referencesDTO.referenceList.map(item =>
                                 <ReferenceItem key={item.id} reference={item}
@@ -120,12 +141,13 @@ function References() {
 
                     </div>
 
-                    <span id={"addNewCollection"} className={"doSomething"} onClick={openUpload}>+ add a new collection</span>
+                    <span id={"addNewCollection"} className={"doSomething"}
+                          onClick={openUpload}>+ add a new collection</span>
 
                     <div>{toggleUpload &&
                         <form id={'formAddFile'} encType={'multipart/form-data'}>
-                            <label id={'labelAddFile'}>Choose your file: </label><br />
-                            <input type={'file'}  id={'inputAddFile'}
+                            <label id={'labelAddFile'}>Choose your file: </label><br/>
+                            <input type={'file'} id={'inputAddFile'}
                                    onChange={event => uploadFile(event.target.files)}/>
                         </form>}
                         <div id={"displayMessageReferences"}></div>
