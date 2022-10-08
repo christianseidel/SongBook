@@ -44,12 +44,11 @@ public class SongCollectionController {
         // HINT
         System.out.println("\n-> Received file \"" + file.getOriginalFilename()
                 + "\" with Content Type: \"" + file.getContentType() + "\"");
-        // String feedbackJSONfied = "{\"message\": \"" + feedback + "\"}";
 
         try {
             return new ResponseEntity<>(songCollectionService.processMultipartFile(file), HttpStatus.OK);
         } catch (MalformedFileException e) {
-            return ResponseEntity.status(406).body(e.getMessage());
+            return ResponseEntity.status(406).body(errorJSONfied(e.getMessage()));
         }
 
     }
@@ -71,5 +70,9 @@ public class SongCollectionController {
     @PutMapping(path = "/{id}")
     public Optional<Reference> editReference(@PathVariable String id, @RequestBody Reference reference) {
         return songCollectionService.editReference(id, reference);
+    }
+
+    private String errorJSONfied(String errorMessage) {
+        return "{\"message\": \"" + errorMessage + "\"}";
     }
 }

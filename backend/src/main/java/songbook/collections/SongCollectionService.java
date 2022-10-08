@@ -44,8 +44,8 @@ public class SongCollectionService {
             Files.createDirectory(tempPath);
             System.out.println("-> Directory created.");
         } catch (IOException e) {
-            System.out.println("Could not create temporary directory!");
-            throw new RuntimeException("The server could not create the temporary directory needed.");
+            System.out.println("! Could not create temporary directory!");
+            throw new RuntimeException("! The server could not create the temporary directory needed.");
         }
 
         // save file
@@ -65,7 +65,6 @@ public class SongCollectionService {
 
         // undo file and directory
         deleteTempDirAndFile(fileLocation, tempPath, storedSongCollection.getName());
-        System.out.println("-> Delete all via \"finally\" clause.");
 
         return newSongCollection;
     }
@@ -162,14 +161,14 @@ public class SongCollectionService {
         try {
             Files.delete(Paths.get(fileLocation));
         } catch (IOException e) {
-            System.out.println("Could not delete file" + storedSongCollection + ".");
-            throw new RuntimeException("File \"" + storedSongCollection + "\" could not be deleted.");
+            System.out.println("! Could not delete file" + storedSongCollection + ".");
+            throw new RuntimeException("! File \"" + storedSongCollection + "\" could not be deleted.");
         }
         try {
             Files.delete(tempPath);
-            System.out.println("-> Directory: \"" + tempPath + "\" deleted.");
+            System.out.println("-> Directory \"" + tempPath + "\" deleted.");
         } catch (IOException e) {
-            System.out.println("Could not delete temporary directory.");
+            System.out.println("! Could not delete temporary directory.");
         }
     }
 

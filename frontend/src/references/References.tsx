@@ -3,12 +3,13 @@ import '../styles/common.css';
 import React, {FormEvent, useEffect, useState} from "react";
 import ReferenceItem from "./ReferenceItem";
 import {ReferencesDTO} from "./ReferenceModels";
+import DisplayMessage from "../DisplayMessage";
 
 function References() {
 
     const [searchWord, setSearchWord] = useState('');
     const [toggleUpload, setToggleUpload] = useState(false);
-
+    const [message, setMessage] = useState('');
     const [referencesDTO, setReferencesDTO] = useState({} as ReferencesDTO);
 
     useEffect(() => {
@@ -45,57 +46,57 @@ function References() {
     }
 
     function uploadFile(files: FileList | null) {
-
         if (files === null) {
             alert('Somehow the FormData Object did not work properly.')
         } else if (!files[0].name.endsWith('.txt')) {
             alert('Sorry, the file "' + files[0].name + '" will not work...\nPlease, choose a regular text file.')
         } else {
-
             const formData = new FormData();
             formData.append('file', files[0]);
-
-            let message = '';
-
+            let responseStatus = 0;
             fetch('api/collections/upload/', {
                 method: 'POST',
                 body: formData,
             })
                 .then((response) => {
-                    if (response.status === 400) {
-                        message = ('Sorry, the server does not accept your request (Bad Request).')
-                    } else if (response.status === 404) {
-                        message = ('Sorry, the server is unable to respond to your request.')
-                    } else if (response.status === 500) {
-                        message = ('Sorry, the server is unable to handle your request (Internal Server Error).');
-                    } else if (response.status !== 201) {
-                        message = ('Unfortunately, something went wrong.')
-                    } else {
-                        return response.json();
-                    }
+                    responseStatus = response.status;
+                    console.log(responseStatus);
+                    return response.json();
                 })
                 .then((responseBody) => {
-                    message = ('Backend received your file "' + files[0].name + '".\n' +
-                        responseBody.message);
-                    console.log('-> Your file "' + files[0].name + '" successfully received by backend!');
-
-
-                    setMessage(message);
+                    if (responseStatus == 200) {
+                        setMessage('Backend received your file "' + files[0].name + '". ' +
+                            'Out of a total of ' + responseBody.totalNumberOfReferences + ' references, ' +
+                            responseBody.numberOfReferencesAccepted + ' references where added.');
+                        console.log('File "' + files[0].name + '" successfully transmitted to backend!');
+                    } else if (responseStatus === 400) {
+                        setMessage('Sorry, the server does not accept your request (Bad Request).')
+                    } else if (responseStatus === 404) {
+                        setMessage('Sorry, the server is unable to respond to your request.')
+                    } else if (responseStatus === 406) {
+                        setMessage(responseBody.message);
+                    } else if (responseStatus === 500) {
+                        setMessage('Sorry, the server is unable to handle your request (Internal Server Error).');
+                    } else if (responseStatus !== 201) {
+                        setMessage('Unfortunately, something went wrong.')
+                    } else {
+                        alert(responseBody);
+                    }
                 });
         }
     }
 
-    function setMessage(message: string) {
-        const displayMessage = document.getElementById('displayMessageReferences');
-        const p = document.createElement("p");
-        p.textContent = message;
-        p.style.marginTop = "3px";
-        p.style.marginBottom = "3px";
-        displayMessage?.appendChild(p);
-        setTimeout(function () {
-            displayMessage?.removeChild(p);
-        }, 9000);
-    }
+    /*    function setMessage(message: string) {
+            const displayMessage = document.getElementById('displayMessageReferences');
+            const p = document.createElement("p");
+            p.textContent = message;
+            p.style.marginTop = "3px";
+            p.style.marginBottom = "3px";
+            displayMessage?.appendChild(p);
+            setTimeout(function () {
+                displayMessage?.removeChild(p);
+            }, 9000);
+        }*/
 
 
     return (
@@ -119,15 +120,20 @@ function References() {
                                        onKeyDown={(event) => {
                                            if (event.key === "Escape") {
                                                undoSearch()
-                                           }}
+                                           }
+                                       }
                                        }
                                        required/>
                             </div>
                         </form>
                         <div>
                             <button id={'undoSearch'} onClick={undoSearch}
-                            onKeyDown={(event) => {if (event.key === "Enter") {
-                                undoSearch()}}}>clear</button>
+                                    onKeyDown={(event) => {
+                                        if (event.key === "Enter") {
+                                            undoSearch()
+                                        }
+                                    }}>clear
+                            </button>
                         </div>
                     </div>
 
@@ -145,14 +151,17 @@ function References() {
 
                     <div>{toggleUpload &&
                         <form id={'formAddFile'} encType={'multipart/form-data'}>
-                            <label id={'labelAddFile'}>Choose your file: </label><br/>
+                            <label id={'labelAddFile'}>Choose your file: </label>
                             <input type={'file'} id={'inputAddFile'}
                                    onChange={event => uploadFile(event.target.files)}/>
                         </form>}
-                        <div id={"displayMessageReferences"}></div>
                     </div>
-
-
+                    <div>
+                        {message && <DisplayMessage
+                            message={message}
+                            onClose={() => {setMessage('')}}
+                        />}
+                    </div>
                 </div>
             </div>
         </div>

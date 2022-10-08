@@ -3,7 +3,7 @@ package songbook.collections.exceptions;
 public class MalformedFileException extends RuntimeException {
 
     public MalformedFileException(String file) {
-        super("Unable to process your file \"" + file + "\". " +
-                "Please, check whether it was saved with an \"UTF-8\" encoding.");
+        super("Unable to process your file '" + file + "'. " +
+                "Please, check whether it was saved in 'UTF-8' encoding.");
     }
 }

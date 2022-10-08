@@ -61,12 +61,12 @@ h2 {}
 }
 
 #formAddFile {
-    margin-top: 12px;
+    margin-top: 6px;
 }
 
 #inputAddFile {
-    margin-left: 58px;
-    margin-top: 6px;
+    margin-left: 24px;
+    margin-top: 0;
     border-radius: 4px;
     color: #EABA5E;
     background-color: #EABA5E;
@@ -80,6 +80,10 @@ h2 {}
     border-radius: 4px;
     outline: none;
     transition: 0.5s;
+}
+
+#labelAddFile {
+    margin-left: 24px;
 }
 
 #labelAddFile:hover {

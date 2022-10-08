@@ -47,3 +47,7 @@ button:focus {
     background-color: lightyellow;
     outline: none;
 }
+
+button:hover {
+    cursor: pointer;
+}
