@@ -1,11 +1,18 @@
-body {
-    background-color: #EABA5E;
-    padding: 15px;
-}
-
 html {
     margin: 0;
     padding: 0;
+    height: 100%;
+}
+
+body {
+    background-color: #EABA5E;
+    margin: 0;
+    padding: 20px;
+    height: 100%;
+}
+
+#container {
+    height: inherit;
 }
 
 h1 {

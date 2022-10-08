@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import './styles/landingPage.css';
-import './styles/commons.css';
+import './styles/common.css';
 import {Song, SongsDTO, Status, DayOfCreation} from "./models";
 import SongItem from "./SongItem";
 import SongItemDetails from "./SongItemDetails";
@@ -116,7 +116,7 @@ function App() {
 
 
     return (
-        <div>
+        <div id={'container'}>
             <h1><img src={ukulele} alt="Ukulele" id={'ukulele'} /> My Song Book</h1>
             <div className={"flex-parent"}>
 

@@ -12,6 +12,11 @@ h2 {}
     margin-bottom: 8px;
 }
 
+#referenceSearchResult {
+    max-height: 292px;
+    overflow: auto;
+}
+
 .referenceItem {
     font-family: Verdana, Trebuchet MS, Lucida Sans Unicode, Lucida Grande, Lucida Sans, Arial, sans-serif;
     font-size: 8pt;

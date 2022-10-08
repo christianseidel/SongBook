@@ -3,8 +3,7 @@ package songbook.collections.exceptions;
 public class MalformedFileException extends RuntimeException {
 
     public MalformedFileException(String file) {
-        super("Die Datei \"" + file + "\" wurde gefunden,\n\tkann aber " +
-                "nicht gelesen werden. Stellen Sie sicher, dass sie in " +
-                "der Codierung \"UTF-16 BE\" gespeichert wurde!");
+        super("Unable to process your file \"" + file + "\". " +
+                "Please, check whether it was saved with an \"UTF-8\" encoding.");
     }
 }

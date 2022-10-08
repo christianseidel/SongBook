@@ -1,5 +1,5 @@
 import {Song, Status} from './models'
-import './styles/commons.css'
+import './styles/common.css'
 import './styles/songs.css'
 import React, {FormEvent, useState} from "react";
 
@@ -33,6 +33,8 @@ function SongItemDetails(props: SongItemProps) {
             })
             .catch(e => setError(e.message));
     }
+
+
 
     const editItem = (id: string) => {
         alert("Da muss ich noch ran! It n°: " + id)
@@ -127,8 +129,10 @@ function SongItemDetails(props: SongItemProps) {
                     <button id={"buttonCancel"} type="submit" onClick={props.onCancel}> &#10008; cancel</button>
                 </div>
             }
+
         </div>
     )
 }
 
 export default SongItemDetails
+

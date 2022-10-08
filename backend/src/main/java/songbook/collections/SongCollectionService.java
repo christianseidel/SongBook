@@ -1,14 +1,12 @@
 package songbook.collections;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.mongodb.util.BsonUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import songbook.collections.exceptions.*;
 import songbook.collections.models.Reference;
 import songbook.collections.models.ReferenceVolume;
 import songbook.collections.models.ReferencesDTO;
-import songbook.models.Song;
 
 import java.io.File;
 import java.io.IOException;
@@ -57,21 +55,17 @@ public class SongCollectionService {
         System.out.println("-> File created: " + file.getOriginalFilename());
 
         // process new SongCollection
-        NewSongCollection newSongCollection = importNewSongCollection(storedSongCollection.toPath());
+        NewSongCollection newSongCollection;
+        try {
+            newSongCollection = importNewSongCollection(storedSongCollection.toPath());
+        } catch (MalformedFileException e) {
+            deleteTempDirAndFile(fileLocation, tempPath, storedSongCollection.getName());
+            throw e;
+        }
 
         // undo file and directory
-        try {
-            Files.delete(Paths.get(fileLocation));
-        } catch (IOException e) {
-            System.out.println("Could not delete file" + storedSongCollection.getName() + ".");
-            throw new RuntimeException("File \"" + storedSongCollection.getName() + "\" could not be deleted.");
-        }
-        try {
-            Files.delete(tempPath);
-            System.out.println("-> Directory: \"" + tempPath + "\" deleted.");
-        } catch (IOException e) {
-            System.out.println("Could not delete temporary directory.");
-        }
+        deleteTempDirAndFile(fileLocation, tempPath, storedSongCollection.getName());
+        System.out.println("-> Delete all via \"finally\" clause.");
 
         return newSongCollection;
     }
@@ -86,6 +80,7 @@ public class SongCollectionService {
     public ReferencesDTO getReferencesByTitle(String title) {
         List<Reference> list = referencesRepository.findAll().stream()
                 .filter(element -> element.title.toLowerCase().contains(title.toLowerCase()))
+                .sorted(Comparator.comparing(Reference::getTitle))
                 .toList();
         return new ReferencesDTO(list);
     }
@@ -107,6 +102,7 @@ public class SongCollectionService {
         NewSongCollection newSongCollection = new NewSongCollection();
         List<String> listOfItems = readListOfReferences(filePath);
         for (String line : listOfItems) {
+            newSongCollection.totalNumberOfReferences++; // will later serve as check sum
             String[] elements = line.split(";");
             // set title
             Reference item = new Reference(elements[0]);
@@ -120,7 +116,7 @@ public class SongCollectionService {
             }
             // check for double
             if (!checkIfReferenceExists(item.title, item.volume)) {
-                newSongCollection.numberOfReferencesCreated++;
+                newSongCollection.numberOfReferencesAccepted++;
                 referencesRepository.save(item);
                 // set page
                 if (elements.length > 2) {
@@ -148,7 +144,7 @@ public class SongCollectionService {
     private List<String> readListOfReferences(Path path) throws FileNotFoundException {
         List<String> listOfReferences;
         try {
-            listOfReferences = Files.readAllLines(path, StandardCharsets.UTF_16BE);
+            listOfReferences = Files.readAllLines(path, StandardCharsets.UTF_8);
             if (listOfReferences.size() == 1 && listOfReferences.get(0).length() == 1) {
                 throw new EmptyFileException(path.toString());
             }
@@ -156,9 +152,24 @@ public class SongCollectionService {
         } catch (NoSuchFileException e) {
             throw new FileNotFoundException(path.toString());
         } catch (MalformedInputException e) {
-            throw new MalformedFileException(path.toString());
+            throw new MalformedFileException(path.getFileName().toString());
         } catch (IOException e) {
             throw new UnableToLoadFileException();
+        }
+    }
+
+    public void deleteTempDirAndFile(String fileLocation, Path tempPath, String storedSongCollection) {
+        try {
+            Files.delete(Paths.get(fileLocation));
+        } catch (IOException e) {
+            System.out.println("Could not delete file" + storedSongCollection + ".");
+            throw new RuntimeException("File \"" + storedSongCollection + "\" could not be deleted.");
+        }
+        try {
+            Files.delete(tempPath);
+            System.out.println("-> Directory: \"" + tempPath + "\" deleted.");
+        } catch (IOException e) {
+            System.out.println("Could not delete temporary directory.");
         }
     }
 

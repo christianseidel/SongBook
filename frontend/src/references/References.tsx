@@ -1,5 +1,5 @@
 import '../styles/references.css';
-import '../styles/commons.css';
+import '../styles/common.css';
 import React, {FormEvent, useEffect, useState} from "react";
 import ReferenceItem from "./ReferenceItem";
 import {ReferencesDTO} from "./ReferenceModels";
@@ -138,7 +138,6 @@ function References() {
                                 />)
                             : <span>... loading</span>
                         }
-
                     </div>
 
                     <span id={"addNewCollection"} className={"doSomething"}

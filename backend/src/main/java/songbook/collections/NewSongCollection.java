@@ -1,23 +1,22 @@
 package songbook.collections;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import songbook.collections.models.Reference;
-
 import java.util.ArrayList;
 
 @Data
 public class NewSongCollection {
-    short numberOfReferencesCreated;
+    short numberOfReferencesAccepted;
     short numberOfReferencesRejected;
+    short totalNumberOfReferences; // serves as check sum
     ArrayList<String> listOfInvalidVolumes;
     short numberOfInvalidVolumeData;
     ArrayList<String> listOfInvalidPageData;
     short numberOfInvalidPageData;
 
     public NewSongCollection() {
-        this.numberOfReferencesCreated = 0;
+        this.numberOfReferencesAccepted = 0;
         this.numberOfReferencesRejected = 0;
+        this.totalNumberOfReferences = 0;
         this.listOfInvalidVolumes = new ArrayList<>();
         this.numberOfInvalidVolumeData = 0;
         this.listOfInvalidPageData = new ArrayList<>();
@@ -44,9 +43,5 @@ public class NewSongCollection {
             }
         }
         numberOfInvalidPageData++;
-    }
-
-    public void remove(Reference reference) {
-
     }
 }

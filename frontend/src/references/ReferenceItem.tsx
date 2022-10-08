@@ -1,6 +1,6 @@
 import {Reference} from "./ReferenceModels";
 import '../styles/references.css';
-import '../styles/commons.css';
+import '../styles/common.css';
 
 interface ReferenceItemProps {
     reference: Reference
