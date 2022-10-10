@@ -6,13 +6,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
-import songbook.SongBookController;
 import songbook.collections.exceptions.MalformedFileException;
 import songbook.collections.models.Reference;
 import songbook.collections.models.ReferencesDTO;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.http.ResponseEntity.status;
@@ -33,7 +31,7 @@ public class SongCollectionController {
         return status(200).body((songCollectionService.getAllReferences()));
     }
 
-    @GetMapping(path = "/{title}")
+    @GetMapping("/{title}")
     public ResponseEntity<ReferencesDTO> getReferencesByTitle(@PathVariable String title){
         return status(200).body((songCollectionService.getReferencesByTitle(title)));
     }
@@ -46,19 +44,28 @@ public class SongCollectionController {
                 + "\" with Content Type: \"" + file.getContentType() + "\"");
 
         try {
-            return new ResponseEntity<>(songCollectionService.processMultipartFile(file), HttpStatus.OK);
+            return new ResponseEntity<>(songCollectionService.processMultipartFileUpload(file), HttpStatus.OK);
         } catch (MalformedFileException e) {
             return ResponseEntity.status(406).body(errorJSONfied(e.getMessage()));
         }
-
     }
 
-    @PostMapping
+    @PostMapping("/upload")
     public Reference createReference(@RequestBody Reference reference) {
         return songCollectionService.createReference(reference);
     }
 
-    @DeleteMapping(path = "/{id}")
+    @GetMapping("/edit/{id}")
+    public ResponseEntity<ReferencesDTO> getReferenceById(@PathVariable String id){
+        return status(200).body((songCollectionService.getReferenceById(id)));
+    }
+
+    @PostMapping("/edit/{id}")
+    public ResponseEntity<ReferencesDTO> copyReferenceById(@PathVariable String id){
+        return status(200).body((songCollectionService.copyReferenceById(id)));
+    }
+
+    @DeleteMapping("/edit/{id}")
     public void deleteReference(@PathVariable String id) {
         try {
             songCollectionService.deleteReference(id);
@@ -67,7 +74,7 @@ public class SongCollectionController {
         }
     }
 
-    @PutMapping(path = "/{id}")
+    @PutMapping("/edit/{id}")
     public Optional<Reference> editReference(@PathVariable String id, @RequestBody Reference reference) {
         return songCollectionService.editReference(id, reference);
     }

@@ -71,8 +71,7 @@ function SongItemDetails(props: SongItemProps) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'},
-            body: JSON.stringify(
-                {
+            body: JSON.stringify({
                     title: title,
                     author: author,
                     year: year,
@@ -114,19 +113,19 @@ function SongItemDetails(props: SongItemProps) {
                     <form onSubmit={ev => doCreateSong(ev)}>
                         <div className={'header'}>
                             <label>Title:</label>
-                            <input className={"title"} id={'inputTitle'} type="text" value={title} placeholder={'Title'}
+                            <input className={'title'} id={'inputTitle'} type='text' value={title} placeholder={'Title'}
                                    onChange={ev => setTitle(ev.target.value)} autoFocus required/><br/>
                             <label>By:</label>
-                            <input className={"author"} type="text" placeholder={'Author'}
+                            <input className={'author'} type="text" placeholder={'Author'}
                                     onChange={ev => setAuthor(ev.target.value)}/>
                             <label id={'labelYear'}>Year:</label>
-                            <input className={"year"} type="text" placeholder={'Year of Creation'}
+                            <input className={'year'} type="text" placeholder={'Year of Creation'}
                                    onChange={ev => setYear(ev.target.value)}/><br/>
                         </div>
 
-                        <button id={"buttonCreate"} type="submit"> &#10004; create</button>
+                        <button id={'buttonCreate'} type='submit'> &#10004; create</button>
                     </form>
-                    <button id={"buttonCancel"} type="submit" onClick={props.onCancel}> &#10008; cancel</button>
+                    <button id={'buttonCancel'} type='submit' onClick={props.onCancel}> &#10008; cancel</button>
                 </div>
             }
 

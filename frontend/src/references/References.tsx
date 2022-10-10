@@ -4,11 +4,14 @@ import React, {FormEvent, useEffect, useState} from "react";
 import ReferenceItem from "./ReferenceItem";
 import {ReferencesDTO} from "./ReferenceModels";
 import DisplayMessage from "../DisplayMessage";
+import EditReferenceItem from "./EditReferenceItem";
 
 function References() {
 
-    const [searchWord, setSearchWord] = useState('');
+    const [toggleDisplaySearchResultsButNotReference, setToggleDisplaySearchResultsButNotReference] = useState(true);
     const [toggleUpload, setToggleUpload] = useState(false);
+
+    const [searchWord, setSearchWord] = useState('');
     const [message, setMessage] = useState('');
     const [referencesDTO, setReferencesDTO] = useState({} as ReferencesDTO);
 
@@ -22,6 +25,10 @@ function References() {
         })
             .then(response => response.json())
             .then((responseBody: ReferencesDTO) => setReferencesDTO(responseBody))
+            .then(() => {
+
+            });
+        setToggleDisplaySearchResultsButNotReference(true);
     };
 
     const searchSong = (event: FormEvent<HTMLFormElement>) => {
@@ -45,6 +52,22 @@ function References() {
             : setToggleUpload(true);
     }
 
+    //////////// I AM HERE  ////////////////
+    const editItem = (id: string) => {
+        fetch('api/collections/edit/' + id, {
+            method: 'GET',
+        })
+            .then(response => response.json())
+            .then((responseBody: ReferencesDTO) => setReferencesDTO(responseBody))
+            .then(() => setToggleDisplaySearchResultsButNotReference(false));
+    }
+
+    const editDone = () => {
+        setMessage("habe fertig!");  //ToDo
+        getAllReferences();
+    }
+
+
     function uploadFile(files: FileList | null) {
         if (files === null) {
             alert('Somehow the FormData Object did not work properly.')
@@ -64,7 +87,7 @@ function References() {
                     return response.json();
                 })
                 .then((responseBody) => {
-                    if (responseStatus == 200) {
+                    if (responseStatus === 200) {
                         setMessage('Backend received your file "' + files[0].name + '". ' +
                             'Out of a total of ' + responseBody.totalNumberOfReferences + ' references, ' +
                             responseBody.numberOfReferencesAccepted + ' references where added.');
@@ -85,6 +108,7 @@ function References() {
                 });
         }
     }
+
 
     /*    function setMessage(message: string) {
             const displayMessage = document.getElementById('displayMessageReferences');
@@ -109,45 +133,57 @@ function References() {
 
                 <div className={'flex-child'}>
 
-                    <div id={'searchForm'}>
-                        <form onSubmit={ev => searchSong(ev)}>
-                            <div className={'header'}>
-                                <input className={"title"} id={'inputSearchWord'} type="text" value={searchWord}
-                                       placeholder={'your search word here...'}
-                                       onChange={(ev) =>
-                                           setSearchWord(ev.target.value)
-                                       }
-                                       onKeyDown={(event) => {
-                                           if (event.key === "Escape") {
-                                               undoSearch()
-                                           }
-                                       }
-                                       }
-                                       required/>
+                    {toggleDisplaySearchResultsButNotReference
+                        ?   <div>
+                            <div id={'searchForm'}>
+                                    <form onSubmit={ev => searchSong(ev)}>
+                                        <div className={'header'}>
+                                            <input className={"title"} id={'inputSearchWord'} type="text" value={searchWord}
+                                                   placeholder={'your search word here...'}
+                                                   onChange={(ev) =>
+                                                       setSearchWord(ev.target.value)
+                                                   }
+                                                   onKeyDown={(event) => {
+                                                       if (event.key === "Escape") {
+                                                           undoSearch()
+                                                       }
+                                                   }
+                                                   }
+                                                   required/>
+                                        </div>
+                                    </form>
+                                    <div>
+                                        <button id={'undoSearch'} onClick={undoSearch}
+                                                onKeyDown={(event) => {
+                                                    if (event.key === "Enter") {
+                                                        undoSearch()
+                                                    }
+                                                }}>clear
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div id={"referenceSearchResult"}>
+                                    {referencesDTO.referenceList
+                                        ? referencesDTO.referenceList.map(item =>
+                                            <ReferenceItem key={item.id} reference={item}
+                                                           onItemClick={editItem}
+                                            />)
+                                        : <span>... loading</span>
+                                    }
+                                </div>
                             </div>
-                        </form>
-                        <div>
-                            <button id={'undoSearch'} onClick={undoSearch}
-                                    onKeyDown={(event) => {
-                                        if (event.key === "Enter") {
-                                            undoSearch()
-                                        }
-                                    }}>clear
-                            </button>
-                        </div>
-                    </div>
+                        :
+                            referencesDTO.referenceList.map(item =>
+                            <EditReferenceItem key={item.id} reference={item}
+                                               onCancel={getAllReferences}
+                            />)
+                    }
 
-                    <div id={"referenceSearchResult"}>
-                        {referencesDTO.referenceList
-                            ? referencesDTO.referenceList.map(item =>
-                                <ReferenceItem key={item.id} reference={item}
-                                />)
-                            : <span>... loading</span>
-                        }
-                    </div>
-
-                    <span id={"addNewCollection"} className={"doSomething"}
-                          onClick={openUpload}>+ add a new collection</span>
+                    {toggleDisplaySearchResultsButNotReference &&
+                        <span id={"addNewCollection"} className={"doSomething"}
+                              onClick={openUpload}>+ add a new collection</span>
+                    }
 
                     <div>{toggleUpload &&
                         <form id={'formAddFile'} encType={'multipart/form-data'}>

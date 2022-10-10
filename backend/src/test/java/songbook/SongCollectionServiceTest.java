@@ -1,33 +1,48 @@
 package songbook;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import songbook.collections.ReferencesRepository;
 import songbook.collections.SongCollectionService;
+import songbook.collections.models.Reference;
+import songbook.collections.models.ReferencesDTO;
+
+import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static songbook.collections.models.ReferenceVolume.TheDailyUkulele_Yellow;
 
 public class SongCollectionServiceTest {
 
-    private SongCollectionService service;
-
-    @BeforeEach
-    public void initEach() {
-        ReferencesRepository repo = Mockito.mock(ReferencesRepository.class);
-        SongCollectionService collectionService = Mockito.mock(SongCollectionService.class);
-    }
-/*
-
-    Path path = Paths.get("src\\main\\java\\songbook\\collections\\source-files");
+    private final ReferencesRepository repo = Mockito.mock((ReferencesRepository.class));
+    private final SongCollectionService service = new SongCollectionService(repo);
 
     @Test
-    @Disabled // siehe JavaBootcamp, 76
-    void shouldReturnSongTitleFoundByIndex() {
-        Reference reference = service.getReferenceByIndex(108);
-        assertEquals("Can't Help Falling In Love; TheDailyUkulele_Yellow", reference.title + "; " + reference.volume);
+    void shouldFindReferenceByIdContainingTitleAndVolume() {
+        Reference ref = new Reference("Never Heard This Song Before");
+        ref.volume = TheDailyUkulele_Yellow;
+        Mockito.when(repo.findById("334455")).thenReturn(Optional.of(ref));
+
+        ReferencesDTO actual = service.getReferenceById("334455");
+
+        assertEquals(new ReferencesDTO(List.of(ref)), actual);
     }
 
+    @Test
+    void shouldFindReferenceByIdContainingTitleAndVolumeAndPage() {
+        short page = 12;
+        Reference ref = new Reference("Never Heard This Song Before", page);
+        ref.volume = TheDailyUkulele_Yellow;
+        Mockito.when(repo.findById("334455")).thenReturn(Optional.of(ref));
+
+        ReferencesDTO actual = service.getReferenceById("334455");
+
+        assertEquals(new ReferencesDTO(List.of(ref)), actual);
+        System.out.println(actual);
+    }
+
+/*
     @Test
     void shouldReturnSongTitleFoundBySearchWord() {
         List<Reference> listReturned = service.getReferenceBySearchWord("moon ri");

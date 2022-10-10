@@ -16,10 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static songbook.collections.models.ReferenceVolume.*;
 
@@ -29,7 +26,53 @@ public class SongCollectionService {
 
     private final ReferencesRepository referencesRepository;
 
-    public NewSongCollection processMultipartFile(MultipartFile file) throws IOException {
+    public ReferencesDTO getAllReferences() {
+        List<Reference> list = referencesRepository.findAll().stream()
+                .sorted(Comparator.comparing(Reference::getTitle))
+                .toList();
+        return new ReferencesDTO(list);
+    }
+
+    public ReferencesDTO getReferencesByTitle(String title) {
+        List<Reference> list = referencesRepository.findAll().stream()
+                .filter(element -> element.title.toLowerCase().contains(title.toLowerCase()))
+                .sorted(Comparator.comparing(Reference::getTitle))
+                .toList();
+        return new ReferencesDTO(list);
+    }
+
+    public Reference createReference(Reference reference) {
+        return referencesRepository.save(reference);
+    }
+
+    public ReferencesDTO getReferenceById(String id) {
+        ArrayList<Reference> list = new ArrayList<>();
+        Optional<Reference> ref = referencesRepository.findById(id);
+        ref.ifPresent(list::add);
+        return new ReferencesDTO(list);
+    }
+
+    public void deleteReference(String id) {
+        referencesRepository.deleteById(id);
+    }
+
+    public Optional<Reference> editReference(String id, Reference reference) {
+        return referencesRepository.findById(id).map(e -> referencesRepository.save(reference));
+    }
+
+    public ReferencesDTO copyReferenceById(String id) {
+        ArrayList<Reference> list = new ArrayList<>();
+        Optional<Reference> originalRef = referencesRepository.findById(id);
+        originalRef.ifPresent((item)  -> {
+            item.setId(null);
+            list.add(item);
+            referencesRepository.save(item);
+        });
+        // ToDo add error scenario
+        return new ReferencesDTO(list);
+    }
+
+    public NewSongCollection processMultipartFileUpload(MultipartFile file) throws IOException {
 
         // get my root
         String rootDirWithSlash = SongCollectionService.class.getResource("/").getPath();
@@ -67,34 +110,6 @@ public class SongCollectionService {
         deleteTempDirAndFile(fileLocation, tempPath, storedSongCollection.getName());
 
         return newSongCollection;
-    }
-
-    public ReferencesDTO getAllReferences() {
-        List<Reference> list = referencesRepository.findAll().stream()
-                .sorted(Comparator.comparing(Reference::getTitle))
-                .toList();
-        return new ReferencesDTO(list);
-    }
-
-    public ReferencesDTO getReferencesByTitle(String title) {
-        List<Reference> list = referencesRepository.findAll().stream()
-                .filter(element -> element.title.toLowerCase().contains(title.toLowerCase()))
-                .sorted(Comparator.comparing(Reference::getTitle))
-                .toList();
-        return new ReferencesDTO(list);
-    }
-
-
-    public Reference createReference(Reference reference) {
-        return referencesRepository.save(reference);
-    }
-
-    public void deleteReference(String id) {
-        referencesRepository.deleteById(id);
-    }
-
-    public Optional<Reference> editReference(String id, Reference reference) {
-        return referencesRepository.findById(id).map(e -> referencesRepository.save(reference));
     }
 
     public NewSongCollection importNewSongCollection(Path filePath) {

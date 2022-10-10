@@ -4,9 +4,9 @@ export interface Reference {
     id: string;
     title: string;
     volume: string;
-    page: number;
+    page: string;
     author?: string;
-    year?: number;
+    year: string;
 }
 
 export interface ReferencesDTO {
