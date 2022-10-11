@@ -1,9 +1,17 @@
-## MY SONG BOOK: Your Private Collection of Song Titles
+## MY SONG BOOK: A Private Collection of Song Sheets
 
-This app will eventually allow to manage a collection of song titles. 
+The aim of this app is to offer a powerful tool to manage song sheets and
+other resources of songs you want to play or learn.
 
-The user may either import new items from a given set of song collections 
-(with their respective indexes imported) or create own items. 
+### Combining Off- And Online Content
+It will eventually allow to combine both your offline song sheets and 
+resources you discover online such as tutorials and lead sheets. 
+Furthermore, it will provide for data fields where you beef-up your
+collection of songs with your own comments and pieces of information.
 
-He or she will then be able to beef up these items with further resources 
-and pieces of information.
+### Import Your Song Sheet Collections
+A centerpiece of this app is an import feature which allows you to import 
+the different content lists of your offline songbooks. You will then be able
+to browse through the entire list of your song sheets from one single point
+of reference.
+
