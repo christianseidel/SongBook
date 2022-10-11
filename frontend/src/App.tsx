@@ -65,7 +65,7 @@ function App() {
 
 
     function setMessage(message: string) {
-            const displayMessage = document.getElementById('displayMessage');
+            const displayMessage = document.getElementById('messageContainer');
             const p = document.createElement("p");
             p.textContent = message;
             p.style.marginTop = "3px";

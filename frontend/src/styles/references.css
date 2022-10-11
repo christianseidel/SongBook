@@ -1,4 +1,6 @@
-h2 {}
+h2 {
+    user-select: none;
+}
 
 #searchForm {
     display: inline-flex;
@@ -25,6 +27,7 @@ h2 {}
     margin-top: 2px;
     margin-bottom: 1px;
     padding: 1px;
+    user-select: none;
 }
 
 .referenceItem:hover {

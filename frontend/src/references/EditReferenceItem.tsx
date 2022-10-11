@@ -2,6 +2,7 @@ import {Reference, ReferencesDTO} from "./ReferenceModels";
 import '../styles/references.css';
 import '../styles/common.css';
 import React, {FormEvent, useState} from "react";
+import DisplayMessage from "../DisplayMessage";
 
 interface ReferenceItemProps {
     reference: Reference;
@@ -11,12 +12,14 @@ interface ReferenceItemProps {
 function EditReferenceItem(props: ReferenceItemProps) {
 
     const [title, setTitle] = useState(props.reference.title);
-    const [page, setPage] = useState(props.reference.page != '0' ? props.reference.page : '');
+    const [page, setPage] = useState(props.reference.page !== '0' ? props.reference.page : '');
     const [author, setAuthor] = useState(props.reference.author == null ? '' : props.reference.author);
-    const [year, setYear] = useState(props.reference.year != '0' ? props.reference.year : '');
+    const [year, setYear] = useState(props.reference.year !== '0' ? props.reference.year : '');
+    const [message, setMessage] = useState('');
 
     const editReference = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        let responseStatus: number;
         fetch('api/collections/edit/' + props.reference.id, {
             method: 'PUT',
             headers: {
@@ -29,7 +32,20 @@ function EditReferenceItem(props: ReferenceItemProps) {
                 author: author,
                 year: year,
             })
-        }).then(props.onCancel);
+        })
+            .then(response => {
+                responseStatus = response.status;
+                return response.json();
+            })
+            .then((responseBody) => {
+                if (responseStatus === 200) {
+                    sessionStorage.setItem('message', 'Your reference "' + title + '" was updated.');
+                } else {
+                    sessionStorage.setItem('message', responseBody.message);
+                    sessionStorage.setItem('messageMarker', 'red');
+                }
+            })
+            .then(props.onCancel)
     }
 
     const copyReference = (id: string) => {
@@ -37,13 +53,17 @@ function EditReferenceItem(props: ReferenceItemProps) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'},
-        }).then(response => {
-            if (response.ok) {
-                alert('Your Song "' + props.reference.title + '" was copied.') // ToDo
+        })
+            .then(response => {
+                if (response.ok) {
+                // ToDo: check error logics
+                setMessage('Your Song "' + props.reference.title + '" was copied.');
+            } else {
+                sessionStorage.setItem('message', 'Oups! Something didn\'t work when trying to copy your reference' + response.text());
+                sessionStorage.setItem('messageMarker', 'red');
+                props.onCancel()
             }
         })
-            .then(props.onCancel)
-            .catch(e => alert('Fehler in der Copy-Methode! ' + e));
     }
 
     const deleteReference = (id: string) => {
@@ -51,11 +71,14 @@ function EditReferenceItem(props: ReferenceItemProps) {
             method: 'DELETE',
         }).then(response => {
             if (response.ok) {
-                alert('Your Song "' + props.reference.title + '" was deleted.') // ToDo
+                // ToDo: check error logics
+                sessionStorage.setItem('message', 'Your Song "' + props.reference.title + '" was deleted.')
+            } else {
+                sessionStorage.setItem('message', 'Oups! Something didn\'t work when trying to delete your reference – ' + response.text());
+                sessionStorage.setItem('messageMarker', 'red');
             }
         })
             .then(props.onCancel)
-            .catch(e => alert('Fehler in der Delete-Methode! ' + e));
     }
 
     return(
@@ -87,6 +110,18 @@ function EditReferenceItem(props: ReferenceItemProps) {
             <div>
                 <button onClick={() => {props.onCancel()}}> &#10008; cancel</button>
             </div>
+
+            <div>
+                {message && <DisplayMessage
+                    message={message}
+                    onClose={() => {
+                        setMessage('');
+                        sessionStorage.setItem('message', '');
+                        sessionStorage.removeItem('messageMarker')
+                    }}
+                />}
+            </div>
+
         </div>
     )
 }

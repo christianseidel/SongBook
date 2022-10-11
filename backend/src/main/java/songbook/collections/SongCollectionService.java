@@ -1,8 +1,10 @@
 package songbook.collections;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 import songbook.collections.exceptions.*;
 import songbook.collections.models.Reference;
 import songbook.collections.models.ReferenceVolume;
@@ -56,9 +58,12 @@ public class SongCollectionService {
         referencesRepository.deleteById(id);
     }
 
-    public Optional<Reference> editReference(String id, Reference reference) {
-        return referencesRepository.findById(id).map(e -> referencesRepository.save(reference));
+    public Reference editReference(String id, Reference reference) {
+        return referencesRepository.findById(id).map(e -> referencesRepository.save(reference))
+                .orElseThrow(IdNotFoundException::new);
     }
+
+    //e -> referencesRepository.save(reference),
 
     public ReferencesDTO copyReferenceById(String id) {
         ArrayList<Reference> list = new ArrayList<>();

@@ -31,6 +31,7 @@ input:focus {
     margin-left: -3px;
     color: darkred;
     font-style: italic;
+    user-select: none;
 }
 
 button {
@@ -51,3 +52,4 @@ button:focus {
 button:hover {
     cursor: pointer;
 }
+

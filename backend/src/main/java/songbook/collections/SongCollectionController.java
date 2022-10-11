@@ -1,11 +1,13 @@
 package songbook.collections;
 
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+import songbook.collections.exceptions.IdNotFoundException;
 import songbook.collections.exceptions.MalformedFileException;
 import songbook.collections.models.Reference;
 import songbook.collections.models.ReferencesDTO;
@@ -75,8 +77,12 @@ public class SongCollectionController {
     }
 
     @PutMapping("/edit/{id}")
-    public Optional<Reference> editReference(@PathVariable String id, @RequestBody Reference reference) {
-        return songCollectionService.editReference(id, reference);
+    public ResponseEntity<Object> editReference(@PathVariable String id, @RequestBody Reference reference) {
+        try {
+            return new ResponseEntity<>(songCollectionService.editReference(id, reference), HttpStatus.OK);
+        } catch (IdNotFoundException e) {
+            return ResponseEntity.status(404).body(errorJSONfied(e.getMessage()));
+        }
     }
 
     private String errorJSONfied(String errorMessage) {

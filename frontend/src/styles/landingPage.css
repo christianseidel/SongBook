@@ -61,7 +61,7 @@ span {
     margin-left: 20px;
 }
 
-#displayMessage, #displayMessageReferences {
+#messageContainer, #displayMessageReferences {
     margin-left: 11px;
     margin-top: 26px;
     color: black;

@@ -29,6 +29,7 @@ function References() {
 
             });
         setToggleDisplaySearchResultsButNotReference(true);
+        setMessage(sessionStorage.getItem('message') ?? '')
     };
 
     const searchSong = (event: FormEvent<HTMLFormElement>) => {
@@ -52,7 +53,6 @@ function References() {
             : setToggleUpload(true);
     }
 
-    //////////// I AM HERE  ////////////////
     const editItem = (id: string) => {
         fetch('api/collections/edit/' + id, {
             method: 'GET',
@@ -109,20 +109,6 @@ function References() {
         }
     }
 
-
-    /*    function setMessage(message: string) {
-            const displayMessage = document.getElementById('displayMessageReferences');
-            const p = document.createElement("p");
-            p.textContent = message;
-            p.style.marginTop = "3px";
-            p.style.marginBottom = "3px";
-            displayMessage?.appendChild(p);
-            setTimeout(function () {
-                displayMessage?.removeChild(p);
-            }, 9000);
-        }*/
-
-
     return (
         <div>
 
@@ -147,8 +133,7 @@ function References() {
                                                        if (event.key === "Escape") {
                                                            undoSearch()
                                                        }
-                                                   }
-                                                   }
+                                                   }}
                                                    required/>
                                         </div>
                                     </form>
@@ -195,7 +180,11 @@ function References() {
                     <div>
                         {message && <DisplayMessage
                             message={message}
-                            onClose={() => {setMessage('')}}
+                            onClose={() => {
+                                setMessage('');
+                                sessionStorage.setItem('message', '');
+                                sessionStorage.removeItem('messageMarker')
+                            }}
                         />}
                     </div>
                 </div>
