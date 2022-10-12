@@ -121,7 +121,7 @@ function References() {
                 <div className={'flex-child'}>
                     <h2>Song Collections</h2>
 
-                    <div id={''} onDragOver={enableDropping}>Just land here!</div>
+                    <div id={''} onDragOver={enableDropping}>Just drop here!</div>
                 </div>
 
                 <div className={'flex-child'}>
