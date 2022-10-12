@@ -64,7 +64,7 @@ function App() {
     }
 
     function setMessage(message: string) {
-            const displayMessage = document.getElementById('messageContainer');
+            const displayMessage = document.getElementById('displayMessage');
             const p = document.createElement("p");
             p.textContent = message;
             p.style.marginTop = "3px";
@@ -75,42 +75,45 @@ function App() {
         }, 2000);
     }
 
-    const hintToList = document.getElementById('chooseASong') as HTMLSpanElement | null;
-    if (hintToList != null ) {
-        hintToList.addEventListener('mouseover', showSongsToChooseFrom)
+    const highlightSongList = document.getElementById('chooseASong') as HTMLSpanElement | null;
+    if (highlightSongList != null ) {
+        highlightSongList.addEventListener('mouseover', highlightSongsToChooseFrom)
     }
 
-    function showSongsToChooseFrom() {
-        //  ToDo: Shorten This Function
-        let i: number = -1;
-        let top: number = Math.min(songsDTO.songList.length, 6) - 1;
-
-        let rotationInterval = setInterval(function () {
+    function highlightSongsToChooseFrom() {
+        let i: number = 0;
+        let top: number = Math.min(songsDTO.songList.length, 5);
+        // initial glow
+        glowItem(document.getElementById(songsDTO.songList[0].id));
+        // glow rush
+        let shimmerInterval = setInterval(function () {
             i++;
-            const singleSongToHighlight = document.getElementById(songsDTO.songList[i].id) as HTMLDivElement | null;
-            if (singleSongToHighlight != null) {
-                singleSongToHighlight.style.color = "yellow";
-                singleSongToHighlight.style.position = "relative";
-                singleSongToHighlight.style.left = "7px";
-            }
-            const singleSongNotToHighlight = document.getElementById(songsDTO.songList[i - 1].id) as HTMLDivElement | null;
-            if (singleSongNotToHighlight != null) {
-                singleSongNotToHighlight.style.color = "unset";
-                singleSongNotToHighlight.style.left = "0";
-            }
-
+            glowItem(document.getElementById(songsDTO.songList[i].id));
+            unglowItem(document.getElementById(songsDTO.songList[i - 1].id));
             if (i === top) {
-                clearInterval(rotationInterval);
+                clearInterval(shimmerInterval);
+                // final glow
                 setTimeout(function () {
-                    const LastSingleSongNotToHighlight = document.getElementById(songsDTO.songList[i].id) as HTMLDivElement | null;
-                    if (LastSingleSongNotToHighlight != null) {
-                        LastSingleSongNotToHighlight.style.color = "unset";
-                        LastSingleSongNotToHighlight.style.left = "0";
-                    }
+                unglowItem(document.getElementById(songsDTO.songList[i].id));
                 }, 110);
             }
         }, 100);
     }
+
+    const glowItem = (item: HTMLElement | null) => {
+        if (item != null) {
+            item.style.color = 'yellow';
+            item.style.transform = 'translate(7px)';
+        }
+    }
+
+    const unglowItem = (item: HTMLElement | null) => {
+        if (item != null) {
+            item.style.color = 'unset';
+            item.style.transform = 'translate(0)';
+        }
+    }
+
 
 
     return (

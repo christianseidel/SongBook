@@ -128,64 +128,7 @@ public class SongCollectionServiceTest {
 
         assertEquals(new ReferencesDTO(List.of(ref)), actual);
     }
-
 /*
-    @Test
-    void shouldReturnSongTitleFoundBySearchWord() {
-        List<Reference> listReturned = service.getReferenceBySearchWord("moon ri");
-        String actual = listReturned.get(0).title;
-        assertEquals("Moon River", actual);
-    }
-*/
-    /*
-    @Test
-    void shouldAddOneTitle() {
-        Reference myReference = new Reference("Never to be Heard Song; The Daily Ukulele (Green)");
-        int collectionLength = service.getLength();
-        service.addSingleReference(myReference);
-        assertEquals(collectionLength + 1, service.getLength());
-
-
-        Reference lastReference = service.getReferenceByIndex(collectionLength);
-        assertEquals(myReference, lastReference);
-    }
-
-     */
-/*
-    @Test
-    void shouldAddOneTitleWithPage() {
-        Reference myReference = new Reference("Never to be Heard Song", (short) 1033);
-        int collectionLength = service.getLength();
-        service.addSingleReference(myReference);
-        assertEquals(collectionLength + 1, service.getLength());
-
-        Reference lastLine = service.getReferenceByIndex(collectionLength);
-        assertEquals(myReference, lastLine);
-        assertEquals("Never to be Heard Song", myReference.title);
-        assertEquals(1033, myReference.page);
-    }
-
-    @Test
-    void shouldAddAnotherCollection() {
-        int collectionLength = service.getLength();
-        service.addCollection(path, "Liederbuecher_a");
-
-        assertEquals(collectionLength + 1374, service.getLength());
-
-        Reference actual = service.getReferenceByIndex(collectionLength + 1);
-        assertEquals("A Hard Rain's A Gonna Fall", actual.title);
-        assertEquals("Zündschnüre-Song", service.getReferenceByIndex(collectionLength + 1373).title);
-    }
-
-    @Test
-    void shouldThrowFileNotFoundException() {
-        Exception exception = Assertions.assertThrows(FileNotFoundException.class,
-                ()-> {
-                    new SongCollection(path, "MichGibtsNicht");
-                });
-        assertEquals("FileNotFoundException", exception.getClass().getSimpleName());
-        assertEquals("Die Datei \"MichGibtsNicht\" wurde nicht gefunden.", exception.getMessage());
-    }
 
     @Test
     void shouldThrowIllegalReferenceVolumeException() {

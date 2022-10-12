@@ -99,7 +99,14 @@ function EditReferenceItem(props: ReferenceItemProps) {
                 <span>{props.reference.volume}</span><br/>
                 <label>Page: </label>
                 <input type={'text'} placeholder={'Page'} value={page}
-                       onChange={ev => setPage(ev.target.value)}/><br />
+                       onChange={ev => setPage(ev.target.value)}
+/*
+                       onKeyDown={(ev) => {
+                           if (ev.key === "Escape") {() => {props.onCancel()}} }}
+
+ */
+
+                           /><br />
                 <label>Author: </label>
                 <input type={'text'} placeholder={'Author'} value={author}
                        onChange={ev => setAuthor(ev.target.value)}/><br />

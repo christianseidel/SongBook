@@ -164,17 +164,15 @@ function References() {
                                         : <span>... loading</span>
                                     }
                                 </div>
-                            </div>
+                            <span id={"addNewCollection"} className={"doSomething"}
+                                  onClick={openUpload}>+ add a new collection</span>
+
+                        </div>
                         :
                             referencesDTO.referenceList.map(item =>
                             <EditReferenceItem key={item.id} reference={item}
                                                onCancel={getAllReferences}
                             />)
-                    }
-
-                    {toggleDisplaySearchResultsButNotReference &&
-                        <span id={"addNewCollection"} className={"doSomething"}
-                              onClick={openUpload}>+ add a new collection</span>
                     }
 
                     <div>{toggleUpload &&
