@@ -49,7 +49,7 @@ public class SongCollectionServiceTest {
         ReferenceVolume volume = TheDailyUkulele_Yellow;
         Reference ref01 = new Reference("Here Comes My Music", volume, 123);
         Reference ref02 = new Reference("Here Comes Your Music", volume, 144);
-        Reference ref03 = new Reference("Oh, Here Comes Your Promised Land", volume, 320);
+        Reference ref03 = new Reference("Oh, Here Comes Your Ice Cream", volume, 320);
         List<Reference> list = List.of(ref01, ref02, ref03);
         ReferencesDTO referencesDTO = new ReferencesDTO(list);
         Mockito.when(repo.findAll()).thenReturn(list);
@@ -91,7 +91,6 @@ public class SongCollectionServiceTest {
 
     @Test
     void shouldDeleteReference() {
-
         String myId = "234234234";
         Reference myReference = new Reference(" You May Sing My Song, Brother", TheDailyUkulele_Blue, 123);
         myReference.setId(myId);
@@ -104,13 +103,12 @@ public class SongCollectionServiceTest {
 
     @Test
     void shouldThrowExceptionWhenTryingToDeleteItemWithWrongId() {
-
         Assertions.assertThatExceptionOfType(NoSuchIdException.class)
                 .isThrownBy(()->service.deleteReference("890-980"));
     }
 
     @Test
-    void shouldFindReferenceByIdContainingTitleAndVolume() {
+    void shouldFindReferenceByIdWithReferenceHavingTitleAndVolume() {
         Reference ref = new Reference("Never Heard This Song Before", TheDailyUkulele_Yellow);
         Mockito.when(repo.findById("334455")).thenReturn(Optional.of(ref));
 
@@ -120,7 +118,7 @@ public class SongCollectionServiceTest {
     }
 
     @Test
-    void shouldFindReferenceByIdContainingTitleAndVolumeAndPage() {
+    void shouldFindReferenceByIdWithReferenceHavingTitleAndVolumeAndPage() {
         Reference ref = new Reference("Never Heard This Song Before", TheDailyUkulele_Yellow, 12);
         Mockito.when(repo.findById("334455")).thenReturn(Optional.of(ref));
 
