@@ -1,8 +1,6 @@
 package songbook.collections.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -10,7 +8,6 @@ import java.util.UUID;
 
 @Document (collection = "Collections")
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class Reference {
 
@@ -22,10 +19,6 @@ public class Reference {
     public String author;
     public int year;
 
-    public Reference(String title) {
-        this.id = UUID.randomUUID().toString();
-        this.title = title;
-    }
 
     public Reference(String title, ReferenceVolume volume) {
         this.id = UUID.randomUUID().toString();
@@ -33,17 +26,20 @@ public class Reference {
         this.volume = volume;
     }
 
-    public Reference(String title, short page) {
-        this.id = UUID.randomUUID().toString();
-        this.title = title;
-        this.page = page;
-    }
-
-    public Reference(String title, ReferenceVolume volume, short page) {
+    public Reference(String title, ReferenceVolume volume, int page) {
         this.id = UUID.randomUUID().toString();
         this.title = title;
         this.volume = volume;
         this.page = page;
+    }
+
+    public Reference(Reference toCopy) {
+        this.id = UUID.randomUUID().toString();
+        this.title = toCopy.title;
+        this.volume = toCopy.volume;
+        this.page = toCopy.page;
+        this.author = toCopy.author;
+        this.year = toCopy.year;
     }
 
 }

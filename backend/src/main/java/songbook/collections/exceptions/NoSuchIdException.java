@@ -1,8 +1,8 @@
 package songbook.collections.exceptions;
 
-public class IdNotFoundException extends RuntimeException {
+public class NoSuchIdException extends RuntimeException {
 
-    public IdNotFoundException() {
+    public NoSuchIdException() {
         super("Server is unable to find your reference's ID.");
     }
 }

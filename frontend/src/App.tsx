@@ -63,7 +63,6 @@ function App() {
         setSongChosen(newSong);
     }
 
-
     function setMessage(message: string) {
             const displayMessage = document.getElementById('messageContainer');
             const p = document.createElement("p");
@@ -77,7 +76,6 @@ function App() {
     }
 
     const hintToList = document.getElementById('chooseASong') as HTMLSpanElement | null;
-        // ToDo: Reactivate This After Item Deletion or New Creation
     if (hintToList != null ) {
         hintToList.addEventListener('mouseover', showSongsToChooseFrom)
     }

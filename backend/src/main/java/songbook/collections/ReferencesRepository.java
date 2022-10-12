@@ -15,8 +15,6 @@ public interface ReferencesRepository extends MongoRepository<Reference, String>
     @Override
     List<Reference> findAll();
 
-    Collection<Reference> findAllByTitle(String title);
-
     Collection<Reference> findAllByTitleAndVolume(String title, ReferenceVolume volume);
 
     @Override

@@ -1,19 +1,16 @@
 package songbook.collections;
 
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
-import songbook.collections.exceptions.IdNotFoundException;
+import songbook.collections.exceptions.NoSuchIdException;
 import songbook.collections.exceptions.MalformedFileException;
 import songbook.collections.models.Reference;
 import songbook.collections.models.ReferencesDTO;
 
 import java.io.IOException;
-import java.util.Optional;
 
 import static org.springframework.http.ResponseEntity.status;
 
@@ -48,7 +45,7 @@ public class SongCollectionController {
         try {
             return new ResponseEntity<>(songCollectionService.processMultipartFileUpload(file), HttpStatus.OK);
         } catch (MalformedFileException e) {
-            return ResponseEntity.status(406).body(errorJSONfied(e.getMessage()));
+            return ResponseEntity.status(406).body(stringToJson(e.getMessage()));
         }
     }
 
@@ -58,8 +55,12 @@ public class SongCollectionController {
     }
 
     @GetMapping("/edit/{id}")
-    public ResponseEntity<ReferencesDTO> getReferenceById(@PathVariable String id){
-        return status(200).body((songCollectionService.getReferenceById(id)));
+    public ResponseEntity<Object> getReferenceById(@PathVariable String id){
+        try {
+            return status(200).body((songCollectionService.getReferenceById(id)));
+        } catch (NoSuchIdException e) {
+            return ResponseEntity.status(404).body(stringToJson(e.getMessage()));
+        }
     }
 
     @PostMapping("/edit/{id}")
@@ -68,11 +69,12 @@ public class SongCollectionController {
     }
 
     @DeleteMapping("/edit/{id}")
-    public void deleteReference(@PathVariable String id) {
+    public ResponseEntity<String> deleteReference(@PathVariable String id) {
         try {
             songCollectionService.deleteReference(id);
-        } catch (RuntimeException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            return ResponseEntity.ok(stringToJson("Your reference was deleted."));
+        } catch (NoSuchIdException e) {
+            return ResponseEntity.status(404).body(stringToJson(e.getMessage()));
         }
     }
 
@@ -80,12 +82,12 @@ public class SongCollectionController {
     public ResponseEntity<Object> editReference(@PathVariable String id, @RequestBody Reference reference) {
         try {
             return new ResponseEntity<>(songCollectionService.editReference(id, reference), HttpStatus.OK);
-        } catch (IdNotFoundException e) {
-            return ResponseEntity.status(404).body(errorJSONfied(e.getMessage()));
+        } catch (NoSuchIdException e) {
+            return ResponseEntity.status(404).body(stringToJson(e.getMessage()));
         }
     }
 
-    private String errorJSONfied(String errorMessage) {
+    private String stringToJson(String errorMessage) {
         return "{\"message\": \"" + errorMessage + "\"}";
     }
 }

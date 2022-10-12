@@ -1,10 +1,8 @@
 package songbook.collections;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
 import songbook.collections.exceptions.*;
 import songbook.collections.models.Reference;
 import songbook.collections.models.ReferenceVolume;
@@ -49,31 +47,31 @@ public class SongCollectionService {
 
     public ReferencesDTO getReferenceById(String id) {
         ArrayList<Reference> list = new ArrayList<>();
-        Optional<Reference> ref = referencesRepository.findById(id);
-        ref.ifPresent(list::add);
+        referencesRepository.findById(id)
+                .map(list::add)
+                .orElseThrow(NoSuchIdException::new);
         return new ReferencesDTO(list);
     }
 
     public void deleteReference(String id) {
-        referencesRepository.deleteById(id);
+       referencesRepository.findById(id)
+               .ifPresentOrElse(e -> referencesRepository.deleteById(e.id),
+                        () -> {throw new NoSuchIdException();});
     }
 
     public Reference editReference(String id, Reference reference) {
-        return referencesRepository.findById(id).map(e -> referencesRepository.save(reference))
-                .orElseThrow(IdNotFoundException::new);
+        return referencesRepository.findById(id)
+                .map(e -> referencesRepository.save(reference))
+                .orElseThrow(NoSuchIdException::new);
     }
-
-    //e -> referencesRepository.save(reference),
 
     public ReferencesDTO copyReferenceById(String id) {
         ArrayList<Reference> list = new ArrayList<>();
         Optional<Reference> originalRef = referencesRepository.findById(id);
         originalRef.ifPresent((item)  -> {
-            item.setId(null);
-            list.add(item);
-            referencesRepository.save(item);
+            Reference copiedItem = referencesRepository.save(new Reference(item));
+            list.add(new Reference(copiedItem));
         });
-        // ToDo add error scenario
         return new ReferencesDTO(list);
     }
 
@@ -121,18 +119,19 @@ public class SongCollectionService {
         NewSongCollection newSongCollection = new NewSongCollection();
         List<String> listOfItems = readListOfReferences(filePath);
         for (String line : listOfItems) {
-            newSongCollection.totalNumberOfReferences++; // will later serve as check sum
+            newSongCollection.totalNumberOfReferences++; // will later serve as check sum (yet ToDo)
             String[] elements = line.split(";");
-            // set title
-            Reference item = new Reference(elements[0]);
-            // set volume
+            ReferenceVolume volume;
+            // check next volume
             try {
-                item.volume = mapReferenceVolume(elements[1]);
+                volume = mapReferenceVolume(elements[1]);
             } catch (IllegalReferenceVolumeException e) {
                 newSongCollection.addIllegalVolumeToList(elements[1]);
                 newSongCollection.numberOfReferencesRejected++;
                 continue;
             }
+            // create next reference
+            Reference item = new Reference(elements[0], volume);
             // check for double
             if (!checkIfReferenceExists(item.title, item.volume)) {
                 newSongCollection.numberOfReferencesAccepted++;
@@ -140,7 +139,8 @@ public class SongCollectionService {
                 // set page
                 if (elements.length > 2) {
                     try {
-                        item.page = Short.parseShort(elements[2].trim());
+                        // TODO: Hier könnte es zu einem Fehler kommen...
+                        item.page = Integer.parseInt(elements[2].trim());
                     } catch (IllegalArgumentException e) {
                         newSongCollection.addIllegalPageToList(elements[2]);
                         newSongCollection.numberOfReferencesRejected++;

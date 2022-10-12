@@ -1,4 +1,4 @@
-import {Reference, ReferencesDTO} from "./ReferenceModels";
+import {Reference} from "./ReferenceModels";
 import '../styles/references.css';
 import '../styles/common.css';
 import React, {FormEvent, useState} from "react";
@@ -40,9 +40,10 @@ function EditReferenceItem(props: ReferenceItemProps) {
             .then((responseBody) => {
                 if (responseStatus === 200) {
                     sessionStorage.setItem('message', 'Your reference "' + title + '" was updated.');
+                    sessionStorage.setItem('messageType', 'green');
                 } else {
                     sessionStorage.setItem('message', responseBody.message);
-                    sessionStorage.setItem('messageMarker', 'red');
+                    sessionStorage.setItem('messageType', 'red');
                 }
             })
             .then(props.onCancel)
@@ -57,27 +58,31 @@ function EditReferenceItem(props: ReferenceItemProps) {
             .then(response => {
                 if (response.ok) {
                 // ToDo: check error logics
-                setMessage('Your Song "' + props.reference.title + '" was copied.');
+                    sessionStorage.setItem('messageType', 'green');
+                    setMessage('Your Song "' + props.reference.title + '" was copied.');
             } else {
                 sessionStorage.setItem('message', 'Oups! Something didn\'t work when trying to copy your reference' + response.text());
-                sessionStorage.setItem('messageMarker', 'red');
+                sessionStorage.setItem('messageType', 'red');
                 props.onCancel()
             }
         })
     }
 
     const deleteReference = (id: string) => {
+        let responseStatus: number;
         fetch('api/collections/edit/' + id, {
             method: 'DELETE',
         }).then(response => {
-            if (response.ok) {
-                // ToDo: check error logics
-                sessionStorage.setItem('message', 'You are about to delete your Reference for "' + props.reference.title + '". Please confirm!')
-                // TODo: Follow suite on this...
-                sessionStorage.setItem('messageMarker', 'blue');
+            responseStatus = response.status;
+            return response.json();
+        })
+            .then((responseBody) => {
+            if (responseStatus === 200) {
+                sessionStorage.setItem('message', 'Your reference "' + props.reference.title + '" was deleted.')
+                sessionStorage.setItem('messageType', 'green');
             } else {
-                sessionStorage.setItem('message', 'Oups! Something didn\'t work when trying to delete your reference – ' + response.text());
-                sessionStorage.setItem('messageMarker', 'red');
+                sessionStorage.setItem('message', responseBody.message);
+                sessionStorage.setItem('messageType', 'red');
             }
         })
             .then(props.onCancel)
@@ -119,7 +124,7 @@ function EditReferenceItem(props: ReferenceItemProps) {
                     onClose={() => {
                         setMessage('');
                         sessionStorage.setItem('message', '');
-                        sessionStorage.removeItem('messageMarker')
+                        sessionStorage.removeItem('messageType')
                     }}
                 />}
             </div>

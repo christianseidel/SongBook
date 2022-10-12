@@ -190,7 +190,7 @@ function References() {
                             onClose={() => {
                                 setMessage('');
                                 sessionStorage.setItem('message', '');
-                                sessionStorage.removeItem('messageMarker')
+                                sessionStorage.removeItem('messageType')
                             }}
                         />}
                     </div>

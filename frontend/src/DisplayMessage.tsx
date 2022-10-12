@@ -9,26 +9,25 @@ interface MessageProps {
 function DisplayMessage(props: MessageProps) {
 
     useEffect(() => {
-        let messageMarker = sessionStorage.getItem('messageMarker');
-        if (messageMarker === 'red' || messageMarker === 'blue') {
+        let messageContainer = document.getElementById('messageContainer') as HTMLDivElement | null;
+        let messageIcon = document.getElementById('messageIcon') as HTMLDivElement | null;
+        let messageType = sessionStorage.getItem('messageType');
 
-            let messageContainer = document.getElementById('messageContainer') as HTMLDivElement | null;
+        if (messageType !== null) {
             if (messageContainer !== null) {
-                messageContainer.style.borderColor = messageMarker;
+                messageContainer.style.borderColor = messageType;
             }
-
-            let messageIcon = document.getElementById('messageIcon') as HTMLDivElement | null;
             if (messageIcon !== null) {
-                if (messageMarker === 'red') {
+                messageIcon.style.color = messageType;
+                if (messageType === 'red') {
                     messageIcon.innerHTML = '!';
-                } else {
-                    messageIcon.innerHTML = '?';
                 }
-                messageIcon.style.color = messageMarker;
+                if (messageType === 'green') {
+                    messageIcon.innerHTML = '&#10003;';
+                }
             }
-        } else if (messageMarker === 'blue') {
-            alert("okay, das muss noch...")
-        } else {
+        }
+        if (messageType === 'green') {
             setTimeout(() => {
                 let messageContainer = document.getElementById('messageContainer') as HTMLDivElement | null;
                 if (messageContainer !== null) {
@@ -44,7 +43,7 @@ function DisplayMessage(props: MessageProps) {
     return (
         <div>
             <div id={'messageContainer'}>
-                <div id={'messageIcon'}>&#10003;</div>
+                <div id={'messageIcon'}></div>
                 <div className={'message'}>
                     {props.message}
                     <div id={'buttonOKContainer'}>
