@@ -10,18 +10,24 @@ function DisplayMessage(props: MessageProps) {
 
     useEffect(() => {
         let messageMarker = sessionStorage.getItem('messageMarker');
-        if (messageMarker === 'red') {
+        if (messageMarker === 'red' || messageMarker === 'blue') {
 
             let messageContainer = document.getElementById('messageContainer') as HTMLDivElement | null;
             if (messageContainer !== null) {
-                messageContainer.style.borderColor = 'red';
+                messageContainer.style.borderColor = messageMarker;
             }
 
             let messageIcon = document.getElementById('messageIcon') as HTMLDivElement | null;
             if (messageIcon !== null) {
-                messageIcon.innerHTML = '!';
-                messageIcon.style.color = 'red';
+                if (messageMarker === 'red') {
+                    messageIcon.innerHTML = '!';
+                } else {
+                    messageIcon.innerHTML = '?';
+                }
+                messageIcon.style.color = messageMarker;
             }
+        } else if (messageMarker === 'blue') {
+            alert("okay, das muss noch...")
         } else {
             setTimeout(() => {
                 let messageContainer = document.getElementById('messageContainer') as HTMLDivElement | null;

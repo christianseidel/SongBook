@@ -11,7 +11,7 @@ collection of songs with your own comments and pieces of information.
 
 ### Import Your Song Sheet Collections
 A centerpiece of this app is an import feature which allows you to import 
-the different content lists of your offline songbooks. You will then be able
+the content lists of your different hardcopy songbooks. You will then be able
 to browse through the entire list of your song sheets from one single point
 of reference.
 

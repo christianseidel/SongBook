@@ -109,12 +109,19 @@ function References() {
         }
     }
 
+    const enableDropping = (event: React.DragEvent<HTMLDivElement>) => {
+        event.preventDefault();
+        alert("Hurra! Angekommen.")
+    }
+
     return (
         <div>
 
             <div className={'flex-parent'}>
                 <div className={'flex-child'}>
                     <h2>Song Collections</h2>
+
+                    <div id={''} onDragOver={enableDropping}>Just land here!</div>
                 </div>
 
                 <div className={'flex-child'}>

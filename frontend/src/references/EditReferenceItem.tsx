@@ -72,7 +72,9 @@ function EditReferenceItem(props: ReferenceItemProps) {
         }).then(response => {
             if (response.ok) {
                 // ToDo: check error logics
-                sessionStorage.setItem('message', 'Your Song "' + props.reference.title + '" was deleted.')
+                sessionStorage.setItem('message', 'You are about to delete your Reference for "' + props.reference.title + '". Please confirm!')
+                // TODo: Follow suite on this...
+                sessionStorage.setItem('messageMarker', 'blue');
             } else {
                 sessionStorage.setItem('message', 'Oups! Something didn\'t work when trying to delete your reference – ' + response.text());
                 sessionStorage.setItem('messageMarker', 'red');
