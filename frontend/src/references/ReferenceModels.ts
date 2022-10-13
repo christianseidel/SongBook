@@ -12,17 +12,10 @@ export interface ReferencesDTO {
 }
 
 export interface UploadResult {
-    numberOfReferencesAccepted?: number;
-    numberOfReferencesRejected?: number;
-    totalNumberOfReferences?: number;
-    listOfInvalidVolumes: [string];
-    numberOfInvalidVolumeData?: number;
-    listOfInvalidPageData?: [string];
-    numberOfInvalidPageData?: number;
+    numberOfReferencesAccepted: number;
+    numberOfExistingReferences: number;
+    numberOfReferencesRejected: number;
+    totalNumberOfReferences: number;
+    listOfLinesWithInvalidVolumeData: [string];
+    listOfLinesWithInvalidPageData: [string];
 }
-
-/*
-setUploadResult('Backend received your file "' + files[0].name + '". ' +
-    'Out of a total of ' + responseBody.totalNumberOfReferences + ' references, ' +
-    responseBody.numberOfReferencesAccepted + ' references where added.');
-*/

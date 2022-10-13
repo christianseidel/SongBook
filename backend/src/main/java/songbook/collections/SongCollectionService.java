@@ -119,18 +119,20 @@ public class SongCollectionService {
         UploadResult uploadResult = new UploadResult();
         List<String> listOfItems = readListOfReferences(filePath);
         for (String line : listOfItems) {
-            uploadResult.totalNumberOfReferences++; // will later serve as check sum (yet ToDo)
+            uploadResult.totalNumberOfReferences++; // will serve as check sum
             String[] elements = line.split(";");
             ReferenceVolume volume;
             // check volume
             try {
                 volume = mapReferenceVolume(elements[1]);
             } catch (IllegalReferenceVolumeException e) {
-                uploadResult.addIllegalVolumeToList(elements[1]);
+                uploadResult.addLineWithInvalidVolumeDatum(line);
                 uploadResult.numberOfReferencesRejected++;
                 continue;
             } catch (IndexOutOfBoundsException e) {
-                throw new MalformedLinesException("Your Line " +  elements[0] + " has no Volume Information. Please correct!");
+                uploadResult.addLineWithInvalidVolumeDatum(elements[0] + " // volume information missing ");
+                uploadResult.numberOfReferencesRejected++;
+                continue;
             }
             // create reference
             Reference item = new Reference(elements[0], volume);
@@ -142,18 +144,17 @@ public class SongCollectionService {
                         // TODO: Hier könnte es zu einem Fehler kommen...
                         item.page = Integer.parseInt(elements[2].trim());
                     } catch (IllegalArgumentException e) {
-                        uploadResult.addIllegalPageToList(elements[2]);
+                        uploadResult.addLineWithInvalidPageDatum(line);
                         uploadResult.numberOfReferencesRejected++;
-                        uploadResult.numberOfReferencesAccepted--;
-                        referencesRepository.delete(item);
+                        continue;
                     }
                 }
                 uploadResult.numberOfReferencesAccepted++;
                 referencesRepository.save(item);
             } else {
-                uploadResult.numberOfReferencesRejected++;
+                uploadResult.numberOfExistingReferences++;
+                System.out.println("-- Already exists: " + line);
             }
-
         }
         return uploadResult;
     }
@@ -215,7 +216,7 @@ public class SongCollectionService {
             case "liederzug_13" -> Liederzug_13;
             case "liederwelt_14" -> Liederwelt_14;
             case "liederfest_15" -> Liederfest_15;
-            default -> throw new IllegalReferenceVolumeException(proposal.trim());
+            default -> throw new IllegalReferenceVolumeException();
         };
     }
 }

@@ -6,42 +6,26 @@ import java.util.ArrayList;
 @Data
 public class UploadResult {
     short numberOfReferencesAccepted;
+    short numberOfExistingReferences;
     short numberOfReferencesRejected;
     short totalNumberOfReferences; // serves as check sum
-    ArrayList<String> listOfInvalidVolumes;
-    short numberOfInvalidVolumeData;
-    ArrayList<String> listOfInvalidPageData;
-    short numberOfInvalidPageData;
+    ArrayList<String> listOfLinesWithInvalidVolumeData;
+    ArrayList<String> listOfLinesWithInvalidPageData;
 
     public UploadResult() {
         this.numberOfReferencesAccepted = 0;
+        this.numberOfExistingReferences = 0;
         this.numberOfReferencesRejected = 0;
         this.totalNumberOfReferences = 0;
-        this.listOfInvalidVolumes = new ArrayList<>();
-        this.numberOfInvalidVolumeData = 0;
-        this.listOfInvalidPageData = new ArrayList<>();
-        this.numberOfInvalidPageData = 0;
+        this.listOfLinesWithInvalidVolumeData = new ArrayList<>();
+        this.listOfLinesWithInvalidPageData = new ArrayList<>();
     }
 
-    public void addIllegalVolumeToList(String illegalVolume) {
-        for (int i = 0; i < listOfInvalidVolumes.size(); i++) {
-            if (listOfInvalidVolumes.get(i).equals(illegalVolume)) {
-                i++;
-            } else {
-                listOfInvalidVolumes.add(illegalVolume);
-            }
-        }
-        numberOfInvalidVolumeData++;
+    public void addLineWithInvalidVolumeDatum(String illegalVolume) {
+        listOfLinesWithInvalidVolumeData.add(illegalVolume);
     }
 
-    public void addIllegalPageToList(String illegalPage) {
-        for (int i = 0; i < listOfInvalidVolumes.size(); i++) {
-            if (listOfInvalidVolumes.get(i).equals(illegalPage)) {
-                i++;
-            } else {
-                listOfInvalidVolumes.add(illegalPage);
-            }
-        }
-        numberOfInvalidPageData++;
+    public void addLineWithInvalidPageDatum(String illegalPage) {
+        listOfLinesWithInvalidVolumeData.add(illegalPage);
     }
 }

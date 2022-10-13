@@ -87,11 +87,8 @@ function App() {
         // glow rush
         let shimmerInterval = setInterval(function () {
             i++;
-            console.log(i);
-
             glowItem(document.getElementById(songsDTO.songList[i].id));
             unglowItem(document.getElementById(songsDTO.songList[i - 1].id));
-
             if (i === top) {
                 clearInterval(shimmerInterval);
                 // final glow

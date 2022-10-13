@@ -59,7 +59,7 @@ function EditReferenceItem(props: ReferenceItemProps) {
                 if (response.ok) {
                 // ToDo: check error logics
                     sessionStorage.setItem('messageType', 'green');
-                    setMessage('Your Song "' + props.reference.title + '" was copied.');
+                    setMessage('Your reference "' + props.reference.title + '" was copied.');
             } else {
                 sessionStorage.setItem('message', 'Oups! Something didn\'t work when trying to copy your reference' + response.text());
                 sessionStorage.setItem('messageType', 'red');

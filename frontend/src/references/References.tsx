@@ -18,6 +18,8 @@ function References() {
     const [uploadResult, setUploadResult] = useState({} as UploadResult);
     const [referencesDTO, setReferencesDTO] = useState({} as ReferencesDTO);
 
+    var fileName = '';
+
     useEffect(() => {
         getAllReferences()
     }, []);
@@ -65,8 +67,8 @@ function References() {
             .then(() => setToggleDisplaySearchResultsButNotReference(false));
     }
 
-    function uploadFile(files: FileList | null) {
-        sessionStorage.setItem('messageType', 'red');
+    function uploadFile(files: FileList | null) {       // ToDo: Introduce Check Sum
+        sessionStorage.setItem('messageType', 'red');   // ToDO: Check Error Paths
         if (files === null) {
             alert('Somehow the FormData Object did not work properly.')
         } else if (!files[0].name.endsWith('.txt')) {
@@ -75,6 +77,7 @@ function References() {
             const formData = new FormData();
             formData.append('file', files[0]);
             let responseStatus = 0;
+            fileName = files[0].name
             fetch('api/collections/upload/', {
                 method: 'POST',
                 body: formData,
@@ -100,9 +103,9 @@ function References() {
                     } else if (responseStatus !== 201) {
                         setMessage('Unfortunately, something went wrong.')
                     } else {
-                        alert(responseBody);
+                        alert('Something Unexpected happened.');
                     }
-                });
+                }).then(getAllReferences);
         }
     }
 
@@ -167,7 +170,7 @@ function References() {
                             />)
                     }
 
-                    <div>{toggleDisplayUploadFunction &&
+                    <div>{toggleDisplayUploadFunction && toggleDisplaySearchResultsButNotReference &&
                         <form id={'formAddFile'} encType={'multipart/form-data'}>
                             <label id={'labelAddFile'}>Choose your file: </label>
                             <input type={'file'} id={'inputAddFile'}
@@ -189,6 +192,7 @@ function References() {
                     <div>
                         {toggleDisplayUploadResult && <DisplayUploadResult
                             uploadResult={uploadResult}
+                            fileName={fileName}
                             onClose={() => {
                                 setToggleDisplayUploadResult(false);
                             }}

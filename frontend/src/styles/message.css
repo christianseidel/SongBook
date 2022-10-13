@@ -69,3 +69,31 @@
     background-color: goldenrod;
     cursor: pointer;
 }
+
+span {
+    font: inherit;
+    margin: 0;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.resultTitle {
+}
+
+.listOfErrorItems {
+
+    font-family: Verdana, Trebuchet MS, Lucida Sans Unicode, Lucida Grande, Lucida Sans, Arial, sans-serif;
+    font-size: 8pt;
+    line-height: 1;
+    margin-left: 24px;
+    color: darkblue;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: 0;
+    max-height: 120px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: auto;
+}
