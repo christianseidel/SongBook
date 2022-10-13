@@ -11,7 +11,6 @@ function App() {
 
     const [songsDTO, setSongsDTO] = useState({} as SongsDTO);
     let [songChosen, setSongChosen] = useState({} as Song)
-    const [error, setError] = useState('')
 
     useEffect(() => {
         fetch('/api/songbook', {
@@ -41,7 +40,7 @@ function App() {
                 responseBody.dayOfCreation = new DayOfCreation(responseBody.dateCreated as string);
                 setSongChosen(responseBody);
             })
-            .catch(e => setError(e.message));
+            .catch(e => setMessage(e.message));
     }
 
     function fetchAllItems() {
@@ -88,13 +87,16 @@ function App() {
         // glow rush
         let shimmerInterval = setInterval(function () {
             i++;
+            console.log(i);
+
             glowItem(document.getElementById(songsDTO.songList[i].id));
             unglowItem(document.getElementById(songsDTO.songList[i - 1].id));
+
             if (i === top) {
                 clearInterval(shimmerInterval);
                 // final glow
                 setTimeout(function () {
-                unglowItem(document.getElementById(songsDTO.songList[i].id));
+                    unglowItem(document.getElementById(songsDTO.songList[i].id));
                 }, 110);
             }
         }, 100);
@@ -113,8 +115,6 @@ function App() {
             item.style.transform = 'translate(0)';
         }
     }
-
-
 
     return (
         <div id={'container'}>

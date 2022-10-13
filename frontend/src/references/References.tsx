@@ -62,12 +62,6 @@ function References() {
             .then(() => setToggleDisplaySearchResultsButNotReference(false));
     }
 
-    const editDone = () => {
-        setMessage("habe fertig!");  //ToDo
-        getAllReferences();
-    }
-
-
     function uploadFile(files: FileList | null) {
         if (files === null) {
             alert('Somehow the FormData Object did not work properly.')
@@ -171,7 +165,7 @@ function References() {
                         :
                             referencesDTO.referenceList.map(item =>
                             <EditReferenceItem key={item.id} reference={item}
-                                               onCancel={getAllReferences}
+                                               doCancel={getAllReferences}
                             />)
                     }
 

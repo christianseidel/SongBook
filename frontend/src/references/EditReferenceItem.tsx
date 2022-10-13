@@ -6,7 +6,7 @@ import DisplayMessage from "../DisplayMessage";
 
 interface ReferenceItemProps {
     reference: Reference;
-    onCancel: () => void;
+    doCancel: () => void;
 }
 
 function EditReferenceItem(props: ReferenceItemProps) {
@@ -46,7 +46,7 @@ function EditReferenceItem(props: ReferenceItemProps) {
                     sessionStorage.setItem('messageType', 'red');
                 }
             })
-            .then(props.onCancel)
+            .then(props.doCancel)
     }
 
     const copyReference = (id: string) => {
@@ -63,7 +63,7 @@ function EditReferenceItem(props: ReferenceItemProps) {
             } else {
                 sessionStorage.setItem('message', 'Oups! Something didn\'t work when trying to copy your reference' + response.text());
                 sessionStorage.setItem('messageType', 'red');
-                props.onCancel()
+                props.doCancel()
             }
         })
     }
@@ -85,7 +85,13 @@ function EditReferenceItem(props: ReferenceItemProps) {
                 sessionStorage.setItem('messageType', 'red');
             }
         })
-            .then(props.onCancel)
+            .then(props.doCancel)
+    }
+
+    const checkIfEscapeKey = (key: string) => {
+        if (key === "Escape") {
+            props.doCancel()
+        };
     }
 
     return(
@@ -94,25 +100,25 @@ function EditReferenceItem(props: ReferenceItemProps) {
             <form onSubmit={ev => editReference(ev)}>
                 <label>Titel: </label>
                 <input className={'title'} id={'inputTitle'} type={'text'} value={title}
-                       onChange={ev => setTitle(ev.target.value)} autoFocus required/>
-
+                       onChange={ev => setTitle(ev.target.value)} autoFocus required
+                       onKeyDown={ev => checkIfEscapeKey(ev.key)}
+                />
                 <span>{props.reference.volume}</span><br/>
                 <label>Page: </label>
                 <input type={'text'} placeholder={'Page'} value={page}
                        onChange={ev => setPage(ev.target.value)}
-/*
-                       onKeyDown={(ev) => {
-                           if (ev.key === "Escape") {() => {props.onCancel()}} }}
-
- */
-
-                           /><br />
+                       onKeyDown={ev => checkIfEscapeKey(ev.key)}
+                /><br />
                 <label>Author: </label>
                 <input type={'text'} placeholder={'Author'} value={author}
-                       onChange={ev => setAuthor(ev.target.value)}/><br />
+                       onChange={ev => setAuthor(ev.target.value)}
+                       onKeyDown={ev => checkIfEscapeKey(ev.key)}
+                /><br />
                 <label>Year: </label>
                 <input type={'text'}  placeholder={'Year'} value={year}
-                       onChange={ev => setYear(ev.target.value)}/><br />
+                       onChange={ev => setYear(ev.target.value)}
+                       onKeyDown={ev => checkIfEscapeKey(ev.key)}
+                /><br />
                 <button type='submit'> &#10004; update</button>
             </form>
             <div>
@@ -122,7 +128,7 @@ function EditReferenceItem(props: ReferenceItemProps) {
                 <span id={'buttonCopyReference'}><button onClick={() => copyReference(props.reference.id)}>&#10004; copy</button></span><br />
             </div>
             <div>
-                <button onClick={() => {props.onCancel()}}> &#10008; cancel</button>
+                <button onClick={() => {props.doCancel()}}> &#10008; cancel</button>
             </div>
 
             <div>

@@ -122,7 +122,7 @@ public class SongCollectionService {
             newSongCollection.totalNumberOfReferences++; // will later serve as check sum (yet ToDo)
             String[] elements = line.split(";");
             ReferenceVolume volume;
-            // check next volume
+            // check volume
             try {
                 volume = mapReferenceVolume(elements[1]);
             } catch (IllegalReferenceVolumeException e) {
@@ -130,12 +130,10 @@ public class SongCollectionService {
                 newSongCollection.numberOfReferencesRejected++;
                 continue;
             }
-            // create next reference
+            // create reference
             Reference item = new Reference(elements[0], volume);
             // check for double
             if (!checkIfReferenceExists(item.title, item.volume)) {
-                newSongCollection.numberOfReferencesAccepted++;
-                referencesRepository.save(item);
                 // set page
                 if (elements.length > 2) {
                     try {
@@ -146,9 +144,11 @@ public class SongCollectionService {
                         newSongCollection.numberOfReferencesRejected++;
                         referencesRepository.delete(item);
                     }
-                } else {
-                    newSongCollection.numberOfReferencesRejected++;
                 }
+                newSongCollection.numberOfReferencesAccepted++;
+                referencesRepository.save(item);
+            } else {
+                newSongCollection.numberOfReferencesRejected++;
             }
 
         }
