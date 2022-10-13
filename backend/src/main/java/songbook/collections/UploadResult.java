@@ -4,7 +4,7 @@ import lombok.Data;
 import java.util.ArrayList;
 
 @Data
-public class NewSongCollection {
+public class UploadResult {
     short numberOfReferencesAccepted;
     short numberOfReferencesRejected;
     short totalNumberOfReferences; // serves as check sum
@@ -13,7 +13,7 @@ public class NewSongCollection {
     ArrayList<String> listOfInvalidPageData;
     short numberOfInvalidPageData;
 
-    public NewSongCollection() {
+    public UploadResult() {
         this.numberOfReferencesAccepted = 0;
         this.numberOfReferencesRejected = 0;
         this.totalNumberOfReferences = 0;

@@ -2,17 +2,20 @@ import '../styles/references.css';
 import '../styles/common.css';
 import React, {FormEvent, useEffect, useState} from "react";
 import ReferenceItem from "./ReferenceItem";
-import {ReferencesDTO} from "./ReferenceModels";
+import {ReferencesDTO, UploadResult} from "./ReferenceModels";
 import DisplayMessage from "../DisplayMessage";
 import EditReferenceItem from "./EditReferenceItem";
+import DisplayUploadResult from "./DisplayUploadResult";
 
 function References() {
 
     const [toggleDisplaySearchResultsButNotReference, setToggleDisplaySearchResultsButNotReference] = useState(true);
-    const [toggleUpload, setToggleUpload] = useState(false);
+    const [toggleDisplayUploadFunction, setToggleDisplayUploadFunction] = useState(false);
+    const [toggleDisplayUploadResult, setToggleDisplayUploadResult] = useState(false);
 
     const [searchWord, setSearchWord] = useState('');
     const [message, setMessage] = useState('');
+    const [uploadResult, setUploadResult] = useState({} as UploadResult);
     const [referencesDTO, setReferencesDTO] = useState({} as ReferencesDTO);
 
     useEffect(() => {
@@ -48,9 +51,9 @@ function References() {
     }
 
     const openUpload = () => {
-        toggleUpload
-            ? setToggleUpload(false)
-            : setToggleUpload(true);
+        toggleDisplayUploadFunction
+            ? setToggleDisplayUploadFunction(false)
+            : setToggleDisplayUploadFunction(true);
     }
 
     const editItem = (id: string) => {
@@ -63,10 +66,11 @@ function References() {
     }
 
     function uploadFile(files: FileList | null) {
+        sessionStorage.setItem('messageType', 'red');
         if (files === null) {
             alert('Somehow the FormData Object did not work properly.')
         } else if (!files[0].name.endsWith('.txt')) {
-            alert('Sorry, the file "' + files[0].name + '" will not work...\nPlease, choose a regular text file.')
+            setMessage('Sorry, file "' + files[0].name + '" will not work...\nPlease, choose a regular text file.')
         } else {
             const formData = new FormData();
             formData.append('file', files[0]);
@@ -77,15 +81,14 @@ function References() {
             })
                 .then((response) => {
                     responseStatus = response.status;
-                    console.log(responseStatus);
                     return response.json();
                 })
                 .then((responseBody) => {
                     if (responseStatus === 200) {
-                        setMessage('Backend received your file "' + files[0].name + '". ' +
-                            'Out of a total of ' + responseBody.totalNumberOfReferences + ' references, ' +
-                            responseBody.numberOfReferencesAccepted + ' references where added.');
+                        setUploadResult(responseBody);
+                        setToggleDisplayUploadResult(true);
                         console.log('File "' + files[0].name + '" successfully transmitted to backend!');
+                        console.log(responseBody);
                     } else if (responseStatus === 400) {
                         setMessage('Sorry, the server does not accept your request (Bad Request).')
                     } else if (responseStatus === 404) {
@@ -93,7 +96,7 @@ function References() {
                     } else if (responseStatus === 406) {
                         setMessage(responseBody.message);
                     } else if (responseStatus === 500) {
-                        setMessage('Sorry, the server is unable to handle your request (Internal Server Error).');
+                        setMessage(responseBody.message);
                     } else if (responseStatus !== 201) {
                         setMessage('Unfortunately, something went wrong.')
                     } else {
@@ -110,16 +113,12 @@ function References() {
 
     return (
         <div>
-
             <div className={'flex-parent'}>
                 <div className={'flex-child'}>
                     <h2>Song Collections</h2>
-
                     <div id={''} onDragOver={enableDropping}>Just drop here!</div>
                 </div>
-
                 <div className={'flex-child'}>
-
                     {toggleDisplaySearchResultsButNotReference
                         ?   <div>
                             <div id={'searchForm'}>
@@ -160,7 +159,6 @@ function References() {
                                 </div>
                             <span id={"addNewCollection"} className={"doSomething"}
                                   onClick={openUpload}>+ add a new collection</span>
-
                         </div>
                         :
                             referencesDTO.referenceList.map(item =>
@@ -169,13 +167,14 @@ function References() {
                             />)
                     }
 
-                    <div>{toggleUpload &&
+                    <div>{toggleDisplayUploadFunction &&
                         <form id={'formAddFile'} encType={'multipart/form-data'}>
                             <label id={'labelAddFile'}>Choose your file: </label>
                             <input type={'file'} id={'inputAddFile'}
                                    onChange={event => uploadFile(event.target.files)}/>
                         </form>}
                     </div>
+
                     <div>
                         {message && <DisplayMessage
                             message={message}
@@ -186,6 +185,16 @@ function References() {
                             }}
                         />}
                     </div>
+
+                    <div>
+                        {toggleDisplayUploadResult && <DisplayUploadResult
+                            uploadResult={uploadResult}
+                            onClose={() => {
+                                setToggleDisplayUploadResult(false);
+                            }}
+                        />}
+                    </div>
+
                 </div>
             </div>
         </div>

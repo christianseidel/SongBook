@@ -75,7 +75,7 @@ public class SongCollectionService {
         return new ReferencesDTO(list);
     }
 
-    public NewSongCollection processMultipartFileUpload(MultipartFile file) throws IOException {
+    public UploadResult processMultipartFileUpload(MultipartFile file) throws IOException {
 
         // get my root
         String rootDirWithSlash = SongCollectionService.class.getResource("/").getPath();
@@ -90,8 +90,8 @@ public class SongCollectionService {
             Files.createDirectory(tempPath);
             System.out.println("-> Directory created.");
         } catch (IOException e) {
-            System.out.println("! Could not create temporary directory!");
-            throw new RuntimeException("! The server could not create the temporary directory needed.");
+            System.out.println("!  Could not create temporary directory!");
+            throw new RuntimeException("Unfortunately, the server could not create the temporary directory needed.");
         }
 
         // save file
@@ -101,9 +101,9 @@ public class SongCollectionService {
         System.out.println("-> File created: " + file.getOriginalFilename());
 
         // process new SongCollection
-        NewSongCollection newSongCollection;
+        UploadResult uploadResult;
         try {
-            newSongCollection = importNewSongCollection(storedSongCollection.toPath());
+            uploadResult = importNewSongCollection(storedSongCollection.toPath());
         } catch (MalformedFileException e) {
             deleteTempDirAndFile(fileLocation, tempPath, storedSongCollection.getName());
             throw e;
@@ -112,23 +112,25 @@ public class SongCollectionService {
         // undo file and directory
         deleteTempDirAndFile(fileLocation, tempPath, storedSongCollection.getName());
 
-        return newSongCollection;
+        return uploadResult;
     }
 
-    public NewSongCollection importNewSongCollection(Path filePath) {
-        NewSongCollection newSongCollection = new NewSongCollection();
+    public UploadResult importNewSongCollection(Path filePath) {
+        UploadResult uploadResult = new UploadResult();
         List<String> listOfItems = readListOfReferences(filePath);
         for (String line : listOfItems) {
-            newSongCollection.totalNumberOfReferences++; // will later serve as check sum (yet ToDo)
+            uploadResult.totalNumberOfReferences++; // will later serve as check sum (yet ToDo)
             String[] elements = line.split(";");
             ReferenceVolume volume;
             // check volume
             try {
                 volume = mapReferenceVolume(elements[1]);
             } catch (IllegalReferenceVolumeException e) {
-                newSongCollection.addIllegalVolumeToList(elements[1]);
-                newSongCollection.numberOfReferencesRejected++;
+                uploadResult.addIllegalVolumeToList(elements[1]);
+                uploadResult.numberOfReferencesRejected++;
                 continue;
+            } catch (IndexOutOfBoundsException e) {
+                throw new MalformedLinesException("Your Line " +  elements[0] + " has no Volume Information. Please correct!");
             }
             // create reference
             Reference item = new Reference(elements[0], volume);
@@ -140,19 +142,20 @@ public class SongCollectionService {
                         // TODO: Hier könnte es zu einem Fehler kommen...
                         item.page = Integer.parseInt(elements[2].trim());
                     } catch (IllegalArgumentException e) {
-                        newSongCollection.addIllegalPageToList(elements[2]);
-                        newSongCollection.numberOfReferencesRejected++;
+                        uploadResult.addIllegalPageToList(elements[2]);
+                        uploadResult.numberOfReferencesRejected++;
+                        uploadResult.numberOfReferencesAccepted--;
                         referencesRepository.delete(item);
                     }
                 }
-                newSongCollection.numberOfReferencesAccepted++;
+                uploadResult.numberOfReferencesAccepted++;
                 referencesRepository.save(item);
             } else {
-                newSongCollection.numberOfReferencesRejected++;
+                uploadResult.numberOfReferencesRejected++;
             }
 
         }
-        return newSongCollection;
+        return uploadResult;
     }
 
     private boolean checkIfReferenceExists(String title, ReferenceVolume volume) {

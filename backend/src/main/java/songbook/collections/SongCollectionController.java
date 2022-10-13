@@ -37,17 +37,16 @@ public class SongCollectionController {
 
     @PostMapping(path = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Object> uploadCollection(@RequestParam("file") MultipartFile file) throws IOException {
-
-        // HINT
         System.out.println("\n-> Received file \"" + file.getOriginalFilename()
                 + "\" with Content Type: \"" + file.getContentType() + "\"");
-
         try {
             return new ResponseEntity<>(songCollectionService.processMultipartFileUpload(file), HttpStatus.OK);
         } catch (MalformedFileException e) {
             return ResponseEntity.status(406).body(stringToJson(e.getMessage()));
-        }
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(500).body(stringToJson(e.getMessage()));
     }
+}
 
     @PostMapping("/upload")
     public Reference createReference(@RequestBody Reference reference) {
