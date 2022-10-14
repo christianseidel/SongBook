@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import './styles/landingPage.css';
 import './styles/common.css';
 import {Song, SongsDTO, Status, DayOfCreation} from "./models";
-import SongItem from "./SongItem";
+import SongItemInList from "./SongItemInList";
 import SongItemDetails from "./SongItemDetails";
 import ukulele from "./images/ukulele.png";
 import References from "./references/References";
@@ -102,14 +102,14 @@ function App() {
     const glowItem = (item: HTMLElement | null) => {
         if (item != null) {
             item.style.color = 'yellow';
-            item.style.transform = 'translate(7px)';
+            item.style.left = '7px';
         }
     }
 
     const unglowItem = (item: HTMLElement | null) => {
         if (item != null) {
-            item.style.color = 'unset';
-            item.style.transform = 'translate(0)';
+            item.style.color = 'darkgreen';
+            item.style.left = '0';
         }
     }
 
@@ -120,13 +120,13 @@ function App() {
 
                 <div className={"flex-child"}>
                     <div onClick={createItem}>
-                        <span id={"addNewSong"} className={"doSomething"} >+ add new song</span>
+                        <span className={"doSomething"} id={"addNewSong"}>+ add new song</span>
                     </div>
 
                     {songsDTO.songList
                         ? songsDTO.songList.map(item =>
-                            <SongItem key={item.id} song={item}
-                                      onItemMarked={displayItemChosen}
+                            <SongItemInList key={item.id} song={item}
+                                            onItemMarked={displayItemChosen}
                             />)
                         : <span>... loading</span>
                     }
@@ -150,7 +150,7 @@ function App() {
                                                }}
                                                onCancel={fetchAllItems}
                                                />
-                            : <span id={"chooseASong"}>&#129172; &nbsp; please choose a song</span>
+                            : <span className={"doSomething"} id={"chooseASong"}>&#129172; &nbsp; please choose a song</span>
                     }
                 </div>
 

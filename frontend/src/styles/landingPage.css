@@ -6,6 +6,8 @@ html {
 
 body {
     background-color: #EABA5E;
+    font-family: Verdana, Trebuchet MS, Lucida Sans Unicode, Lucida Grande, Lucida Sans, Arial, sans-serif;
+    font-size: 12px;
     margin: 0;
     padding: 20px;
     height: 100%;
@@ -18,7 +20,6 @@ body {
 h1 {
     margin-top: 0;
     margin-bottom: 42px;
-    font-family: Verdana, Arial, sans-serif;
 }
 
 #ukulele {
@@ -42,23 +43,8 @@ h1 {
     color: darkred;
 }
 
-#addNewSong, #addNewCollection {
-    cursor: pointer;
-}
-
-
-#chooseASong {
-    cursor: pointer;
-}
-
 .flex-child:first-child {
     color: green;
-}
-
-span {
-    font-family: Verdana, Trebuchet MS, Lucida Sans Unicode, Lucida Grande, Lucida Sans, Arial, sans-serif;
-    font-size: 11pt;
-    margin-left: 20px;
 }
 
 #displayMessage {
@@ -73,6 +59,23 @@ span {
 }
 
 .songItem {
+    position: relative;
+    width: fit-content;
+    margin: 2px 20px;
+    color: darkgreen;
+    padding: 1px 6px;
     transition: 0.1s;
+    user-select: none;
+
+}
+
+.songItem:hover {
+    width: fit-content;
+    background-color: lightyellow;
+    border-width: 0px;
+    border-radius: 2px;
+    box-shadow: 4px 4px darkgoldenrod;
+    transform: translate(8px);
+    cursor: pointer;
 }
 

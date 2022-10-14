@@ -26,6 +26,6 @@ public class UploadResult {
     }
 
     public void addLineWithInvalidPageDatum(String illegalPage) {
-        listOfLinesWithInvalidVolumeData.add(illegalPage);
+        listOfLinesWithInvalidPageData.add(illegalPage);
     }
 }

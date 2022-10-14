@@ -1,3 +1,4 @@
+import './styles/landingPage.css'
 import {Song} from './models'
 
 interface SongItemProps {
@@ -5,7 +6,7 @@ interface SongItemProps {
     onItemMarked: (id: string) => void;
 }
 
-function SongItem(props: SongItemProps) {
+function SongItemInList(props: SongItemProps) {
 
     const chooseSong = () => props.onItemMarked(props.song.id);
 
@@ -18,4 +19,4 @@ function SongItem(props: SongItemProps) {
     )
 }
 
-export default SongItem
+export default SongItemInList

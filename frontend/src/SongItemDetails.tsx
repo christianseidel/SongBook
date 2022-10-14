@@ -1,6 +1,6 @@
 import {Song, Status} from './models'
 import './styles/common.css'
-import './styles/songs.css'
+import './styles/songDetails.css'
 import React, {FormEvent, useState} from "react";
 
 interface SongItemProps {

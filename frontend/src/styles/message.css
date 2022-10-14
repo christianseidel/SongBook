@@ -1,4 +1,4 @@
-#messageContainer {
+.Container {
     display: flex;
     background-color: blanchedalmond;
     font-family: Verdana, Trebuchet MS, Lucida Sans Unicode, Lucida Grande, Lucida Sans, Arial, sans-serif;
@@ -10,22 +10,30 @@
     border-color: transparent;
     border-radius: 2px;
     padding: 15px;
-    position: absolute;
-    left: 48%;
-    right: 10%;
-    top: 70%;
     box-shadow: 12px 8px 16px 0 dimgray, 0 6px 20px 0 dimgray;
     transition: 400ms;
 }
 
-@keyframes fadeOut {
-    0% {
-        opacity:1;
-    }
-    100% {
-        opacity: 0;
-    }
+#uploadResultContainer {
+    border-color: blue;
+    position: absolute;
+    left: 8%;
+    right: 42%;
+    bottom: 8%;
+}
 
+#uploadResultContainer:hover {
+    box-shadow: 12px 12px 24px 1px dimgray, 0 12px 24px 2px dimgray;
+    left: 8.2%;
+    right: 41.8%;
+    bottom: 8.2%;
+}
+
+#messageContainer {
+    position: absolute;
+    left: 48%;
+    right: 10%;
+    top: 70%;
 }
 
 #messageContainer:hover {
@@ -36,7 +44,7 @@
 }
 
 #messageIcon {
-    display: inline-block;
+    display: inline;
     line-height: 1;
     width: 76px;
     text-align: center;
@@ -44,6 +52,7 @@
     font-size: 48pt;
     color: green;
 }
+
 .message {
     display: inline-block;
     margin-top: auto;
@@ -56,6 +65,7 @@
     position: relative;
     height: 18px;
     transform: translate(0, -16px);
+
 }
 
 #buttonOK {
@@ -70,30 +80,27 @@
     cursor: pointer;
 }
 
-span {
-    font: inherit;
-    margin: 0;
-}
-
 .bold {
     font-weight: bold;
 }
 
 .resultTitle {
+
 }
 
 .listOfErrorItems {
-
     font-family: Verdana, Trebuchet MS, Lucida Sans Unicode, Lucida Grande, Lucida Sans, Arial, sans-serif;
     font-size: 8pt;
-    line-height: 1;
+    line-height: .8;
     margin-left: 24px;
     color: darkblue;
     margin-top: 0;
     margin-bottom: 0;
     padding: 0;
     max-height: 120px;
+    max-width: 452px;
     white-space: nowrap;
     text-overflow: ellipsis;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: visible;
 }

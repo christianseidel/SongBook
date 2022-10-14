@@ -11,10 +11,6 @@ interface ResultProps {
 function DisplayMessage(props: ResultProps) {
 
     useEffect(() => {
-        let messageContainer = document.getElementById('messageContainer') as HTMLDivElement | null;
-        if (messageContainer !== null) {
-            messageContainer.style.borderColor = 'blue';
-        }
         let messageIcon = document.getElementById('messageIcon') as HTMLDivElement | null;
         if (messageIcon !== null) {
             messageIcon.style.color = 'blue';
@@ -23,7 +19,7 @@ function DisplayMessage(props: ResultProps) {
 
     return (
         <div>
-            <div id={'messageContainer'}>
+            <div className={'Container'} id={'uploadResultContainer'}>
                 <div id={'messageIcon'}>&#10003;</div>
                 <div className={'message'}>
                     <p>
@@ -32,7 +28,7 @@ function DisplayMessage(props: ResultProps) {
                     <p>
                         Your song list contains a <span className={"bold"}>
                         total of {props.uploadResult.totalNumberOfReferences} </span>
-                        song references, <br/>out of which:</p>
+                        song references, out of which:</p>
                     <p>
                         <span className={"bold"}> {props.uploadResult.numberOfReferencesAccepted} </span>
                         <span className={"bold"}> were added</span>
@@ -62,7 +58,7 @@ function DisplayMessage(props: ResultProps) {
                             && <span>These references have <span className={"bold"}>incorrect volume information:</span></span>}
                         </p>
                         <div className={'listOfErrorItems'}>
-                            {props.uploadResult.listOfLinesWithInvalidVolumeData.map(item => <p key={item}>{item}</p>)}
+                            {props.uploadResult.listOfLinesWithInvalidVolumeData.map(item1 => <p key={item1}>{item1}</p>)}
                         </div>
                     </div>
 
@@ -72,7 +68,7 @@ function DisplayMessage(props: ResultProps) {
                         </p>
                     </div>
                     <div className={'listOfErrorItems'}>
-                        {props.uploadResult.listOfLinesWithInvalidPageData.map(item => <p key={item}>{item}</p>)}
+                        {props.uploadResult.listOfLinesWithInvalidPageData.map(item2 => <p key={item2}>{item2}</p>)}
                     </div>
 
 

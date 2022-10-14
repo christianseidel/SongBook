@@ -9,7 +9,7 @@ interface ReferenceItemProps {
     doCancel: () => void;
 }
 
-function EditReferenceItem(props: ReferenceItemProps) {
+function ReferenceItemToEdit(props: ReferenceItemProps) {
 
     const [title, setTitle] = useState(props.reference.title);
     const [page, setPage] = useState(props.reference.page !== '0' ? props.reference.page : '');
@@ -146,4 +146,4 @@ function EditReferenceItem(props: ReferenceItemProps) {
     )
 }
 
-export default EditReferenceItem
+export default ReferenceItemToEdit

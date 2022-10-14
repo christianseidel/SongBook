@@ -8,7 +8,7 @@ interface ReferenceItemProps {
     onItemClick: (id: string) => void;
 }
 
-function ReferenceItem(props: ReferenceItemProps) {
+function ReferenceItemInList(props: ReferenceItemProps) {
 
     const handleDragStart = (event: React.DragEvent<HTMLDivElement>) => {
         let itemDragged = document.getElementById(props.reference.id) as HTMLDivElement | null;
@@ -26,7 +26,7 @@ function ReferenceItem(props: ReferenceItemProps) {
                 {props.reference.title}
                 <span className={'referenceItemDetails'}>(
                     {props.reference.volume}
-                    {(props.reference.page != '0')
+                    {(props.reference.page !== '0')
                         && <span className={'referenceItemDetailsPage'}>,
                             p. {props.reference.page}</span>}
                     )
@@ -36,4 +36,4 @@ function ReferenceItem(props: ReferenceItemProps) {
     )
 }
 
-export default ReferenceItem
+export default ReferenceItemInList

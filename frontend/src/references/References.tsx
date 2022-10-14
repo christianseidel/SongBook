@@ -1,10 +1,10 @@
 import '../styles/references.css';
 import '../styles/common.css';
 import React, {FormEvent, useEffect, useState} from "react";
-import ReferenceItem from "./ReferenceItem";
+import ReferenceItemInList from "./ReferenceItemInList";
 import {ReferencesDTO, UploadResult} from "./ReferenceModels";
 import DisplayMessage from "../DisplayMessage";
-import EditReferenceItem from "./EditReferenceItem";
+import ReferenceItemToEdit from "./ReferenceItemToEdit";
 import DisplayUploadResult from "./DisplayUploadResult";
 
 function References() {
@@ -154,19 +154,19 @@ function References() {
                                 <div id={"referenceSearchResult"}>
                                     {referencesDTO.referenceList
                                         ? referencesDTO.referenceList.map(item =>
-                                            <ReferenceItem key={item.id} reference={item}
-                                                           onItemClick={editItem}
+                                            <ReferenceItemInList key={item.id} reference={item}
+                                                                 onItemClick={editItem}
                                             />)
                                         : <span>... loading</span>
                                     }
                                 </div>
-                            <span id={"addNewCollection"} className={"doSomething"}
+                            <span className={"doSomething"} id={"addNewCollection"}
                                   onClick={openUpload}>+ add a new collection</span>
                         </div>
                         :
                             referencesDTO.referenceList.map(item =>
-                            <EditReferenceItem key={item.id} reference={item}
-                                               doCancel={getAllReferences}
+                            <ReferenceItemToEdit key={item.id} reference={item}
+                                                 doCancel={getAllReferences}
                             />)
                     }
 
