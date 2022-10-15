@@ -68,7 +68,7 @@ h2 {
 }
 
 #inputAddFile {
-    margin-left: 24px;
+    margin-left: 6px;
     margin-top: 0;
     border-radius: 4px;
     color: #EABA5E;
@@ -83,6 +83,7 @@ h2 {
     border-radius: 4px;
     outline: none;
     transition: 0.5s;
+    cursor: pointer;
 }
 
 #labelAddFile {

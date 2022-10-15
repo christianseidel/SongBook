@@ -2,7 +2,7 @@ import {Reference} from "./ReferenceModels";
 import '../styles/references.css';
 import '../styles/common.css';
 import React, {FormEvent, useState} from "react";
-import DisplayMessage from "../DisplayMessage";
+import DisplayMessageReferences from "../DisplayMessageReferences";
 
 interface ReferenceItemProps {
     reference: Reference;
@@ -132,7 +132,7 @@ function ReferenceItemToEdit(props: ReferenceItemProps) {
             </div>
 
             <div>
-                {message && <DisplayMessage
+                {message && <DisplayMessageReferences
                     message={message}
                     onClose={() => {
                         setMessage('');

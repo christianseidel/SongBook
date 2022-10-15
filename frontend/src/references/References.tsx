@@ -3,7 +3,7 @@ import '../styles/common.css';
 import React, {FormEvent, useEffect, useState} from "react";
 import ReferenceItemInList from "./ReferenceItemInList";
 import {ReferencesDTO, UploadResult} from "./ReferenceModels";
-import DisplayMessage from "../DisplayMessage";
+import DisplayMessageReferences from "../DisplayMessageReferences";
 import ReferenceItemToEdit from "./ReferenceItemToEdit";
 import DisplayUploadResult from "./DisplayUploadResult";
 
@@ -179,7 +179,7 @@ function References() {
                     </div>
 
                     <div>
-                        {message && <DisplayMessage
+                        {message && <DisplayMessageReferences
                             message={message}
                             onClose={() => {
                                 setMessage('');

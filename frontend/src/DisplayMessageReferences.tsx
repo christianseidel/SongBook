@@ -6,7 +6,7 @@ interface MessageProps {
     onClose: () => void;
 }
 
-function DisplayMessage(props: MessageProps) {
+function DisplayMessageReferences(props: MessageProps) {
 
     useEffect(() => {
         let messageContainer = document.getElementById('messageContainer') as HTMLDivElement | null;
@@ -27,7 +27,7 @@ function DisplayMessage(props: MessageProps) {
                 }
             }
         }
-        if (messageType === 'green') {
+       if (messageType === 'green') {
             setTimeout(() => {
                 let messageContainer = document.getElementById('messageContainer') as HTMLDivElement | null;
                 if (messageContainer !== null) {
@@ -36,13 +36,13 @@ function DisplayMessage(props: MessageProps) {
             setTimeout(() => {
                     props.onClose()},
                 3000);
-        }
+       }
     }, []);
 
 
     return (
         <div>
-            <div id={'messageContainer'}>
+            <div className={'Container'} id={'messageContainer'}>
                 <div id={'messageIcon'}></div>
                 <div className={'message'}>
                     {props.message}
@@ -55,4 +55,4 @@ function DisplayMessage(props: MessageProps) {
     )
 }
 
-export default DisplayMessage
+export default DisplayMessageReferences

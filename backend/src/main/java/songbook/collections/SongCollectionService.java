@@ -95,7 +95,7 @@ public class SongCollectionService {
         }
 
         // save file
-        String fileLocation = rootDir + "\\temporary\\" + file.getOriginalFilename();
+        String fileLocation = rootDir + "/temporary/" + file.getOriginalFilename();
         File storedSongCollection = new File(fileLocation);
         file.transferTo(storedSongCollection);
         System.out.println("-> File created: " + file.getOriginalFilename());
@@ -115,7 +115,7 @@ public class SongCollectionService {
         return uploadResult;
     }
 
-    public UploadResult importNewSongCollection(Path filePath) {
+    private UploadResult importNewSongCollection(Path filePath) {
         UploadResult uploadResult = new UploadResult();
         List<String> listOfItems = readListOfReferences(filePath);
         for (String line : listOfItems) {

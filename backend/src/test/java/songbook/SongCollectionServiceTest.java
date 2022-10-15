@@ -1,25 +1,29 @@
 package songbook;
 
-import java.lang.invoke.WrongMethodTypeException;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
 import org.assertj.core.api.Assertions;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
+import static songbook.collections.models.ReferenceVolume.*;
 
+import org.springframework.mock.web.MockMultipartFile;
 import songbook.collections.ReferencesRepository;
 import songbook.collections.SongCollectionService;
+import songbook.collections.UploadResult;
 import songbook.collections.exceptions.NoSuchIdException;
 import songbook.collections.models.Reference;
 import songbook.collections.models.ReferenceVolume;
 import songbook.collections.models.ReferencesDTO;
-
-import static songbook.collections.models.ReferenceVolume.TheDailyUkulele_Blue;
-import static songbook.collections.models.ReferenceVolume.TheDailyUkulele_Yellow;
 
 public class SongCollectionServiceTest {
 
@@ -81,7 +85,7 @@ public class SongCollectionServiceTest {
     }
 
     @Test
-    void shouldThrowExceptionWhenLookingUpForWrongId() {
+    void shouldThrowExceptionWhenLookingUpReferenceWithWrongId() {
         String myId = "454566";
         Mockito.when(repo.findById(myId)).thenReturn(Optional.empty());
 
@@ -106,6 +110,210 @@ public class SongCollectionServiceTest {
         Assertions.assertThatExceptionOfType(NoSuchIdException.class)
                 .isThrownBy(()->service.deleteReference("890-980"));
     }
+
+    @Test
+    void shouldSaveEditedReference() {
+        Reference initialReference = new Reference("All The Leaves Are Green", TheDailyUkulele_Blue, 334);
+        String id = initialReference.getId();
+        Reference changedReference = new Reference("All The Leaves Are Brown", TheDailyUkulele_Blue, 222);
+        Mockito.when(repo.findById(id)).thenReturn(Optional.of(initialReference));
+        Mockito.when(repo.save(changedReference)).thenReturn(changedReference);
+
+        Reference actual = service.editReference(id, changedReference);
+
+        assertEquals(changedReference, actual);
+    }
+
+    @Test
+    void shouldThrowExceptionWhenTryingToEditItemWithWrongId() {
+        Reference changedRef = new Reference("All The Leaves Are Gone", TheDailyUkulele_Blue, 222);
+        Assertions.assertThatExceptionOfType(NoSuchIdException.class)
+                .isThrownBy(()->service.editReference("55555-25", changedRef));
+    }
+
+    @Test
+    void shouldSaveCopyOfReference() {
+    }
+
+    @Test
+    void shouldThrowExceptionWhenTryingToCopyItemWithWrongId() {
+    }
+
+    @Test
+    void shouldAddNewReferenceToCollection() {
+        MockMultipartFile oneRefUpload = new MockMultipartFile(
+                "importOneReference.txt",
+                "importOneReference.txt",
+                "text/plain",
+                "This Is My Song, Yeah; The Daily Ukulele (Blue); 477"
+                        .getBytes(StandardCharsets.UTF_8)
+        );
+
+        String title = "This Is My Song, Yeah";
+        Collection<Reference> collection = List.of();
+        Mockito.when(repo.findAllByTitleAndVolume(title, TheDailyUkulele_Blue)).thenReturn(collection);
+        UploadResult uploadResult = new UploadResult();
+        uploadResult.setNumberOfReferencesAccepted(1);
+        uploadResult.setTotalNumberOfReferences(1);
+
+        UploadResult actual = new UploadResult();
+        try {
+            actual = service.processMultipartFileUpload(oneRefUpload);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        assertEquals(uploadResult, actual);
+    }
+
+    @Test
+    void shouldAddFourNewReferenceToCollection() {
+        MockMultipartFile oneRefUpload = new MockMultipartFile(
+                "importOneReference.txt",
+                "importOneReference.txt",
+                "text/plain",
+                ("This Is My Song, Yeah; The Daily Ukulele (Blue); 477\n" +
+                        " What Is This You Are Singing; The Daily Ukulele (Yellow); 333  \n" +
+                        "When The Saints Go Marching In; Liederbuch\n" +
+                        "i forgot to sing my song today; Liederbuch ; 2" )
+                        .getBytes(StandardCharsets.UTF_8)
+        );
+
+        String title1 = "This Is My Song, Yeah";
+        String title2 = " What Is This You Are Singing";
+        String title3 = "When The Saints Go Marching Inn";
+        String title4 = "i forgot to sing my song today";
+
+        Collection<Reference> collection = List.of();
+        Mockito.when(repo.findAllByTitleAndVolume(title1, TheDailyUkulele_Blue)).thenReturn(collection);
+        Mockito.when(repo.findAllByTitleAndVolume(title2, TheDailyUkulele_Yellow)).thenReturn(collection);
+        Mockito.when(repo.findAllByTitleAndVolume(title3, Liederbuch_1)).thenReturn(collection);
+        Mockito.when(repo.findAllByTitleAndVolume(title4, Liederbuch_1)).thenReturn(collection);
+
+        UploadResult uploadResult = new UploadResult();
+        uploadResult.setNumberOfReferencesAccepted(4);
+        uploadResult.setTotalNumberOfReferences(4);
+
+        UploadResult actual = new UploadResult();
+        try {
+            actual = service.processMultipartFileUpload(oneRefUpload);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        assertEquals(uploadResult, actual);
+    }
+
+    @Test
+    void shouldRefuseToAddExistingReferenceToCollection() {
+        MockMultipartFile oneRefUpload = new MockMultipartFile(
+                "importOneReference.txt",
+                "importOneReference.txt",
+                "text/plain",
+                "This Is My Song, Yeah; The Daily Ukulele (Blue); 477"
+                        .getBytes(StandardCharsets.UTF_8)
+        );
+
+        String title = "This Is My Song, Yeah";
+        Collection<Reference> collection = List.of(new Reference("This Is My Song, Yeah", TheDailyUkulele_Blue));
+        Mockito.when(repo.findAllByTitleAndVolume(title, TheDailyUkulele_Blue)).thenReturn(collection);
+        UploadResult uploadResult = new UploadResult();
+        uploadResult.setNumberOfReferencesAccepted(0);
+        uploadResult.setNumberOfExistingReferences(1);
+        uploadResult.setTotalNumberOfReferences(1);
+
+        UploadResult actual = new UploadResult();
+        try {
+            actual = service.processMultipartFileUpload(oneRefUpload);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        assertEquals(uploadResult, actual);
+    }
+
+    @Test
+    void shouldAcceptEmptyFileReturningZeroAdditions() {
+        MockMultipartFile oneRefUpload = new MockMultipartFile(
+                "importOneReference.txt",
+                "importOneReference.txt",
+                "text/plain",
+                "".getBytes(StandardCharsets.UTF_8)
+        );
+
+        String title = "";
+        Collection<Reference> collection = List.of();
+        Mockito.when(repo.findAllByTitleAndVolume(title, TheDailyUkulele_Blue)).thenReturn(collection);
+        UploadResult uploadResult = new UploadResult();
+        uploadResult.setNumberOfReferencesAccepted(0);
+        uploadResult.setNumberOfExistingReferences(0);
+        uploadResult.setTotalNumberOfReferences(0);
+
+        UploadResult actual = new UploadResult();
+        try {
+            actual = service.processMultipartFileUpload(oneRefUpload);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        assertEquals(uploadResult, actual);
+    }
+
+    @Test
+    void shouldRefuseToAddReferenceWithMalformedPageDatum() {
+        MockMultipartFile oneRefUpload = new MockMultipartFile(
+                "importOneReference.txt",
+                "importOneReference.txt",
+                "text/plain",
+                "This Is Not My Song, Bro; The Daily Ukulele (Blue); ab23ab".getBytes(StandardCharsets.UTF_8)
+        );
+
+        UploadResult uploadResult = new UploadResult();
+        uploadResult.setNumberOfReferencesAccepted(0);
+        uploadResult.setNumberOfExistingReferences(0);
+        uploadResult.setTotalNumberOfReferences(1);
+        uploadResult.setNumberOfReferencesRejected(1);
+        uploadResult.addLineWithInvalidPageDatum("This Is Not My Song, Bro; The Daily Ukulele (Blue); ab23ab");
+
+        UploadResult actual = new UploadResult();
+        try {
+            actual = service.processMultipartFileUpload(oneRefUpload);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        assertEquals(uploadResult, actual);
+    }
+
+    @Test
+    void shouldRefuseToAddReferencesWithIllegalVolumeData() {
+        MockMultipartFile oneRefUpload = new MockMultipartFile(
+                "importOneReference.txt",
+                "importOneReference.txt",
+                "text/plain",
+                ("This Is Not My Song, Bro; The Daily Ukulele (Green); 333\n" +
+                        "This Isn't My Song Either, Sister; The Daily Song Book; 444")
+                        .getBytes(StandardCharsets.UTF_8)
+        );
+
+        UploadResult uploadResult = new UploadResult();
+        uploadResult.setNumberOfReferencesAccepted(0);
+        uploadResult.setNumberOfExistingReferences(0);
+        uploadResult.setTotalNumberOfReferences(2);
+        uploadResult.setNumberOfReferencesRejected(2);
+        uploadResult.addLineWithInvalidVolumeDatum("This Is Not My Song, Bro; The Daily Ukulele (Green); 333");
+        uploadResult.addLineWithInvalidVolumeDatum("This Isn't My Song Either, Sister; The Daily Song Book; 444");
+
+        UploadResult actual = new UploadResult();
+        try {
+            actual = service.processMultipartFileUpload(oneRefUpload);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        assertEquals(uploadResult, actual);
+    }
+
 
     @Test
     void shouldFindReferenceByIdWithReferenceHavingTitleAndVolume() {
