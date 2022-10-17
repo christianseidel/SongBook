@@ -42,7 +42,6 @@ public class SongCollectionService {
     }
 
     public Reference createReference(Reference reference) {
-        System.out.println(reference);
         return referencesRepository.save(reference);
     }
 
@@ -62,8 +61,8 @@ public class SongCollectionService {
 
     public Reference editReference(String id, Reference reference) {
         return referencesRepository.findById(id)
-                .map(e -> referencesRepository.save(reference))
-                .orElseThrow(NoSuchIdException::new);
+                    .map(e -> referencesRepository.save(reference))
+                    .orElseThrow(NoSuchIdException::new);
     }
 
     public ReferencesDTO copyReferenceById(String id) {

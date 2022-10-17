@@ -3,6 +3,7 @@ package songbook.collections;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import songbook.collections.exceptions.NoSuchIdException;
@@ -83,10 +84,24 @@ public class SongCollectionController {
             return new ResponseEntity<>(songCollectionService.editReference(id, reference), HttpStatus.OK);
         } catch (NoSuchIdException e) {
             return ResponseEntity.status(404).body(stringToJson(e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(418).body(stringToJson(e.getMessage() + " - " + e.getClass().getSimpleName()));
+        } catch (Throwable e) {
+            return ResponseEntity.status(418).body(stringToJson("Fehler: " + e.getClass().getSimpleName()));
         }
     }
 
     private String stringToJson(String errorMessage) {
         return "{\"message\": \"" + errorMessage + "\"}";
     }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<String> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
+        if (e.getMessage().startsWith("JSON parse error: Cannot deserialize value of type `int` from String")) {
+            return ResponseEntity.status(406).body(stringToJson("The page given is not a valid value! Your reference could not be updated."));
+        } else {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
+
 }
