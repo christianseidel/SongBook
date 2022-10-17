@@ -26,7 +26,7 @@ class SongBookServiceTest {
     @Test
     void deleteSong() {
         Song song = new Song("testSong", "me and myself");
-        song.id = "123456";
+        song.setId("123456");
         SongsRepository repo = Mockito.mock(SongsRepository.class);
         SongBookService songBookService = new SongBookService(repo);
         Mockito.when(repo.findById("123456")).thenReturn(Optional.of(song));
@@ -41,18 +41,18 @@ class SongBookServiceTest {
     void changeSong() {
         // given
         Song song01new = new Song("testSong 1", "me and myself");
-        song01new.id = "123456_1";
+        song01new.setId("123456_1");
         SongsRepository repo = Mockito.mock(SongsRepository.class);
         SongBookService songBookService = new SongBookService(repo);
 
         Song song01edited = new Song("testSong edited", "you and me");
-        song01edited.id = "123456_2";
+        song01edited.setId("123456_2");
 
         Mockito.when(repo.findById("123456_1")).thenReturn(Optional.of(song01new));
         Mockito.when(repo.save(song01edited)).thenReturn(song01edited);
 
         songBookService.createSong(song01new);
-        songBookService.editSong(song01new.id, song01edited);
+        songBookService.editSong(song01new.getId(), song01edited);
 
         // when
         Optional<Song> actual = songBookService.editSong("123456_1", song01edited);
@@ -67,11 +67,11 @@ class SongBookServiceTest {
         SongBookService songBookService = new SongBookService(repo);
 
         Song song01 = new Song("testSong 1", "Alphonse");
-        song01.id = "123456_1";
+        song01.setId("123456_1");
         Song song02 = new Song("testSong 2", "Bertrand");
-        song02.id = "123456_2";
+        song02.setId("123456_2");
         Song song03 = new Song("testSong 3", "Claude");
-        song03.id = "123456_3";
+        song03.setId("123456_3");
 
         List<Song> songList = List.of(song01, song02, song03);
 

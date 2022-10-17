@@ -7,12 +7,12 @@ import java.util.List;
 import java.util.Optional;
 
 import org.assertj.core.api.Assertions;
-import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static songbook.collections.models.ReferenceVolume.*;
 
@@ -125,6 +125,11 @@ public class SongCollectionServiceTest {
     }
 
     @Test
+    void shouldThrowExceptionWhenTryingToSetInvalidPageDatum() {
+
+    }
+
+    @Test
     void shouldThrowExceptionWhenTryingToEditItemWithWrongId() {
         Reference changedRef = new Reference("All The Leaves Are Gone", TheDailyUkulele_Blue, 222);
         Assertions.assertThatExceptionOfType(NoSuchIdException.class)
@@ -133,10 +138,15 @@ public class SongCollectionServiceTest {
 
     @Test
     void shouldSaveCopyOfReference() {
-    }
+        Reference initialRef = new Reference("All The Leaves Are Brown", TheDailyUkulele_Yellow, 100);
+        Reference copiedRef = new Reference("All The Leaves Are Brown", TheDailyUkulele_Yellow, 100);
+        Mockito.when(repo.findById(initialRef.getId())).thenReturn(Optional.of(initialRef));
+        Mockito.when(repo.save(any())).thenReturn(copiedRef);
 
-    @Test
-    void shouldThrowExceptionWhenTryingToCopyItemWithWrongId() {
+        ReferencesDTO actual = service.copyReferenceById(initialRef.getId());
+
+        assertEquals(copiedRef.getId(), actual.getReferenceList().get(0).getId());
+        verify(repo).save(any());
     }
 
     @Test

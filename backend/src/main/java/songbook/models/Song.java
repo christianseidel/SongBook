@@ -10,17 +10,21 @@ import java.util.UUID;
 
 @Document (collection = "Songs")
 @Data
-@NoArgsConstructor
 public class Song {
 
     @Id
-    public String id;
-    public String title;
-    public String author;
-    private LocalDate dateCreated;
-    public String year;
+    private String id;
+    private String title;
+    private String author;
+    private final LocalDate dateCreated;
+    private String year;
 
-    // public List<ReferenceRetained> references = new ArrayList<>();
+    // private List<ReferenceRetained> references = new ArrayList<>();
+
+    public Song() {
+        this.id = UUID.randomUUID().toString();
+        this.dateCreated = LocalDate.now();
+    }
 
     public Song(String title) {
         this.id = UUID.randomUUID().toString();

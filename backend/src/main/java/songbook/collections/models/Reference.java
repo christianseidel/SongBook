@@ -12,12 +12,12 @@ import java.util.UUID;
 public class Reference {
 
     @Id
-    public String id;
-    public String title;
-    public ReferenceVolume volume;
-    public int page;
-    public String author;
-    public int year;
+    private String id;
+    private String title;
+    private ReferenceVolume volume;
+    private int page;
+    private String author;
+    private int year;
 
 
     public Reference(String title, ReferenceVolume volume) {

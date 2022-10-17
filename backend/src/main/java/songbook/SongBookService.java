@@ -18,7 +18,6 @@ public class SongBookService {
     }
 
     public Song createSong(Song song) {
-        song.setDateCreated(LocalDate.now());
         return songsRepository.save(song);
     }
 

@@ -43,15 +43,4 @@ public class SongBookController {
     public Optional<Song> getSingleSong(@PathVariable String id) {
         return songBookService.getSingleSong(id);
     }
-
-    Song countryRoads = new Song("Take Me Home, Country Roads");
-
-    // public SongBookService service = new SongBookService();
-
-    String fileName = "serviceTest_twoPerfectLines";
-
-    public void importSongCollection(String fileName) {
-        // referencesService.importSongCollection(fileName);
-    }
-
 }

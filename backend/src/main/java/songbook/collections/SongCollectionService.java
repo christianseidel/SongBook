@@ -35,13 +35,14 @@ public class SongCollectionService {
 
     public ReferencesDTO getReferencesByTitle(String title) {
         List<Reference> list = referencesRepository.findAll().stream()
-                .filter(element -> element.title.toLowerCase().contains(title.toLowerCase()))
+                .filter(element -> element.getTitle().toLowerCase().contains(title.toLowerCase()))
                 .sorted(Comparator.comparing(Reference::getTitle))
                 .toList();
         return new ReferencesDTO(list);
     }
 
     public Reference createReference(Reference reference) {
+        System.out.println(reference);
         return referencesRepository.save(reference);
     }
 
@@ -55,7 +56,7 @@ public class SongCollectionService {
 
     public void deleteReference(String id) {
        referencesRepository.findById(id)
-               .ifPresentOrElse(e -> referencesRepository.deleteById(e.id),
+               .ifPresentOrElse(e -> referencesRepository.deleteById(e.getId()),
                         () -> {throw new NoSuchIdException();});
     }
 
@@ -70,7 +71,7 @@ public class SongCollectionService {
         Optional<Reference> originalRef = referencesRepository.findById(id);
         originalRef.ifPresent((item)  -> {
             Reference copiedItem = referencesRepository.save(new Reference(item));
-            list.add(new Reference(copiedItem));
+            list.add(copiedItem);
         });
         return new ReferencesDTO(list);
     }
@@ -119,7 +120,7 @@ public class SongCollectionService {
         UploadResult uploadResult = new UploadResult();
         List<String> listOfItems = readListOfReferences(filePath);
         for (String line : listOfItems) {
-            uploadResult.totalNumberOfReferences++; // will serve as check sum
+            uploadResult.setTotalNumberOfReferences(uploadResult.getTotalNumberOfReferences() + 1); // will serve as check sum
             String[] elements = line.split(";");
             ReferenceVolume volume;
             // check volume
@@ -127,32 +128,32 @@ public class SongCollectionService {
                 volume = mapReferenceVolume(elements[1]);
             } catch (IllegalReferenceVolumeException e) {
                 uploadResult.addLineWithInvalidVolumeDatum(line);
-                uploadResult.numberOfReferencesRejected++;
+                uploadResult.setNumberOfReferencesRejected(uploadResult.getNumberOfReferencesRejected() + 1);
                 continue;
             } catch (IndexOutOfBoundsException e) {
                 uploadResult.addLineWithInvalidVolumeDatum(elements[0] + " // volume information missing ");
-                uploadResult.numberOfReferencesRejected++;
+                uploadResult.setNumberOfReferencesRejected(uploadResult.getNumberOfReferencesRejected() + 1);
                 continue;
             }
             // create reference
             Reference item = new Reference(elements[0], volume);
             // check for double
-            if (!checkIfReferenceExists(item.title, item.volume)) {
+            if (!checkIfReferenceExists(item.getTitle(), item.getVolume())) {
                 // set page
                 if (elements.length > 2) {
                     try {
                         // TODO: Hier könnte es zu einem Fehler kommen...
-                        item.page = Integer.parseInt(elements[2].trim());
+                        item.setPage(Integer.parseInt(elements[2].trim()));
                     } catch (IllegalArgumentException e) {
                         uploadResult.addLineWithInvalidPageDatum(line);
-                        uploadResult.numberOfReferencesRejected++;
+                        uploadResult.setNumberOfReferencesRejected(uploadResult.getNumberOfReferencesRejected() + 1);
                         continue;
                     }
                 }
-                uploadResult.numberOfReferencesAccepted++;
+                uploadResult.setNumberOfReferencesAccepted(uploadResult.getNumberOfReferencesAccepted() + 1);
                 referencesRepository.save(item);
             } else {
-                uploadResult.numberOfExistingReferences++;
+                uploadResult.setNumberOfExistingReferences(uploadResult.getNumberOfExistingReferences() + 1);
                 System.out.println("-- Already exists: " + line);
             }
         }

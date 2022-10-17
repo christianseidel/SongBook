@@ -5,12 +5,12 @@ import java.util.ArrayList;
 
 @Data
 public class UploadResult {
-    int numberOfReferencesAccepted;
-    int numberOfExistingReferences;
-    int numberOfReferencesRejected;
-    int totalNumberOfReferences; // serves as check sum
-    ArrayList<String> listOfLinesWithInvalidVolumeData;
-    ArrayList<String> listOfLinesWithInvalidPageData;
+    private int numberOfReferencesAccepted;
+    private int numberOfExistingReferences;
+    private int numberOfReferencesRejected;
+    private int totalNumberOfReferences; // serves as check sum
+    private ArrayList<String> listOfLinesWithInvalidVolumeData;
+    private ArrayList<String> listOfLinesWithInvalidPageData;
 
     public UploadResult() {
         this.numberOfReferencesAccepted = 0;
