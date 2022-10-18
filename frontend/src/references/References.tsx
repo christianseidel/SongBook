@@ -3,7 +3,7 @@ import '../styles/common.css';
 import React, {FormEvent, useEffect, useState} from "react";
 import ReferenceItemInList from "./ReferenceItemInList";
 import {ReferencesDTO, UploadResult} from "./ReferenceModels";
-import DisplayMessageReferences from "../DisplayMessageReferences";
+import DisplayMessageReferences from "./DisplayMessageReferences";
 import ReferenceItemToEdit from "./ReferenceItemToEdit";
 import DisplayUploadResult from "./DisplayUploadResult";
 
@@ -93,15 +93,15 @@ function References() {
                         console.log('File "' + files[0].name + '" successfully transmitted to backend!');
                         console.log(responseBody);
                     } else if (responseStatus === 400) {
-                        setMessage('Sorry, the server does not accept your request (Bad Request).')
+                        sessionStorage.setItem('message', 'Sorry, the server does not accept your request (Bad Request).');
                     } else if (responseStatus === 404) {
-                        setMessage('Sorry, the server is unable to respond to your request.')
+                        sessionStorage.setItem('message', 'Sorry, the server is unable to respond to your request.');
                     } else if (responseStatus === 406) {
-                        setMessage(responseBody.message);
+                        sessionStorage.setItem('message', responseBody.message);
                     } else if (responseStatus === 500) {
-                        setMessage(responseBody.message);
+                        sessionStorage.setItem('message', responseBody.message);
                     } else if (responseStatus !== 201) {
-                        setMessage('Unfortunately, something went wrong.')
+                        sessionStorage.setItem('message', responseBody.message);
                     } else {
                         alert('Something Unexpected happened.');
                     }

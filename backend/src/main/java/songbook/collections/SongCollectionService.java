@@ -95,7 +95,7 @@ public class SongCollectionService {
         }
 
         // save file
-        String fileLocation = rootDir + "/temporary/" + file.getOriginalFilename();
+        String fileLocation = rootDir + "temporary/" + file.getOriginalFilename();
         File storedSongCollection = new File(fileLocation);
         file.transferTo(storedSongCollection);
         System.out.println("-> File created: " + file.getOriginalFilename());
@@ -141,7 +141,6 @@ public class SongCollectionService {
                 // set page
                 if (elements.length > 2) {
                     try {
-                        // TODO: Hier könnte es zu einem Fehler kommen...
                         item.setPage(Integer.parseInt(elements[2].trim()));
                     } catch (IllegalArgumentException e) {
                         uploadResult.addLineWithInvalidPageDatum(line);
@@ -164,12 +163,15 @@ public class SongCollectionService {
         return !collection.isEmpty();
     }
 
-    private List<String> readListOfReferences(Path path) throws FileNotFoundException {
+    private List<String> readListOfReferences(Path path) throws RuntimeException {
         List<String> listOfReferences;
         try {
             listOfReferences = Files.readAllLines(path, StandardCharsets.UTF_8);
-            if (listOfReferences.size() == 1 && listOfReferences.get(0).length() == 1) {
-                throw new EmptyFileException(path.toString());
+            if (listOfReferences.size() == 0) {
+                Files.delete(path);
+                Path parent = path.getParent();
+                Files.delete(parent);
+                throw new EmptyFileException(path.getFileName().toString());
             }
             return listOfReferences;
         } catch (NoSuchFileException e) {
@@ -182,6 +184,9 @@ public class SongCollectionService {
     }
 
     public void deleteTempDirAndFile(String fileLocation, Path tempPath, String storedSongCollection) {
+        System.out.println("file location: " + fileLocation);  //  D:/Ukulele/SongBook/backend/target/classes//temporary/0 oneTestSong.txt
+        System.out.println("tempPath: " + tempPath);  // D:\Ukulele\SongBook\backend\target\classes\temporary
+        System.out.println("storedSongCollection: " + storedSongCollection);  // 0 oneTestSong.txt
         try {
             Files.delete(Paths.get(fileLocation));
         } catch (IOException e) {

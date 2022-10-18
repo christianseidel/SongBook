@@ -18,6 +18,7 @@ import static org.springframework.http.ResponseEntity.status;
 @RestController
 @RequestMapping("/api/collections")
 @CrossOrigin
+
 public class SongCollectionController {
 
     private final SongCollectionService songCollectionService;
@@ -37,15 +38,17 @@ public class SongCollectionController {
     }
 
     @PostMapping(path = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Object> uploadCollection(@RequestParam("file") MultipartFile file) throws IOException {
+    public ResponseEntity<Object> uploadCollection(@RequestParam("file") MultipartFile file) {
         System.out.println("\n-> Received file \"" + file.getOriginalFilename()
                 + "\" with Content Type: \"" + file.getContentType() + "\"");
         try {
             return new ResponseEntity<>(songCollectionService.processMultipartFileUpload(file), HttpStatus.OK);
-        } catch (MalformedFileException e) {
+        } catch (MalformedFileException e) { // wrong file encoding
             return ResponseEntity.status(406).body(stringToJson(e.getMessage()));
         } catch (RuntimeException e) {
             return ResponseEntity.status(500).body(stringToJson(e.getMessage()));
+        } catch (IOException e) {  // could not create directory
+            return ResponseEntity.status(500).body(stringToJson(e.getMessage() + " (" + e.getClass().getSimpleName() + ")"));
     }
 }
 
@@ -84,10 +87,6 @@ public class SongCollectionController {
             return new ResponseEntity<>(songCollectionService.editReference(id, reference), HttpStatus.OK);
         } catch (NoSuchIdException e) {
             return ResponseEntity.status(404).body(stringToJson(e.getMessage()));
-        } catch (Exception e) {
-            return ResponseEntity.status(418).body(stringToJson(e.getMessage() + " - " + e.getClass().getSimpleName()));
-        } catch (Throwable e) {
-            return ResponseEntity.status(418).body(stringToJson("Fehler: " + e.getClass().getSimpleName()));
         }
     }
 
@@ -98,7 +97,8 @@ public class SongCollectionController {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<String> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
         if (e.getMessage().startsWith("JSON parse error: Cannot deserialize value of type `int` from String")) {
-            return ResponseEntity.status(406).body(stringToJson("The page given is not a valid value! Your reference could not be updated."));
+            return ResponseEntity.status(406).body(stringToJson("The server received invalid data. " +
+                    "Please ensure that all numbers are entered in a number format."));
         } else {
             return ResponseEntity.status(400).body(e.getMessage());
         }

@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static songbook.collections.models.ReferenceVolume.*;
@@ -20,6 +21,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import songbook.collections.ReferencesRepository;
 import songbook.collections.SongCollectionService;
 import songbook.collections.UploadResult;
+import songbook.collections.exceptions.EmptyFileException;
 import songbook.collections.exceptions.NoSuchIdException;
 import songbook.collections.models.Reference;
 import songbook.collections.models.ReferenceVolume;
@@ -72,8 +74,10 @@ public class SongCollectionServiceTest {
         verify(repo).save(ref);
     }
 
+
+    // TODO:  DOUBLES HERE (check those three...)
     @Test
-    void shouldFindReferenceByID() {
+    void shouldFindReferenceById() {
         Reference ref = new Reference("Here Comes My Music", TheDailyUkulele_Yellow, 123);
         String myId = ref.getId();
         ReferencesDTO myDTO = new ReferencesDTO(List.of(ref));
@@ -83,6 +87,28 @@ public class SongCollectionServiceTest {
 
         assertEquals(myDTO, actual);
     }
+
+    @Test
+    void shouldFindReferenceByIdWithReferenceHavingTitleAndVolumeAndPage() {
+        Reference ref = new Reference("Never Heard This Song Before", TheDailyUkulele_Yellow, 12);
+        Mockito.when(repo.findById("334455")).thenReturn(Optional.of(ref));
+
+        ReferencesDTO actual = service.getReferenceById("334455");
+
+        assertEquals(new ReferencesDTO(List.of(ref)), actual);
+    }
+
+    @Test
+    void shouldFindReferenceByIdWithReferenceHavingTitleAndVolume() {
+        Reference ref = new Reference("Never Heard This Song Before", TheDailyUkulele_Yellow);
+        Mockito.when(repo.findById("334455")).thenReturn(Optional.of(ref));
+
+        ReferencesDTO actual = service.getReferenceById("334455");
+
+        assertEquals(new ReferencesDTO(List.of(ref)), actual);
+    }
+
+
 
     @Test
     void shouldThrowExceptionWhenLookingUpReferenceWithWrongId() {
@@ -243,30 +269,20 @@ public class SongCollectionServiceTest {
     }
 
     @Test
-    void shouldAcceptEmptyFileReturningZeroAdditions() {
-        MockMultipartFile oneRefUpload = new MockMultipartFile(
-                "importOneReference.txt",
-                "importOneReference.txt",
+    void shouldThrowEmptyFileException() {
+        MockMultipartFile zeroRefUpload = new MockMultipartFile(
+                "importZeroReference.txt",
+                "importZeroReference.txt",
                 "text/plain",
                 "".getBytes(StandardCharsets.UTF_8)
         );
 
-        String title = "";
-        Collection<Reference> collection = List.of();
-        Mockito.when(repo.findAllByTitleAndVolume(title, TheDailyUkulele_Blue)).thenReturn(collection);
-        UploadResult uploadResult = new UploadResult();
-        uploadResult.setNumberOfReferencesAccepted(0);
-        uploadResult.setNumberOfExistingReferences(0);
-        uploadResult.setTotalNumberOfReferences(0);
-
-        UploadResult actual = new UploadResult();
-        try {
-            actual = service.processMultipartFileUpload(oneRefUpload);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        assertEquals(uploadResult, actual);
+        Exception exception = assertThrows(EmptyFileException.class,
+                () -> {
+                    service.processMultipartFileUpload(zeroRefUpload);
+                });
+        assertEquals("EmptyFileException", exception.getClass().getSimpleName());
+        assertEquals("The file 'importZeroReference.txt' is empty; there are no references to process.", exception.getMessage());
     }
 
     @Test
@@ -296,7 +312,7 @@ public class SongCollectionServiceTest {
     }
 
     @Test
-    void shouldRefuseToAddReferencesWithIllegalVolumeData() {
+    void shouldRejectReferencesWithIllegalVolumeData() {
         MockMultipartFile oneRefUpload = new MockMultipartFile(
                 "importOneReference.txt",
                 "importOneReference.txt",
@@ -325,47 +341,7 @@ public class SongCollectionServiceTest {
     }
 
 
-    @Test
-    void shouldFindReferenceByIdWithReferenceHavingTitleAndVolume() {
-        Reference ref = new Reference("Never Heard This Song Before", TheDailyUkulele_Yellow);
-        Mockito.when(repo.findById("334455")).thenReturn(Optional.of(ref));
-
-        ReferencesDTO actual = service.getReferenceById("334455");
-
-        assertEquals(new ReferencesDTO(List.of(ref)), actual);
-    }
-
-    @Test
-    void shouldFindReferenceByIdWithReferenceHavingTitleAndVolumeAndPage() {
-        Reference ref = new Reference("Never Heard This Song Before", TheDailyUkulele_Yellow, 12);
-        Mockito.when(repo.findById("334455")).thenReturn(Optional.of(ref));
-
-        ReferencesDTO actual = service.getReferenceById("334455");
-
-        assertEquals(new ReferencesDTO(List.of(ref)), actual);
-    }
 /*
-
-    @Test
-    void shouldThrowIllegalReferenceVolumeException() {
-        Exception exception = Assertions.assertThrows(IllegalReferenceVolumeException.class,
-                () -> {
-                    service.addCollection(path, "serviceTest_WrongVolume");
-                });
-        assertEquals("IllegalReferenceVolumeException", exception.getClass().getSimpleName());
-        assertEquals("Die Liedersammlung \"The Daily Ukulele (Green)\" ist nicht bekannt.", exception.getMessage());
-    }
-
-    @Test
-    void shouldThrowIllegalPageFormatException() {
-        Exception exception = Assertions.assertThrows(IllegalPageFormatException.class,
-                () -> {
-                    service.addCollection(path, "serviceTest_WrongPageFormat");
-                });
-        assertEquals("IllegalPageFormatException", exception.getClass().getSimpleName());
-        assertEquals("Die Zeichenfolge \" ab12\" in der Liedersammlung \"serviceTest_WrongPageFormat\" " +
-                "ist keine gültige Seitenangabe.", exception.getMessage());
-    }
 
     @Test
     void shouldThrowMalformedFileException() {
@@ -379,14 +355,5 @@ public class SongCollectionServiceTest {
                 exception.getMessage());
     }
 
-    @Test
-    void shouldThrowEmptyFileException() {
-        Exception exception = Assertions.assertThrows(EmptyFileException.class,
-                () -> {
-                    service.addCollection(path, "serviceTest_EmptyFile");
-                });
-        assertEquals("EmptyFileException", exception.getClass().getSimpleName());
-        assertEquals("Die Datei \"serviceTest_EmptyFile\" ist leer.", exception.getMessage());
-    }
 */
 }

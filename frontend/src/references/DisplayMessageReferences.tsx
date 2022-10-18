@@ -1,4 +1,4 @@
-import './styles/message.css'
+import '../styles/message.css'
 import {useEffect} from "react";
 
 interface MessageProps {
@@ -13,7 +13,7 @@ function DisplayMessageReferences(props: MessageProps) {
         let messageIcon = document.getElementById('messageIcon') as HTMLDivElement | null;
         let messageType = sessionStorage.getItem('messageType');
 
-        if (messageType !== null) {
+      if (messageType !== null) {
             if (messageContainer !== null) {
                 messageContainer.style.borderColor = messageType;
             }

@@ -1,7 +1,6 @@
 package songbook.models;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -16,7 +15,7 @@ public class Song {
     private String id;
     private String title;
     private String author;
-    private final LocalDate dateCreated;
+    private LocalDate dateCreated;
     private String year;
 
     // private List<ReferenceRetained> references = new ArrayList<>();

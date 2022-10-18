@@ -2,7 +2,7 @@ import {Reference} from "./ReferenceModels";
 import '../styles/references.css';
 import '../styles/common.css';
 import React, {FormEvent, useState} from "react";
-import DisplayMessageReferences from "../DisplayMessageReferences";
+import DisplayMessageReferences from "./DisplayMessageReferences";
 
 interface ReferenceItemProps {
     reference: Reference;
