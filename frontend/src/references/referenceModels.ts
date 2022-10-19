@@ -2,9 +2,9 @@ export interface Reference {
     id: string;
     title: string;
     volume: string;
-    page: string;
+    page: number;
     author?: string;
-    year: string;
+    year: number;
 }
 
 export interface ReferencesDTO {

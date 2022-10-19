@@ -3,6 +3,6 @@ package songbook.collections.exceptions;
 public class UnableToLoadFileException extends RuntimeException {
 
     public UnableToLoadFileException() {
-        super("Die Datei konnte nicht geladen werden.");
+        super("The server was unable to load the file.");
     }
 }

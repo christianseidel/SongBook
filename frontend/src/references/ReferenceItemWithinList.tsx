@@ -1,4 +1,4 @@
-import {Reference} from "./ReferenceModels";
+import {Reference} from "./referenceModels";
 import '../styles/references.css';
 import '../styles/common.css';
 import React from "react";
@@ -8,7 +8,7 @@ interface ReferenceItemProps {
     onItemClick: (id: string) => void;
 }
 
-function ReferenceItemInList(props: ReferenceItemProps) {
+function ReferenceItemWithinList(props: ReferenceItemProps) {
 
     const handleDragStart = (event: React.DragEvent<HTMLDivElement>) => {
         let itemDragged = document.getElementById(props.reference.id) as HTMLDivElement | null;
@@ -26,7 +26,7 @@ function ReferenceItemInList(props: ReferenceItemProps) {
                 {props.reference.title}
                 <span className={'referenceItemDetails'}>(
                     {props.reference.volume}
-                    {(props.reference.page !== '0')
+                    {(props.reference.page !== 0)
                         && <span className={'referenceItemDetailsPage'}>,
                             p. {props.reference.page}</span>}
                     )
@@ -36,4 +36,4 @@ function ReferenceItemInList(props: ReferenceItemProps) {
     )
 }
 
-export default ReferenceItemInList
+export default ReferenceItemWithinList

@@ -1,6 +1,6 @@
 import '../styles/message.css'
 import {useEffect} from "react";
-import {UploadResult} from "./ReferenceModels";
+import {UploadResult} from "./referenceModels";
 
 interface ResultProps {
     uploadResult: UploadResult

@@ -1,8 +1,8 @@
 import '../styles/references.css';
 import '../styles/common.css';
 import React, {FormEvent, useEffect, useState} from "react";
-import ReferenceItemInList from "./ReferenceItemInList";
-import {ReferencesDTO, UploadResult} from "./ReferenceModels";
+import ReferenceItemWithinList from "./ReferenceItemWithinList";
+import {ReferencesDTO, UploadResult} from "./referenceModels";
 import DisplayMessageReferences from "./DisplayMessageReferences";
 import ReferenceItemToEdit from "./ReferenceItemToEdit";
 import DisplayUploadResult from "./DisplayUploadResult";
@@ -29,13 +29,10 @@ function References() {
             method: 'GET',
         })
             .then(response => response.json())
-            .then((responseBody: ReferencesDTO) => setReferencesDTO(responseBody))
-            .then(() => {
-
-            });
+            .then((responseBody: ReferencesDTO) => setReferencesDTO(responseBody));
         setToggleDisplaySearchResultsButNotReference(true);
-        setMessage(sessionStorage.getItem('message') ?? '')
-    };
+        setMessage(sessionStorage.getItem('message') ?? '');
+    }
 
     const searchSong = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -154,8 +151,8 @@ function References() {
                                 <div id={"referenceSearchResult"}>
                                     {referencesDTO.referenceList
                                         ? referencesDTO.referenceList.map(item =>
-                                            <ReferenceItemInList key={item.id} reference={item}
-                                                                 onItemClick={editItem}
+                                            <ReferenceItemWithinList key={item.id} reference={item}
+                                                                     onItemClick={editItem}
                                             />)
                                         : <span>... loading</span>
                                     }

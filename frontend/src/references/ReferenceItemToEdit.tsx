@@ -1,4 +1,4 @@
-import {Reference} from "./ReferenceModels";
+import {Reference} from "./referenceModels";
 import '../styles/references.css';
 import '../styles/common.css';
 import React, {FormEvent, useState} from "react";
@@ -12,9 +12,9 @@ interface ReferenceItemProps {
 function ReferenceItemToEdit(props: ReferenceItemProps) {
 
     const [title, setTitle] = useState(props.reference.title);
-    const [page, setPage] = useState(props.reference.page !== '0' ? props.reference.page : '');
+    const [page, setPage] = useState(props.reference.page !== 0 ? props.reference.page : '');
     const [author, setAuthor] = useState(props.reference.author == null ? '' : props.reference.author);
-    const [year, setYear] = useState(props.reference.year !== '0' ? props.reference.year : '');
+    const [year, setYear] = useState(props.reference.year !== 0 ? props.reference.year : '');
     const [message, setMessage] = useState('');
 
     const editReference = (event: FormEvent<HTMLFormElement>) => {

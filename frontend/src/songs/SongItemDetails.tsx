@@ -1,48 +1,49 @@
-import {Song, Status} from './models'
-import './styles/common.css'
-import './styles/songDetails.css'
+import {Song, Status} from './songModels'
+import '../styles/common.css'
+import '../styles/songDetails.css'
 import React, {FormEvent, useState} from "react";
+import DisplayMessageSongs from "./DisplayMessageSongs";
 
 interface SongItemProps {
     song: Song
     onItemDeletion: (message: string) => void;
     onItemCreation: (message: string) => void;
     onItemRevision: (message: string) => void;
-    onCancel: () => void;
+    doReturn: () => void;
 }
 
 
 function SongItemDetails(props: SongItemProps) {
 
-    const [error, setError] = useState('');
     const [title, setTitle] = useState('');
     const [author, setAuthor] = useState('');
     const [year, setYear] = useState('');
+    const [message, setMessage] = useState('');
 
-    function deleteItem(id: string) {
-        // ToDo: Install Confirm Box
+    function deleteSong(id: string) {
         fetch('/api/songbook/' + id, {
             method: 'DELETE'
         })
             .then(response => {
                 if (response.ok) {
-                    props.onItemDeletion("Your song was deleted!")
+                    sessionStorage.setItem('messageType', 'green');
+                    sessionStorage.setItem('message', 'Your song was deleted!');
                 } else {
-                    throw Error("An item with Id no. " + id + " could not be found.")
+                    sessionStorage.setItem('messageType', 'red');
+                    sessionStorage.setItem('message', 'Your song could not be deleted!');
                 }
             })
-            .catch(e => setError(e.message));
+            .then(props.doReturn);
     }
 
-
-
-    const editItem = (id: string) => {
-        alert("Da muss ich noch ran! It n°: " + id)
-
+    const editSong = (id: string) => {
+        setMessage("Sorry, this function has not yet been implemented! (Id n°: " + id + ").");
+        sessionStorage.setItem('messageType', 'blue');
     }
 
+    /*
     const doEditItem = (event: FormEvent<HTMLFormElement>) => {
-    /*    event.preventDefault();
+        event.preventDefault();
         fetch('api/songbook/{id}' + eventxxx, {
             method: 'PUT',
             body: JSON.stringify({
@@ -62,11 +63,12 @@ function SongItemDetails(props: SongItemProps) {
                 }
             })
             .catch(e => setError(e.message));
-            */
     }
+     */
 
     const doCreateSong = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        let responseStatus: number;
         fetch('api/songbook', {
             method: 'POST',
             headers: {
@@ -78,34 +80,40 @@ function SongItemDetails(props: SongItemProps) {
                 })
         })
             .then(response => {
-                if (response.ok) {
-                    props.onItemCreation("Your song was successfully created!")
+                responseStatus = response.status;
+                return response.json();
+            })
+            .then((responseBody) => {
+                if (responseStatus === 200) {
+                    sessionStorage.setItem('messageType', 'green');
+                    sessionStorage.setItem('message', 'Your song was successfully created!');
                 } else {
-                    throw Error("nicht angelegt");
+                    sessionStorage.setItem('message', responseBody.message);
+                    sessionStorage.setItem('messageType', 'red');
                 }
             })
-            .catch(e => setError(e.message));
+            .then((props.doReturn));
     }
 
-
-    return (
+return (
         <div>
             {(props.song.status !== Status.write)
                 ?
                 <div>
                     <div className={'header'}>
                         <label>Title:</label> <span className={'title'}> {props.song.title}</span>
-                        <span id={'buttonEditSong'}><button onClick={() => editItem(props.song.id)}>&#8734; edit &nbsp;</button></span>
-                        <span id={'buttonDeleteSong'}><button onClick={() => deleteItem(props.song.id)}>&#10008; delete</button></span>
+                        <span id={'buttonEditSong'}><button onClick={() => editSong(props.song.id)}>&#8734; edit &nbsp;</button></span>
                     </div>
                     <div>{props.song.author && <label>By:</label>} {props.song.author && <span className={'author'}> {props.song.author} </span>}
-                        {props.song.year && <span>(<label>Year:</label></span>} {props.song.year && <span className={'year'}> {props.song.year})</span>}</div>
+                        {props.song.year && <span>(<label>Year:</label></span>} {props.song.year && <span className={'year'}> {props.song.year})</span>}
+                        <span id={'buttonDeleteSong'}><button onClick={() => deleteSong(props.song.id)}>&#10008; delete</button></span>
+                    </div>
 
                     <div className={'dateCreated'}>
-                        <label id={"dateCreated"}>created:</label>
+                        <label id={"dateCreated"}>created: </label>
                         <span className={'dateCreated'}>{props.song.dayOfCreation.day}.{props.song.dayOfCreation.month}.{props.song.dayOfCreation.year}</span>
-
                     </div>
+
 
                 </div>
                 :
@@ -125,9 +133,20 @@ function SongItemDetails(props: SongItemProps) {
 
                         <button id={'buttonCreate'} type='submit'> &#10004; create</button>
                     </form>
-                    <button id={'buttonCancel'} type='submit' onClick={props.onCancel}> &#10008; cancel</button>
+                    <button id={'buttonCancel'} type='submit' onClick={props.doReturn}> &#10008; cancel</button>
                 </div>
             }
+
+            <div>
+                {message && <DisplayMessageSongs
+                    message={message}
+                    onClose={() => {
+                        setMessage('');
+                        sessionStorage.setItem('message', '');
+                        sessionStorage.removeItem('messageType')
+                    }}
+                />}
+            </div>
 
         </div>
     )

@@ -6,7 +6,7 @@ other resources of songs you want to play or learn.
 ### Combining Off- And Online Content
 It will eventually allow to combine both your offline song sheets and 
 resources you discover online such as tutorials and lead sheets. 
-Furthermore, it will provide for data fields where you beef-up your
+Furthermore, it will provide for fields of data where you beef-up your
 collection of songs with your own comments and pieces of information.
 
 ### Import Your Song Sheet Collections

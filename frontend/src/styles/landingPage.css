@@ -33,6 +33,7 @@ h1 {
     display: flex;
     width: 100%;
     gap: 28px;
+    margin-top: 28px;
 }
 
 .flex-child {
@@ -40,22 +41,11 @@ h1 {
     border: 2px solid darkgoldenrod;
     border-radius: 8px;
     padding: 15px;
-    color: darkred;
+    min-height: 200px;
 }
 
 .flex-child:first-child {
     color: green;
-}
-
-#displayMessage {
-    margin-left: 11px;
-    margin-top: 26px;
-    color: black;
-    border: 1px solid #EABA5E;
-    border-radius: 8px;
-    background-color: #fee449;
-    padding: 0 12px;
-    width: fit-content;
 }
 
 .songItem {
@@ -66,7 +56,6 @@ h1 {
     padding: 1px 6px;
     transition: 0.1s;
     user-select: none;
-
 }
 
 .songItem:hover {

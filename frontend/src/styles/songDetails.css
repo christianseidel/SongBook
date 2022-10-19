@@ -1,9 +1,13 @@
 /*  REGULAR VIEW   */
 
-#buttonDeleteSong {
+#buttonEditSong {
     float: right;
 }
 
+#buttonDeleteSong {
+    float: right;
+    clear: both;
+}
 
 /*  EDIT VIEW   */
 
@@ -23,7 +27,7 @@ label#dateCreated {
 }
 
 .title {
-    margin-left: 21px;
+    margin-left: 23px;
     width: 312px;
 }
 .author {

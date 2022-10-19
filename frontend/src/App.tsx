@@ -1,16 +1,18 @@
 import React, {useEffect, useState} from 'react';
 import './styles/landingPage.css';
 import './styles/common.css';
-import {Song, SongsDTO, Status, DayOfCreation} from "./models";
-import SongItemInList from "./SongItemInList";
-import SongItemDetails from "./SongItemDetails";
+import {Song, SongsDTO, Status, DayOfCreation} from "./songs/songModels";
+import SongItemWithinList from "./songs/SongItemWithinList";
+import SongItemDetails from "./songs/SongItemDetails";
 import ukulele from "./images/ukulele.png";
 import References from "./references/References";
+import DisplayMessageSongs from "./songs/DisplayMessageSongs";
 
 function App() {
 
     const [songsDTO, setSongsDTO] = useState({} as SongsDTO);
     let [songChosen, setSongChosen] = useState({} as Song)
+    const [message, setMessage] = useState('');
 
     useEffect(() => {
         fetch('/api/songbook', {
@@ -22,7 +24,7 @@ function App() {
             .then((responseBody: SongsDTO) => setSongsDTO(responseBody))
     }, []);
 
-    function displayItemChosen(id: string) {
+    function displaySongChosen(id: string) {
         fetch('/api/songbook/' + id, {
             method: 'GET',
             headers: {
@@ -40,18 +42,20 @@ function App() {
                 responseBody.dayOfCreation = new DayOfCreation(responseBody.dateCreated as string);
                 setSongChosen(responseBody);
             })
-            .catch(e => setMessage(e.message));
+            .catch((e) => {
+                setMessage(e.message);
+                sessionStorage.setItem('messageType', 'red');
+            });
     }
 
-    function fetchAllItems() {
+    function getAllSongs() {
         fetch('/api/songbook', {
             method: 'GET',
         })
-            .then(response => {
-                return response.json()
-            })
+            .then(response => response.json())
             .then((responseBody: SongsDTO) => setSongsDTO(responseBody))
             .then(() => setSongChosen({} as Song));
+        setMessage(sessionStorage.getItem('message') ?? '');
     }
 
 
@@ -62,41 +66,33 @@ function App() {
         setSongChosen(newSong);
     }
 
-    function setMessage(message: string) {
-            const displayMessage = document.getElementById('displayMessage');
-            const p = document.createElement("p");
-            p.textContent = message;
-            p.style.marginTop = "3px";
-            p.style.marginBottom = "3px";
-            displayMessage?.appendChild(p);
-        setTimeout(function () {
-            displayMessage?.removeChild(p);
-        }, 2000);
-    }
-
     const highlightSongList = document.getElementById('chooseASong') as HTMLSpanElement | null;
     if (highlightSongList != null ) {
         highlightSongList.addEventListener('mouseover', highlightSongsToChooseFrom)
     }
 
     function highlightSongsToChooseFrom() {
-        let i: number = 0;
-        let top: number = Math.min(songsDTO.songList.length, 5);
-        // initial glow
-        glowItem(document.getElementById(songsDTO.songList[0].id));
-        // glow rush
-        let shimmerInterval = setInterval(function () {
-            i++;
-            glowItem(document.getElementById(songsDTO.songList[i].id));
-            unglowItem(document.getElementById(songsDTO.songList[i - 1].id));
-            if (i === top) {
-                clearInterval(shimmerInterval);
-                // final glow
-                setTimeout(function () {
-                    unglowItem(document.getElementById(songsDTO.songList[i].id));
-                }, 110);
-            }
-        }, 100);
+        if (songsDTO.songList.length > 1) {
+            let i: number = 0;
+            let lastI: number = Math.min(songsDTO.songList.length, 6) - 1;
+            // initial glow
+            glowItem(document.getElementById(songsDTO.songList[0].id));
+            // glow rush
+            const shimmerInterval = setInterval(function () {
+                i++;
+                glowItem(document.getElementById(songsDTO.songList[i].id));
+                unglowItem(document.getElementById(songsDTO.songList[i - 1].id));
+                if (i === lastI) {
+                    clearInterval(shimmerInterval);
+                    // final glow
+                    if (i < songsDTO.songList.length) {
+                        setTimeout(function () {
+                            unglowItem(document.getElementById(songsDTO.songList[i].id));
+                        }, 110);
+                    }
+                }
+            }, 100);
+        }
     }
 
     const glowItem = (item: HTMLElement | null) => {
@@ -125,8 +121,8 @@ function App() {
 
                     {songsDTO.songList
                         ? songsDTO.songList.map(item =>
-                            <SongItemInList key={item.id} song={item}
-                                            onItemMarked={displayItemChosen}
+                            <SongItemWithinList key={item.id} song={item}
+                                                onItemMarked={displaySongChosen}
                             />)
                         : <span>... loading</span>
                     }
@@ -138,27 +134,38 @@ function App() {
                             ? <SongItemDetails song={songChosen}
                                                onItemDeletion={(message: string) => {
                                                    setMessage(message);
-                                                   fetchAllItems();
+                                                   getAllSongs();
                                                }}
                                                onItemCreation={(message: string) => {
                                                    setMessage(message);
-                                                   fetchAllItems();
+                                                   getAllSongs();
                                                }}
                                                onItemRevision={(message: string) => {
                                                    setMessage(message);
-                                                   fetchAllItems();
+                                                   getAllSongs();
                                                }}
-                                               onCancel={fetchAllItems}
+                                               doReturn={getAllSongs}
                                                />
                             : <span className={"doSomething"} id={"chooseASong"}>&#129172; &nbsp; please choose a song</span>
                     }
                 </div>
 
+
             </div>
-            <div id={"displayMessage"}></div>
 
             <div>
                 <References />
+            </div>
+
+            <div>
+                {message && <DisplayMessageSongs
+                    message={message}
+                    onClose={() => {
+                        setMessage('');
+                        sessionStorage.setItem('message', '');
+                        sessionStorage.removeItem('messageType')
+                    }}
+                />}
             </div>
 
         </div>
