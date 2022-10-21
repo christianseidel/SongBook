@@ -183,18 +183,24 @@ public class SongCollectionService {
         }
     }
 
+    //public void deleteTempDirAndFile(String fileLocation, Path tempPath, String storedSongCollection) {
     public void deleteTempDirAndFile(String fileLocation, Path tempPath, String storedSongCollection) {
+        int end = fileLocation.lastIndexOf("/");
+        String fileName = fileLocation.substring(end + 1);
+        System.out.println("fileName: " + fileName);
         System.out.println("file location: " + fileLocation);  //  D:/Ukulele/SongBook/backend/target/classes//temporary/0 oneTestSong.txt
         System.out.println("tempPath: " + tempPath);  // D:\Ukulele\SongBook\backend\target\classes\temporary
         System.out.println("storedSongCollection: " + storedSongCollection);  // 0 oneTestSong.txt
+        Path path = Paths.get(fileLocation);
         try {
-            Files.delete(Paths.get(fileLocation));
+            Files.delete(path);
         } catch (IOException e) {
             System.out.println("! Could not delete file" + storedSongCollection + ".");
             throw new RuntimeException("! File \"" + storedSongCollection + "\" could not be deleted.");
         }
+        Path parent = path.getParent();
         try {
-            Files.delete(tempPath);
+            Files.delete(parent);
             System.out.println("-> Directory \"" + tempPath + "\" deleted.");
         } catch (IOException e) {
             System.out.println("! Could not delete temporary directory.");

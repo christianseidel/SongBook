@@ -74,22 +74,8 @@ public class SongCollectionServiceTest {
         verify(repo).save(ref);
     }
 
-
-    // TODO:  DOUBLES HERE (check those three...)
     @Test
     void shouldFindReferenceById() {
-        Reference ref = new Reference("Here Comes My Music", TheDailyUkulele_Yellow, 123);
-        String myId = ref.getId();
-        ReferencesDTO myDTO = new ReferencesDTO(List.of(ref));
-        Mockito.when(repo.findById(myId)).thenReturn(Optional.of(ref));
-
-        ReferencesDTO actual = service.getReferenceById(myId);
-
-        assertEquals(myDTO, actual);
-    }
-
-    @Test
-    void shouldFindReferenceByIdWithReferenceHavingTitleAndVolumeAndPage() {
         Reference ref = new Reference("Never Heard This Song Before", TheDailyUkulele_Yellow, 12);
         Mockito.when(repo.findById("334455")).thenReturn(Optional.of(ref));
 
@@ -97,18 +83,6 @@ public class SongCollectionServiceTest {
 
         assertEquals(new ReferencesDTO(List.of(ref)), actual);
     }
-
-    @Test
-    void shouldFindReferenceByIdWithReferenceHavingTitleAndVolume() {
-        Reference ref = new Reference("Never Heard This Song Before", TheDailyUkulele_Yellow);
-        Mockito.when(repo.findById("334455")).thenReturn(Optional.of(ref));
-
-        ReferencesDTO actual = service.getReferenceById("334455");
-
-        assertEquals(new ReferencesDTO(List.of(ref)), actual);
-    }
-
-
 
     @Test
     void shouldThrowExceptionWhenLookingUpReferenceWithWrongId() {
@@ -148,11 +122,6 @@ public class SongCollectionServiceTest {
         Reference actual = service.editReference(id, changedReference);
 
         assertEquals(changedReference, actual);
-    }
-
-    @Test
-    void shouldThrowExceptionWhenTryingToSetInvalidPageDatum() {
-
     }
 
     @Test
@@ -269,23 +238,6 @@ public class SongCollectionServiceTest {
     }
 
     @Test
-    void shouldThrowEmptyFileException() {
-        MockMultipartFile zeroRefUpload = new MockMultipartFile(
-                "importZeroReference.txt",
-                "importZeroReference.txt",
-                "text/plain",
-                "".getBytes(StandardCharsets.UTF_8)
-        );
-
-        Exception exception = assertThrows(EmptyFileException.class,
-                () -> {
-                    service.processMultipartFileUpload(zeroRefUpload);
-                });
-        assertEquals("EmptyFileException", exception.getClass().getSimpleName());
-        assertEquals("The file 'importZeroReference.txt' is empty; there are no references to process.", exception.getMessage());
-    }
-
-    @Test
     void shouldRefuseToAddReferenceWithMalformedPageDatum() {
         MockMultipartFile oneRefUpload = new MockMultipartFile(
                 "importOneReference.txt",
@@ -340,20 +292,20 @@ public class SongCollectionServiceTest {
         assertEquals(uploadResult, actual);
     }
 
-
-/*
-
     @Test
-    void shouldThrowMalformedFileException() {
-        Exception exception = Assertions.assertThrows(MalformedFileException.class,
-                () -> {
-                    service.addCollection(path, "serviceTest_WrongFileFormat");
-                });
-        assertEquals("MalformedFileException", exception.getClass().getSimpleName());
-        assertEquals("Die Datei \"serviceTest_WrongFileFormat\" wurde gefunden,\n\tkann aber nicht gelesen " +
-                "werden. Stellen Sie sicher, dass sie in der Codierung \"UTF-16 BE\" gespeichert wurde!",
-                exception.getMessage());
-    }
+    void shouldThrowEmptyFileException() {
+        MockMultipartFile zeroRefUpload = new MockMultipartFile(
+                "importZeroReference.txt",
+                "importZeroReference.txt",
+                "text/plain",
+                "".getBytes(StandardCharsets.UTF_8)
+        );
 
-*/
+        Exception exception = assertThrows(EmptyFileException.class,
+                () -> {
+                    service.processMultipartFileUpload(zeroRefUpload);
+                });
+        assertEquals("EmptyFileException", exception.getClass().getSimpleName());
+        assertEquals("The file 'importZeroReference.txt' is empty. There are no references to process.", exception.getMessage());
+    }
 }

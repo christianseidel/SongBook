@@ -90,10 +90,6 @@ public class SongCollectionController {
         }
     }
 
-    private String stringToJson(String errorMessage) {
-        return "{\"message\": \"" + errorMessage + "\"}";
-    }
-
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<String> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
         if (e.getMessage().startsWith("JSON parse error: Cannot deserialize value of type `int` from String")) {
@@ -104,4 +100,8 @@ public class SongCollectionController {
         }
     }
 
+
+    private String stringToJson(String errorMessage) {
+        return "{\"message\": \"" + errorMessage + "\"}";
+    }
 }
