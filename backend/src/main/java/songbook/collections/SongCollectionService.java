@@ -88,10 +88,10 @@ public class SongCollectionService {
 
         try {
             Files.createDirectory(tempPath);
-            System.out.println("-> Directory created.");
+            System.out.println("-> Temporary directory created.");
         } catch (IOException e) {
             System.out.println("!  Could not create temporary directory!");
-            throw new RuntimeException("Unfortunately, the server could not create the temporary directory needed.");
+            throw new RuntimeException("The server could not create the temporary directory needed.");
         }
 
         // save file
@@ -105,12 +105,12 @@ public class SongCollectionService {
         try {
             uploadResult = importNewSongCollection(storedSongCollection.toPath());
         } catch (MalformedFileException e) {
-            deleteTempDirAndFile(fileLocation, tempPath, storedSongCollection.getName());
+            deleteFileAndTempDir(fileLocation);
             throw e;
         }
 
         // undo file and directory
-        deleteTempDirAndFile(fileLocation, tempPath, storedSongCollection.getName());
+        deleteFileAndTempDir(fileLocation);
 
         return uploadResult;
     }
@@ -183,25 +183,20 @@ public class SongCollectionService {
         }
     }
 
-    //public void deleteTempDirAndFile(String fileLocation, Path tempPath, String storedSongCollection) {
-    public void deleteTempDirAndFile(String fileLocation, Path tempPath, String storedSongCollection) {
+    public void deleteFileAndTempDir(String fileLocation) {
         int end = fileLocation.lastIndexOf("/");
         String fileName = fileLocation.substring(end + 1);
-        System.out.println("fileName: " + fileName);
-        System.out.println("file location: " + fileLocation);  //  D:/Ukulele/SongBook/backend/target/classes//temporary/0 oneTestSong.txt
-        System.out.println("tempPath: " + tempPath);  // D:\Ukulele\SongBook\backend\target\classes\temporary
-        System.out.println("storedSongCollection: " + storedSongCollection);  // 0 oneTestSong.txt
         Path path = Paths.get(fileLocation);
         try {
             Files.delete(path);
         } catch (IOException e) {
-            System.out.println("! Could not delete file" + storedSongCollection + ".");
-            throw new RuntimeException("! File \"" + storedSongCollection + "\" could not be deleted.");
+            System.out.println("! Could not delete file" + fileName + ".");
+            throw new RuntimeException("! File \"" + fileName + "\" could not be deleted.");
         }
         Path parent = path.getParent();
         try {
             Files.delete(parent);
-            System.out.println("-> Directory \"" + tempPath + "\" deleted.");
+            System.out.println("-> Directory \"" + parent + "\" deleted.");
         } catch (IOException e) {
             System.out.println("! Could not delete temporary directory.");
         }
