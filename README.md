@@ -19,4 +19,4 @@ of reference.
 Once all functionalities integrated, your Song Book will empower you to do 
 two things: Keep focus while your learn and practice on a daily basis by 
 sticking to your Focus List, while at the same time collect new ideas and 
-inspiration which may want to turn to at a later point in time.
+inspiration which may want to turn to at a later point in time. 
