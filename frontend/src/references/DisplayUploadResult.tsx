@@ -54,11 +54,11 @@ function DisplayMessage(props: ResultProps) {
                     </p>
 
                     <div>
-                        <p className={'resultTitle'}>{props.uploadResult.listOfLinesWithInvalidVolumeData.length > 0
+                        <p className={'resultTitle'}>{props.uploadResult.listOfLinesWithInvalidCollectionName.length > 0
                             && <span>These references have <span className={"bold"}>incorrect volume information:</span></span>}
                         </p>
                         <div className={'listOfErrorItems'}>
-                            {props.uploadResult.listOfLinesWithInvalidVolumeData.map(item1 => <p key={item1}>{item1}</p>)}
+                            {props.uploadResult.listOfLinesWithInvalidCollectionName.map(item1 => <p key={item1}>{item1}</p>)}
                         </div>
                     </div>
 

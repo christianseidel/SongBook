@@ -1,4 +1,4 @@
-import {Reference} from "./referenceModels";
+import {songCollectionToRealName, Reference} from "./referenceModels";
 import '../styles/references.css';
 import '../styles/common.css';
 import React from "react";
@@ -24,12 +24,11 @@ function ReferenceItemWithinList(props: ReferenceItemProps) {
                  onClick={() => {props.onItemClick(props.reference.id)}}
                  draggable={'true'} onDragStart={handleDragStart}>
                 {props.reference.title}
-                <span className={'referenceItemDetails'}>(
-                    {props.reference.volume}
+                <span className={'referenceItemDetails'}>&ndash;&#129174;&nbsp;
+                    {songCollectionToRealName(props.reference.songCollection)}
                     {(props.reference.page !== 0)
                         && <span className={'referenceItemDetailsPage'}>,
                             p. {props.reference.page}</span>}
-                    )
                 </span>
             </div>
         </div>

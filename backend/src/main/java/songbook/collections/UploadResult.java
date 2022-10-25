@@ -9,7 +9,7 @@ public class UploadResult {
     private int numberOfExistingReferences;
     private int numberOfReferencesRejected;
     private int totalNumberOfReferences; // serves as check sum
-    private ArrayList<String> listOfLinesWithInvalidVolumeData;
+    private ArrayList<String> listOfLinesWithInvalidCollectionName;
     private ArrayList<String> listOfLinesWithInvalidPageData;
 
     public UploadResult() {
@@ -17,12 +17,12 @@ public class UploadResult {
         this.numberOfExistingReferences = 0;
         this.numberOfReferencesRejected = 0;
         this.totalNumberOfReferences = 0;
-        this.listOfLinesWithInvalidVolumeData = new ArrayList<>();
+        this.listOfLinesWithInvalidCollectionName = new ArrayList<>();
         this.listOfLinesWithInvalidPageData = new ArrayList<>();
     }
 
-    public void addLineWithInvalidVolumeDatum(String illegalVolume) {
-        listOfLinesWithInvalidVolumeData.add(illegalVolume);
+    public void addLineWithInvalidCollectionName(String illegalCollectionName) {
+        listOfLinesWithInvalidCollectionName.add(illegalCollectionName);
     }
 
     public void addLineWithInvalidPageDatum(String illegalPage) {

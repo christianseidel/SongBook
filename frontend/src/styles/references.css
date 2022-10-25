@@ -48,7 +48,7 @@ h2 {
     margin-top: 2px;
     margin-bottom: 1px;
     padding: 1px;
-    color: darkslategray;
+    color: #3b6363;
     display: inline;
     margin-left: 6px;
     font-style: italic;
@@ -93,5 +93,16 @@ h2 {
 #labelAddFile:hover {
     cursor: help;
 }
+
+#inputTitle {
+    color: darkblue;
+    margin-left: 12px;
+    margin-right: 16px;
+}
+
+#collectionTitle {
+    color: darkblue;
+}
+
 /* todo: Add Info Field with Requirements*/
 

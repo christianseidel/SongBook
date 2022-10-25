@@ -1,4 +1,4 @@
-import {Reference} from "./referenceModels";
+import {Reference, songCollectionToRealName} from "./referenceModels";
 import '../styles/references.css';
 import '../styles/common.css';
 import React, {FormEvent, useState} from "react";
@@ -27,7 +27,7 @@ function ReferenceItemToEdit(props: ReferenceItemProps) {
             body: JSON.stringify({
                 id: props.reference.id,
                 title: title,
-                volume: props.reference.volume,
+                volume: props.reference.songCollection,
                 page: page,
                 author: author,
                 year: year,
@@ -103,7 +103,7 @@ function ReferenceItemToEdit(props: ReferenceItemProps) {
                        onChange={ev => setTitle(ev.target.value)} autoFocus required
                        onKeyDown={ev => checkIfEscapeKey(ev.key)}
                 />
-                <span>{props.reference.volume}</span><br/>
+                <span id={'collectionTitle'}>{songCollectionToRealName(props.reference.songCollection)}</span><br/>
                 <label>Page: </label>
                 <input type={'text'} placeholder={'Page'} value={page}
                        onChange={ev => setPage(ev.target.value)}

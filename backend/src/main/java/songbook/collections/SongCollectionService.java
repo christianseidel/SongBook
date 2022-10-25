@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import songbook.collections.exceptions.*;
 import songbook.collections.models.Reference;
-import songbook.collections.models.ReferenceVolume;
+import songbook.collections.models.SongCollection;
 import songbook.collections.models.ReferencesDTO;
 
 import java.io.File;
@@ -18,7 +18,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
-import static songbook.collections.models.ReferenceVolume.*;
+import static songbook.collections.models.SongCollection.*;
 
 @Service
 @RequiredArgsConstructor
@@ -121,23 +121,23 @@ public class SongCollectionService {
         for (String line : listOfItems) {
             uploadResult.setTotalNumberOfReferences(uploadResult.getTotalNumberOfReferences() + 1); // will serve as check sum
             String[] elements = line.split(";");
-            ReferenceVolume volume;
-            // check volume
+            SongCollection songCollection;
+            // check song collection
             try {
-                volume = mapReferenceVolume(elements[1]);
-            } catch (IllegalReferenceVolumeException e) {
-                uploadResult.addLineWithInvalidVolumeDatum(line);
+                songCollection = mapSongCollection(elements[1]);
+            } catch (IllegalSongCollectionException e) {
+                uploadResult.addLineWithInvalidCollectionName(line);
                 uploadResult.setNumberOfReferencesRejected(uploadResult.getNumberOfReferencesRejected() + 1);
                 continue;
             } catch (IndexOutOfBoundsException e) {
-                uploadResult.addLineWithInvalidVolumeDatum(elements[0] + " // volume information missing ");
+                uploadResult.addLineWithInvalidCollectionName(elements[0] + " // song collection information missing ");
                 uploadResult.setNumberOfReferencesRejected(uploadResult.getNumberOfReferencesRejected() + 1);
                 continue;
             }
             // create reference
-            Reference item = new Reference(elements[0], volume);
+            Reference item = new Reference(elements[0], songCollection);
             // check for double
-            if (!checkIfReferenceExists(item.getTitle(), item.getVolume())) {
+            if (!checkIfReferenceExists(item.getTitle(), item.getSongCollection())) {
                 // set page
                 if (elements.length > 2) {
                     try {
@@ -158,8 +158,8 @@ public class SongCollectionService {
         return uploadResult;
     }
 
-    private boolean checkIfReferenceExists(String title, ReferenceVolume volume) {
-        Collection<Reference> collection = referencesRepository.findAllByTitleAndVolume(title, volume);
+    private boolean checkIfReferenceExists(String title, SongCollection collection1) {
+        Collection<Reference> collection = referencesRepository.findAllByTitleAndSongCollection(title, collection1);
         return !collection.isEmpty();
     }
 
@@ -202,27 +202,27 @@ public class SongCollectionService {
         }
     }
 
-    private ReferenceVolume mapReferenceVolume(String proposal) {
+    private SongCollection mapSongCollection(String proposal) {
         String trimmedProposal = proposal.toLowerCase().trim();
         return switch (trimmedProposal) {
-            case "the daily ukulele (yellow)" -> TheDailyUkulele_Yellow;
-            case "the daily ukulele (blue)" -> TheDailyUkulele_Blue;
-            case "liederbuch" -> Liederbuch_1;
-            case "liederkiste" -> Liederkiste_2;
-            case "liederkarren" -> Liederkarren_3;
-            case "liedercircus" -> Liedercircus_4;
-            case "liederkorb" -> Liederkorb_5;
-            case "liederbaum" -> Liederbaum_6;
-            case "liederwolke" -> Liederwolke_7;
-            case "liedersonne" -> Liedersonne_8;
-            case "liederstern" -> Liederstern_9;
-            case "liederstrauss" -> Liederstrauss_10;
-            case "liederballon_11" -> Liederballon_11;
-            case "liedergarten_12" -> Liedergarten_12;
-            case "liederzug_13" -> Liederzug_13;
-            case "liederwelt_14" -> Liederwelt_14;
-            case "liederfest_15" -> Liederfest_15;
-            default -> throw new IllegalReferenceVolumeException();
+            case "the daily ukulele (yellow)" -> THE_DAILY_UKULELE_YELLOW;
+            case "the daily ukulele (blue)" -> THE_DAILY_UKULELE_BLUE;
+            case "liederbuch" -> LIEDERBUCH_1;
+            case "liederkiste" -> LIEDERKISTE_2;
+            case "liederkarren" -> LIEDERKARREN_3;
+            case "liedercircus" -> LIEDERCIRCUS_4;
+            case "liederkorb" -> LIEDERKORB_5;
+            case "liederbaum" -> LIEDERBAUM_6;
+            case "liederwolke" -> LIEDERWOLKE_7;
+            case "liedersonne" -> LIEDERSONNE_8;
+            case "liederstern" -> LIEDERSTERN_9;
+            case "liederstrauss" -> LIEDERSTRAUSS_10;
+            case "liederballon_11" -> LIEDERBALLON_11;
+            case "liedergarten_12" -> LIEDERGARTEN_12;
+            case "liederzug_13" -> LIEDERZUG_13;
+            case "liederwelt_14" -> LIEDERWELT_14;
+            case "liederfest_15" -> LIEDERFEST_15;
+            default -> throw new IllegalSongCollectionException();
         };
     }
 }
