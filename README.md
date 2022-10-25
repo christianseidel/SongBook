@@ -1,7 +1,7 @@
 ## MY SONG BOOK: A Private Collection of Song Sheets
 
-The aim of this app is to offer a powerful tool to manage song sheets and
-other resources of songs you want to play or learn.
+The idea of this app is to offer a tool to efficiently manage song sheets
+and other related resources of songs you want to play or learn.
 
 ### Combining Off- And Online Content
 It will eventually allow to combine both your offline song sheets and 
@@ -15,3 +15,8 @@ the content lists of your different hardcopy songbooks. You will then be able
 to browse through the entire list of your song sheets from one single point
 of reference.
 
+### Keep Focus, Gather Inspiration
+Once all functionalities integrated, your Song Book will empower you to do 
+two things: Keep focus while your learn and practice on a daily basis by 
+sticking to your Focus List, while at the same time collect new ideas and 
+inspiration which may want to turn to at a later point in time.
