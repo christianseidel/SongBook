@@ -18,6 +18,7 @@ public class Reference {
     private int page;
     private String author;
     private int year;
+    private boolean hidden;
 
 
     public Reference(String title, SongCollection songCollection) {

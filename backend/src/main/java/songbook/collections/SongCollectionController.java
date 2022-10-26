@@ -90,6 +90,28 @@ public class SongCollectionController {
         }
     }
 
+
+    // I AM HERE
+    @PutMapping("/edit/hide/{id}")
+    public ResponseEntity<Object> hideReference(@PathVariable String id) {
+        try {
+            songCollectionService.hideReference(id);
+            return ResponseEntity.ok(stringToJson("Your reference now is HIDDEN."));
+        } catch (NoSuchIdException e) {
+            return ResponseEntity.status(404).body(stringToJson(e.getMessage()));
+        }
+    }
+
+    @PutMapping("/edit/unhide/{id}")
+    public ResponseEntity<Object> unhideReference(@PathVariable String id) {
+        try {
+            songCollectionService.unhideReference(id);
+            return ResponseEntity.ok(stringToJson("Your reference now is no longer HIDDEN."));
+        } catch (NoSuchIdException e) {
+            return ResponseEntity.status(404).body(stringToJson(e.getMessage()));
+        }
+    }
+
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<String> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
         if (e.getMessage().startsWith("JSON parse error: Cannot deserialize value of type `int` from String")) {

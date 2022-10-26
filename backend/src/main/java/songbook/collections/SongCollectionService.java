@@ -28,6 +28,7 @@ public class SongCollectionService {
 
     public ReferencesDTO getAllReferences() {
         List<Reference> list = referencesRepository.findAll().stream()
+                .filter(e -> !e.isHidden())
                 .sorted(Comparator.comparing(Reference::getTitle))
                 .toList();
         return new ReferencesDTO(list);
@@ -35,6 +36,7 @@ public class SongCollectionService {
 
     public ReferencesDTO getReferencesByTitle(String title) {
         List<Reference> list = referencesRepository.findAll().stream()
+                .filter(e -> !e.isHidden())
                 .filter(element -> element.getTitle().toLowerCase().contains(title.toLowerCase()))
                 .sorted(Comparator.comparing(Reference::getTitle))
                 .toList();
@@ -63,6 +65,18 @@ public class SongCollectionService {
         return referencesRepository.findById(id)
                     .map(e -> referencesRepository.save(reference))
                     .orElseThrow(NoSuchIdException::new);
+    }
+
+    public void hideReference (String id) {
+        Reference reference = referencesRepository.findById(id).orElseThrow(NoSuchIdException::new);
+        reference.setHidden(true);
+        referencesRepository.save(reference);
+    }
+
+    public void unhideReference (String id) {
+        Reference reference = referencesRepository.findById(id).orElseThrow(NoSuchIdException::new);
+        reference.setHidden(false);
+        referencesRepository.save(reference);
     }
 
     public ReferencesDTO copyReferenceById(String id) {

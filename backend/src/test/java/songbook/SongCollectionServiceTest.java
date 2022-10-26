@@ -34,7 +34,7 @@ public class SongCollectionServiceTest {
 
 
     @Test
-    void shouldReturnAllReference() {
+    void shouldReturnAllReferences() {
         SongCollection collection = THE_DAILY_UKULELE_YELLOW;
         Reference ref01 = new Reference("Here Comes My Music", collection, 123);
         Reference ref02 = new Reference("Here Comes Your Music", collection, 144);
@@ -307,5 +307,67 @@ public class SongCollectionServiceTest {
                 });
         assertEquals("EmptyFileException", exception.getClass().getSimpleName());
         assertEquals("The file 'importZeroReference.txt' is empty. There are no references to process.", exception.getMessage());
+    }
+
+    @Test
+    void shouldSetReferenceToHidden() {
+        Reference initialReference = new Reference("Singing In The Rain", THE_DAILY_UKULELE_YELLOW, 35);
+        String id = initialReference.getId();
+        Mockito.when(repo.findById(id)).thenReturn(Optional.of(initialReference));
+        Reference hiddenReference = new Reference("Singing In The Rain", THE_DAILY_UKULELE_YELLOW, 35);
+        hiddenReference.setId(id);
+        hiddenReference.setHidden(true);
+
+        service.hideReference(id);
+
+        verify(repo).save(hiddenReference);
+    }
+
+    @Test
+    void shouldSetReferenceToNotHidden() {
+        Reference initialReference = new Reference("Singing In The Rain", THE_DAILY_UKULELE_YELLOW, 35);
+        String id = initialReference.getId();
+        initialReference.setHidden(true);
+        Mockito.when(repo.findById(id)).thenReturn(Optional.of(initialReference));
+        Reference unhiddenReference = new Reference("Singing In The Rain", THE_DAILY_UKULELE_YELLOW, 35);
+        unhiddenReference.setId(id);
+        unhiddenReference.setHidden(false);
+
+        service.unhideReference(id);
+
+        verify(repo).save(unhiddenReference);
+    }
+
+    @Test
+    void shouldNotReturnHiddenReferenceWhenLookingUpAllReferences() {
+        SongCollection collection = THE_DAILY_UKULELE_YELLOW;
+        Reference ref01 = new Reference("Here Comes My Music", collection, 123);
+        Reference ref02 = new Reference("Here Comes Your Music", collection, 144);
+        Reference ref04 = new Reference("Oh, When The Music Ends", collection, 320);
+        ref04.setHidden(false);
+        Reference ref07 = new Reference("Here Comes My Silent Music", collection, 007);
+        ref07.setHidden(true);
+        List<Reference> fullList = List.of(ref02, ref01, ref04, ref07);
+        Mockito.when(repo.findAll()).thenReturn(fullList);
+
+        ReferencesDTO actual = service.getAllReferences();
+
+        assertEquals(new ReferencesDTO(List.of(ref01, ref02, ref04)), actual);
+    }
+
+    @Test
+    void shouldNotFindHiddenReferenceWhenSearchingByTitle() {
+        SongCollection collection = THE_DAILY_UKULELE_YELLOW;
+        Reference ref01 = new Reference("Here Comes My Music", collection, 123);
+        Reference ref02 = new Reference("Oh, Here Comes Your Ice Cream", collection, 320);
+        Reference ref03 = new Reference("Here Comes Your Music", collection, 144);
+        Reference ref07 = new Reference("Here Comes My Silent Music", collection, 007);
+        ref07.setHidden(true);
+        List<Reference> list = List.of(ref01, ref02, ref03, ref07);
+        Mockito.when(repo.findAll()).thenReturn(list);
+
+        ReferencesDTO actual = service.getReferencesByTitle("Here Comes");
+
+        assertEquals(new ReferencesDTO(List.of(ref01, ref03, ref02)), actual);
     }
 }
