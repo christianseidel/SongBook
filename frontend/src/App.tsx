@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {FormEvent, useEffect, useState} from 'react';
 import './styles/landingPage.css';
 import './styles/common.css';
 import {Song, SongsDTO, Status, DayOfCreation} from "./songs/songModels";
@@ -7,14 +7,20 @@ import SongItemDetails from "./songs/SongItemDetails";
 import ukulele from "./images/ukulele.png";
 import References from "./references/References";
 import DisplayMessageSongs from "./songs/DisplayMessageSongs";
+import {ReferencesDTO} from "./references/referenceModels";
 
 function App() {
 
     const [songsDTO, setSongsDTO] = useState({} as SongsDTO);
-    let [songChosen, setSongChosen] = useState({} as Song)
+    let [songChosen, setSongChosen] = useState({} as Song);
     const [message, setMessage] = useState('');
 
-    useEffect(() => {
+    const [dragOver, setDragOver] = React.useState(false)
+    const handleDragOverStart = () => setDragOver(true);
+    const handleDragOverEnd = () => setDragOver(false);
+
+
+        useEffect(() => {
         fetch('/api/songbook', {
             method: 'GET',
         })
@@ -109,12 +115,74 @@ function App() {
         }
     }
 
+    const enableDropping = (event: React.DragEvent<HTMLDivElement>) => {
+        event.preventDefault();
+    }
+
+    const handleDropAndCreateSongFromReference = (event: React.DragEvent<HTMLDivElement>) => {
+        const id = event.dataTransfer.getData('text');
+
+        // get reference
+        let responseStatus: number;
+        fetch('api/songbook/add/' + id, {
+            method: 'POST',
+        })
+            .then(response => {
+                responseStatus = response.status;
+                return response.json();
+            })
+            .then((responseBody) => {
+                if (responseStatus === 200) {
+                    sessionStorage.setItem('messageType', 'green');
+                    // sessionStorage.setItem('message', 'Your song ' + responseBody.title + ' was successfully created!');
+                    sessionStorage.setItem('message', responseBody.message);
+                } else {
+                    sessionStorage.setItem('message', responseBody.message);
+                    sessionStorage.setItem('messageType', 'red');
+                }
+            });
+/*
+        // create new song
+        let responseStatus: number;
+        fetch('api/songbook', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                title: referencesDTO.referenceList[0].title,
+                author: referencesDTO.referenceList[0].author,
+                year: referencesDTO.referenceList[0].year,
+            })
+        })
+            .then(response => {
+                responseStatus = response.status;
+                return response.json();
+            })
+            .then((responseBody) => {
+                if (responseStatus === 200) {
+                    sessionStorage.setItem('messageType', 'green');
+                    sessionStorage.setItem('message', 'Your song ' + responseBody.title + ' was successfully created!');
+                } else {
+                    sessionStorage.setItem('message', responseBody.message);
+                    sessionStorage.setItem('messageType', 'red');
+                }
+            })*/
+        setDragOver(false);
+    }
+
     return (
         <div id={'container'}>
             <h1><img src={ukulele} alt="Ukulele" id={'ukulele'} /> My Song Book</h1>
             <div className={"flex-parent"}>
 
-                <div className={"flex-child"}>
+                <div className={"flex-child"} id={'showSongList'}
+                    onDragOver={enableDropping}
+                    onDrop={handleDropAndCreateSongFromReference}
+                    onDragEnter={handleDragOverStart}
+                    onDragLeave={handleDragOverEnd}
+                    style={dragOver ? {backgroundColor: 'rgb(243, 217, 167)'} : {}}
+                >
+
                     <div onClick={createItem}>
                         <span className={"doSomething"} id={"addNewSong"}>+ add new song</span>
                     </div>

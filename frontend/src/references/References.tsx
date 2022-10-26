@@ -34,7 +34,7 @@ function References() {
         setMessage(sessionStorage.getItem('message') ?? '');
     }
 
-    const searchSong = (event: FormEvent<HTMLFormElement>) => {
+    const searchReference = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         fetch('api/collections/' + searchWord, {
             method: 'GET',
@@ -106,23 +106,18 @@ function References() {
         }
     }
 
-    const enableDropping = (event: React.DragEvent<HTMLDivElement>) => {
-        event.preventDefault();
-        alert("Hurra! Angekommen.")
-    }
-
     return (
         <div>
             <div className={'flex-parent'}>
                 <div className={'flex-child'}>
                     <h2>Song Collections</h2>
-                    <div id={''} onDragOver={enableDropping}>Just drop here!</div>
+
                 </div>
                 <div className={'flex-child'}>
                     {toggleDisplaySearchResultsButNotReference
                         ?   <div>
                             <div id={'searchForm'}>
-                                    <form onSubmit={ev => searchSong(ev)}>
+                                    <form onSubmit={ev => searchReference(ev)}>
                                         <div className={'header'}>
                                             <input className={"title"} id={'inputSearchWord'} type="text" value={searchWord}
                                                    placeholder={'your search word here...'}

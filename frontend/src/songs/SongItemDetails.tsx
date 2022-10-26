@@ -105,7 +105,7 @@ return (
                         <span id={'buttonEditSong'}><button onClick={() => editSong(props.song.id)}>&#8734; edit &nbsp;</button></span>
                     </div>
                     <div>{props.song.author && <label>By:</label>} {props.song.author && <span className={'author'}> {props.song.author} </span>}
-                        {props.song.year && <span>(<label>Year:</label></span>} {props.song.year && <span className={'year'}> {props.song.year})</span>}
+                        {(props.song.year!== 0) && <span>&nbsp;&nbsp;&nbsp;(<label>Year:</label></span>} {(props.song.year !== 0) && <span className={'year'}> {props.song.year})</span>}
                         <span id={'buttonDeleteSong'}><button onClick={() => deleteSong(props.song.id)}>&#10008; delete</button></span>
                     </div>
 

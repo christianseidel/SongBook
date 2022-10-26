@@ -16,7 +16,7 @@ public class Song {
     private String title;
     private String author;
     private LocalDate dateCreated;
-    private String year;
+    private int year;
 
     // private List<ReferenceRetained> references = new ArrayList<>();
 
@@ -35,6 +35,14 @@ public class Song {
         this.id = UUID.randomUUID().toString();
         this.title = title;
         this.author = author;
+        this.dateCreated = LocalDate.now();
+    }
+
+    public Song(String title, String author, int year) {
+        this.id = UUID.randomUUID().toString();
+        this.title = title;
+        this.author = author;
+        this.year = year;
         this.dateCreated = LocalDate.now();
     }
 

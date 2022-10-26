@@ -1,6 +1,10 @@
 package songbook;
 
 import org.springframework.stereotype.Service;
+import songbook.collections.ReferencesRepository;
+import songbook.collections.exceptions.NoSuchIdException;
+import songbook.collections.exceptions.SongAlreadyExistsException;
+import songbook.collections.models.Reference;
 import songbook.models.Song;
 
 import java.util.Comparator;
@@ -11,9 +15,11 @@ import java.util.Optional;
 public class SongBookService {
 
     private final SongsRepository songsRepository;
+    private final ReferencesRepository referencesRepository;
 
-    public SongBookService(SongsRepository songsRepository) {
+    public SongBookService(SongsRepository songsRepository, ReferencesRepository referencesRepository) {
         this.songsRepository = songsRepository;
+        this.referencesRepository = referencesRepository;
     }
 
     public Song createSong(Song song) {
@@ -47,4 +53,19 @@ public class SongBookService {
     public Optional<Song> getSingleSong(String id) {
         return songsRepository.findById(id);
     }
+
+    public Song createSongFromReference(String id) {
+        Reference reference = referencesRepository.findById(id).orElseThrow(NoSuchIdException::new);
+        // check if song already exists
+
+        // versuche: ifPresent()
+        if (songsRepository.findByTitle(reference.getTitle()).isPresent()) {
+            throw new SongAlreadyExistsException(reference.getTitle());
+        } else {
+            reference.setHidden(true);
+            referencesRepository.save(reference);
+        return songsRepository.save(new Song(reference.getTitle(), reference.getAuthor(), reference.getYear()));
+        }
+    }
+
 }

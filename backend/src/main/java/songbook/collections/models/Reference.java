@@ -42,5 +42,4 @@ public class Reference {
         this.author = toCopy.author;
         this.year = toCopy.year;
     }
-
 }

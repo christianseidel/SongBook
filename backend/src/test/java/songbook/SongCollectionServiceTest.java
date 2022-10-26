@@ -79,9 +79,9 @@ public class SongCollectionServiceTest {
         Reference ref = new Reference("Never Heard This Song Before", THE_DAILY_UKULELE_YELLOW, 12);
         Mockito.when(repo.findById("334455")).thenReturn(Optional.of(ref));
 
-        ReferencesDTO actual = service.getReferenceById("334455");
+        Reference actual = service.getReferenceById("334455");
 
-        assertEquals(new ReferencesDTO(List.of(ref)), actual);
+        assertEquals(ref, actual);
     }
 
     @Test

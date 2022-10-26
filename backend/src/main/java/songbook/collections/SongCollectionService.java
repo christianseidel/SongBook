@@ -47,12 +47,9 @@ public class SongCollectionService {
         return referencesRepository.save(reference);
     }
 
-    public ReferencesDTO getReferenceById(String id) {
-        ArrayList<Reference> list = new ArrayList<>();
-        referencesRepository.findById(id)
-                .map(list::add)
+    public Reference getReferenceById(String id) {
+        return referencesRepository.findById(id)
                 .orElseThrow(NoSuchIdException::new);
-        return new ReferencesDTO(list);
     }
 
     public void deleteReference(String id) {

@@ -1,11 +1,15 @@
 package songbook;
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import songbook.collections.exceptions.NoSuchIdException;
+import songbook.collections.exceptions.SongAlreadyExistsException;
 import songbook.models.Song;
 import songbook.models.SongsDTO;
 
 import java.util.Optional;
+
+import static org.springframework.http.ResponseEntity.status;
 
 @RestController
 @RequestMapping("/api/songbook")
@@ -42,5 +46,20 @@ public class SongBookController {
     @GetMapping("/{id}")
     public Optional<Song> getSingleSong(@PathVariable String id) {
         return songBookService.getSingleSong(id);
+    }
+
+    @PostMapping("/add/{id}")
+    public ResponseEntity<Object> createSongFromReference(@PathVariable String id) {
+        try {
+            return status(200).body((songBookService.createSongFromReference(id)));
+        } catch (NoSuchIdException e) {
+            return ResponseEntity.status(404).body(jsonifyToMessage(e.getMessage()));
+        } catch (SongAlreadyExistsException e) {
+            return ResponseEntity.status(409).body(jsonifyToMessage(e.getMessage()));
+        }
+    }
+
+    private String jsonifyToMessage(String errorMessage) {
+        return "{\"message\": \"" + errorMessage + "\"}";
     }
 }

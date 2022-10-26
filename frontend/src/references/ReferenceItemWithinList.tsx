@@ -15,7 +15,7 @@ function ReferenceItemWithinList(props: ReferenceItemProps) {
         if (itemDragged !== null) {
             itemDragged.style.cursor = 'grabbing';
         }
-
+        event.dataTransfer.setData('text', event.currentTarget.id);
     }
 
     return (
