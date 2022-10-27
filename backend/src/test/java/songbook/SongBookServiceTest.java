@@ -3,7 +3,6 @@ package songbook;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import songbook.collections.ReferencesRepository;
 import songbook.collections.exceptions.NoSuchIdException;
@@ -91,19 +90,19 @@ class SongBookServiceTest {
         Assertions.assertThat(actual).isEqualTo(songList);
     }
 
-/*    @Test
+    @Test
     void shouldCreateSongFromReference() {
         Reference reference = new Reference("Here Comes The Sun", THE_DAILY_UKULELE_YELLOW, 22);
         String id = reference.getId();
         Mockito.when(referencesRepo.findById(id)).thenReturn(Optional.of(reference));
-        Mockito.when(songsRepo.findByTitle("Here Comes The Sun")).thenReturn(false);
+        Mockito.when(songsRepo.findByTitle("Here Comes The Sun")).thenReturn(Optional.empty());
         Song sunSong = new Song("Here Comes The Sun");
         Mockito.when(songsRepo.save(any())).thenReturn(sunSong);
 
         Song actual = songBookService.createSongFromReference(id);
 
         assertEquals(sunSong, actual);
-    }*/
+    }
 
     @Test
     void shouldThrowExceptionWhenTryingToCreateSongFromReferenceWithWrongId() {
@@ -116,16 +115,16 @@ class SongBookServiceTest {
         assertEquals("Server is unable to find your reference's ID.", exception.getMessage());
     }
 
-    /*@Test
+    @Test
     void shouldThrowExceptionWhenTryingToCreateSongFromReferenceWithExistingTitle() {
         Reference reference = new Reference("Here Comes The Sun", THE_DAILY_UKULELE_YELLOW, 24);
         String id = reference.getId();
         Mockito.when(referencesRepo.findById(id)).thenReturn(Optional.of(reference));
-        Mockito.when(songsRepo.findByTitle("Here Comes The Sun")).thenReturn(true);
+        Mockito.when(songsRepo.findByTitle("Here Comes The Sun")).thenReturn(Optional.of(new Song("Here Comes The Sun", "The Daily Ukulele (Yellow)", 89)));
 
         Exception exception = assertThrows(SongAlreadyExistsException.class, () -> {
                     songBookService.createSongFromReference(id);
                 });
         assertEquals("The song 'Here Comes The Sun' already exists.", exception.getMessage());
-    }*/
+    }
 }

@@ -1,4 +1,4 @@
-import React, {FormEvent, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './styles/landingPage.css';
 import './styles/common.css';
 import {Song, SongsDTO, Status, DayOfCreation} from "./songs/songModels";
@@ -7,7 +7,6 @@ import SongItemDetails from "./songs/SongItemDetails";
 import ukulele from "./images/ukulele.png";
 import References from "./references/References";
 import DisplayMessageSongs from "./songs/DisplayMessageSongs";
-import {ReferencesDTO} from "./references/referenceModels";
 
 function App() {
 
@@ -15,7 +14,7 @@ function App() {
     let [songChosen, setSongChosen] = useState({} as Song);
     const [message, setMessage] = useState('');
 
-    const [dragOver, setDragOver] = React.useState(false)
+    const [dragOver, setDragOver] = useState(false)
     const handleDragOverStart = () => setDragOver(true);
     const handleDragOverEnd = () => setDragOver(false);
 
@@ -122,6 +121,7 @@ function App() {
     const handleDropAndCreateSongFromReference = (event: React.DragEvent<HTMLDivElement>) => {
         const id = event.dataTransfer.getData('text');
 
+/*
         // get reference
         let responseStatus: number;
         fetch('api/songbook/add/' + id, {
@@ -140,7 +140,7 @@ function App() {
                     sessionStorage.setItem('message', responseBody.message);
                     sessionStorage.setItem('messageType', 'red');
                 }
-            });
+            });*/
 /*
         // create new song
         let responseStatus: number;
@@ -168,6 +168,7 @@ function App() {
                 }
             })*/
         setDragOver(false);
+        // getAllSongs();
     }
 
     return (
