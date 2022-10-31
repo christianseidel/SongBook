@@ -6,7 +6,7 @@ interface SongItemProps {
     updateDetailsView: () => void;
     onItemRevision: (song: Song) => void;
 }
-// TODO: I need to go via session storage in order to not loose entered data inadvertently
+// TODO: I still need to go via session storage in order to not loose entered data inadvertently
 function EditSongTitle(props: SongItemProps) {
 
     const [title, setTitle] = useState(props.song.title);
@@ -48,28 +48,27 @@ function EditSongTitle(props: SongItemProps) {
     return (
         <div>
             <form onSubmit={ev => doEditSong(ev)}>
-                <div className={'header'}>
-                    <label>Title:</label>
-                    <input id={'inputTitle'} type='text' value={title} placeholder={'Title'}
-                           onChange={ev => setTitle(ev.target.value)} autoFocus required/>
-                    <button id={'buttonCreate'} type='submit'> &#10004; update</button>
-                    <br/>
+                <div>
+                    <span id={'titleLine'}>
+                        <label>Title:</label>
+                        <input id={'inputTitle'} type='text' value={title} placeholder={'Title'}
+                               onChange={ev => setTitle(ev.target.value)} autoFocus required/>
+                        <button id={'buttonUpdateSong'} type='submit'> &#10004; update</button>
+                    </span>
                     <label>By:</label>
                     <input id={'inputAuthor'} type="text" value={author} placeholder={'Author'}
                            onChange={ev => setAuthor(ev.target.value)}/>
-                    <label id={'labelYear'}>Year:</label>
-                    <input className={'year'} type="number" value={(props.song.year !== '0') ? year : ''}
-                           placeholder={'Year of Creation'}
+                    <label id={'labelInputYear'}>Year:</label>
+                    <input id={'inputYear'} type="number" value={(props.song.year != '0') ? year : ''}
+                           placeholder={'Year created'}
                            onChange={ev => setYear(ev.target.value)}/>
-                    <button id={'buttonCancel'} onClick={
+                    <button id={'buttonCancelEditSong'} onClick={
                         () => {
                             props.song.status = 'display';
                             props.updateDetailsView();
                         }
                     }> &#10008; cancel
                     </button>
-
-                    <br/>
                 </div>
             </form>
         </div>

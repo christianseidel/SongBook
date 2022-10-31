@@ -5,6 +5,7 @@ export interface Song {
     year?: string;
     dateCreated?: string;
     dayOfCreation: DayOfCreation;
+    description?: string;
     resources?: {};
     status: string;
 }

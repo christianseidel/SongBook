@@ -43,25 +43,25 @@ function CreateSongTitle(props: SongItemProps) {
     return (
         <div>
             <form onSubmit={ev => doCreateSong(ev)}>
-                <div className={'header'}>
-                    <label>Title:</label>
-                    <input id={'inputTitle'} type='text' value={title} placeholder={'Title'}
-                           onChange={ev => setTitle(ev.target.value)} autoFocus required/>
-                    <button id={'buttonCreate'} type='submit'> &#10004; create</button>
-                    <br/>
+                <div>
+                    <span id={'titleLine'}>
+                        <label>Title:</label>
+                        <input id={'inputTitle'} type='text' value={title} placeholder={'Title'}
+                               onChange={ev => setTitle(ev.target.value)} autoFocus required/>
+                        <button id={'buttonCreateSong'} type='submit'> &#10004; create</button>
+                    </span>
                     <label>By:</label>
                     <input id={'inputAuthor'} type="text" value={author} placeholder={'Author'}
                            onChange={ev => setAuthor(ev.target.value)}/>
-                    <label id={'labelYear'}>Year:</label>
-                    <input className={'year'} type="number" value={(props.song.year !== '0') ? year : ''}
-                           placeholder={'Year of Creation'}
+                    <label id={'labelInputYear'}>Year:</label>
+                    <input id={'inputYear'} type="number" value={(props.song.year != '0') ? year : ''}
+                           placeholder={'Year created'}
                            onChange={ev => setYear(ev.target.value)}/>
-                    <button id={'buttonCancel'}
+                    <button id={'buttonCancelCreateSong'}
                             onClick={() => {
                                 props.clear()
                             }}> &#10008; cancel
                     </button>
-                    <br/>
                 </div>
             </form>
         </div>

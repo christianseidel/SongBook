@@ -22,19 +22,16 @@ function DisplaySongTitle(props: SongItemProps) {
                             </button>
                         </span>
             </div>
-            <div id={'displayAuthorAndYear'}>
-                {props.song.author && <span className={'displaySongItem'}>By:</span>} {props.song.author &&
-                <span id={'displayAuthor'}> {props.song.author} </span>}
-                {(props.song.year != '0') &&
-                    <span>&nbsp;&nbsp;&nbsp;<label>Year:</label></span>} {(props.song.year != '0') &&
-                <span id={'displayYear'}> {props.song.year}</span>}
-                <span id={'buttonCancelSong'}>
-                            <button onClick={() => {
-                                props.clear();
-                            }}>
-                                &#10008; cancel
-                            </button>
-                        </span>
+            <div id={'test'}>
+                {props.song.author && <label>By:</label>}
+                {props.song.author && <span id={'displayAuthor'}> {props.song.author} </span>}
+                {(props.song.year != '0') && <label>Year:</label>}
+                {(props.song.year != '0') && <span id={'displayYear'}> {props.song.year} </span>}
+                <button id={'buttonCancelDisplaySong'} onClick={() => {
+                        props.clear();
+                    }}>
+                    &#10008; cancel
+                    </button>
             </div>
         </div>
     )

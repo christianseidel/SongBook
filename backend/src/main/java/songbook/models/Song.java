@@ -19,6 +19,7 @@ public class Song {
     private String author;
     private LocalDate dateCreated;
     private int year;
+    private String description;
     private List<Object> resources = new ArrayList<>();
 
     // private List<ReferenceRetained> references = new ArrayList<>();

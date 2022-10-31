@@ -3,7 +3,7 @@ import './styles/landingPage.css';
 import './styles/common.css';
 import {Song, SongsDTO, DayOfCreation} from "./Songs/songModels";
 import SongItemWithinList from "./Songs/SongItemWithinList";
-import SongDetailsView from "./Songs/SongDetailsView";
+import SongItemDetailsView from "./Songs/SongItemDetailsView";
 import ukulele from "./media/images/ukulele.png";
 import References from "./References/References";
 import DisplayMessageSongs from "./Songs/DisplayMessageSongs";
@@ -121,7 +121,7 @@ function SongBook() {
     }
 
     const handleDropAndCreateSongFromReference = (event: React.DragEvent<HTMLDivElement>) => {
-        const id = event.dataTransfer.getData('text');
+        // const id = event.dataTransfer.getData('text');
 
 /*
         // get reference
@@ -202,24 +202,24 @@ function SongBook() {
                 <div className={"flex-child"}>
                     {
                         songChosen.title
-                            ? <SongDetailsView song={songChosen}
-                                               onItemDeletion={(message: string) => {
+                            ? <SongItemDetailsView song={songChosen}
+                                                   onItemDeletion={(message: string) => {
                                                         setMessage(message);
                                                         getAllSongs(true);
                                                }}
-                                               onItemCreation={(message: string) => {
+                                                   onItemCreation={(message: string) => {
                                                         setMessage(message);
                                                         getAllSongs(true);
                                                }}
-                                               onItemRevision={(song) => {
+                                                   onItemRevision={(song) => {
                                                         song.dayOfCreation = new DayOfCreation( // = displayable format of "dateCreated"
                                                             song.dateCreated as string
                                                         );
                                                         getAllSongs(false);
                                                         setSongChosen(song);
                                                }}
-                                               doReturn={() => getAllSongs(true)}
-                                               clear={() => setSongChosen({} as Song)}
+                                                   doReturn={() => getAllSongs(true)}
+                                                   clear={() => setSongChosen({} as Song)}
                                                />
                             : <span className={"doSomething"} id={"chooseASong"}>&#129172; &nbsp; please choose a song</span>
                     }
