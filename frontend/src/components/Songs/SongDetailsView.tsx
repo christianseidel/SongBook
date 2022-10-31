@@ -9,7 +9,6 @@ import DisplaySongTitle from "./DisplaySongTitle";
 
 interface SongItemProps {
     song: Song;
-    handOverSongState: string;
     onItemDeletion: (message: string) => void;
     onItemCreation: (message: string) => void;
     onItemRevision: (song: Song) => void;

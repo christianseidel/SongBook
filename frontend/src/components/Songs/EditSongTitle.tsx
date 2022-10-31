@@ -61,8 +61,14 @@ function EditSongTitle(props: SongItemProps) {
                     <input className={'year'} type="number" value={(props.song.year !== '0') ? year : ''}
                            placeholder={'Year of Creation'}
                            onChange={ev => setYear(ev.target.value)}/>
-                    <button id={'buttonCancel'} onClick={() => props.song.status = 'display'}> &#10008; cancel
+                    <button id={'buttonCancel'} onClick={
+                        () => {
+                            props.song.status = 'display';
+                            props.updateDetailsView();
+                        }
+                    }> &#10008; cancel
                     </button>
+
                     <br/>
                 </div>
             </form>

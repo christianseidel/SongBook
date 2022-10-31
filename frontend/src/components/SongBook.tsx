@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import './styles/landingPage.css';
 import './styles/common.css';
-import {Song, SongsDTO, Status, DayOfCreation} from "./Songs/songModels";
+import {Song, SongsDTO, DayOfCreation} from "./Songs/songModels";
 import SongItemWithinList from "./Songs/SongItemWithinList";
 import SongDetailsView from "./Songs/SongDetailsView";
 import ukulele from "./media/images/ukulele.png";
@@ -11,9 +11,8 @@ import DisplayMessageSongs from "./Songs/DisplayMessageSongs";
 function SongBook() {
 
     const [songsDTO, setSongsDTO] = useState({} as SongsDTO);
-    let [songChosen, setSongChosen] = useState({} as Song);
+    const [songChosen, setSongChosen] = useState({} as Song);
     const [message, setMessage] = useState('');
-    const [songStatus, setSongStatus] = useState('');
 
     const [dragOver, setDragOver] = useState(false)
     const handleDragOverStart = () => setDragOver(true);
@@ -71,7 +70,6 @@ function SongBook() {
     let newSong: Song = {title: "no title", author: "", id: "", year: "", resources: {} as String, status: "create",
         dayOfCreation: new DayOfCreation("2022-11-11")};
     function createItem() {
-        setSongStatus('create'); // ToDo-AlarM: Muss ich noch einarbeiten
         setSongChosen(newSong);
     }
 
@@ -204,8 +202,7 @@ function SongBook() {
                 <div className={"flex-child"}>
                     {
                         songChosen.title
-                            ? <SongDetailsView handOverSongState={songStatus}
-                                               song={songChosen}
+                            ? <SongDetailsView song={songChosen}
                                                onItemDeletion={(message: string) => {
                                                         setMessage(message);
                                                         getAllSongs(true);
