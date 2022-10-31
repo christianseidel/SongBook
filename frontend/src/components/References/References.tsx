@@ -4,7 +4,7 @@ import React, {FormEvent, useEffect, useState} from "react";
 import ReferenceItemWithinList from "./ReferenceItemWithinList";
 import {ReferencesDTO, UploadResult} from "./referenceModels";
 import DisplayMessageReferences from "./DisplayMessageReferences";
-import ReferenceItemToEdit from "./ReferenceItemToEdit";
+import ReferenceToEdit from "./ReferenceToEdit";
 import DisplayUploadResult from "./DisplayUploadResult";
 
 function References() {
@@ -119,7 +119,7 @@ function References() {
                             <div id={'searchForm'}>
                                     <form onSubmit={ev => searchReference(ev)}>
                                         <div className={'header'}>
-                                            <input className={"title"} id={'inputSearchWord'} type="text" value={searchWord}
+                                            <input id={'inputSearchWord'} type="text" value={searchWord}
                                                    placeholder={'your search word here...'}
                                                    onChange={(ev) =>
                                                        setSearchWord(ev.target.value)
@@ -153,12 +153,16 @@ function References() {
                                     }
                                 </div>
                             <span className={"doSomething"} id={"addNewCollection"}
-                                  onClick={openUpload}>+ add a new collection</span>
+                                  onClick={openUpload}>
+                                {toggleDisplayUploadFunction
+                                    ? <span>&lt;</span>
+                                    : <span>+</span>}
+                                add a new collection</span>
                         </div>
                         :
                             referencesDTO.referenceList.map(item =>
-                            <ReferenceItemToEdit key={item.id} reference={item}
-                                                 doCancel={getAllReferences}
+                            <ReferenceToEdit key={item.id} reference={item}
+                                             doCancel={getAllReferences}
                             />)
                     }
 

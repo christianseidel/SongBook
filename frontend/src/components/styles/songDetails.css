@@ -1,0 +1,84 @@
+/*  REGULAR VIEW   */
+
+#buttonEditSong {
+    float: right;
+}
+
+#buttonCancelSong {
+    float: right;
+}
+
+#buttonDeleteSong {
+    position: absolute;
+    bottom: 0;
+    right: 0
+}
+
+/*  EDIT VIEW   */
+
+#displayTitle {
+    margin-bottom: 12px;
+    font-style: italic;
+    font-weight: bold;
+    font-size: large;
+    color: darkblue;
+    text-decoration: underline;
+}
+
+.displaySongItem {
+    font-weight: bold;
+}
+
+#displayAuthorAndYear {
+
+}
+
+#displayAuthor {
+    display: inline-block;
+    margin-left: 6px;
+    min-width: 180px;
+}
+
+#displayYear {
+    margin-left: 6px;
+}
+
+#songContainer {
+    min-height: 200px;
+    position: relative;
+}
+
+#displayDateCreated {
+    position: absolute;
+    bottom: 0;
+    color: darkslategray;
+    font-family: "Times New Roman", sans-serif;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+#inputTitle {
+    margin-left: 23px;
+    width: 312px;
+}
+
+#inputAuthor {
+    margin-left: 35px;
+    width: 120px;
+}
+
+#labelYear {
+    margin-left: 18px;
+}
+.year {
+    margin-left: 8px;
+    width: 120px;
+}
+
+#buttonCreate {
+    margin-left: 58px;
+}
+
+#buttonCancel {
+    margin-left: 58px;
+}

@@ -1,18 +1,19 @@
 import React, {useEffect, useState} from 'react';
 import './styles/landingPage.css';
 import './styles/common.css';
-import {Song, SongsDTO, Status, DayOfCreation} from "./songs/songModels";
-import SongItemWithinList from "./songs/SongItemWithinList";
-import SongItemDetails from "./songs/SongItemDetails";
-import ukulele from "./images/ukulele.png";
-import References from "./references/References";
-import DisplayMessageSongs from "./songs/DisplayMessageSongs";
+import {Song, SongsDTO, Status, DayOfCreation} from "./Songs/songModels";
+import SongItemWithinList from "./Songs/SongItemWithinList";
+import SongDetailsView from "./Songs/SongDetailsView";
+import ukulele from "./media/images/ukulele.png";
+import References from "./References/References";
+import DisplayMessageSongs from "./Songs/DisplayMessageSongs";
 
-function App() {
+function SongBook() {
 
     const [songsDTO, setSongsDTO] = useState({} as SongsDTO);
     let [songChosen, setSongChosen] = useState({} as Song);
     const [message, setMessage] = useState('');
+    const [songStatus, setSongStatus] = useState('');
 
     const [dragOver, setDragOver] = useState(false)
     const handleDragOverStart = () => setDragOver(true);
@@ -44,7 +45,10 @@ function App() {
                 }
             })
             .then((responseBody: Song) => {
-                responseBody.dayOfCreation = new DayOfCreation(responseBody.dateCreated as string);
+                responseBody.dayOfCreation = new DayOfCreation( // = displayable format of "dateCreated"
+                    responseBody.dateCreated as string
+                );
+                responseBody.status = 'display';
                 setSongChosen(responseBody);
             })
             .catch((e) => {
@@ -53,21 +57,21 @@ function App() {
             });
     }
 
-    function getAllSongs() {
+    function getAllSongs(clearSong: boolean) {
         fetch('/api/songbook', {
             method: 'GET',
         })
             .then(response => response.json())
             .then((responseBody: SongsDTO) => setSongsDTO(responseBody))
-            .then(() => setSongChosen({} as Song));
+            .then(() => { if (clearSong) {setSongChosen({} as Song)}});
         setMessage(sessionStorage.getItem('message') ?? '');
     }
 
 
-    let newSong: Song = {title: "no title", author: "", id: "", dateCreated: "22-09-29",
-        dayOfCreation: new DayOfCreation("22-09-29"), status: Status.write};
-
+    let newSong: Song = {title: "no title", author: "", id: "", year: "", resources: {} as String, status: "create",
+        dayOfCreation: new DayOfCreation("2022-11-11")};
     function createItem() {
+        setSongStatus('create'); // ToDo-AlarM: Muss ich noch einarbeiten
         setSongChosen(newSong);
     }
 
@@ -191,7 +195,7 @@ function App() {
                     {songsDTO.songList
                         ? songsDTO.songList.map(item =>
                             <SongItemWithinList key={item.id} song={item}
-                                                onItemMarked={displaySongChosen}
+                                                openItemClicked={displaySongChosen}
                             />)
                         : <span>... loading</span>
                     }
@@ -200,26 +204,29 @@ function App() {
                 <div className={"flex-child"}>
                     {
                         songChosen.title
-                            ? <SongItemDetails song={songChosen}
+                            ? <SongDetailsView handOverSongState={songStatus}
+                                               song={songChosen}
                                                onItemDeletion={(message: string) => {
-                                                   setMessage(message);
-                                                   getAllSongs();
+                                                        setMessage(message);
+                                                        getAllSongs(true);
                                                }}
                                                onItemCreation={(message: string) => {
-                                                   setMessage(message);
-                                                   getAllSongs();
+                                                        setMessage(message);
+                                                        getAllSongs(true);
                                                }}
-                                               onItemRevision={(message: string) => {
-                                                   setMessage(message);
-                                                   getAllSongs();
+                                               onItemRevision={(song) => {
+                                                        song.dayOfCreation = new DayOfCreation( // = displayable format of "dateCreated"
+                                                            song.dateCreated as string
+                                                        );
+                                                        getAllSongs(false);
+                                                        setSongChosen(song);
                                                }}
-                                               doReturn={getAllSongs}
+                                               doReturn={() => getAllSongs(true)}
+                                               clear={() => setSongChosen({} as Song)}
                                                />
                             : <span className={"doSomething"} id={"chooseASong"}>&#129172; &nbsp; please choose a song</span>
                     }
                 </div>
-
-
             </div>
 
             <div>
@@ -241,4 +248,4 @@ function App() {
     );
 }
 
-export default App;
+export default SongBook;

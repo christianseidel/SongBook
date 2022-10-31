@@ -34,7 +34,6 @@ public class SongBookController {
 
     @PutMapping("/{id}")
     public Optional<Song> editSong(@PathVariable String id, @RequestBody Song song) {
-        System.out.println("-> request received");
         return songBookService.editSong(id, song);
     }
 

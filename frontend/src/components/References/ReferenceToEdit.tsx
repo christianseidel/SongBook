@@ -9,7 +9,7 @@ interface ReferenceItemProps {
     doCancel: () => void;
 }
 
-function ReferenceItemToEdit(props: ReferenceItemProps) {
+function ReferenceToEdit(props: ReferenceItemProps) {
 
     const [title, setTitle] = useState(props.reference.title);
     const [page, setPage] = useState(props.reference.page !== 0 ? props.reference.page : '');
@@ -23,7 +23,8 @@ function ReferenceItemToEdit(props: ReferenceItemProps) {
         fetch('api/collections/edit/' + props.reference.id, {
             method: 'PUT',
             headers: {
-                'Content-Type': 'application/json'},
+                'Content-Type': 'application/json'
+            },
             body: JSON.stringify({
                 id: props.reference.id,
                 title: title,
@@ -146,4 +147,4 @@ function ReferenceItemToEdit(props: ReferenceItemProps) {
     )
 }
 
-export default ReferenceItemToEdit
+export default ReferenceToEdit

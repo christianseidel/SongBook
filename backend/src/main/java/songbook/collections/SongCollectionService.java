@@ -47,9 +47,9 @@ public class SongCollectionService {
         return referencesRepository.save(reference);
     }
 
-    public Reference getReferenceById(String id) {
-        return referencesRepository.findById(id)
-                .orElseThrow(NoSuchIdException::new);
+    public ReferencesDTO getReferenceById(String id) {
+        return new ReferencesDTO(List.of(referencesRepository.findById(id)
+                .orElseThrow(NoSuchIdException::new)));
     }
 
     public void deleteReference(String id) {

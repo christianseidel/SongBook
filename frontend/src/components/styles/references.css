@@ -15,7 +15,7 @@ h2 {
 }
 
 #referenceSearchResult {
-    max-height: 292px;
+    max-height: 291px;
     overflow: auto;
 }
 
@@ -94,11 +94,11 @@ h2 {
     cursor: help;
 }
 
-#inputTitle {
-    color: darkblue;
-    margin-left: 12px;
-    margin-right: 16px;
+#inputSearchWord {
+    margin-left: 23px;
+    width: 312px;
 }
+
 
 #collectionTitle {
     color: darkblue;

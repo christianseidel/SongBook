@@ -3,12 +3,12 @@ import {Song} from './songModels'
 
 interface SongItemProps {
     song: Song
-    onItemMarked: (id: string) => void;
+    openItemClicked: (id: string) => void;
 }
 
 function SongItemWithinList(props: SongItemProps) {
 
-    const chooseSong = () => props.onItemMarked(props.song.id);
+    const chooseSong = () => props.openItemClicked(props.song.id);
 
     return (
         <div>
