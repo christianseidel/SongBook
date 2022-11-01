@@ -18,4 +18,5 @@ public enum SongCollection {
     LIEDERZUG_13,
     LIEDERWELT_14,
     LIEDERFEST_15,
+    MANUALLY_ADDED_COLLECTION,
 }

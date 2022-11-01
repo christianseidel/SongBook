@@ -67,7 +67,7 @@ function SongBook() {
     }
 
 
-    let newSong: Song = {title: "no title", author: "", id: "", year: "", resources: {} as String, status: "create",
+    let newSong: Song = {title: "no title", author: "", id: "", year: "", status: "create",
         dayOfCreation: new DayOfCreation("2022-11-11")};
     function createItem() {
         setSongChosen(newSong);

@@ -157,7 +157,7 @@ function References() {
                                 {toggleDisplayUploadFunction
                                     ? <span>&lt;</span>
                                     : <span>+</span>}
-                                add a new collection</span>
+                                &nbsp;add a new collection</span>
                         </div>
                         :
                             referencesDTO.referenceList.map(item =>

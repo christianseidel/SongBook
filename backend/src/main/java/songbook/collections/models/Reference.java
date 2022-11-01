@@ -19,6 +19,7 @@ public class Reference {
     private String author;
     private int year;
     private boolean hidden;
+    private String addedCollection;
 
 
     public Reference(String title, SongCollection songCollection) {
@@ -41,5 +42,7 @@ public class Reference {
         this.page = toCopy.page;
         this.author = toCopy.author;
         this.year = toCopy.year;
+        this.hidden = toCopy.hidden;
+        this.addedCollection = toCopy.addedCollection;
     }
 }

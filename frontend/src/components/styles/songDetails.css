@@ -14,7 +14,7 @@
     font-style: italic;
     font-weight: bold;
     font-size: large;
-    color: darkblue;
+    color: #a60a0a;
     text-decoration: underline;
 }
 
@@ -141,11 +141,109 @@
 }
 
 /*  DESCRIPTION  */
-#inputDescription {
 
+#displayDescription {
+    margin-top: 20px;
+    margin-bottom: 12px;
+    border: 1px solid darkgoldenrod;
+    padding: 5px;
+    font-weight: lighter;
+    font-style: italic;
+}
+
+#inputDescription {
+    margin-top: 6px;
 }
 
 #buttonAddDescription {
+    float: right;
+}
+
+#buttonCancelAddDescription, #buttonClearDescription {
+    margin-right: 12px;
+}
+
+/*  REFERENCE  */
+
+.displayReferences {
+    display: block;
+    margin-top: 16px;
+    border: 1px solid darkgoldenrod;
+    padding: 5px;
+}
+
+#listOfReferences {
+}
+
+.retainedReferenceItem {
+    font-family: Verdana, Trebuchet MS, Lucida Sans Unicode, Lucida Grande, Lucida Sans, Arial, sans-serif;
+    font-size: 8pt;
+    color: #3b6363;
+    margin-left: 26px;
+    font-style: italic;
+}
+
+.retainedReferenceItem:hover {
+    background-color: lightyellow;
+    border-style: solid;
+    border-width: 2px;
+    border-color: darkgoldenrod;
+    border-radius: 2px;
+    width: fit-content;
+    box-shadow: 3px 3px darkgoldenrod;
+    cursor: pointer;
+    color: black;
+    user-select: none;
+    padding: 1px 6px;
+}
+
+.retainedReferenceItem:hover + .retainedReferenceItem {
+    margin-top: -6px;
+}
+
+.retainedReferenceItem:hover:last-child {
+    margin-top: -4px;
+    margin-bottom: -2px;
+}
+
+
+/*
+.referenceItemDetailsPage {
+    all: inherit;
+    margin-left: 0;
+}
+
+*/
+#inputFormRef {
+    margin-top: 20px;
+}
+
+#titleLineRef, #secondLineRef{
+    display: block;
+    margin-top: 6px;
+}
+
+#buttonUpdateReference, #buttonCancelAddReference {
+    float: right;
+    transform: translate(0, -2px);
+}
+
+#inputRefCollection {
+    margin-left: 16px;
+    width: 176px;
+}
+
+#labelInputRefPage {
+    margin-left: 12px;
+}
+
+#inputRefPage {
+    margin-left: 8px;
+    width: 70px;
+}
+
+#buttonCancelAddReference {
+    float: right;
 }
 
 

@@ -1,10 +1,22 @@
-export interface Reference {
-    id: string;
+export class Reference {
+    id?: string;
     title: string;
     songCollection: string;
     page: number;
     author?: string;
-    year: number;
+    year?: number;
+    hidden?: boolean;
+    addedCollection: string;
+
+    constructor(title: string, collection: string,
+                page: number, author?: string, year?: number) {
+        this.title = title + ' (manually added song sheet reference)';
+        this.songCollection = 'MANUALLY_ADDED_COLLECTION'
+        this.addedCollection = collection;
+        this.page = page;
+        this.author = author;
+        this.year = year;
+    }
 }
 
 export interface ReferencesDTO {
@@ -56,5 +68,7 @@ export function songCollectionToRealName (volume: string) {
             return 'Liederwelt (14)';
         case 'LIEDERFEST_15':
             return 'Liederfest (15)';
+        case 'MANUALLY_ADDED_COLLECTION':
+            return 'manually added';
     }
 }

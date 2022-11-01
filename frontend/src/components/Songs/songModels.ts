@@ -1,3 +1,5 @@
+import {Reference} from "../References/referenceModels";
+
 export interface Song {
     id: string;
     title: string;
@@ -6,7 +8,7 @@ export interface Song {
     dateCreated?: string;
     dayOfCreation: DayOfCreation;
     description?: string;
-    resources?: {};
+    references?: Array<Reference>;
     status: string;
 }
 

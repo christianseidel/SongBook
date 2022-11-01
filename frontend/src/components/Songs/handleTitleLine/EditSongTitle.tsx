@@ -1,54 +1,59 @@
 import React, {FormEvent, useState} from "react";
-import {Song} from "./songModels";
+import {Song} from "../songModels";
 
 interface SongItemProps {
     song: Song;
-    onItemCreation: (song: Song) => void;
-    clear: () => void;
+    updateDetailsView: () => void;
+    onItemRevision: (song: Song) => void;
 }
+// TODO: I still need to go via session storage in order to not loose entered data inadvertently
+function EditSongTitle(props: SongItemProps) {
 
-function CreateSongTitle(props: SongItemProps) {
-
-    const [title, setTitle] = useState('');
+    const [title, setTitle] = useState(props.song.title);
     const [author, setAuthor] = useState(props.song.author);
     const [year, setYear] = useState(props.song.year);
 
-    const doCreateSong = (event: FormEvent<HTMLFormElement>) => {
+    const doEditSong = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         let responseStatus: number;
-        fetch('api/songbook', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
+        fetch('api/songbook/' + props.song.id, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
             body: JSON.stringify({
+                id: props.song.id,
                 title: title,
                 author: author,
                 year: year,
+                dateCreated: props.song.dateCreated,
+                references: props.song.references
             })
         })
             .then(response => {
                 responseStatus = response.status;
                 return response.json();
             })
-            .then((responseBody) => {
+            .then((responseBody: Song) => {
                 if (responseStatus === 200) {
                     responseBody.status = 'display';
-                    props.onItemCreation(responseBody);
+                    props.onItemRevision(responseBody);
                 } else {
-                    sessionStorage.setItem('message', responseBody.message);
                     sessionStorage.setItem('messageType', 'red');
+                    sessionStorage.setItem('message', 'An item with Id no. ' + props.song.id + ' could not be found.');
                 }
-            })
+            });
     }
 
     return (
         <div>
-            <form onSubmit={ev => doCreateSong(ev)}>
+            <form onSubmit={ev => doEditSong(ev)}>
                 <div>
                     <span id={'titleLine'}>
                         <label>Title:</label>
                         <input id={'inputTitle'} type='text' value={title} placeholder={'Title'}
                                onChange={ev => setTitle(ev.target.value)} autoFocus required/>
-                        <button id={'buttonCreateSong'} type='submit'> &#10004; create</button>
+                        <button id={'buttonUpdateSong'} type='submit'> &#10004; update</button>
                     </span>
                     <label>By:</label>
                     <input id={'inputAuthor'} type="text" value={author} placeholder={'Author'}
@@ -57,10 +62,12 @@ function CreateSongTitle(props: SongItemProps) {
                     <input id={'inputYear'} type="number" value={(props.song.year != '0') ? year : ''}
                            placeholder={'Year created'}
                            onChange={ev => setYear(ev.target.value)}/>
-                    <button id={'buttonCancelCreateSong'}
-                            onClick={() => {
-                                props.clear()
-                            }}> &#10008; cancel
+                    <button id={'buttonCancelEditSong'} onClick={
+                        () => {
+                            props.song.status = 'display';
+                            props.updateDetailsView();
+                        }
+                    }> &#10008; cancel
                     </button>
                 </div>
             </form>
@@ -68,4 +75,4 @@ function CreateSongTitle(props: SongItemProps) {
     )
 }
 
-export default CreateSongTitle
+export default EditSongTitle
