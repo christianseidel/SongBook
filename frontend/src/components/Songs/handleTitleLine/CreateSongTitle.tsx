@@ -54,9 +54,9 @@ function CreateSongTitle(props: SongItemProps) {
                     <input id={'inputAuthor'} type="text" value={author} placeholder={'Author'}
                            onChange={ev => setAuthor(ev.target.value)}/>
                     <label id={'labelInputYear'}>Year:</label>
-                    <input id={'inputYear'} type="number" value={(props.song.year != '0') ? year : ''}
+                    <input id={'inputYear'} type="number" value={year === 0 ? '' : year}
                            placeholder={'Year created'}
-                           onChange={ev => setYear(ev.target.value)}/>
+                           onChange={ev => setYear(Number(ev.target.value))}/>
                     <button id={'buttonCancelCreateSong'}
                             onClick={() => {
                                 props.clear()

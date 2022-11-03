@@ -28,7 +28,7 @@ function ReferenceToEdit(props: ReferenceItemProps) {
             body: JSON.stringify({
                 id: props.reference.id,
                 title: title,
-                volume: props.reference.songCollection,
+                songCollection: props.reference.songCollection,
                 page: page,
                 author: author,
                 year: year,

@@ -7,6 +7,7 @@ import SongItemDetailsView from "./Songs/SongItemDetailsView";
 import ukulele from "./media/images/ukulele.png";
 import References from "./References/References";
 import DisplayMessageSongs from "./Songs/DisplayMessageSongs";
+import {Reference, ReferencesDTO} from "./References/referenceModels";
 
 function SongBook() {
 
@@ -14,12 +15,15 @@ function SongBook() {
     const [songChosen, setSongChosen] = useState({} as Song);
     const [message, setMessage] = useState('');
 
-    const [dragOver, setDragOver] = useState(false)
-    const handleDragOverStart = () => setDragOver(true);
-    const handleDragOverEnd = () => setDragOver(false);
+    const [dragOverLeft, setDragOverLeft] = useState(false)
+    const handleDragOverStartLeft = () => setDragOverLeft(true);
+    const handleDragOverEndLeft = () => setDragOverLeft(false);
+    const [dragOverRight, setDragOverRight] = useState(false)
+    const handleDragOverStartRight = () => setDragOverRight(true);
+    const handleDragOverEndRight = () => setDragOverRight(false);
 
 
-        useEffect(() => {
+    useEffect(() => {
         fetch('/api/songbook', {
             method: 'GET',
         })
@@ -66,9 +70,9 @@ function SongBook() {
         setMessage(sessionStorage.getItem('message') ?? '');
     }
 
+    let newSong: Song = {title: "no title", author: "", id: "", status: "create",
+        dayOfCreation: new DayOfCreation(new Date().toISOString().slice(0, 10))};
 
-    let newSong: Song = {title: "no title", author: "", id: "", year: "", status: "create",
-        dayOfCreation: new DayOfCreation("2022-11-11")};
     function createItem() {
         setSongChosen(newSong);
     }
@@ -120,57 +124,89 @@ function SongBook() {
         event.preventDefault();
     }
 
+    // HAVE NEW SONG ITEMS CREATED BY DRAGGING & DROPPING A REFERENCE
     const handleDropAndCreateSongFromReference = (event: React.DragEvent<HTMLDivElement>) => {
-        // const id = event.dataTransfer.getData('text');
+        const id = event.dataTransfer.getData('text');
+        let songCreatedFromReference: Song;
 
-/*
         // get reference
-        let responseStatus: number;
-        fetch('api/songbook/add/' + id, {
-            method: 'POST',
+        let referenceRetrieved: Reference;
+        fetch('api/collections/edit/' + id, {
+            method: 'GET',
         })
-            .then(response => {
-                responseStatus = response.status;
-                return response.json();
-            })
-            .then((responseBody) => {
-                if (responseStatus === 200) {
-                    sessionStorage.setItem('messageType', 'green');
-                    // sessionStorage.setItem('message', 'Your song ' + responseBody.title + ' was successfully created!');
-                    sessionStorage.setItem('message', responseBody.message);
-                } else {
-                    sessionStorage.setItem('message', responseBody.message);
-                    sessionStorage.setItem('messageType', 'red');
-                }
-            });*/
-/*
-        // create new song
-        let responseStatus: number;
-        fetch('api/songbook', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                title: referencesDTO.referenceList[0].title,
-                author: referencesDTO.referenceList[0].author,
-                year: referencesDTO.referenceList[0].year,
-            })
+            .then(response => response.json())
+            .then((responseBody: ReferencesDTO) =>
+                referenceRetrieved = responseBody.referenceList[0])
+            .then(() => {
+
+                // create new Song from Reference Retrieved
+                let responseStatus: number;
+                fetch('api/songbook', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        title: referenceRetrieved.title,
+                        author: referenceRetrieved.author,
+                        year: referenceRetrieved.year,
+                        references: [referenceRetrieved],
+                    })
+                })
+                    .then(response => {
+                        responseStatus = response.status;
+                        return response.json();
+                    })
+                    .then((responseBody) => {
+                        if (responseStatus === 200) {
+                            songCreatedFromReference = responseBody;
+                            sessionStorage.setItem('messageType', 'green');
+                            sessionStorage.setItem('message', 'Your song "' + responseBody.title
+                                + '" was successfully created!');
+                        } else {
+                            sessionStorage.setItem('message', 'Your reference could not be retrieved ' +
+                                'form the server (error code: ' + responseStatus + ')');
+                            sessionStorage.setItem('messageType', 'red');
+                        }
+                    })
+            .then(() => {
+
+                // TODO: Reference needs to be unhidden when song gets deleted!
+                // hide Reference Retrieved
+                fetch('api/collections/edit/hide/' + referenceRetrieved.id, {
+                    method: 'PUT',
+                    })
+                    .then(response => {
+                        if (response.status !== 200) {
+                            sessionStorage.setItem('message', 'Your source reference could not be hidden!');
+                            sessionStorage.setItem('messageType', 'red');
+                        }}
+                    )
+
+                })
+            .then(() => {
+
+                // display freshly created Song
+                songCreatedFromReference.status = 'display';
+                songCreatedFromReference.dayOfCreation = new DayOfCreation( // = displayable format of "dateCreated"
+                    songCreatedFromReference.dateCreated as string
+                );
+                setSongChosen(songCreatedFromReference);
+                getAllSongs(false);
+                // rerenders Reference List:
+                trigger();
+                // Todo: message gets called twice -- once by setSongChosen, once by trigger
+                //  -- need to fix this....
+            });
         })
-            .then(response => {
-                responseStatus = response.status;
-                return response.json();
-            })
-            .then((responseBody) => {
-                if (responseStatus === 200) {
-                    sessionStorage.setItem('messageType', 'green');
-                    sessionStorage.setItem('message', 'Your song ' + responseBody.title + ' was successfully created!');
-                } else {
-                    sessionStorage.setItem('message', responseBody.message);
-                    sessionStorage.setItem('messageType', 'red');
-                }
-            })*/
-        setDragOver(false);
-        // getAllSongs();
+        setDragOverLeft(false);
+        setDragOverRight(false);
+    }
+
+    let receiver = () => {}
+
+    const trigger = () => {receiver && receiver();}
+
+    const receiverRerenderSignal = (handler: () => void) => {
+        receiver = handler;
     }
 
     return (
@@ -178,28 +214,34 @@ function SongBook() {
             <h1><img src={ukulele} alt="Ukulele" id={'ukulele'} /> My Song Book</h1>
             <div className={"flex-parent"}>
 
-                <div className={"flex-child"} id={'showSongList'}
-                    onDragOver={enableDropping}
-                    onDrop={handleDropAndCreateSongFromReference}
-                    onDragEnter={handleDragOverStart}
-                    onDragLeave={handleDragOverEnd}
-                    style={dragOver ? {backgroundColor: 'rgb(243, 217, 167)'} : {}}
+                <div className={"flex-child"}
+                     onDragOver={enableDropping}
+                     onDrop={handleDropAndCreateSongFromReference}
+                     onDragEnter={handleDragOverStartLeft}
+                     onDragLeave={handleDragOverEndLeft}
+                     style={dragOverLeft ? {backgroundColor: 'rgb(243, 217, 167)'} : {}}
                 >
-
                     <div onClick={createItem}>
                         <span className={"doSomething"} id={"addNewSong"}>+ add new song</span>
                     </div>
-
-                    {songsDTO.songList
-                        ? songsDTO.songList.map(item =>
-                            <SongItemWithinList key={item.id} song={item}
-                                                openItemClicked={displaySongChosen}
-                            />)
-                        : <span>... loading</span>
-                    }
+                    <div id={'displaySongList'}>
+                        {songsDTO.songList
+                            ? songsDTO.songList.map(item =>
+                                <SongItemWithinList key={item.id} song={item}
+                                                    openItemClicked={displaySongChosen}
+                                />)
+                            : <span>... loading</span>
+                        }
+                    </div>
                 </div>
 
-                <div className={"flex-child"}>
+                <div className={'flex-child'}
+                     onDragOver={enableDropping}
+                     onDrop={handleDropAndCreateSongFromReference}
+                     onDragEnter={handleDragOverStartRight}
+                     onDragLeave={handleDragOverEndRight}
+                     style={dragOverRight ? {backgroundColor: 'rgb(243, 217, 167)'} : {}}
+                >
                     {
                         songChosen.title
                             ? <SongItemDetailsView song={songChosen}
@@ -227,7 +269,8 @@ function SongBook() {
             </div>
 
             <div>
-                <References />
+                <References
+                    receiverRerenderSignal={receiverRerenderSignal}/>
             </div>
 
             <div>

@@ -55,6 +55,7 @@
 #inputYear {
     margin-left: 8px;
     width: 90px;
+    -moz-appearance: textfield;
 }
 
 #buttonCancelDisplaySong {
@@ -167,7 +168,7 @@
 
 .displayReferences {
     display: block;
-    margin-top: 16px;
+    margin-top: 20px;
     border: 1px solid darkgoldenrod;
     padding: 5px;
 }
@@ -206,14 +207,6 @@
     margin-bottom: -2px;
 }
 
-
-/*
-.referenceItemDetailsPage {
-    all: inherit;
-    margin-left: 0;
-}
-
-*/
 #inputFormRef {
     margin-top: 20px;
 }

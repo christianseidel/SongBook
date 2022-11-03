@@ -48,6 +48,15 @@ h1 {
     color: green;
 }
 
+#displaySongList {
+    max-height: 225px;
+    overflow: auto;
+}
+
+#songChosenView {
+
+}
+
 .songItem {
     position: relative;
     width: fit-content;

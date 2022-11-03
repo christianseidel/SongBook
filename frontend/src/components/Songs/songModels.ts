@@ -3,8 +3,8 @@ import {Reference} from "../References/referenceModels";
 export interface Song {
     id: string;
     title: string;
-    author: string;
-    year?: string;
+    author?: string;
+    year?: number;
     dateCreated?: string;
     dayOfCreation: DayOfCreation;
     description?: string;

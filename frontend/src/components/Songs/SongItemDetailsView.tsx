@@ -222,16 +222,16 @@ function SongItemDetailsView(props: SongItemProps) {
                 </div> }
 
                 {/* the following line is for development purposes only: */}
-                {props.song.references != undefined && props.song.references.length === 0 && !toggleOpenReferences
+                {props.song.references !== undefined && props.song.references.length === 0 && !toggleOpenReferences
                     && <span className={'displayReferences'}>0 references</span>}
 
-                {props.song.references != undefined && props.song.references.length > 0
+                {props.song.references !== undefined && props.song.references.length > 0
                     && !toggleOpenReferences &&  // display References
                     <div className={'displayReferences'}>
                         <div id={'listOfReferences'}>
                             {props.song.references.map((item, index) =>
                                 <div key={index} className={'retainedReferenceItem'} onClick={() => editItem(item.title)}>
-                                    &ndash;&#129174;&nbsp; {item.addedCollection},
+                                    &ndash;&#129174;&nbsp; {(item.addedCollection === null) ? <span>{songCollectionToRealName(item.songCollection)}</span> : <span>{item.addedCollection}</span> },
                                     page {item.page}
                                 </div>)}
                         </div>

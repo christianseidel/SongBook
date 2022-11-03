@@ -7,7 +7,11 @@ import DisplayMessageReferences from "./DisplayMessageReferences";
 import ReferenceToEdit from "./ReferenceToEdit";
 import DisplayUploadResult from "./DisplayUploadResult";
 
-function References() {
+interface Props {
+    receiverRerenderSignal: (getAllReferences: () => void) => void;
+}
+
+function References(props: Props) {
 
     const [toggleDisplaySearchResultsButNotReference, setToggleDisplaySearchResultsButNotReference] = useState(true);
     const [toggleDisplayUploadFunction, setToggleDisplayUploadFunction] = useState(false);
@@ -33,6 +37,8 @@ function References() {
         setToggleDisplaySearchResultsButNotReference(true);
         setMessage(sessionStorage.getItem('message') ?? '');
     }
+
+    props.receiverRerenderSignal(getAllReferences)
 
     const searchReference = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();

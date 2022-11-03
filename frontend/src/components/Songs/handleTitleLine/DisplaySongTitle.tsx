@@ -25,18 +25,15 @@ function DisplaySongTitle(props: SongItemProps) {
             <div id={'test'}>
                 {props.song.author && <label>By:</label>}
                 {props.song.author && <span id={'displayAuthor'}> {props.song.author} </span>}
-                {(props.song.year != '0') && <label>Year:</label>}
-                {(props.song.year != '0') && <span id={'displayYear'}> {props.song.year} </span>}
+                {(props.song.year !== 0) && <label>Year:</label>}
+                {(props.song.year !== 0) && <span id={'displayYear'}> {props.song.year} </span>}
                 <button id={'buttonCancelDisplaySong'} onClick={() => {
                         props.clear();
                     }}>
-                    &#10008; cancel
+                    &#10008; close
                     </button>
             </div>
         </div>
     )
 }
-
-// ToDo: Somehow the cancel button doesn't get activated -- if there is no author and no year...
-
 export default DisplaySongTitle

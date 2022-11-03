@@ -10,7 +10,7 @@ export class Reference {
 
     constructor(title: string, collection: string,
                 page: number, author?: string, year?: number) {
-        this.title = title + ' (manually added song sheet reference)';
+        this.title = title + ' (manually added reference)';
         this.songCollection = 'MANUALLY_ADDED_COLLECTION'
         this.addedCollection = collection;
         this.page = page;

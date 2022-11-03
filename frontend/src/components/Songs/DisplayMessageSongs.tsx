@@ -12,7 +12,6 @@ function DisplayMessageReferences(props: MessageProps) {
         let messageContainer = document.getElementById('messageContainer') as HTMLDivElement | null;
         let messageIcon = document.getElementById('messageIcon') as HTMLDivElement | null;
         let messageType = sessionStorage.getItem('messageType');
-
       if (messageType !== null) {
             if (messageContainer !== null) {
                 messageContainer.style.borderColor = messageType;
