@@ -46,6 +46,7 @@ function SongItemDetailsView(props: SongItemProps) {
     }
 
     function deleteSong(id: string) {
+        unhideAllReferencesAttached(id);
         fetch('/api/songbook/' + id, {
             method: 'DELETE'
         })
@@ -59,6 +60,15 @@ function SongItemDetailsView(props: SongItemProps) {
                 }
             })
             .then(props.doReturn);
+    }
+
+    const unhideAllReferencesAttached = (songId: string) => {
+        fetch('api/songbook/unhideReferences/' + songId, {
+            method: 'PUT'})
+            .then(response => {
+
+            })
+        .then(response => {})
     }
 
     function saveSongItem() {

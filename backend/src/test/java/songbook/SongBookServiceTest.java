@@ -5,16 +5,18 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import songbook.collections.ReferencesRepository;
+import songbook.collections.SongCollectionService;
 import songbook.collections.exceptions.NoSuchIdException;
 import songbook.collections.exceptions.SongAlreadyExistsException;
 import songbook.collections.models.Reference;
 import songbook.models.Song;
 
+import java.sql.Ref;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static songbook.collections.models.SongCollection.*;
@@ -23,11 +25,12 @@ class SongBookServiceTest {
 
     SongBookService songBookService;
     SongsRepository songsRepo = Mockito.mock(SongsRepository.class);
+    SongCollectionService songCollectionService = Mockito.mock(SongCollectionService.class);
     ReferencesRepository referencesRepo = Mockito.mock(ReferencesRepository.class);
 
     @BeforeEach
     public void setup() {
-        SongBookService songBookService = new SongBookService(songsRepo, referencesRepo);
+        SongBookService songBookService = new SongBookService(songsRepo, songCollectionService, referencesRepo);
         this.songBookService = songBookService;
     }
 
@@ -127,4 +130,32 @@ class SongBookServiceTest {
                 });
         assertEquals("The song 'Here Comes The Sun' already exists.", exception.getMessage());
     }
+
+    @Test
+    void shouldUnhideTwoReferences() {
+        Reference referenceFromCollection = new Reference("Here Comes The Sun", THE_DAILY_UKULELE_YELLOW, 24);
+        Reference referenceAddedManually = new Reference("Here Comes The Sun", MANUALLY_ADDED_COLLECTION, 48);
+        referenceAddedManually.setId(null);
+        Song singSunSong = new Song("Here Comes The Sun", "The Beatles", 1969);
+        List<Reference> references = List.of(referenceFromCollection, referenceAddedManually);
+        singSunSong.setReferences(references);
+        Mockito.when(songsRepo.findById(singSunSong.getId())).thenReturn(Optional.of(singSunSong));
+        Mockito.when(referencesRepo.findById(referenceFromCollection.getId())).thenReturn(Optional.of(referenceFromCollection));
+        Mockito.when(referencesRepo.findById(referenceAddedManually.getId())).thenReturn(Optional.of(referenceAddedManually));
+
+        String actual = songBookService.unhideAllReferences(singSunSong.getId());
+
+        assertEquals("All songs are reinserted into Reference Index.", actual);
+        assertNotNull(referenceAddedManually.getId());
+    }
+
+    @Test
+    void shouldReturnIdNotFoundMessage() {
+        Mockito.when(songsRepo.findById("7755577")).thenReturn(Optional.empty());
+
+        String actual = songBookService.unhideAllReferences("7755577");
+
+        assertEquals("A song with id # \"7755577\" could not be found.", actual);
+    }
+
 }

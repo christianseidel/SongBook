@@ -58,6 +58,12 @@ public class SongBookController {
         }
     }
 
+    @PostMapping("/unhideReferences/{songId}")
+    public ResponseEntity<String> unhideAllReferences(@PathVariable String songId) {
+        ///  shall be a String
+        return status(200).body(jsonifyToMessage(songBookService.unhideAllReferences(songId)));
+    }
+
     private String jsonifyToMessage(String errorMessage) {
         return "{\"message\": \"" + errorMessage + "\"}";
     }

@@ -2,6 +2,7 @@ package songbook;
 
 import org.springframework.stereotype.Service;
 import songbook.collections.ReferencesRepository;
+import songbook.collections.SongCollectionService;
 import songbook.collections.exceptions.NoSuchIdException;
 import songbook.collections.exceptions.SongAlreadyExistsException;
 import songbook.collections.models.Reference;
@@ -10,15 +11,18 @@ import songbook.models.Song;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class SongBookService {
 
     private final SongsRepository songsRepository;
+    private final SongCollectionService songCollectionService;
     private final ReferencesRepository referencesRepository;
 
-    public SongBookService(SongsRepository songsRepository, ReferencesRepository referencesRepository) {
+    public SongBookService(SongsRepository songsRepository, SongCollectionService songCollectionService, ReferencesRepository referencesRepository) {
         this.songsRepository = songsRepository;
+        this.songCollectionService = songCollectionService;
         this.referencesRepository = referencesRepository;
     }
 
@@ -57,15 +61,30 @@ public class SongBookService {
     public Song createSongFromReference(String id) {
         Reference reference = referencesRepository.findById(id).orElseThrow(NoSuchIdException::new);
         // check if song already exists
-
+        // Todo: Clean this up!
         // versuche: ifPresent()
         if (songsRepository.findByTitle(reference.getTitle()).isPresent()) {
             throw new SongAlreadyExistsException(reference.getTitle());
         } else {
             reference.setHidden(true);
             referencesRepository.save(reference);
-        return songsRepository.save(new Song(reference.getTitle(), reference.getAuthor(), reference.getYear()));
+            return songsRepository.save(new Song(reference.getTitle(), reference.getAuthor(), reference.getYear()));
         }
     }
 
+    public String unhideAllReferences(String id) {
+        Optional<Song> lookupResult = songsRepository.findById(id);
+        if (lookupResult.isEmpty()) {
+            return "A song with id # \"" + id + "\" could not be found.";
+        } else {
+            Song song = lookupResult.get();
+            for (Reference ref : song.getReferences()) {
+                if (ref.getId() == null) {
+                    ref.setId(UUID.randomUUID().toString());
+                }
+                songCollectionService.unhideReference(ref.getId());
+            }
+            return "All songs are reinserted into Reference Index.";
+        }
+    }
 }
