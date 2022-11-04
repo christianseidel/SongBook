@@ -1,4 +1,4 @@
-import {Song} from './songModels'
+import {Link, Song} from './songModels'
 import '../styles/common.css'
 import '../styles/songDetails.css'
 import React, {FormEvent, useEffect, useState} from "react";
@@ -65,10 +65,8 @@ function SongItemDetailsView(props: SongItemProps) {
     const unhideAllReferencesAttached = (songId: string) => {
         fetch('api/songbook/unhideReferences/' + songId, {
             method: 'PUT'})
-            .then(response => {
-
-            })
-        .then(response => {})
+            .then(response => {return response.json();})
+            //.then((responseBody: string) => (setMessage(responseBody)));
     }
 
     function saveSongItem() {
@@ -85,7 +83,8 @@ function SongItemDetailsView(props: SongItemProps) {
                 dateCreated: props.song.dateCreated,
                 year: props.song.year,
                 description: props.song.description,
-                references: props.song.references
+                references: props.song.references,
+                links: props.song.links,
             })
         })
             .then(response => {
@@ -115,6 +114,7 @@ function SongItemDetailsView(props: SongItemProps) {
 
     const openOrCloseAddDescription = () => {
         setToggleOpenReferences(false);
+        setToggleOpenLinks(false);
         if (!toggleOpenDescription) {
             setDescription(props.song.description ?? '')
         } else {
@@ -150,6 +150,7 @@ function SongItemDetailsView(props: SongItemProps) {
 
     const openOrCloseAddReference = () => {
         setToggleOpenDescription(false);
+        setToggleOpenLinks(false);
         if (!toggleOpenReferences) {
             setDescription(props.song.description ?? '')
         } else {
@@ -181,6 +182,52 @@ function SongItemDetailsView(props: SongItemProps) {
     }
 
 
+    // --- LINK ELEMENTS --- //
+
+    const [toggleOpenLinks, setToggleOpenLinks] = useState(false);
+    useEffect(() => {setToggleOpenLinks(false)}, [props.song.title]);
+
+    const [linkText, setLinkText] = useState(sessionStorage.getItem('linkText') ?? '');
+    useEffect(() => {
+        sessionStorage.setItem('linkText', linkText)}, [linkText]);
+    const [linkTarget, setLinkTarget] = useState(sessionStorage.getItem('linkTarget') ?? '');
+    useEffect(() => {
+        sessionStorage.setItem('linkTarget', linkTarget)}, [linkTarget]);
+
+    const openOrCloseAddLink = () => {
+        setToggleOpenDescription(false);
+        setToggleOpenReferences(false);
+        if (!toggleOpenLinks) {
+            setLinkText('')
+            setLinkTarget('')
+        } else {
+            setLinkText('')
+            setLinkTarget( '')
+        }
+        setToggleOpenLinks(!toggleOpenLinks);
+    }
+
+    const doAddLink = (ev: FormEvent<HTMLFormElement>) => {
+        ev.preventDefault();
+        let next: number;
+        let finalTarget = linkTarget;
+        if (linkTarget.slice(0, 4) != 'http') {
+            finalTarget = 'https://' + finalTarget;
+        }
+        let link = new Link(linkText, finalTarget);
+        if (props.song.links !== undefined) {
+            next = props.song.links.length;
+            props.song.links[next] = link;
+        } else {
+            alert("the resources array is undefined!");
+            console.log("the resources array is undefined!");
+        }
+        saveSongItem();
+        setToggleOpenLinks(false); setLinkText(''); setLinkTarget('');
+    }
+
+
+
     return (
         <div>
             <div id={'songHead'}>
@@ -189,19 +236,19 @@ function SongItemDetailsView(props: SongItemProps) {
 
             <div id={'songBody'}>
                 <div id={'iconContainer'}>
-                        <span className={'circle iconInfo tooltip'} onClick={openOrCloseAddDescription}>
+                        <span className={'icon tooltip'} id={'iconInfo'} onClick={openOrCloseAddDescription}>
                             i
                             <span className="tooltipText">add a description</span>
                         </span>
-                        <span className={'circle iconReference tooltip'} onClick={openOrCloseAddReference}>
+                        <span className={'icon tooltip'} id={'iconReference'} onClick={openOrCloseAddReference}>
                             R
                             <span className="tooltipText">add a song sheet reference</span>
                         </span>
-                        <span className={'circle iconLink tooltip'} onClick={() => alert("adding links yet to implement")}>
+                        <span className={'icon tooltip'} id={'iconLink'} onClick={openOrCloseAddLink}>
                             &#8734;
                             <span className="tooltipText">add a link</span>
                         </span>
-                        <span className={'circle iconFile tooltip'} onClick={() => alert("adding song sheets as a file yet to implement")}>
+                        <span className={'icon tooltip'} id={'iconFile'} onClick={() => alert("adding song sheets as a file yet to implement")}>
                             &#128195;
                             <span className="tooltipText">add a file</span>
                         </span>
@@ -269,6 +316,42 @@ function SongItemDetailsView(props: SongItemProps) {
                     </form>
                 </div>}
 
+
+                {props.song.links !== undefined && props.song.links.length > 0
+                    && !toggleOpenLinks &&  // display Links
+                    <div className={'displayReferences'}>
+                        <div id={'listOfReferences'}>
+                            {props.song.links.map((item, index) =>
+                                <div key={index} className={'link'}>
+                                    <span id={'linkDot'}>&#8734;</span>&nbsp;
+                                    <a href={item.linkTarget} target={'_blank'}>{item.linkText}</a>
+                                </div>)}
+                        </div>
+                    </div>}
+
+
+                {toggleOpenLinks && <div>
+                    <form id={'inputFormLink'} onSubmit={ev => doAddLink(ev)}>
+                        <label>Add a Link:</label>
+                        <span id={'secondLineLink'}>
+                            <label>Text:</label>
+                            <input id={'inputLinkText'} type='text' value={linkText} placeholder={'Link Description'}
+                                   onChange={ev => setLinkText(ev.target.value)} required/>
+                            <button id={'buttonUpdateLink'} type='submit'> &#10004; update</button><br />
+                            <label>Target:</label>
+                            <input id={'inputLinkTarget'} type='text' value={linkTarget} placeholder={'Link Target'}
+                                   onChange={ev => setLinkTarget(ev.target.value)} required/>
+                            <button id={'buttonCancelAddLink'} onClick={
+                                () => {
+                                    props.song.status = 'display';
+                                    setToggleOpenLinks(false);
+                                }
+                            }> &#10008; cancel
+                            </button>
+                        </span>
+                    </form>
+                </div>}
+
                 <div id={'displayDateCreated'}>
                     created: {props.song.dayOfCreation.day}.
                     {props.song.dayOfCreation.month}.
@@ -297,4 +380,3 @@ function SongItemDetailsView(props: SongItemProps) {
 }
 
 export default SongItemDetailsView
-

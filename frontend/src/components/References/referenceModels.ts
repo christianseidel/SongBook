@@ -10,8 +10,8 @@ export class Reference {
 
     constructor(title: string, collection: string,
                 page: number, author?: string, year?: number) {
-        this.title = title + ' (manually added reference)';
-        this.songCollection = 'MANUALLY_ADDED_COLLECTION'
+        this.title = title;
+        this.songCollection = 'MANUALLY_ADDED_COLLECTION';
         this.addedCollection = collection;
         this.page = page;
         this.author = author;
@@ -69,6 +69,6 @@ export function songCollectionToRealName (volume: string) {
         case 'LIEDERFEST_15':
             return 'Liederfest (15)';
         case 'MANUALLY_ADDED_COLLECTION':
-            return 'manually added';
+            return '(manually added)';
     }
 }

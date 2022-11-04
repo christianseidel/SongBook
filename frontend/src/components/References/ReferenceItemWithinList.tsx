@@ -25,7 +25,9 @@ function ReferenceItemWithinList(props: ReferenceItemProps) {
                  draggable={'true'} onDragStart={handleDragStart}>
                 {props.reference.title}
                 <span className={'referenceItemDetails'}>&ndash;&#129174;&nbsp;
-                    {songCollectionToRealName(props.reference.songCollection)}
+                    {(props.reference.addedCollection === null)
+                        ? <span>{songCollectionToRealName(props.reference.songCollection)}</span>
+                        : <span>{props.reference.addedCollection}</span>}
                     {(props.reference.page !== 0)
                         && <span className={'referenceItemDetailsPage'}>,
                             p. {props.reference.page}</span>}

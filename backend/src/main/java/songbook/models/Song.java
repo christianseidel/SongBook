@@ -22,8 +22,7 @@ public class Song {
     private int year; // year of creation of the song
     private String description;
     private List<Reference> references = new ArrayList<>();
-
-    // private List<ReferenceRetained> references = new ArrayList<>();
+    private List<Link> links = new ArrayList<>();
 
     public Song() {
         this.id = UUID.randomUUID().toString();
@@ -50,5 +49,4 @@ public class Song {
         this.year = yearOfCreation;
         this.dateCreated = LocalDate.now();
     }
-
 }

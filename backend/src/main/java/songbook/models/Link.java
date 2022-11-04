@@ -1,11 +1,14 @@
 package songbook.models;
 
-public class Link {
-    private String denomination;
-    private String target;
+import lombok.Data;
 
-    public Link (String denomination, String target) {
-        this.denomination = denomination;
-        this.target = target;
+@Data
+public class Link {
+    private String linkText;
+    private String linkTarget;
+
+    public Link (String linkText, String linkTarget) {
+        this.linkText = linkText;
+        this.linkTarget = linkTarget;
     }
 }

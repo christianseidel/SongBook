@@ -10,11 +10,17 @@ export interface Song {
     description?: string;
     references?: Array<Reference>;
     status: string;
+    links?: Array<Link>;
 }
 
-export interface Link {
+export class Link {
     linkText: string;
     linkTarget: string;
+
+    constructor(linkText: string, linkTarget: string) {
+        this.linkText = linkText;
+        this.linkTarget = linkTarget;
+    }
 }
 
 export class DayOfCreation {

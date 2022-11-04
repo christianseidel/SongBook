@@ -141,16 +141,9 @@ function SongBook() {
 
                 // create new Song from Reference Retrieved
                 let responseStatus: number;
-                fetch('api/songbook', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({
-                        title: referenceRetrieved.title,
-                        author: referenceRetrieved.author,
-                        year: referenceRetrieved.year,
-                        references: [referenceRetrieved],
-                    })
-                })
+                fetch(`api/songbook/add/${id}`, {
+                    method: 'POST'
+              })
                     .then(response => {
                         responseStatus = response.status;
                         return response.json();
@@ -169,7 +162,6 @@ function SongBook() {
                     })
             .then(() => {
 
-                // TODO: Reference needs to be unhidden when song gets deleted!
                 // hide Reference Retrieved
                 fetch('api/collections/edit/hide/' + referenceRetrieved.id, {
                     method: 'PUT',
@@ -183,7 +175,6 @@ function SongBook() {
 
                 })
             .then(() => {
-
                 // display freshly created Song
                 songCreatedFromReference.status = 'display';
                 songCreatedFromReference.dayOfCreation = new DayOfCreation( // = displayable format of "dateCreated"
@@ -248,6 +239,8 @@ function SongBook() {
                                                    onItemDeletion={(message: string) => {
                                                         setMessage(message);
                                                         getAllSongs(true);
+                                                        trigger();
+                                                        alert("bin hier")
                                                }}
                                                    onItemCreation={(message: string) => {
                                                         setMessage(message);
@@ -260,7 +253,7 @@ function SongBook() {
                                                         getAllSongs(false);
                                                         setSongChosen(song);
                                                }}
-                                                   doReturn={() => getAllSongs(true)}
+                                                   doReturn={() => {getAllSongs(true); trigger()}}
                                                    clear={() => setSongChosen({} as Song)}
                                                />
                             : <span className={"doSomething"} id={"chooseASong"}>&#129172; &nbsp; please choose a song</span>

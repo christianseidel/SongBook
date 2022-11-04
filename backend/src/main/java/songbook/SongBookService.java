@@ -8,10 +8,8 @@ import songbook.collections.exceptions.SongAlreadyExistsException;
 import songbook.collections.models.Reference;
 import songbook.models.Song;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.sql.Ref;
+import java.util.*;
 
 @Service
 public class SongBookService {
@@ -63,13 +61,27 @@ public class SongBookService {
         // check if song already exists
         // Todo: Clean this up!
         // versuche: ifPresent()
-        if (songsRepository.findByTitle(reference.getTitle()).isPresent()) {
-            throw new SongAlreadyExistsException(reference.getTitle());
+        // Todo: Method still needs to be tested
+        Optional<Song> existingSong = songsRepository.findByTitle(reference.getTitle());
+        if (existingSong.isPresent()) {
+            Song song = addOneReferenceToSong(existingSong.get(), reference);
+            return songsRepository.save(song);
         } else {
             reference.setHidden(true);
             referencesRepository.save(reference);
-            return songsRepository.save(new Song(reference.getTitle(), reference.getAuthor(), reference.getYear()));
+            Song song = new Song(reference.getTitle(), reference.getAuthor(), reference.getYear());
+            song.setReferences(List.of(reference));
+            return songsRepository.save(song);
         }
+    }
+
+    public Song addOneReferenceToSong(Song song, Reference reference) {
+        if (song.getReferences().isEmpty()) {
+            song.setReferences(List.of(reference));
+        } else {
+            song.getReferences().add(reference);
+        }
+        return song;
     }
 
     public String unhideAllReferences(String id) {
@@ -81,8 +93,11 @@ public class SongBookService {
             for (Reference ref : song.getReferences()) {
                 if (ref.getId() == null) {
                     ref.setId(UUID.randomUUID().toString());
+                    songCollectionService.createReference(ref);
+                } else {
+                    songCollectionService.unhideReference(ref.getId());
+                    // Todo: Plus Hier alle neuen Daten einfließen lassen!!
                 }
-                songCollectionService.unhideReference(ref.getId());
             }
             return "All songs are reinserted into Reference Index.";
         }
