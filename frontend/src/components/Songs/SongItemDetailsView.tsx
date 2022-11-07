@@ -1,4 +1,4 @@
-import {Link, Song} from './songModels'
+import {Song} from './songModels'
 import '../styles/common.css'
 import '../styles/songDetails.css'
 import React, {FormEvent, useEffect, useState} from "react";
@@ -7,6 +7,9 @@ import EditSongTitle from "./handleTitleLine/EditSongTitle";
 import CreateSongTitle from "./handleTitleLine/CreateSongTitle";
 import DisplaySongTitle from "./handleTitleLine/DisplaySongTitle";
 import {Reference, songCollectionToRealName} from "../References/referenceModels";
+import DisplayLinks from "./handleLinkRendering/DisplayLinks";
+import EditLink from "./handleLinkRendering/EditLink";
+import CreateLink from "./handleLinkRendering/CreateLink";
 
 interface SongItemProps {
     song: Song;
@@ -44,6 +47,7 @@ function SongItemDetailsView(props: SongItemProps) {
             clear={props.clear}
         />;
     }
+
 
     function deleteSong(id: string) {
         unhideAllReferencesAttached(id);
@@ -114,7 +118,8 @@ function SongItemDetailsView(props: SongItemProps) {
 
     const openOrCloseAddDescription = () => {
         setToggleOpenReferences(false);
-        setToggleOpenLinks(false);
+        setToggleCreateLink(false);
+        setLinkRendering('display')
         if (!toggleOpenDescription) {
             setDescription(props.song.description ?? '')
         } else {
@@ -150,7 +155,8 @@ function SongItemDetailsView(props: SongItemProps) {
 
     const openOrCloseAddReference = () => {
         setToggleOpenDescription(false);
-        setToggleOpenLinks(false);
+        setToggleCreateLink(false);
+        setLinkRendering('display');
         if (!toggleOpenReferences) {
             setDescription(props.song.description ?? '')
         } else {
@@ -184,49 +190,68 @@ function SongItemDetailsView(props: SongItemProps) {
 
     // --- LINK ELEMENTS --- //
 
-    const [toggleOpenLinks, setToggleOpenLinks] = useState(false);
-    useEffect(() => {setToggleOpenLinks(false)}, [props.song.title]);
+    // Open OR Close Link Creation  // value may be true or false
+    const [toggleCreateLink, setToggleCreateLink] = useState(false);
+    useEffect(() => {setToggleCreateLink(false)}, [props.song.title]);
 
-    const [linkText, setLinkText] = useState(sessionStorage.getItem('linkText') ?? '');
-    useEffect(() => {
-        sessionStorage.setItem('linkText', linkText)}, [linkText]);
-    const [linkTarget, setLinkTarget] = useState(sessionStorage.getItem('linkTarget') ?? '');
-    useEffect(() => {
-        sessionStorage.setItem('linkTarget', linkTarget)}, [linkTarget]);
-
-    const openOrCloseAddLink = () => {
+    const openOrCloseLinkCreation = () => {
+        setLinkRendering('display');
         setToggleOpenDescription(false);
         setToggleOpenReferences(false);
-        if (!toggleOpenLinks) {
-            setLinkText('')
-            setLinkTarget('')
-        } else {
-            setLinkText('')
-            setLinkTarget( '')
-        }
-        setToggleOpenLinks(!toggleOpenLinks);
+        setToggleCreateLink(!toggleCreateLink);
+        sessionStorage.setItem('linkText', '');
+        sessionStorage.setItem('linkTarget', '');
     }
 
-    const doAddLink = (ev: FormEvent<HTMLFormElement>) => {
-        ev.preventDefault();
-        let next: number;
-        let finalTarget = linkTarget;
-        if (linkTarget.slice(0, 4) != 'http') {
-            finalTarget = 'https://' + finalTarget;
-        }
-        let link = new Link(linkText, finalTarget);
-        if (props.song.links !== undefined) {
-            next = props.song.links.length;
-            props.song.links[next] = link;
-        } else {
-            alert("the resources array is undefined!");
-            console.log("the resources array is undefined!");
-        }
-        saveSongItem();
-        setToggleOpenLinks(false); setLinkText(''); setLinkTarget('');
+    // Display OR Edit Existing Links  // value may be 'display' or 'edit'
+    const [linkRendering, setLinkRendering] = useState('display');
+    useEffect(() => {setLinkRendering('display')}, [props.song.title]);
+
+    let handleLinkRendering;  // controls rendering of Link Data
+    const [linkIndex, setLinkIndex] = useState(0)
+    if (linkRendering === 'display') {
+        handleLinkRendering = <DisplayLinks
+            links={props.song.links}
+            doEditLink={(index) => {
+                setLinkIndex(index);
+                setToggleCreateLink(false);
+                setLinkRendering('edit');
+            }}
+        />;
+    }
+    if (linkRendering === 'edit') {
+        handleLinkRendering = <EditLink
+            link={props.song.links![linkIndex]}
+            saveLink={
+                () => {
+                    saveSongItem();
+                    setLinkRendering('display');
+                }}
+            onCancel={() => setLinkRendering('display')}
+            onDeletion={
+                () => {
+                    props.song.links!.splice(linkIndex, 1);
+                    saveSongItem();
+                    setLinkRendering('display');
+                }}
+        />;
     }
 
 
+    // --- SONG SHEET FILES --- //
+
+    const [toggleAddSongSheet, setToggleAddSongSheet] = useState(false);
+    useEffect(() => {setToggleAddSongSheet(false)}, [props.song.title]);
+
+    const openOrCloseSongSheetAddition = () => {
+        setToggleAddSongSheet(!toggleAddSongSheet);
+        setLinkRendering('display');
+        setToggleOpenDescription(false);
+        setToggleOpenReferences(false);
+        setToggleCreateLink(false);
+        sessionStorage.setItem('linkText', '');
+        sessionStorage.setItem('linkTarget', '');
+    }
 
     return (
         <div>
@@ -244,24 +269,21 @@ function SongItemDetailsView(props: SongItemProps) {
                             R
                             <span className="tooltipText">add a song sheet reference</span>
                         </span>
-                        <span className={'icon tooltip'} id={'iconLink'} onClick={openOrCloseAddLink}>
+                        <span className={'icon tooltip'} id={'iconLink'} onClick={openOrCloseLinkCreation}>
                             &#8734;
                             <span className="tooltipText">add a link</span>
                         </span>
-                        <span className={'icon tooltip'} id={'iconFile'} onClick={() => alert("adding song sheets as a file yet to implement")}>
+                        <span className={'icon tooltip'} id={'iconFile'} onClick={openOrCloseSongSheetAddition}>
                             &#128195;
                             <span className="tooltipText">add a file</span>
                         </span>
                 </div>
 
-                {props.song.description && !toggleOpenDescription &&  // display description if any
-                    <div id={'displayDescription'} onClick={openOrCloseAddDescription}>
-                    {props.song.description}
-                </div>}
-
                 {toggleOpenDescription && <div>
-                    <form onSubmit={ev => doAddDescription(ev)}>
-                        <label>Add a Comment or Description:</label><br/>
+                    <form id={'addADescription'} onSubmit={ev => doAddDescription(ev)}>
+                        <label>{props.song.description!.length > 0
+                            ? <span>Edit your </span>
+                            : <span>Add a </span>} Comment or Description:</label><br/>
                         <textarea id={'inputDescription'} value={description}
                                 rows={3}
                                   cols={60}
@@ -274,13 +296,53 @@ function SongItemDetailsView(props: SongItemProps) {
                         &#10008; cancel</button>
                     <button id={'buttonClearDescription'} type='submit' onClick={doClearDescription}>
                         ! clear</button>
-
-
                 </div> }
 
-                {/* the following line is for development purposes only: */}
-                {props.song.references !== undefined && props.song.references.length === 0 && !toggleOpenReferences
-                    && <span className={'displayReferences'}>0 references</span>}
+                {toggleOpenReferences && <div>
+                    <form id={'inputFormRef'} onSubmit={ev => doAddReference(ev)}>
+                        <label>Add a Song Sheet Reference:</label>
+                        <button id={'buttonUpdateReference'} type='submit'> &#10004; update</button><br />
+                        <span id={'secondLineRef'}>
+                            <label>Coll.:</label>
+                            <input id={'inputRefCollection'} type='text' value={collection} placeholder={'Song Collection'}
+                                   onChange={ev => setCollection(ev.target.value)} required/>
+                            <label id={'labelInputRefPage'}>Page:</label>
+                            <input id={'inputRefPage'} type='number' value={page} placeholder={'Page'}
+                                   onChange={ev => setPage(ev.target.value)} required/>
+                            <button id={'buttonCancelAddReference'} onClick={
+                                () => {
+                                    props.song.status = 'display';
+                                    setToggleOpenReferences(false);
+                                }
+                            }> &#10008; cancel
+                            </button>
+                        </span>
+                    </form>
+                </div>}
+
+
+                {toggleCreateLink && <CreateLink
+                    links={props.song.links}
+                    onCancel={() => setToggleCreateLink(false)}
+                    onCreation={
+                        () => {
+                            saveSongItem();
+                            setToggleCreateLink(false);
+                        }}
+                />}
+
+
+                {toggleAddSongSheet && <div>
+                    <br />
+                    <b>-&gt; hier</b> kommt dann noch ein Feld zum Dateihochladen...
+                </div>
+                }
+
+                {props.song.description && !toggleOpenDescription &&  // display description if any
+                    <div id={'displayDescription'} onClick={openOrCloseAddDescription}>
+                        {props.song.description}
+                    </div>}
+
 
                 {props.song.references !== undefined && props.song.references.length > 0
                     && !toggleOpenReferences &&  // display References
@@ -294,63 +356,9 @@ function SongItemDetailsView(props: SongItemProps) {
                         </div>
                     </div>}
 
-                {toggleOpenReferences && <div>
-                    <form id={'inputFormRef'} onSubmit={ev => doAddReference(ev)}>
-                        <label>Add a Song Sheet Reference</label> (Collection)<label>:</label>
-                        <button id={'buttonUpdateReference'} type='submit'> &#10004; update</button><br />
-                        <span id={'secondLineRef'}>
-                            <label>Coll.:</label>
-                            <input id={'inputRefCollection'} type='text' value={collection} placeholder={'Song Collection'}
-                                onChange={ev => setCollection(ev.target.value)} required/>
-                            <label id={'labelInputRefPage'}>Page:</label>
-                            <input id={'inputRefPage'} type='number' value={page} placeholder={'Page'}
-                                onChange={ev => setPage(ev.target.value)} required/>
-                            <button id={'buttonCancelAddReference'} onClick={
-                                () => {
-                                    props.song.status = 'display';
-                                    setToggleOpenReferences(false);
-                                }
-                            }> &#10008; cancel
-                            </button>
-                        </span>
-                    </form>
-                </div>}
-
-
-                {props.song.links !== undefined && props.song.links.length > 0
-                    && !toggleOpenLinks &&  // display Links
-                    <div className={'displayReferences'}>
-                        <div id={'listOfReferences'}>
-                            {props.song.links.map((item, index) =>
-                                <div key={index} className={'link'}>
-                                    <span id={'linkDot'}>&#8734;</span>&nbsp;
-                                    <a href={item.linkTarget} target={'_blank'}>{item.linkText}</a>
-                                </div>)}
-                        </div>
-                    </div>}
-
-
-                {toggleOpenLinks && <div>
-                    <form id={'inputFormLink'} onSubmit={ev => doAddLink(ev)}>
-                        <label>Add a Link:</label>
-                        <span id={'secondLineLink'}>
-                            <label>Text:</label>
-                            <input id={'inputLinkText'} type='text' value={linkText} placeholder={'Link Description'}
-                                   onChange={ev => setLinkText(ev.target.value)} required/>
-                            <button id={'buttonUpdateLink'} type='submit'> &#10004; update</button><br />
-                            <label>Target:</label>
-                            <input id={'inputLinkTarget'} type='text' value={linkTarget} placeholder={'Link Target'}
-                                   onChange={ev => setLinkTarget(ev.target.value)} required/>
-                            <button id={'buttonCancelAddLink'} onClick={
-                                () => {
-                                    props.song.status = 'display';
-                                    setToggleOpenLinks(false);
-                                }
-                            }> &#10008; cancel
-                            </button>
-                        </span>
-                    </form>
-                </div>}
+                <div>
+                    <div>{handleLinkRendering}</div>
+                </div>
 
                 <div id={'displayDateCreated'}>
                     created: {props.song.dayOfCreation.day}.

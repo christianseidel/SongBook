@@ -168,21 +168,31 @@
     font-style: italic;
 }
 
+#addADescription {
+    margin-top: 20px;
+}
+
 #inputDescription {
-    margin-top: 6px;
+    margin-top: 12px;
+    margin-left: 51px;
+    width: 310px;
 }
 
 #buttonAddDescription {
     float: right;
 }
 
-#buttonCancelAddDescription, #buttonClearDescription {
-    margin-right: 12px;
+#buttonCancelAddDescription {
+    margin-left: 50px;
+}
+
+#buttonClearDescription {
+    margin-left: 12px;
 }
 
 /*  REFERENCE  */
 
-.displayReferences {
+.displayReferences, #displayLinks {
     display: block;
     margin-top: 20px;
     border: 1px solid darkgoldenrod;
@@ -264,10 +274,80 @@
 #listOfLinks {
 }
 
-#linkDot {
+.linkDot {
     color: dodgerblue;
-    font-weight: normal;
+    font-weight: bold;
     margin-right: 1px;
+}
+
+.linkDot:hover {
+    font-weight: bold;
+
+    background-color: lightyellow;
+    border-style: solid;
+    border-width: 2px;
+    border-color: darkgoldenrod;
+    border-radius: 2px;
+    width: fit-content;
+    box-shadow: 3px 3px darkgoldenrod;
+    cursor: pointer;
+    user-select: none;
+    padding: 1px 2px 1px 30px;
+    margin-left: -33px;
+}
+
+.linkDot:hover:before {
+    font-weight: normal;
+    content: 'edit ';
+    margin-left: -28px;
+    letter-spacing: -1px;
+}
+
+.linkText {
+}
+
+.linkText:hover {
+    font-weight: bold;
+    background-color: #eaba5e;
+    border-style: solid;
+    border-width: 2px;
+    border-color: darkgoldenrod;
+    border-radius: 2px;
+    width: fit-content;
+    box-shadow: 3px 3px darkgoldenrod;
+    cursor: pointer;
+    user-select: none;
+    padding: 1px 6px 2px 6px;
+    margin-left: -3px;
+}
+
+.linkText:hover:before {
+    content: '\2013\1F896\00A0 ';
+    line-height: 0.9;
+
+}
+
+.retainedReferenceItem:hover {
+    background-color: lightyellow;
+    border-style: solid;
+    border-width: 2px;
+    border-color: darkgoldenrod;
+    border-radius: 2px;
+    width: fit-content;
+    box-shadow: 3px 3px darkgoldenrod;
+    cursor: pointer;
+    color: black;
+    user-select: none;
+    padding: 1px 6px;
+}
+
+.retainedReferenceItem:hover + .retainedReferenceItem {
+    margin-top: -6px;
+}
+
+.retainedReferenceItem:hover:last-child {
+    margin-top: -4px;
+    margin-bottom: -2px;
 }
 
 .link {
@@ -316,7 +396,7 @@
     transform: translate(0, -2px);
 }
 
-#buttonCancelAddLink{
+#buttonCancelAddLink, #buttonDeleteLink{
     float: right;
     margin-top: 6px;
 }

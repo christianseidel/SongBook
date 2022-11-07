@@ -29,7 +29,9 @@ function EditSongTitle(props: SongItemProps) {
                 author: author,
                 year: year,
                 dateCreated: props.song.dateCreated,
-                references: props.song.references
+                references: props.song.references,
+                description: props.song.description,
+                links: props.song.links,
             })
         })
             .then(response => {
