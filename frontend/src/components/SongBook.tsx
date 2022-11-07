@@ -256,7 +256,7 @@ function SongBook() {
                                                    doReturn={() => {getAllSongs(true); trigger()}}
                                                    clear={() => setSongChosen({} as Song)}
                                                />
-                            : <span className={"doSomething"} id={"chooseASong"}>&#129172; &nbsp; please choose a song</span>
+                            : <span className={"doSomething"} id={"chooseASong"}>&#129172; &nbsp; please, choose a song</span>
                     }
                 </div>
             </div>

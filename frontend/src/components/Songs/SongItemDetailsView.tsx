@@ -119,12 +119,9 @@ function SongItemDetailsView(props: SongItemProps) {
     const openOrCloseAddDescription = () => {
         setToggleOpenReferences(false);
         setToggleCreateLink(false);
-        setLinkRendering('display')
-        if (!toggleOpenDescription) {
-            setDescription(props.song.description ?? '')
-        } else {
-            setDescription('')
-        }
+        setLinkRendering('display');
+        setToggleAddSongSheet(false);
+        setDescription(props.song.description ?? '');
         setToggleOpenDescription(!toggleOpenDescription);
     }
 
@@ -140,9 +137,6 @@ function SongItemDetailsView(props: SongItemProps) {
     const doClearDescription = () => {
         setDescription('');
         props.song.description = '';
-        /*
-                setToggleOpenDescription(false);
-        */
         sessionStorage.removeItem('description');
         saveSongItem();
     }
@@ -157,11 +151,6 @@ function SongItemDetailsView(props: SongItemProps) {
         setToggleOpenDescription(false);
         setToggleCreateLink(false);
         setLinkRendering('display');
-        if (!toggleOpenReferences) {
-            setDescription(props.song.description ?? '')
-        } else {
-            setDescription('')
-        }
         setToggleOpenReferences(!toggleOpenReferences);
     }
 
@@ -281,7 +270,8 @@ function SongItemDetailsView(props: SongItemProps) {
 
                 {toggleOpenDescription && <div>
                     <form id={'addADescription'} onSubmit={ev => doAddDescription(ev)}>
-                        <label>{props.song.description!.length > 0
+                        <label>{((props.song.description !== null
+                            && props.song.description!.length > 0) && true)
                             ? <span>Edit your </span>
                             : <span>Add a </span>} Comment or Description:</label><br/>
                         <textarea id={'inputDescription'} value={description}
@@ -350,8 +340,8 @@ function SongItemDetailsView(props: SongItemProps) {
                         <div id={'listOfReferences'}>
                             {props.song.references.map((item, index) =>
                                 <div key={index} className={'retainedReferenceItem'} onClick={() => editItem(item.title)}>
-                                    &ndash;&#129174;&nbsp; {(item.addedCollection === null) ? <span>{songCollectionToRealName(item.songCollection)}</span> : <span>{item.addedCollection}</span> },
-                                    page {item.page}
+                                    &ndash;&#129174;&nbsp; {(item.addedCollection === null) ? <span>{songCollectionToRealName(item.songCollection)}</span> : <span>{item.addedCollection}</span> }
+                                    {item.page !== 0 && <span>, page {item.page}</span>}
                                 </div>)}
                         </div>
                     </div>}
