@@ -87,18 +87,9 @@ public class SongCollectionService {
     }
 
     public UploadResult processMultipartFileUpload(MultipartFile file) throws IOException {
-
-        // get my root
-        String rootDirWithSlash = SongCollectionService.class.getResource("/").getPath();
-        String rootDir = rootDirWithSlash.substring(1);
-        System.out.println("-> Root dir: \"" + rootDir + "\"");
-
-        // establish temp dir
-        Path rootPath = Paths.get(rootDir);
-        Path tempPath = rootPath.resolve("temporary");
-
+        Path tempDir = Path.of("temporary");
         try {
-            Files.createDirectory(tempPath);
+            Files.createDirectory(tempDir);
             System.out.println("-> Temporary directory created.");
         } catch (IOException e) {
             System.out.println("!  Could not create temporary directory!");
@@ -106,7 +97,7 @@ public class SongCollectionService {
         }
 
         // save file
-        String fileLocation = rootDir + "temporary/" + file.getOriginalFilename();
+        String fileLocation = "temporary" + File.separator + file.getOriginalFilename();
         File storedSongCollection = new File(fileLocation);
         file.transferTo(storedSongCollection);
         System.out.println("-> File created: " + file.getOriginalFilename());
