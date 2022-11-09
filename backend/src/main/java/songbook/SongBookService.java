@@ -4,11 +4,9 @@ import org.springframework.stereotype.Service;
 import songbook.collections.ReferencesRepository;
 import songbook.collections.SongCollectionService;
 import songbook.collections.exceptions.NoSuchIdException;
-import songbook.collections.exceptions.SongAlreadyExistsException;
 import songbook.collections.models.Reference;
 import songbook.models.Song;
 
-import java.sql.Ref;
 import java.util.*;
 
 @Service
@@ -31,8 +29,8 @@ public class SongBookService {
     public void deleteSong(String id) {
         var item = songsRepository.findById(id);
         if (item.isEmpty()) {
-            throw new RuntimeException("The has NOT been DELETED: " +
-                    "A song with Id no. " + id + " could not be found.");
+            throw new RuntimeException("This song has NOT been DELETED! " +
+                    "A song with Id no. \"" + id + "\" could not be found.");
         } else {
             songsRepository.deleteById(id);
         }
@@ -41,8 +39,8 @@ public class SongBookService {
     public Optional<Song> editSong(String id, Song song) {
         var item = songsRepository.findById(id);
         if (item.isEmpty()) {
-            throw new RuntimeException("The song has NOT been CHANGED: " +
-                    "A song with Id no. " + id + " could not be found.");
+            throw new RuntimeException("This song has NOT been CHANGED! " +
+                    "A song with Id no. \"" + id + "\" could not be found.");
         } else {
             return songsRepository.findById(id).map(e -> songsRepository.save(song));
         }
@@ -58,16 +56,12 @@ public class SongBookService {
 
     public Song createSongFromReference(String id) {
         Reference reference = referencesRepository.findById(id).orElseThrow(NoSuchIdException::new);
-        // check if song already exists
-        // Todo: Clean this up!
-        // versuche: ifPresent()
-        // Todo: Method still needs to be tested
+        reference.setHidden(true);
         Optional<Song> existingSong = songsRepository.findByTitle(reference.getTitle());
         if (existingSong.isPresent()) {
             Song song = addOneReferenceToSong(existingSong.get(), reference);
             return songsRepository.save(song);
         } else {
-            reference.setHidden(true);
             referencesRepository.save(reference);
             Song song = new Song(reference.getTitle(), reference.getAuthor(), reference.getYear());
             song.setReferences(List.of(reference));
@@ -84,7 +78,7 @@ public class SongBookService {
         return song;
     }
 
-    public String unhideAllReferences(String id) {
+    public String unhideAllReferencesOfASong(String id) {
         Optional<Song> lookupResult = songsRepository.findById(id);
         if (lookupResult.isEmpty()) {
             return "A song with id # \"" + id + "\" could not be found.";
