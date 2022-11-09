@@ -62,3 +62,4 @@ yarn-error.log*
 /README_oldVersion.md
 /temporary/
 /backend/src/main/java/songbook/collections/source-files/
+/backend/.env.development

@@ -1,22 +1,10 @@
 package songbook;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-
 import org.assertj.core.api.Assertions;
-
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.mockito.Mockito;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static songbook.collections.models.SongCollection.*;
-
 import org.springframework.mock.web.MockMultipartFile;
 import songbook.collections.ReferencesRepository;
 import songbook.collections.SongCollectionService;
@@ -24,14 +12,40 @@ import songbook.collections.UploadResult;
 import songbook.collections.exceptions.EmptyFileException;
 import songbook.collections.exceptions.NoSuchIdException;
 import songbook.collections.models.Reference;
-import songbook.collections.models.SongCollection;
 import songbook.collections.models.ReferencesDTO;
+import songbook.collections.models.SongCollection;
 
-public class SongCollectionServiceTest {
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static songbook.collections.models.SongCollection.*;
+
+// @SpringBootTest
+class SongCollectionServiceTest {
+    
     private final ReferencesRepository repo = Mockito.mock((ReferencesRepository.class));
     private final SongCollectionService service = new SongCollectionService(repo);
 
+/*
+    @Value("${say.hello}")
+    private String hello;
+*/
+/*
+    @Value("${root.Directory}")
+    private String rootDirectory;
+*/
+
+    @Test
+    void shouldSayHello() {
+        service.sayHello();
+    }
 
     @Test
     void shouldReturnAllReferences() {
@@ -155,9 +169,8 @@ public class SongCollectionServiceTest {
                         .getBytes(StandardCharsets.UTF_8)
         );
 
-        String title = "This Is My Song, Yeah";
         Collection<Reference> collection = List.of();
-        Mockito.when(repo.findAllByTitleAndSongCollection(title, THE_DAILY_UKULELE_BLUE)).thenReturn(collection);
+        Mockito.when(repo.findAllByTitleAndSongCollection("This Is My Song, Yeah", THE_DAILY_UKULELE_BLUE)).thenReturn(collection);
         UploadResult uploadResult = new UploadResult();
         uploadResult.setNumberOfReferencesAccepted(1);
         uploadResult.setTotalNumberOfReferences(1);
@@ -346,7 +359,7 @@ public class SongCollectionServiceTest {
         Reference ref02 = new Reference("Here Comes Your Music", collection, 144);
         Reference ref04 = new Reference("Oh, When The Music Ends", collection, 320);
         ref04.setHidden(false);
-        Reference ref07 = new Reference("Here Comes My Silent Music", collection, 007);
+        Reference ref07 = new Reference("Here Comes My Silent Music", collection, 7);
         ref07.setHidden(true);
         List<Reference> fullList = List.of(ref02, ref01, ref04, ref07);
         Mockito.when(repo.findAll()).thenReturn(fullList);
@@ -362,7 +375,7 @@ public class SongCollectionServiceTest {
         Reference ref01 = new Reference("Here Comes My Music", collection, 123);
         Reference ref02 = new Reference("Oh, Here Comes Your Ice Cream", collection, 320);
         Reference ref03 = new Reference("Here Comes Your Music", collection, 144);
-        Reference ref07 = new Reference("Here Comes My Silent Music", collection, 007);
+        Reference ref07 = new Reference("Here Comes My Silent Music", collection, 7);
         ref07.setHidden(true);
         List<Reference> list = List.of(ref01, ref02, ref03, ref07);
         Mockito.when(repo.findAll()).thenReturn(list);

@@ -1,6 +1,7 @@
 package songbook.collections;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import songbook.collections.exceptions.*;
@@ -26,11 +27,21 @@ public class SongCollectionService {
 
     private final ReferencesRepository referencesRepository;
 
+    @Value("${root.directory}")
+    private String rootDirectory;
+    @Value("${say.hello}")
+    private String hello;
+
+    public void sayHello() {
+        System.out.println(hello);
+    }
+
     public ReferencesDTO getAllReferences() {
         List<Reference> list = referencesRepository.findAll().stream()
                 .filter(e -> !e.isHidden())
                 .sorted(Comparator.comparing(Reference::getTitle))
                 .toList();
+        sayHello();
         return new ReferencesDTO(list);
     }
 
@@ -87,7 +98,11 @@ public class SongCollectionService {
     }
 
     public UploadResult processMultipartFileUpload(MultipartFile file) throws IOException {
-        Path tempDir = Path.of("temporary");
+
+        System.out.println(rootDirectory);
+        Path tempDir = Path.of(rootDirectory, "temporary");
+        System.out.println(tempDir);
+
         try {
             Files.createDirectory(tempDir);
             System.out.println("-> Temporary directory created.");
@@ -97,8 +112,9 @@ public class SongCollectionService {
         }
 
         // save file
-        String fileLocation = "temporary" + File.separator + file.getOriginalFilename();
+        String fileLocation = tempDir + File.separator + file.getOriginalFilename();
         File storedSongCollection = new File(fileLocation);
+        System.out.println("die datei: " + fileLocation);
         file.transferTo(storedSongCollection);
         System.out.println("-> File created: " + file.getOriginalFilename());
 
