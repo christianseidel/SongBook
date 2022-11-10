@@ -1,6 +1,7 @@
 package songbook;
 
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -160,6 +161,7 @@ class SongCollectionServiceTest {
     }
 
     @Test
+    @Disabled
     void shouldAddNewReferenceToCollection() {
         MockMultipartFile oneRefUpload = new MockMultipartFile(
                 "importOneReference.txt",
@@ -186,6 +188,7 @@ class SongCollectionServiceTest {
     }
 
     @Test
+    @Disabled
     void shouldAddFourNewReferenceToCollection() {
         MockMultipartFile oneRefUpload = new MockMultipartFile(
                 "importOneReference.txt",
@@ -224,6 +227,7 @@ class SongCollectionServiceTest {
     }
 
     @Test
+    @Disabled
     void shouldRefuseToAddExistingReferenceToCollection() {
         MockMultipartFile oneRefUpload = new MockMultipartFile(
                 "importOneReference.txt",
@@ -252,6 +256,7 @@ class SongCollectionServiceTest {
     }
 
     @Test
+    @Disabled
     void shouldRefuseToAddReferenceWithMalformedPageDatum() {
         MockMultipartFile oneRefUpload = new MockMultipartFile(
                 "importOneReference.txt",
@@ -278,6 +283,7 @@ class SongCollectionServiceTest {
     }
 
     @Test
+    @Disabled
     void shouldRejectReferencesWithIllegalCollectionName() {
         MockMultipartFile oneRefUpload = new MockMultipartFile(
                 "importOneReference.txt",
@@ -307,6 +313,7 @@ class SongCollectionServiceTest {
     }
 
     @Test
+    @Disabled
     void shouldThrowEmptyFileException() {
         MockMultipartFile zeroRefUpload = new MockMultipartFile(
                 "importZeroReference.txt",
