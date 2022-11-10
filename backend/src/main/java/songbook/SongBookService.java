@@ -86,15 +86,20 @@ public class SongBookService {
             return "A song with id # \"" + id + "\" could not be found.";
         } else {
             Song song = lookupResult.get();
-            for (Reference ref : song.getReferences()) {
+            List<Reference> references = song.getReferences();
+            for (int i = 0; i < references.size(); i++) {
+                Reference ref = references.get(i);
+                ref.setTitle(song.getTitle());
+                ref.setAuthor(song.getAuthor());
+                ref.setYear(song.getYear());
                 if (ref.getId() == null) {
                     ref.setId(UUID.randomUUID().toString());
-                    songCollectionService.createReference(ref);
                 } else {
-                    songCollectionService.unhideReference(ref.getId());
-                    // Todo: Plus Hier alle neuen Daten einfließen lassen!!
+                    ref.setHidden(false);
                 }
+                referencesRepository.save(ref);
             }
+            // Todo: updated version to be tested...
             return "All songs are reinserted into Reference Index.";
         }
     }

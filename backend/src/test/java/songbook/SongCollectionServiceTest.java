@@ -35,18 +35,9 @@ class SongCollectionServiceTest {
     private final SongCollectionService service = new SongCollectionService(repo);
 
 /*
-    @Value("${say.hello}")
-    private String hello;
-*/
-/*
     @Value("${root.Directory}")
     private String rootDirectory;
 */
-
-    @Test
-    void shouldSayHello() {
-        service.sayHello();
-    }
 
     @Test
     void shouldReturnAllReferences() {

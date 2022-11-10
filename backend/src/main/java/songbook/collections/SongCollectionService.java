@@ -29,19 +29,12 @@ public class SongCollectionService {
 
     @Value("${root.directory}")
     private String rootDirectory;
-    @Value("${say.hello}")
-    private String hello;
-
-    public void sayHello() {
-        System.out.println(hello);
-    }
 
     public ReferencesDTO getAllReferences() {
         List<Reference> list = referencesRepository.findAll().stream()
                 .filter(e -> !e.isHidden())
                 .sorted(Comparator.comparing(Reference::getTitle))
                 .toList();
-        sayHello();
         return new ReferencesDTO(list);
     }
 

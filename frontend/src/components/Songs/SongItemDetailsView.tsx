@@ -48,29 +48,37 @@ function SongItemDetailsView(props: SongItemProps) {
         />;
     }
 
-
     function deleteSong(id: string) {
-        unhideAllReferencesAttached(id);
-        fetch('/api/songbook/' + id, {
-            method: 'DELETE'
-        })
-            .then(response => {
-                if (response.ok) {
-                    sessionStorage.setItem('messageType', 'green');
-                    sessionStorage.setItem('message', 'Your song "' + props.song.title + '" was deleted!');
-                } else {
-                    sessionStorage.setItem('messageType', 'red');
-                    sessionStorage.setItem('message', 'Your song could not be deleted!');
+        unhideAllReferencesAttached(id)
+            .then(()=> {
+                fetch('/api/songbook/' + id, {
+                    method: 'DELETE'
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            sessionStorage.setItem('messageType', 'green');
+                            sessionStorage.setItem('message', 'Your song "' + props.song.title + '" was deleted!');
+                        } else {
+                            sessionStorage.setItem('messageType', 'red');
+                            sessionStorage.setItem('message', 'Your song could not be deleted!');
+                        }
+                    })
+                    .then(props.doReturn);
                 }
-            })
-            .then(props.doReturn);
+            )
     }
 
+    // function needs work asynchronous for references need to be repatriated first before song can then be deleted //
     const unhideAllReferencesAttached = (songId: string) => {
-        fetch('api/songbook/unhideReferences/' + songId, {
-            method: 'PUT'})
-            .then(response => {return response.json();})
-            //.then((responseBody: string) => (setMessage(responseBody)));
+        return new Promise((resolve) => {
+            resolve(
+                fetch('api/songbook/unhideReferences/' + songId, {
+                    method: 'PUT'})
+                    .then(response => {return response.json();})
+                //.then((responseBody: string) => (setMessage(responseBody)));
+            );
+            }
+        )
     }
 
     function saveSongItem() {

@@ -69,6 +69,6 @@ export function songCollectionToRealName (volume: string) {
         case 'LIEDERFEST_15':
             return 'Liederfest (15)';
         case 'MANUALLY_ADDED_COLLECTION':
-            return '(manually added)';
+            return 'manually added';
     }
 }

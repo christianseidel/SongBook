@@ -104,7 +104,11 @@ function ReferenceToEdit(props: ReferenceItemProps) {
                        onChange={ev => setTitle(ev.target.value)} autoFocus required
                        onKeyDown={ev => checkIfEscapeKey(ev.key)}
                 />
-                <span id={'collectionTitle'}>{songCollectionToRealName(props.reference.songCollection)}</span><br/>
+                <span id={'collectionTitle'}>{
+                    props.reference.songCollection === "MANUALLY_ADDED_COLLECTION"
+                        ? <span>{props.reference.addedCollection} <span id={'labelManuallyAdded'}>(manually added)</span></span>
+                        : <span>{songCollectionToRealName(props.reference.songCollection)}</span>
+                }</span><br/>
                 <label>Page: </label>
                 <input type={'text'} placeholder={'Page'} value={page}
                        onChange={ev => setPage(ev.target.value)}
