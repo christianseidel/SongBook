@@ -18,7 +18,7 @@ function DisplaySongTitle(props: SongItemProps) {
                                 props.song.status = 'edit';
                                 props.updateDetailsView();
                             }}>
-                                &#8734; edit &nbsp;
+                                <div className={'edit'}>&#9998;</div> edit
                             </button>
                         </span>
             </div>
@@ -30,7 +30,7 @@ function DisplaySongTitle(props: SongItemProps) {
                 <button id={'buttonCancelDisplaySong'} onClick={() => {
                         props.clear();
                     }}>
-                    &#10008; close
+                    close
                     </button>
             </div>
         </div>

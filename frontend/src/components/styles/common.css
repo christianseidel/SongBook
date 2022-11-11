@@ -7,15 +7,40 @@
     user-select: none;
 }
 
-#addNewSong {
+#addANewSong {
+    margin-left: 42px;
     cursor: pointer;
 }
 
 #addNewCollection {
+    margin-top: 26px;
+    margin-left: 24px;
     cursor: pointer;
 }
 
 #chooseASong {
+}
+
+
+.inline {
+    display: inline;
+}
+
+.cancel {
+    font-size: 12px;
+}
+
+.edit {
+    display: inline-block;
+    transform: rotate(90deg);
+}
+
+.line-through {
+    text-decoration: line-through;
+}
+
+.underline {
+    text-decoration: underline;
 }
 
 form {

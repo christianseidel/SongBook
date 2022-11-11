@@ -13,10 +13,6 @@ body {
     height: 90%;
 }
 
-#container {
-    height: inherit;
-}
-
 h1 {
     margin-top: 0;
     margin-bottom: 42px;
@@ -33,19 +29,38 @@ h1 {
     display: flex;
     width: 100%;
     gap: 28px;
-    margin-top: 28px;
 }
+
+.flex-container-left {
+    flex-basis: 500px;
+    flex-grow: 0.5;
+}
+
+.flex-container-right {
+    flex-basis: 500px;
+    flex-grow: 1;
+    position: relative;
+    border: 3px double darkgoldenrod;
+    border-radius: 8px;
+    padding: 15px;
+}
+
 
 .flex-child {
     flex: 1;
-    border: 2px solid darkgoldenrod;
+    color: green;
+    border: 3px double darkgoldenrod;
     border-radius: 8px;
     padding: 15px;
     min-height: 200px;
 }
 
-.flex-child:first-child {
-    color: green;
+.flex-child:nth-of-type(1) {
+
+}
+
+.flex-child:nth-of-type(2) {
+    margin-top: 28px;
 }
 
 #displaySongList {

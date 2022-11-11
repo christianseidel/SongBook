@@ -66,19 +66,25 @@ function SongBook() {
         })
             .then(response => response.json())
             .then((responseBody: SongsDTO) => setSongsDTO(responseBody))
-            .then(() => { if (clearSong) {setSongChosen({} as Song)}});
+            .then(() => {
+                if (clearSong) {
+                    setSongChosen({} as Song)
+                }
+            });
         setMessage(sessionStorage.getItem('message') ?? '');
     }
 
-    let newSong: Song = {title: "no title", author: "", id: "", status: "create",
-        dayOfCreation: new DayOfCreation(new Date().toISOString().slice(0, 10))};
+    let newSong: Song = {
+        title: "no title", author: "", id: "", status: "create",
+        dayOfCreation: new DayOfCreation(new Date().toISOString().slice(0, 10))
+    };
 
     function createItem() {
         setSongChosen(newSong);
     }
 
     const highlightSongList = document.getElementById('chooseASong') as HTMLSpanElement | null;
-    if (highlightSongList != null ) {
+    if (highlightSongList != null) {
         highlightSongList.addEventListener('mouseover', highlightSongsToChooseFrom)
     }
 
@@ -143,7 +149,7 @@ function SongBook() {
                 let responseStatus: number;
                 fetch(`api/songbook/add/${id}`, {
                     method: 'POST'
-              })
+                })
                     .then(response => {
                         responseStatus = response.status;
                         return response.json();
@@ -160,73 +166,90 @@ function SongBook() {
                             sessionStorage.setItem('messageType', 'red');
                         }
                     })
-            .then(() => {
+                    .then(() => {
 
-                // hide Reference Retrieved
-                fetch('api/collections/edit/hide/' + referenceRetrieved.id, {
-                    method: 'PUT',
+                        // hide Reference Retrieved
+                        fetch('api/collections/edit/hide/' + referenceRetrieved.id, {
+                            method: 'PUT',
+                        })
+                            .then(response => {
+                                    if (response.status !== 200) {
+                                        sessionStorage.setItem('message', 'Your source reference could not be hidden!');
+                                        sessionStorage.setItem('messageType', 'red');
+                                    }
+                                }
+                            )
+
                     })
-                    .then(response => {
-                        if (response.status !== 200) {
-                            sessionStorage.setItem('message', 'Your source reference could not be hidden!');
-                            sessionStorage.setItem('messageType', 'red');
-                        }}
-                    )
-
-                })
-            .then(() => {
-                // display freshly created Song
-                songCreatedFromReference.status = 'display';
-                songCreatedFromReference.dayOfCreation = new DayOfCreation( // = displayable format of "dateCreated"
-                    songCreatedFromReference.dateCreated as string
-                );
-                setSongChosen(songCreatedFromReference);
-                getAllSongs(false);
-                // rerenders Reference List:
-                trigger();
-                // Todo: message gets called twice -- once by setSongChosen, once by trigger
-                //  -- need to fix this....
-            });
-        })
+                    .then(() => {
+                        // display freshly created Song
+                        songCreatedFromReference.status = 'display';
+                        songCreatedFromReference.dayOfCreation = new DayOfCreation( // = displayable format of "dateCreated"
+                            songCreatedFromReference.dateCreated as string
+                        );
+                        setSongChosen(songCreatedFromReference);
+                        getAllSongs(false);
+                        // rerenders Reference List:
+                        trigger();
+                        // Todo: message gets called twice -- once by setSongChosen, once by trigger
+                        //  -- need to fix this....
+                    });
+            })
         setDragOverLeft(false);
         setDragOverRight(false);
     }
 
-    let receiver = () => {}
+    let receiver = () => {
+    }
 
-    const trigger = () => {receiver && receiver();}
+    const trigger = () => {
+        receiver && receiver();
+    }
 
     const receiverRerenderSignal = (handler: () => void) => {
         receiver = handler;
     }
 
     return (
-        <div id={'container'}>
-            <h1><img src={ukulele} alt="Ukulele" id={'ukulele'} /> My Song Book</h1>
+        <div>
+            <h1>
+                <img src={ukulele} alt="Ukulele" id={'ukulele'}/>
+                My Song Book
+            </h1>
             <div className={"flex-parent"}>
+                <div className={"flex-container-left"}>
+                    <div className={"flex-child"}
+                         onDragOver={enableDropping}
+                         onDrop={handleDropAndCreateSongFromReference}
+                         onDragEnter={handleDragOverStartLeft}
+                         onDragLeave={handleDragOverEndLeft}
+                         style={dragOverLeft ? {backgroundColor: 'rgb(243, 217, 167)'} : {}}
+                    >
+                        <h2 className={"inline"}>List of Songs</h2>
+                        <span onClick={createItem} className={"doSomething"} id={"addANewSong"}>
+                        + add new song
+                    </span>
 
-                <div className={"flex-child"}
-                     onDragOver={enableDropping}
-                     onDrop={handleDropAndCreateSongFromReference}
-                     onDragEnter={handleDragOverStartLeft}
-                     onDragLeave={handleDragOverEndLeft}
-                     style={dragOverLeft ? {backgroundColor: 'rgb(243, 217, 167)'} : {}}
-                >
-                    <div onClick={createItem}>
-                        <span className={"doSomething"} id={"addNewSong"}>+ add new song</span>
+                        <div id={'displaySongList'}>
+                            {songsDTO.songList
+                                ? songsDTO.songList.map(item =>
+                                    <SongItemWithinList key={item.id} song={item}
+                                                        openItemClicked={displaySongChosen}
+                                    />)
+                                : <span>... loading</span>
+                            }
+                        </div>
                     </div>
-                    <div id={'displaySongList'}>
-                        {songsDTO.songList
-                            ? songsDTO.songList.map(item =>
-                                <SongItemWithinList key={item.id} song={item}
-                                                    openItemClicked={displaySongChosen}
-                                />)
-                            : <span>... loading</span>
-                        }
+
+                    <div className={"flex-child"}>
+                        <References
+                            receiverRerenderSignal={receiverRerenderSignal}/>
                     </div>
+
                 </div>
 
-                <div className={'flex-child'}
+
+               <div className={'flex-container-right'}
                      onDragOver={enableDropping}
                      onDrop={handleDropAndCreateSongFromReference}
                      onDragEnter={handleDragOverStartRight}
@@ -237,33 +260,32 @@ function SongBook() {
                         songChosen.title
                             ? <SongItemDetailsView song={songChosen}
                                                    onItemDeletion={(message: string) => {
-                                                        setMessage(message);
-                                                        getAllSongs(true);
-                                                        trigger();
-                                                        alert("bin hier")
-                                               }}
+                                                       setMessage(message);
+                                                       getAllSongs(true);
+                                                       trigger();
+                                                       alert("bin hier")
+                                                   }}
                                                    onItemCreation={(message: string) => {
-                                                        setMessage(message);
-                                                        getAllSongs(true);
-                                               }}
+                                                       setMessage(message);
+                                                       getAllSongs(true);
+                                                   }}
                                                    onItemRevision={(song) => {
-                                                        song.dayOfCreation = new DayOfCreation( // = displayable format of "dateCreated"
-                                                            song.dateCreated as string
-                                                        );
-                                                        getAllSongs(false);
-                                                        setSongChosen(song);
-                                               }}
-                                                   doReturn={() => {getAllSongs(true); trigger()}}
+                                                       song.dayOfCreation = new DayOfCreation( // = displayable format of "dateCreated"
+                                                           song.dateCreated as string
+                                                       );
+                                                       getAllSongs(false);
+                                                       setSongChosen(song);
+                                                   }}
+                                                   doReturn={() => {
+                                                       getAllSongs(true);
+                                                       trigger()
+                                                   }}
                                                    clear={() => setSongChosen({} as Song)}
-                                               />
-                            : <span className={"doSomething"} id={"chooseASong"}>&#129172; &nbsp; please, choose a song</span>
+                            />
+                            : <span className={"doSomething"}
+                                    id={"chooseASong"}>&#129172; &nbsp; please, choose a song</span>
                     }
                 </div>
-            </div>
-
-            <div>
-                <References
-                    receiverRerenderSignal={receiverRerenderSignal}/>
             </div>
 
             <div>
@@ -276,7 +298,6 @@ function SongBook() {
                     }}
                 />}
             </div>
-
         </div>
     );
 }

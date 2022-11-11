@@ -37,7 +37,7 @@ function EditLink (props: SongItemLinksProps) {
     }
 
     return (
-        <form id={'inputFormLink'} onSubmit={ev => doCreateLink(ev)}>
+        <form id={'inputFormLink'} onSubmit={ev => doCreateLink(ev)} className={'workingSpaceElement'}>
             <label>Add a Link:</label>
             <span id={'secondLineLink'}>
                         <label>Text:</label>
@@ -50,7 +50,7 @@ function EditLink (props: SongItemLinksProps) {
                         <input id={'inputLinkTarget'} type='text' value={linkTarget} placeholder={'Link Target'}
                                onChange={ev => setLinkTarget(ev.target.value)} required/>
                         <button id={'buttonCancelAddLink'} onClick={() => props.onCancel()}
-                            > &#10008; cancel
+                            > cancel
                         </button>
                     </span>
         </form>

@@ -45,7 +45,7 @@ function EditLink (props: SongItemLinksProps) {
                         <input id={'inputLinkTarget'} type='text' value={linkTarget} placeholder={'Link Target'}
                                onChange={ev => setLinkTarget(ev.target.value)} required/>
                         <button id={'buttonCancelAddLink'} onClick={() => props.onCancel()}
-                        > &#10008; cancel
+                        > cancel
                         </button>
                         <br />
                         <button id={'buttonDeleteLink'} onClick={() => props.onDeletion()}>

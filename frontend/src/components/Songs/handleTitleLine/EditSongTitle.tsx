@@ -71,7 +71,7 @@ function EditSongTitle(props: SongItemProps) {
                             props.song.status = 'display';
                             props.updateDetailsView();
                         }
-                    }> &#10008; cancel
+                    }> cancel
                     </button>
                 </div>
             </form>

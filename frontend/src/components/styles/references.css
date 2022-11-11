@@ -15,7 +15,7 @@ h2 {
 }
 
 #referenceSearchResult {
-    max-height: 291px;
+    max-height: 228px;
     overflow: auto;
 }
 
@@ -57,10 +57,6 @@ h2 {
 .referenceItemDetailsPage {
     all: inherit;
     margin-left: 0;
-}
-
-#addNewCollection {
-    margin-top: 36px;
 }
 
 #formAddFile {

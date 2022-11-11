@@ -114,12 +114,8 @@ function References(props: Props) {
 
     return (
         <div>
-            <div className={'flex-parent'}>
-                <div className={'flex-child'}>
-                    <h2>Song Collections</h2>
+                    <h2>List of References</h2>
 
-                </div>
-                <div className={'flex-child'}>
                     {toggleDisplaySearchResultsButNotReference
                         ?   <div>
                             <div id={'searchForm'}>
@@ -200,10 +196,8 @@ function References(props: Props) {
                             }}
                         />}
                     </div>
-
                 </div>
-            </div>
-        </div>
+
     )
 }
 

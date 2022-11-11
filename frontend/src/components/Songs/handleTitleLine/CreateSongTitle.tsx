@@ -60,7 +60,7 @@ function CreateSongTitle(props: SongItemProps) {
                     <button id={'buttonCancelCreateSong'}
                             onClick={() => {
                                 props.clear()
-                            }}> &#10008; cancel
+                            }}> <span className={'cancel'}>cancel</span>
                     </button>
                 </div>
             </form>

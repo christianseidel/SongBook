@@ -1,10 +1,39 @@
-#songHead {
-    height: 70px;
+.songDataSheetElement {
+    position: relative;
+    border: 1px solid darkgoldenrod;
+    border-radius: 8px;
+    padding: 18px;
+    background-color: #f0c579;
+    box-shadow: -2px -2px darkgoldenrod;
 }
 
-#songBody {
-    min-height: 380px;
-    position: relative;
+#songHead {
+    height: 60px;
+}
+
+#workingSpace {
+    height: 138px;
+    margin-top: 18px;
+}
+
+#displaySpace {
+    height: 138px;
+    margin-top: 18px;
+}
+
+#footerContainer {
+}
+
+#songFooter {
+    position: absolute;
+    bottom: 0;
+    margin-top: 18px;
+    padding: 18px;
+    color: darkslategray;
+    font-family: "Times New Roman", sans-serif;
+    font-size: 12px;
+    font-weight: normal;
+    background-color: #eaba5e;
 }
 
 /*  SONG HEAD /// DISPLAY / EDIT / CREATE TITLE  */
@@ -14,7 +43,8 @@
     font-style: italic;
     font-weight: bold;
     font-size: large;
-    color: #a60a0a;
+    color: #850808;
+    /*color: #a60a0a;*/
     text-decoration: underline;
 }
 
@@ -71,8 +101,8 @@
 /*  ICON LINE   */
 
 #iconContainer {
-    margin-top: 8px;
-    margin-bottom: 12px;
+    margin-top: 24px;
+    margin-left: 18px;
     display: flex;
     flex-direction: row;
 }
@@ -89,6 +119,7 @@
     background-color: blanchedalmond;
     box-shadow: 3px 2px darkgoldenrod, 2px 2px 2px #936b09;
     transition: 50ms;
+    user-select: none;
 }
 
 .icon:hover {
@@ -127,12 +158,13 @@
 
 .tooltip .tooltipText {
     visibility: hidden;
-    width: 120px;
+    width: max-content;
+    min-width: 110px;
     background-color: goldenrod;
     border: solid 1px darkgoldenrod;
     color: white;
     text-align: center;
-    padding: 5px 0;
+    padding: 5px 10px;
     border-radius: 6px;
     position: absolute;
     transform: translate(25px, -10px);
@@ -157,20 +189,33 @@
     border-color: transparent darkgoldenrod transparent transparent;
 }
 
+
+/*  WORKING SPACE  */
+
+
+.workingSpaceElement {}
+
+
+/*  DISPLAY SPACE  */
+
+.displayThis {
+    margin-top: 18px;
+    border: 1px solid darkgoldenrod;
+    border-radius: 8px;
+    padding: 18px;
+}
+
+
 /*  DESCRIPTION  */
 
 #displayDescription {
-    margin-top: 20px;
-    margin-bottom: 12px;
-    border: 1px solid darkgoldenrod;
-    padding: 5px;
+    margin-top: 6px;
     font-weight: lighter;
     font-style: italic;
 }
 
-#addADescription {
-    margin-top: 20px;
-}
+
+#addADescription {}
 
 #inputDescription {
     margin-top: 12px;
@@ -233,9 +278,7 @@
     margin-bottom: -2px;
 }
 
-#inputFormRef {
-    margin-top: 20px;
-}
+#inputFormRef {}
 
 #titleLineRef, #secondLineRef{
     display: block;
@@ -382,9 +425,7 @@
     margin-bottom: -2px;
 }*/
 
-#inputFormLink {
-    margin-top: 20px;
-}
+#inputFormLink {}
 
 #titleLineLink, #secondLineLink{
     display: block;
@@ -413,22 +454,18 @@
     width: 308px;
 }
 
+/*  SONG SHEETS  */
 
-/*  LAST LINE  */
-
-#displayDateCreated {
-    width: 100%;
-    position: absolute;
-    bottom: 0;
-    color: darkslategray;
-    font-family: "Times New Roman", sans-serif;
-    font-size: 12px;
-    font-weight: normal;
+#songSheetForm {
+    margin-top: 6px;
 }
+
+
+/*  FOOTER  */
 
 #buttonDeleteSong {
     position: absolute;
-    right: 0;
-    bottom: -6px;
+    right: 18px;
+    bottom: 18px;
 }
 
