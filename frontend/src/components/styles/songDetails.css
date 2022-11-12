@@ -12,16 +12,13 @@
 }
 
 #workingSpace {
-    height: 138px;
+    min-height: 140px;
     margin-top: 18px;
 }
 
 #displaySpace {
-    height: 138px;
+    min-height: 140px;
     margin-top: 18px;
-}
-
-#footerContainer {
 }
 
 #songFooter {
@@ -44,13 +41,17 @@
     font-weight: bold;
     font-size: large;
     color: #850808;
-    /*color: #a60a0a;*/
     text-decoration: underline;
 }
 
-#titleLine {
+#titleFirstLine {
     display: block;
     margin-bottom: 8px;
+    min-width: 446px;
+}
+
+#titleSecondLine {
+    min-width: 446px;
 }
 
 #inputTitle {
@@ -62,12 +63,17 @@
     float: right;
 }
 
+#labelDisplayAuthor {
+    margin-left: 0;
+}
+
 #displayAuthor {
     display: inline-block;
     margin-left: 6px;
     min-width: 187px;
     margin-right: 12px;
 }
+
 #inputAuthor {
     margin-left: 28px;
     width: 157px;
@@ -215,33 +221,41 @@
 }
 
 
-#addADescription {}
+#addADescription {
+
+}
 
 #inputDescription {
     margin-top: 12px;
-    margin-left: 51px;
-    width: 310px;
+    margin-left: 54px;
+    width: 307px;
 }
 
 #buttonAddDescription {
     float: right;
+    transform: translateY(4px);
 }
 
 #buttonCancelAddDescription {
-    margin-left: 50px;
+    float: right;
+    clear: right;
+    margin-top: 13px;
 }
 
 #buttonClearDescription {
-    margin-left: 12px;
+    margin-left: 51px;
 }
 
 /*  REFERENCE  */
 
 .displayReferences, #displayLinks {
     display: block;
-    margin-top: 20px;
-    border: 1px solid darkgoldenrod;
+    /*border: 1px solid darkgoldenrod;*/
     padding: 5px;
+}
+
+#displayLinks:nth-of-type(1) {
+    margin-top: 20px;
 }
 
 #listOfReferences {
@@ -280,7 +294,13 @@
 
 #inputFormRef {}
 
-#titleLineRef, #secondLineRef{
+#titleLineRef, #secondLineRef {
+    display: block;
+    margin-top: 6px;
+    /*border: 1px solid steelblue;*/
+}
+
+#thirdLineRef {
     display: block;
     margin-top: 6px;
 }
@@ -291,9 +311,25 @@
 }
 
 #inputRefCollection {
-    margin-left: 16px;
-    width: 176px;
+    margin-left: 21px;
+    margin-top: 2px;
+    width: 172px;
 }
+
+/*
+
+#inputLinkText {
+    margin-left: 21px;
+    margin-top: 2px;
+    width: 308px;
+}
+
+#inputLinkTarget {
+    margin-left: 8px;
+    margin-top: 8px;
+    width: 308px;
+}
+*/
 
 #labelInputRefPage {
     margin-left: 12px;
@@ -304,6 +340,27 @@
     width: 70px;
 }
 
+#inputKey {
+    margin-left: 25px;
+    max-height: 60px;
+    background-color: blanchedalmond;
+    border-color: darkgoldenrod;
+}
+
+.labelInputMajorOrMinor {
+    font-weight: normal;
+}
+
+.inputMajorOrMinor {
+    margin-left: 10px;
+    width: revert;
+    background-color: goldenrod;
+    transition: revert;
+}
+
+#major {
+    margin-left: 26px;
+}
 
 /*  LINK  */
 
@@ -456,9 +513,7 @@
 
 /*  SONG SHEETS  */
 
-#songSheetForm {
-    margin-top: 6px;
-}
+#songSheetForm {}
 
 
 /*  FOOTER  */

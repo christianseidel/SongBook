@@ -18,6 +18,7 @@ public class Reference {
     private int page;
     private String author;
     private int year;
+    private String key;
     private boolean hidden;
     private String addedCollection;
 
@@ -42,6 +43,7 @@ public class Reference {
         this.page = toCopy.page;
         this.author = toCopy.author;
         this.year = toCopy.year;
+        this.key = toCopy.key;
         this.hidden = toCopy.hidden;
         this.addedCollection = toCopy.addedCollection;
     }

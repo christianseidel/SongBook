@@ -53,26 +53,28 @@ function EditSongTitle(props: SongItemProps) {
         <div>
             <form onSubmit={ev => doEditSong(ev)}>
                 <div>
-                    <span id={'titleLine'}>
+                    <span id={'titleFirstLine'}>
                         <label>Title:</label>
                         <input id={'inputTitle'} type='text' value={title} placeholder={'Title'}
                                onChange={ev => setTitle(ev.target.value)} autoFocus required/>
                         <button id={'buttonUpdateSong'} type='submit'> &#10004; update</button>
                     </span>
-                    <label>By:</label>
-                    <input id={'inputAuthor'} type="text" value={author} placeholder={'Author'}
-                           onChange={ev => setAuthor(ev.target.value)}/>
-                    <label id={'labelInputYear'}>Year:</label>
-                    <input id={'inputYear'} type="number" value={year === 0 ? '' : year}
-                           placeholder={'Year created'}
-                           onChange={ev => setYear(Number(ev.target.value))}/>
-                    <button id={'buttonCancelEditSong'} onClick={
-                        () => {
-                            props.song.status = 'display';
-                            props.updateDetailsView();
-                        }
-                    }> cancel
-                    </button>
+                    <span id={'titleSecondLine'}>
+                        <label>By:</label>
+                        <input id={'inputAuthor'} type="text" value={author} placeholder={'Author'}
+                               onChange={ev => setAuthor(ev.target.value)}/>
+                        <label id={'labelInputYear'}>Year:</label>
+                        <input id={'inputYear'} type="number" value={year === 0 ? '' : year}
+                               placeholder={'Year created'}
+                               onChange={ev => setYear(Number(ev.target.value))}/>
+                        <button id={'buttonCancelEditSong'} onClick={
+                            () => {
+                                props.song.status = 'display';
+                                props.updateDetailsView();
+                            }
+                        }> cancel
+                        </button>
+                    </span>
                 </div>
             </form>
         </div>

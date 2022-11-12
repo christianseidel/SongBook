@@ -44,7 +44,7 @@ function CreateSongTitle(props: SongItemProps) {
         <div>
             <form onSubmit={ev => doCreateSong(ev)}>
                 <div>
-                    <span id={'titleLine'}>
+                    <span id={'titleFirstLine'}>
                         <label>Title:</label>
                         <input id={'inputTitle'} type='text' value={title} placeholder={'Title'}
                                onChange={ev => setTitle(ev.target.value)} autoFocus required/>

@@ -5,17 +5,19 @@ export class Reference {
     page: number;
     author?: string;
     year?: number;
+    key?: string;
     hidden?: boolean;
     addedCollection: string;
 
     constructor(title: string, collection: string,
-                page: number, author?: string, year?: number) {
+                page: number, author?: string, year?: number, key?: string) {
         this.title = title;
         this.songCollection = 'MANUALLY_ADDED_COLLECTION';
         this.addedCollection = collection;
         this.page = page;
         this.author = author;
         this.year = year;
+        this.key = key;
     }
 }
 

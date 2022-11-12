@@ -23,7 +23,7 @@ function DisplaySongTitle(props: SongItemProps) {
                         </span>
             </div>
             <div id={'test'}>
-                {props.song.author && <label>By:</label>}
+                {props.song.author && <label id={'labelDisplayAuthor'}>By:</label>}
                 {props.song.author && <span id={'displayAuthor'}> {props.song.author} </span>}
                 {(props.song.year !== 0) && <label>Year:</label>}
                 {(props.song.year !== 0) && <span id={'displayYear'}> {props.song.year} </span>}
