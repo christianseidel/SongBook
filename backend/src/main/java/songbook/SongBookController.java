@@ -1,7 +1,9 @@
 package songbook;
 
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import songbook.collections.exceptions.NoSuchIdException;
 import songbook.collections.exceptions.SongAlreadyExistsException;
 import songbook.models.Song;
@@ -61,6 +63,12 @@ public class SongBookController {
     @PutMapping("/unhideReferences/{songId}")
     public ResponseEntity<String> unhideAllReferences(@PathVariable String songId) {
         return status(200).body(jsonifyToMessage(songBookService.unhideAllReferencesOfASong(songId)));
+    }
+
+    @PostMapping(path = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Object> uploadSongSheet(@RequestParam("file") MultipartFile file) {
+        // TODO: This function has yet to be implemented...
+        return ResponseEntity.status(200).body(jsonifyToMessage("Server not yet prepared to implement this function"));
     }
 
     private String jsonifyToMessage(String errorMessage) {

@@ -116,6 +116,8 @@ function SongItemDetailsView(props: SongItemProps) {
         })
     }
 
+    //ToDo: Check This Again... //
+
     function saveSongItem() {
         let responseStatus: number;
         fetch('api/songbook/' + props.song.id, {
@@ -261,7 +263,10 @@ function SongItemDetailsView(props: SongItemProps) {
         setKey('');
     }
 
-    const editItem = (index: number) => {
+    const editRefItem = (index: number) => {
+        setToggleAddDescription(false);
+        setToggleAddLink(false);
+        setToggleAddSongSheet(false);
         setToggleAddReference(true);
         setRefIndex(index);
         console.log("index: " + index);
@@ -363,6 +368,47 @@ function SongItemDetailsView(props: SongItemProps) {
         setLinkRendering('display');
         sessionStorage.setItem('linkText', '');
         sessionStorage.setItem('linkTarget', '');
+    }
+
+    function uploadSongSheet(files: FileList | null) {
+        sessionStorage.setItem('messageType', 'red');
+        if (files === null) {
+            alert('Ops, somehow the FormData Object produced a glitch.')
+        } else {
+            const formData = new FormData();
+            formData.append('file', files[0]);
+            let responseStatus = 0;
+            fetch('api/songbook/upload/', {
+                method: 'POST',
+                body: formData,
+            })
+                .then((response) => {
+                    responseStatus = response.status;
+                    return response.json();
+                })
+                .then((responseBody) => {
+                    if (responseStatus === 200) {
+                        // Todo: Do The Magic
+                        // Yet to implement...
+                        console.log('File "' + files[0].name + '" successfully transmitted to backend!');
+                        console.log(responseBody);
+                    } else if (responseStatus === 400) {
+                        sessionStorage.setItem('message', 'Sorry, the server does not accept your request (Bad Request).');
+                    } else if (responseStatus === 404) {
+                        sessionStorage.setItem('message', 'Sorry, the server is unable to respond to your request.');
+                    } else if (responseStatus === 405) {
+                        console.log("sorry, the entire set of methods has yet to be written...")
+                    } else if (responseStatus === 406) {
+                        sessionStorage.setItem('message', responseBody.message);
+                    } else if (responseStatus === 500) {
+                        sessionStorage.setItem('message', responseBody.message);
+                    } else if (responseStatus !== 201) {
+                        sessionStorage.setItem('message', responseBody.message);
+                    } else {
+                        alert('Something Unexpected happened.');
+                    }
+                })
+        }
     }
 
     return (
@@ -501,10 +547,15 @@ function SongItemDetailsView(props: SongItemProps) {
                 />}
 
 
-                {toggleAddSongSheet && <div id={'songSheetForm'} className={'workingSpaceElement'}>
-                    <form>
-                        <b>hier kommt</b> dann noch ein Feld zum Dateihochladen...
+                {toggleAddSongSheet && <div className={'workingSpaceElement'}>
+                    <form id={'formAddSongSheet'} className={'workingSpaceElement'} encType={'multipart/form-data'}>
+                        <label >Add a Song Sheet File:</label>
+                        <div id={'secondLineSongSheet'}>Please, go and fetch a song sheet file:
+                            <input type={'file'} id={'inputAddSongSheet'}
+                                   onChange={event => uploadSongSheet(event.target.files)}/>
+                        </div>
                     </form>
+                    <p><i> This feature is yet to be implemented </i></p>
                 </div>
                 }
 
@@ -517,19 +568,19 @@ function SongItemDetailsView(props: SongItemProps) {
                         <div id={'listOfReferences'}>
                             {props.song.references.map((item, index) =>
                                 <div key={index} className={'retainedReferenceItem'}
-                                     onClick={() => editItem(index)}>
+                                     onClick={() => editRefItem(index)}>
                                     &ndash;&#129174;&nbsp; {(item.addedCollection === null) ?
                                     <span>{songCollectionToRealName(item.songCollection)}</span> :
                                     <span>{item.addedCollection}</span>}
                                     {item.page !== 0 && <span>, page {item.page} </span>}
                                     {item.key && <span>– </span>}
                                     {item.key && <span id={'displayRefKey'}>({item.key})</span>}
-                                    {(item.author || item.year !== 0) && <span> –</span>}
+                                    {/*{(item.author || item.year !== 0) && <span> –</span>}
                                     {item.author && <span id={'displayRefAuthor'}> ({item.author}</span>}
                                     {!item.author && item.year !== 0 && <span> (</span>}
                                     {item.author && item.year === 0 && <span id={'displayRefAuthor'}>)</span>}
                                     {item.author && item.year !== 0 && <span>, </span>}
-                                    {item.year !== 0 && <span>{item.year})</span>}
+                                    {item.year !== 0 && <span>{item.year})</span>}*/}
                                 </div>)}
                         </div>
                     </div>}

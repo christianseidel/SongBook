@@ -43,7 +43,7 @@ function EditLink (props: SongItemLinksProps) {
                         <label>Text:</label>
                         <input id={'inputLinkText'} type='text' value={linkText} placeholder={'Link Description'}
                                onChange={ev => setLinkText(ev.target.value)} required/>
-                        <button id={'buttonUpdateLink'} type='submit'>
+                        <button id={'buttonAddLink'} type='submit'>
                             &#10004; create
                         </button><br />
                         <label>Target:</label>

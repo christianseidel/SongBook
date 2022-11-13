@@ -12,7 +12,7 @@
 }
 
 #workingSpace {
-    min-height: 140px;
+    height: 148px;
     margin-top: 18px;
 }
 
@@ -374,7 +374,7 @@
     margin-left: 10px;
     width: revert;
     background-color: goldenrod;
-    transition: revert;
+    transition: 0ms;
 }
 
 #major {
@@ -513,13 +513,13 @@
     margin-top: 6px;
 }
 
-#buttonUpdateLink {
+#buttonAddLink {
     float: right;
-    transform: translate(0, -2px);
 }
 
 #buttonCancelAddLink, #buttonDeleteLink{
     float: right;
+    clear: right;
     margin-top: 6px;
 }
 
@@ -537,7 +537,18 @@
 
 /*  SONG SHEETS  */
 
-#songSheetForm {}
+#formAddSongSheet {
+}
+
+#secondLineSongSheet {
+    margin-top: 8px;
+}
+
+#inputAddSongSheet {
+    float: right;
+    width: 96px;
+    background-color: #f0c579;
+}
 
 
 /*  FOOTER  */
