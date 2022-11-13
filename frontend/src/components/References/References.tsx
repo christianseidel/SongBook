@@ -135,7 +135,7 @@ function References(props: Props) {
                                         </div>
                                     </form>
                                     <div>
-                                        <button id={'undoSearch'} onClick={undoSearch}
+                                        <button id={'undoSearch'} type={'button'} onClick={undoSearch}
                                                 onKeyDown={(event) => {
                                                     if (event.key === "Enter") {
                                                         undoSearch()

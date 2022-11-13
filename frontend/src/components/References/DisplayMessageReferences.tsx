@@ -47,7 +47,7 @@ function DisplayMessageReferences(props: MessageProps) {
                 <div className={'message'}>
                     {props.message}
                     <div id={'buttonOKContainer'}>
-                        <button id={'buttonOK'} onClick={props.onClose}>OK</button>
+                        <button id={'buttonOK'} type={'button'} onClick={props.onClose}>OK</button>
                     </div>
                 </div>
             </div>

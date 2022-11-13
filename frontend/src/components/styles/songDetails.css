@@ -36,7 +36,6 @@
 /*  SONG HEAD /// DISPLAY / EDIT / CREATE TITLE  */
 
 #displayTitle {
-    margin-bottom: 15px;
     font-style: italic;
     font-weight: bold;
     font-size: large;
@@ -46,8 +45,13 @@
 
 #titleFirstLine {
     display: block;
+    margin-top: 1px;
     margin-bottom: 8px;
     min-width: 446px;
+}
+
+#displayTitleSecondLine {
+    margin-top: 16px;
 }
 
 #titleSecondLine {
@@ -94,9 +98,9 @@
     -moz-appearance: textfield;
 }
 
-#buttonCancelDisplaySong {
+#buttonCloseDisplaySong {
     float: right;
-    transform: translate(0, -5px);
+    transform: translateY(-5px);
 }
 
 #buttonCancelEditSong, #buttonCancelCreateSong {
@@ -233,17 +237,18 @@
 
 #buttonAddDescription {
     float: right;
-    transform: translateY(4px);
+    margin-top: 6px;
 }
 
 #buttonCancelAddDescription {
     float: right;
     clear: right;
-    margin-top: 13px;
+    margin-top: 40px;
 }
 
 #buttonClearDescription {
-    margin-left: 51px;
+    margin-top: 14px;
+    margin-left: 54px;
 }
 
 /*  REFERENCE  */
@@ -294,20 +299,29 @@
 
 #inputFormRef {}
 
-#titleLineRef, #secondLineRef {
+#titleLineRef, #secondLineRef, #thirdLineRef {
     display: block;
     margin-top: 6px;
     /*border: 1px solid steelblue;*/
 }
 
-#thirdLineRef {
+#fourthLineRef {
     display: block;
     margin-top: 6px;
 }
 
-#buttonUpdateReference, #buttonCancelAddReference {
+#buttonAddReference, #buttonCancelAddReference {
     float: right;
-    transform: translate(0, -2px);
+}
+
+#buttonDeleteReference {
+    margin-top: 8px;
+    margin-left: 12px;
+}
+
+#buttonClearReference {
+    margin-top: 8px;
+    margin-left: 54px;
 }
 
 #inputRefCollection {
@@ -315,21 +329,6 @@
     margin-top: 2px;
     width: 172px;
 }
-
-/*
-
-#inputLinkText {
-    margin-left: 21px;
-    margin-top: 2px;
-    width: 308px;
-}
-
-#inputLinkTarget {
-    margin-left: 8px;
-    margin-top: 8px;
-    width: 308px;
-}
-*/
 
 #labelInputRefPage {
     margin-left: 12px;
@@ -339,6 +338,26 @@
     margin-left: 8px;
     width: 70px;
 }
+
+#inputRefAuthor {
+    margin-left: 6px;
+    margin-top: 2px;
+    width: 172px;
+}
+
+#labelInputRefYear {
+    margin-left: 12px;
+}
+
+#inputRefYear {
+    margin-left: 9px;
+    width: 70px;
+}
+
+#displayRefAuthor, #displayRefKey {
+
+}
+
 
 #inputKey {
     margin-left: 25px;
@@ -360,6 +379,11 @@
 
 #major {
     margin-left: 26px;
+}
+
+#displayRefKey {
+    font-style: normal;
+    color: #850808;
 }
 
 /*  LINK  */

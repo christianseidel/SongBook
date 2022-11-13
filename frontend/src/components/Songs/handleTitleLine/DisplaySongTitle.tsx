@@ -14,7 +14,7 @@ function DisplaySongTitle(props: SongItemProps) {
             <div id={'displayTitle'}>
                 <span>{props.song.title}</span>
                 <span id={'buttonEditSong'}>
-                            <button onClick={() => {
+                            <button type={'button'} onClick={() => {
                                 props.song.status = 'edit';
                                 props.updateDetailsView();
                             }}>
@@ -22,12 +22,12 @@ function DisplaySongTitle(props: SongItemProps) {
                             </button>
                         </span>
             </div>
-            <div id={'test'}>
+            <div id={'displayTitleSecondLine'}>
                 {props.song.author && <label id={'labelDisplayAuthor'}>By:</label>}
                 {props.song.author && <span id={'displayAuthor'}> {props.song.author} </span>}
                 {(props.song.year !== 0) && <label>Year:</label>}
                 {(props.song.year !== 0) && <span id={'displayYear'}> {props.song.year} </span>}
-                <button id={'buttonCancelDisplaySong'} onClick={() => {
+                <button id={'buttonCloseDisplaySong'} type={'button'} onClick={() => {
                         props.clear();
                     }}>
                     close

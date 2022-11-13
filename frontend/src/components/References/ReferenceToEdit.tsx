@@ -127,10 +127,10 @@ function ReferenceToEdit(props: ReferenceItemProps) {
                 <button type='submit'> &#10004; update</button>
             </form>
             <div>
-                <span id={'buttonDeleteReference'}><button onClick={() => deleteReference(props.reference.id!)}>&#10008; delete</button></span>
+                <span id={'buttonDeleteReference'}><button type={'button'} onClick={() => deleteReference(props.reference.id!)}>&#10008; delete</button></span>
             </div>
             <div>
-                <span id={'buttonCopyReference'}><button onClick={() => copyReference(props.reference.id!)}>&#10004; copy</button></span><br />
+                <span id={'buttonCopyReference'}><button type={'button'} onClick={() => copyReference(props.reference.id!)}>&#10004; copy</button></span><br />
             </div>
             <div>
                 <button onClick={() => {props.doCancel()}}> &#10008; cancel</button>

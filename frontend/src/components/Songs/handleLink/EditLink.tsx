@@ -44,11 +44,11 @@ function EditLink (props: SongItemLinksProps) {
                         <label>Target:</label>
                         <input id={'inputLinkTarget'} type='text' value={linkTarget} placeholder={'Link Target'}
                                onChange={ev => setLinkTarget(ev.target.value)} required/>
-                        <button id={'buttonCancelAddLink'} onClick={() => props.onCancel()}
+                        <button id={'buttonCancelAddLink'} type={'button'} onClick={() => props.onCancel()}
                         > cancel
                         </button>
                         <br />
-                        <button id={'buttonDeleteLink'} onClick={() => props.onDeletion()}>
+                        <button id={'buttonDeleteLink'} type={'button'} onClick={() => props.onDeletion()}>
                             &#10008; delete
                         </button>
                     </span>

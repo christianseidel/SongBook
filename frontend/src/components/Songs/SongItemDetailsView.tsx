@@ -1,15 +1,15 @@
-import {Song} from './songModels'
+import React, {FormEvent, useEffect, useState} from "react";
 import '../styles/common.css'
 import '../styles/songDetails.css'
-import React, {FormEvent, useEffect, useState} from "react";
 import DisplayMessageSongs from "./DisplayMessageSongs";
 import EditSongTitle from "./handleTitleLine/EditSongTitle";
 import CreateSongTitle from "./handleTitleLine/CreateSongTitle";
 import DisplaySongTitle from "./handleTitleLine/DisplaySongTitle";
-import {Reference, songCollectionToRealName} from "../References/referenceModels";
 import DisplayLinks from "./handleLink/DisplayLinks";
 import EditLink from "./handleLink/EditLink";
 import CreateLink from "./handleLink/CreateLink";
+import {Song} from './songModels'
+import {Reference, songCollectionToRealName} from "../References/referenceModels";
 
 interface SongItemProps {
     song: Song;
@@ -40,11 +40,16 @@ function SongItemDetailsView(props: SongItemProps) {
 
     useEffect(() => {
         setToggleAddDescription(false);
-        setToggleAddReference(true);
+        setToggleAddReference(false);
         setToggleAddLink(false);
         setToggleAddSongSheet(false);
+        setCollection('');
+        setPage('');
+        setKey('');
+        setMood(0);
     }, [props.song.title]);
 
+    // description will be hidden, whenever the Working Space is used, but visible if it's not
     useEffect(() => {
         if (!toggleAddDescription && !toggleAddReference && !toggleAddLink && !toggleAddSongSheet) {
             setDisplayDescription(true);
@@ -185,19 +190,12 @@ function SongItemDetailsView(props: SongItemProps) {
 
     const [collection, setCollection] = useState('');
     const [page, setPage] = useState('');
-    const [author, setAuthor] = useState('');
-    const [year, setYear] = useState(0);
-    const [key, setKey] = useState('C');
+    // const [author, setAuthor] = useState('');
+    // const [year, setYear] = useState('');
+    const [key, setKey] = useState('');
     const [mood, setMood] = useState(0);
-    useEffect(() => {
-
-        if (mood === 0) {
-            setKey('C');
-        } else if (mood === 1) {
-            setKey('a');
-        }
-    }, [mood])
-    useEffect(() => setMood(0), [props.song.title])
+    const [refIndex, setRefIndex] = useState(-1);
+//    useEffect(() => setMood(0), [props.song.title])
 
     const keys = [
         {
@@ -220,6 +218,9 @@ function SongItemDetailsView(props: SongItemProps) {
         },
         {
             mood: [{label: "C", value: "C"}, {label: "a", value: "a"}]
+        },
+        {
+            mood: [{label: "", value: ""}, {label: "", value: ""}]
         },
         {
             mood: [{label: "F", value: "F"}, {label: "d", value: "d"}]
@@ -245,9 +246,7 @@ function SongItemDetailsView(props: SongItemProps) {
         ev.preventDefault();
         let next: number;
         let reference = new Reference(props.song.title, collection, Number(page),
-            author, year, key);
-        console.log(key);
-        console.log(mood);
+            props.song.author, props.song.year, key);
         if (props.song.references !== undefined) {
             next = props.song.references.length;
             props.song.references[next] = reference;
@@ -259,14 +258,53 @@ function SongItemDetailsView(props: SongItemProps) {
         setToggleAddReference(false);
         setCollection('');
         setPage('');
+        setKey('');
     }
 
-    const editItem = (id: string) => {
-        alert("spass muss sein " + id);
+    const editItem = (index: number) => {
+        setToggleAddReference(true);
+        setRefIndex(index);
+        console.log("index: " + index);
+        if (props.song.references !== undefined) {
+            let ref: Reference = props.song.references[index];
+            if (ref.songCollection === 'MANUALLY_ADDED_COLLECTION') {
+                setCollection(ref.addedCollection);
+            } else {
+                setCollection(songCollectionToRealName(ref.songCollection) ?? '');
+            }
+            ref.page !== 0 ? setPage(String(ref.page)) : setPage('');
+            let checkIfNotMinor = keys.every(k => {return k.mood[1].value !== ref.key;});
+            (checkIfNotMinor) ? console.log('major') : console.log('minor');
+            checkIfNotMinor || ref.key === ''
+                ? setMood(0)
+                : setMood(1);
+            ref.key === null || ref.key === undefined
+                ? setKey('')
+                : setKey(ref.key);
+        }
+    }
+
+    function deleteReference () {
+        props.song.status = 'display';
+        setToggleAddReference(false);
+        if (refIndex !== -1) {
+            props.song.references!.splice(refIndex, 1)
+        };
+        saveSongItem();
+        setRefIndex(-1);
+        clearReference();
+    }
+
+    function clearReference () {
+        setRefIndex(-1);
+        setCollection('');
+        setPage('');
+        setKey('');
+        setMood(0);
     }
 
 
-    // --- LINK ELEMENTS --- //
+// --- LINK ELEMENTS --- //
 
     const openOrCloseAddLink = () => {
         setToggleAddDescription(false);
@@ -282,7 +320,7 @@ function SongItemDetailsView(props: SongItemProps) {
     const [linkRendering, setLinkRendering] = useState('display');
     useEffect(() => {
         setLinkRendering('display')
-    }, [props.song.title]);
+    }, [props.song.id]);
 
     let handleLinkRendering;  // controls rendering of Link Data
     const [linkIndex, setLinkIndex] = useState(0)
@@ -376,7 +414,7 @@ function SongItemDetailsView(props: SongItemProps) {
                             &#10004; {(props.song.description !== null && props.song.description!.length > 0)
                             ? <span>update</span>
                             : <span>add</span>} </button>
-                        <button id={'buttonCancelAddDescription'} onClick={openOrCloseAddDescription}>
+                        <button id={'buttonCancelAddDescription'} type='button' onClick={openOrCloseAddDescription}>
                             cancel
                         </button>
                     </form>
@@ -398,37 +436,57 @@ function SongItemDetailsView(props: SongItemProps) {
                         <label id={'labelInputRefPage'}>Page:</label>
                         <input id={'inputRefPage'} type='number' value={page} placeholder={'Page'}
                                onChange={ev => setPage(ev.target.value)} required/>
-                        <button id={'buttonUpdateReference'} className={'workingSpaceElement'}
-                            type='submit'> &#10004; create
+                        <button id={'buttonAddReference'} className={'workingSpaceElement'} type='submit'>
+                            &#10004; create
                         </button>
-
                         </div>
-                        <span id={'thirdLineRef'}>
+                        <div id={'thirdLineRef'}>
+                            <label>Author:</label>
+                            <input id={'inputRefAuthor'} type='text' value={props.song.author}
+                                   placeholder={'(Author)'} className={'readOnly'} readOnly/>
+                            <label id={'labelInputRefYear'}>Year:</label>
+                            <input id={'inputRefYear'} type='text' value={props.song.year !== 0 ? props.song.year : ''}
+                                   placeholder={'(Year)'} className={'readOnly'} readOnly/>
+                        </div>
+                        <span id={'fourthLineRef'}>
                         <label htmlFor={'inputKey'}>Key:</label>
                             <select name={'inputKey'} id={'inputKey'} form={'inputFormRef'}
                                     value={key} onChange={ev => setKey(ev.target.value)}>{keys.map((songKey) => (
                                 <option value={songKey.mood[mood].value} key={songKey.mood[mood].value}>{songKey.mood[mood].label}</option>
                             ))}
                         </select>
-
                         <input type={'radio'} id={'major'} name={'majorOrMinor'}
                                value={0} className={'inputMajorOrMinor'} checked={mood === 0}
-                               onChange={ev => setMood(Number(ev.target.value))}/>
+                               onChange={ev => {
+                                   setMood(Number(ev.target.value));
+                                   setKey('');
+                               }}/>
                         <label htmlFor={'major'} className={'labelInputMajorOrMinor'}>major</label>
                         <input type={'radio'} id={'minor'} name={'majorOrMinor'}
                                value={1} className={'inputMajorOrMinor'} checked={mood === 1}
-                               onChange={ev => setMood(Number(ev.target.value))}/>
+                               onChange={ev => {
+                                   setMood(Number(ev.target.value));
+                                   setKey('');
+                               }}/>
                         <label htmlFor={'minor'} className={'labelInputMajorOrMinor'}>minor</label>
-
-                        <button id={'buttonCancelAddReference'} onClick={
-                            () => {
+                        <button id={'buttonCancelAddReference'} type='button' onClick={() => {
                                 props.song.status = 'display';
                                 setToggleAddReference(false);
-                            }
-                        }> cancel
+                                setRefIndex(-1)}
+                        }>
+                            cancel
                         </button>
                     </span>
                     </form>
+
+                    <button id={'buttonClearReference'} type='button' onClick={() => {clearReference()}}>
+                        ! clear
+                    </button>
+
+                    <button id={'buttonDeleteReference'} type='button' onClick={() => {deleteReference()}}>
+                        &#10008; delete
+                    </button>
+
                 </div>}
 
 
@@ -453,17 +511,25 @@ function SongItemDetailsView(props: SongItemProps) {
             </div>
 
             <div id={'displaySpace'} className={'songDataSheetElement'}>
-                {props.song.references !== undefined && props.song.references.length > 0
-                    && !toggleAddReference &&  // display References
+
+                {props.song.references !== undefined && props.song.references.length > 0 && // display References
                     <div className={'displayReferences'}>
                         <div id={'listOfReferences'}>
                             {props.song.references.map((item, index) =>
                                 <div key={index} className={'retainedReferenceItem'}
-                                     onClick={() => editItem(item.title)}>
+                                     onClick={() => editItem(index)}>
                                     &ndash;&#129174;&nbsp; {(item.addedCollection === null) ?
                                     <span>{songCollectionToRealName(item.songCollection)}</span> :
                                     <span>{item.addedCollection}</span>}
-                                    {item.page !== 0 && <span>, page {item.page}</span>}
+                                    {item.page !== 0 && <span>, page {item.page} </span>}
+                                    {item.key && <span>– </span>}
+                                    {item.key && <span id={'displayRefKey'}>({item.key})</span>}
+                                    {(item.author || item.year !== 0) && <span> –</span>}
+                                    {item.author && <span id={'displayRefAuthor'}> ({item.author}</span>}
+                                    {!item.author && item.year !== 0 && <span> (</span>}
+                                    {item.author && item.year === 0 && <span id={'displayRefAuthor'}>)</span>}
+                                    {item.author && item.year !== 0 && <span>, </span>}
+                                    {item.year !== 0 && <span>{item.year})</span>}
                                 </div>)}
                         </div>
                     </div>}
@@ -480,7 +546,7 @@ function SongItemDetailsView(props: SongItemProps) {
                 {props.song.dayOfCreation.year}
             </div>
             <span id={'buttonDeleteSong'}>
-                <button onClick={() => deleteSong(props.song.id)}>
+                <button type='button' onClick={() => deleteSong(props.song.id)}>
                     &#10008; delete
                 </button>
             </span>

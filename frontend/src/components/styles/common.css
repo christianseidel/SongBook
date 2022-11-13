@@ -70,7 +70,6 @@ input:focus {
 }
 
 button {
-    margin-top: 2px;
     width: 72px;
     background-color: blanchedalmond;
     border-color: goldenrod;
@@ -88,3 +87,16 @@ button:hover {
     cursor: pointer;
 }
 
+.readOnly {
+    cursor: default;
+    background-color: #f0c579;
+    pointer-events:none;
+}
+
+.readOnly::-webkit-outer-spin-button {
+    display: none;
+}
+
+.readOnly:focus {
+    background-color: #f0c579;
+}

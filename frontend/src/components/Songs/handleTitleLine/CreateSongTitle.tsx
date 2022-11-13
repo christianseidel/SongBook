@@ -57,7 +57,7 @@ function CreateSongTitle(props: SongItemProps) {
                     <input id={'inputYear'} type="number" value={year === 0 ? '' : year}
                            placeholder={'Year created'}
                            onChange={ev => setYear(Number(ev.target.value))}/>
-                    <button id={'buttonCancelCreateSong'}
+                    <button id={'buttonCancelCreateSong'} type={'button'}
                             onClick={() => {
                                 props.clear()
                             }}> <span className={'cancel'}>cancel</span>
