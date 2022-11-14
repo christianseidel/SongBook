@@ -22,11 +22,10 @@ function DisplayLinks (props: SongItemLinksProps) {
                     {props.links.map((item, index) =>
                         <div key={index} className={'link'}>
                             <span className={'linkDot'} onClick={() => editLink(index)}>&#8734;</span>&nbsp;
-
                             <a href={item.linkTarget} target={'_blank'} rel={'noreferrer'}>
                                 <span className={'linkText'}>{item.linkText}</span></a>
-
-                        </div>)}
+                        </div>)
+                    }
                 </div>
             }
         </div>

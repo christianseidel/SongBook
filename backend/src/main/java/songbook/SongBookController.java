@@ -68,7 +68,7 @@ public class SongBookController {
     @PostMapping(path = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Object> uploadSongSheet(@RequestParam("file") MultipartFile file) {
         // TODO: This function has yet to be implemented...
-        return ResponseEntity.status(200).body(jsonifyToMessage("Server not yet prepared to implement this function"));
+        return ResponseEntity.status(200).body(jsonifyToMessage("Application not yet set-up to run this function"));
     }
 
     private String jsonifyToMessage(String errorMessage) {

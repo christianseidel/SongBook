@@ -42,14 +42,14 @@ function EditLink (props: SongItemLinksProps) {
             <span id={'secondLineLink'}>
                         <label>Text:</label>
                         <input id={'inputLinkText'} type='text' value={linkText} placeholder={'Link Description'}
-                               onChange={ev => setLinkText(ev.target.value)} required/>
-                        <button id={'buttonAddLink'} type='submit'>
+                               onChange={ev => setLinkText(ev.target.value)} autoFocus tabIndex={1} required/>
+                        <button id={'buttonAddLink'} type='submit' tabIndex={3}>
                             &#10004; create
                         </button><br />
                         <label>Target:</label>
                         <input id={'inputLinkTarget'} type='text' value={linkTarget} placeholder={'Link Target'}
-                               onChange={ev => setLinkTarget(ev.target.value)} required/>
-                        <button id={'buttonCancelAddLink'} type={'button'} onClick={() => props.onCancel()}
+                               onChange={ev => setLinkTarget(ev.target.value)} tabIndex={2} required/>
+                        <button id={'buttonCancelAddLink'} type={'button'} onClick={() => props.onCancel()} tabIndex={4}
                             > cancel
                         </button>
                     </span>

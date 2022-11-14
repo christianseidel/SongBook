@@ -15,8 +15,12 @@ h2 {
 }
 
 #referenceSearchResult {
-    max-height: 228px;
+    height: 228px;
     overflow: auto;
+}
+
+#editReferenceItem {
+    height: 322px;
 }
 
 .referenceItem {
@@ -94,7 +98,6 @@ h2 {
     margin-left: 23px;
     width: 312px;
 }
-
 
 #collectionTitle {
     color: darkblue;

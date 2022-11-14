@@ -1,4 +1,5 @@
-import {songCollectionToRealName, Reference} from "./referenceModels";
+import {Reference} from "./referenceModels";
+import {songCollectionToRealName} from "../literals/collectionNames";
 import '../styles/references.css';
 import '../styles/common.css';
 import React from "react";

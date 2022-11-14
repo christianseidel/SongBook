@@ -259,12 +259,6 @@ function SongBook() {
                     {
                         songChosen.title
                             ? <SongItemDetailsView song={songChosen}
-                                                   onItemDeletion={(message: string) => {
-                                                       setMessage(message);
-                                                       getAllSongs(true);
-                                                       trigger();
-                                                       alert("bin hier")
-                                                   }}
                                                    onItemCreation={(message: string) => {
                                                        setMessage(message);
                                                        getAllSongs(true);

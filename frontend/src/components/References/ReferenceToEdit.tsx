@@ -1,4 +1,5 @@
-import {Reference, songCollectionToRealName} from "./referenceModels";
+import {Reference} from "./referenceModels";
+import {songCollectionToRealName} from "../literals/collectionNames";
 import '../styles/references.css';
 import '../styles/common.css';
 import React, {FormEvent, useState} from "react";
@@ -97,6 +98,7 @@ function ReferenceToEdit(props: ReferenceItemProps) {
 
     return(
         <div>
+            <div  id={'editReferenceItem'}>
             <div>Update Your Reference:</div>
             <form onSubmit={ev => editReference(ev)}>
                 <label>Titel: </label>
@@ -145,6 +147,7 @@ function ReferenceToEdit(props: ReferenceItemProps) {
                         sessionStorage.removeItem('messageType')
                     }}
                 />}
+            </div>
             </div>
 
         </div>

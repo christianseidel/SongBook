@@ -9,11 +9,12 @@ import DisplayLinks from "./handleLink/DisplayLinks";
 import EditLink from "./handleLink/EditLink";
 import CreateLink from "./handleLink/CreateLink";
 import {Song} from './songModels'
-import {Reference, songCollectionToRealName} from "../References/referenceModels";
+import {Reference} from "../References/referenceModels";
+import {songCollectionToRealName} from "../literals/collectionNames";
+import {keys} from "../literals/keys";
 
 interface SongItemProps {
     song: Song;
-    onItemDeletion: (message: string) => void;
     onItemCreation: (message: string) => void;
     onItemRevision: (song: Song) => void;
     doReturn: () => void;
@@ -83,7 +84,7 @@ function SongItemDetailsView(props: SongItemProps) {
         />;
     }
 
-    function deleteSong(id: string) {
+    function deleteSongItem(id: string) {
         unhideAllReferencesAttached(id)
             .then(() => {
                     fetch('/api/songbook/' + id, {
@@ -176,7 +177,7 @@ function SongItemDetailsView(props: SongItemProps) {
         sessionStorage.removeItem('description');
     }
 
-    const doClearDescription = () => {
+    const clearDescription = () => {
         setDescription('');
         props.song.description = '';
         sessionStorage.removeItem('description');
@@ -197,57 +198,9 @@ function SongItemDetailsView(props: SongItemProps) {
 
     const [collection, setCollection] = useState('');
     const [page, setPage] = useState('');
-    // const [author, setAuthor] = useState('');
-    // const [year, setYear] = useState('');
     const [key, setKey] = useState('');
     const [mood, setMood] = useState(0);
     const [refIndex, setRefIndex] = useState(-1);
-    // useEffect(() => openOrCloseAddReference(), [toggleCreateOrUpdate])
-
-    const keys = [
-        {
-            mood: [{label: "F#", value: "F#"}, {label: "d#", value: "d#"}]
-        },
-        {
-            mood: [{label: "B", value: "B"}, {label: "g#", value: "g#"}]
-        },
-        {
-            mood: [{label: "E", value: "E"}, {label: "c#", value: "c#"}]
-        },
-        {
-            mood: [{label: "A", value: "A"}, {label: "f#", value: "f#"}]
-        },
-        {
-            mood: [{label: "D", value: "D"}, {label: "b", value: "b"}]
-        },
-        {
-            mood: [{label: "G", value: "G"}, {label: "e", value: "e"}]
-        },
-        {
-            mood: [{label: "C", value: "C"}, {label: "a", value: "a"}]
-        },
-        {
-            mood: [{label: "", value: ""}, {label: "", value: ""}]
-        },
-        {
-            mood: [{label: "F", value: "F"}, {label: "d", value: "d"}]
-        },
-        {
-            mood: [{label: "Bb", value: "Bb"}, {label: "g", value: "g"}]
-        },
-        {
-            mood: [{label: "Eb", value: "Eb"}, {label: "c", value: "c"}]
-        },
-        {
-            mood: [{label: "Ab", value: "Ab"}, {label: "f", value: "f"}]
-        },
-        {
-            mood: [{label: "Db", value: "Db"}, {label: "bb", value: "bb"}]
-        },
-        {
-            mood: [{label: "Gb", value: "Gb"}, {label: "eb", value: "eb"}]
-        },
-    ]
 
     const createReference = (ev: FormEvent<HTMLFormElement>) => {
         ev.preventDefault();
@@ -501,7 +454,7 @@ function SongItemDetailsView(props: SongItemProps) {
                         </button>
                     </form>
 
-                    <button id={'buttonClearDescription'} type='submit' onClick={doClearDescription}>
+                    <button id={'buttonClearDescription'} type='submit' onClick={clearDescription}>
                         ! clear
                     </button>
                 </div>}
@@ -511,31 +464,31 @@ function SongItemDetailsView(props: SongItemProps) {
                     <form id={'inputFormRef'} onSubmit={ev => {
                         toggleCreateOrUpdate === 'create' ? createReference(ev) : handleEditReference();
                     }}>
-                        <label>Add a Song Sheet Reference:</label>
+                        <label>{toggleCreateOrUpdate === 'create' ? <span>Add a</span>: <span>Edit your</span>} Song Sheet Reference:</label>
                         <div id={'secondLineRef'}>
                         <label>Coll.:</label>
                         <input id={'inputRefCollection'} type='text' value={collection}
                                placeholder={'Song Collection'}
-                               onChange={ev => setCollection(ev.target.value)} required/>
+                               onChange={ev => setCollection(ev.target.value)} required autoFocus tabIndex={1}/>
                         <label id={'labelInputRefPage'}>Page:</label>
                         <input id={'inputRefPage'} type='number' value={page} placeholder={'Page'}
-                               onChange={ev => setPage(ev.target.value)}/>
-                        <button id={'buttonAddReference'} className={'workingSpaceElement'} type='submit'>
+                               onChange={ev => setPage(ev.target.value)} tabIndex={2}/>
+                        <button id={'buttonAddReference'} className={'workingSpaceElement'} type='submit' tabIndex={5}>
                             &#10004; {toggleCreateOrUpdate}
                         </button>
                         </div>
                         <div id={'thirdLineRef'}>
                             <label>Author:</label>
                             <input id={'inputRefAuthor'} type='text' value={props.song.author !== null ? props.song.author : ''}
-                                   placeholder={'(Author)'} className={'readOnly'} readOnly/>
+                                   placeholder={'(Author)'} className={'readOnly'} disabled/>
                             <label id={'labelInputRefYear'}>Year:</label>
                             <input id={'inputRefYear'} type='text' value={props.song.year !== 0 ? props.song.year : ''}
-                                   placeholder={'(Year)'} className={'readOnly'} readOnly/>
+                                   placeholder={'(Year)'} className={'readOnly'} disabled readOnly/>
                         </div>
                         <span id={'fourthLineRef'}>
                         <label htmlFor={'inputKey'}>Key:</label>
                             <select name={'inputKey'} id={'inputKey'} form={'inputFormRef'}
-                                    value={key} onChange={ev => setKey(ev.target.value)}>{keys.map((songKey) => (
+                                    value={key} onChange={ev => setKey(ev.target.value)} tabIndex={3}>{keys.map((songKey) => (
                                 <option value={songKey.mood[mood].value} key={songKey.mood[mood].value}>{songKey.mood[mood].label}</option>
                             ))}
                         </select>
@@ -544,7 +497,7 @@ function SongItemDetailsView(props: SongItemProps) {
                                onChange={ev => {
                                    setMood(Number(ev.target.value));
                                    setKey('');
-                               }}/>
+                               }} tabIndex={4}/>
                         <label htmlFor={'major'} className={'labelInputMajorOrMinor'}>major</label>
                         <input type={'radio'} id={'minor'} name={'majorOrMinor'}
                                value={1} className={'inputMajorOrMinor'} checked={mood === 1}
@@ -557,12 +510,12 @@ function SongItemDetailsView(props: SongItemProps) {
                                 props.song.status = 'display';
                                 setToggleAddReference(false);
                                 setRefIndex(-1)}
-                        }>
+                        } tabIndex={6}>
                             cancel
                         </button>
                     </span>
                     </form>
-                    <button id={'buttonClearReference'} type='button' onClick={() => {clearReference()}}>
+                    <button id={'buttonClearReference'} type='button' onClick={() => {clearReference()}} tabIndex={9}>
                         ! clear
                     </button>
                     {toggleCreateOrUpdate === 'update' &&
@@ -634,7 +587,7 @@ function SongItemDetailsView(props: SongItemProps) {
                 {props.song.dayOfCreation.year}
             </div>
             <span id={'buttonDeleteSong'}>
-                <button type='button' onClick={() => deleteSong(props.song.id)}>
+                <button type='button' onClick={() => deleteSongItem(props.song.id)}>
                     &#10008; delete
                 </button>
             </span>
