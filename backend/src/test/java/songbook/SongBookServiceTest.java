@@ -228,7 +228,7 @@ class SongBookServiceTest {
 
         String actual = songBookService.unhideAllReferencesOfASong(singSunSong.getId());
 
-        assertEquals("All songs are reinserted into Reference Index.", actual);
+        assertEquals("All references are reinserted into Reference Index. References with no existing record were created.", actual);
         assertNotNull(referenceAddedManually.getId());
     }
 

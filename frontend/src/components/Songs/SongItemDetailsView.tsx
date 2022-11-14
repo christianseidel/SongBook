@@ -325,7 +325,7 @@ function SongItemDetailsView(props: SongItemProps) {
         setToggleAddReference(false);
         if (refIndex !== -1) {
             props.song.references!.splice(refIndex, 1)
-        };
+        }
         saveSongItem();
         setRefIndex(-1);
         clearReference();
