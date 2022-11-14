@@ -36,6 +36,7 @@ function SongItemDetailsView(props: SongItemProps) {
     const [toggleAddReference, setToggleAddReference] = useState(false);
     const [toggleAddLink, setToggleAddLink] = useState(false);
     const [toggleAddSongSheet, setToggleAddSongSheet] = useState(false);
+    const [toggleCreateOrUpdate, setToggleCreateOrUpdate] = useState('create');
 
 
     useEffect(() => {
@@ -47,6 +48,7 @@ function SongItemDetailsView(props: SongItemProps) {
         setPage('');
         setKey('');
         setMood(0);
+        setToggleCreateOrUpdate('create');
     }, [props.song.title]);
 
     // description will be hidden, whenever the Working Space is used, but visible if it's not
@@ -109,7 +111,8 @@ function SongItemDetailsView(props: SongItemProps) {
         return new Promise((resolve, failure) => {
             fetch('api/songbook/unhideReferences/' + songId, {
                 method: 'PUT'
-            }).then((response) => {
+            })
+                .then((response) => {
                 if (response.ok) {
                     resolve('success');
                 } else {
@@ -189,6 +192,7 @@ function SongItemDetailsView(props: SongItemProps) {
         setToggleAddSongSheet(false);
         setLinkRendering('display');
         setToggleAddReference(!toggleAddReference);
+        setToggleCreateOrUpdate('create');
     }
 
     const [collection, setCollection] = useState('');
@@ -198,7 +202,7 @@ function SongItemDetailsView(props: SongItemProps) {
     const [key, setKey] = useState('');
     const [mood, setMood] = useState(0);
     const [refIndex, setRefIndex] = useState(-1);
-//    useEffect(() => setMood(0), [props.song.title])
+    // useEffect(() => openOrCloseAddReference(), [toggleCreateOrUpdate])
 
     const keys = [
         {
@@ -245,7 +249,7 @@ function SongItemDetailsView(props: SongItemProps) {
         },
     ]
 
-    const doAddReference = (ev: FormEvent<HTMLFormElement>) => {
+    const createReference = (ev: FormEvent<HTMLFormElement>) => {
         ev.preventDefault();
         let next: number;
         let reference = new Reference(props.song.title, collection, Number(page),
@@ -264,7 +268,7 @@ function SongItemDetailsView(props: SongItemProps) {
         setKey('');
     }
 
-    const editRefItem = (index: number) => {
+    const openEditReference = (index: number) => {
         setToggleAddDescription(false);
         setToggleAddLink(false);
         setToggleAddSongSheet(false);
@@ -275,8 +279,14 @@ function SongItemDetailsView(props: SongItemProps) {
             let ref: Reference = props.song.references[index];
             if (ref.songCollection === 'MANUALLY_ADDED_COLLECTION') {
                 setCollection(ref.addedCollection);
+                if (document.getElementById('inputRefCollection') != null) {
+                    document.getElementById('inputRefCollection')!.className = '';
+                }
             } else {
                 setCollection(songCollectionToRealName(ref.songCollection) ?? '');
+                if (document.getElementById('inputRefCollection') != null) {
+                    document.getElementById('inputRefCollection')!.className = 'readOnly';
+                }
             }
             ref.page !== 0 ? setPage(String(ref.page)) : setPage('');
             let checkIfNotMinor = keys.every(k => {return k.mood[1].value !== ref.key;});
@@ -288,6 +298,26 @@ function SongItemDetailsView(props: SongItemProps) {
                 ? setKey('')
                 : setKey(ref.key);
         }
+        setToggleCreateOrUpdate('update');
+    }
+
+    const handleEditReference = () => {
+        if (props.song.references !== undefined) {
+            let ref: Reference = props.song.references[refIndex];
+            if (ref.songCollection === 'MANUALLY_ADDED_COLLECTION') {
+                ref.addedCollection = collection;
+            }
+            ref.title = props.song.title
+            ref.page = Number(page);
+            ref.author = props.song.author;
+            ref.year = props.song.year;
+            ref.key = key;
+        }
+        saveSongItem();
+        setToggleAddReference(false);
+        setCollection('');
+        setPage('');
+        setKey('');
     }
 
     function deleteReference () {
@@ -299,6 +329,7 @@ function SongItemDetailsView(props: SongItemProps) {
         saveSongItem();
         setRefIndex(-1);
         clearReference();
+        setToggleCreateOrUpdate('create');
     }
 
     function clearReference () {
@@ -307,6 +338,10 @@ function SongItemDetailsView(props: SongItemProps) {
         setPage('');
         setKey('');
         setMood(0);
+        if (document.getElementById('inputRefCollection') != null) {
+            document.getElementById('inputRefCollection')!.className = '';
+        }
+        setToggleCreateOrUpdate('create');
     }
 
 
@@ -473,7 +508,9 @@ function SongItemDetailsView(props: SongItemProps) {
 
 
                 {toggleAddReference && <div>
-                    <form id={'inputFormRef'} onSubmit={ev => doAddReference(ev)}>
+                    <form id={'inputFormRef'} onSubmit={ev => {
+                        toggleCreateOrUpdate === 'create' ? createReference(ev) : handleEditReference();
+                    }}>
                         <label>Add a Song Sheet Reference:</label>
                         <div id={'secondLineRef'}>
                         <label>Coll.:</label>
@@ -482,14 +519,14 @@ function SongItemDetailsView(props: SongItemProps) {
                                onChange={ev => setCollection(ev.target.value)} required/>
                         <label id={'labelInputRefPage'}>Page:</label>
                         <input id={'inputRefPage'} type='number' value={page} placeholder={'Page'}
-                               onChange={ev => setPage(ev.target.value)} required/>
+                               onChange={ev => setPage(ev.target.value)}/>
                         <button id={'buttonAddReference'} className={'workingSpaceElement'} type='submit'>
-                            &#10004; create
+                            &#10004; {toggleCreateOrUpdate}
                         </button>
                         </div>
                         <div id={'thirdLineRef'}>
                             <label>Author:</label>
-                            <input id={'inputRefAuthor'} type='text' value={props.song.author}
+                            <input id={'inputRefAuthor'} type='text' value={props.song.author !== null ? props.song.author : ''}
                                    placeholder={'(Author)'} className={'readOnly'} readOnly/>
                             <label id={'labelInputRefYear'}>Year:</label>
                             <input id={'inputRefYear'} type='text' value={props.song.year !== 0 ? props.song.year : ''}
@@ -525,15 +562,14 @@ function SongItemDetailsView(props: SongItemProps) {
                         </button>
                     </span>
                     </form>
-
                     <button id={'buttonClearReference'} type='button' onClick={() => {clearReference()}}>
                         ! clear
                     </button>
-
-                    <button id={'buttonDeleteReference'} type='button' onClick={() => {deleteReference()}}>
-                        &#10008; delete
-                    </button>
-
+                    {toggleCreateOrUpdate === 'update' &&
+                        <button id={'buttonDeleteReference'} type='button' onClick={() => {deleteReference()}}>
+                            &#10008; delete
+                        </button>
+                    }
                 </div>}
 
 
@@ -569,7 +605,7 @@ function SongItemDetailsView(props: SongItemProps) {
                         <div id={'listOfReferences'}>
                             {props.song.references.map((item, index) =>
                                 <div key={index} className={'retainedReferenceItem'}
-                                     onClick={() => editRefItem(index)}>
+                                     onClick={() => openEditReference(index)}>
                                     &ndash;&#129174;&nbsp; {(item.addedCollection === null) ?
                                     <span>{songCollectionToRealName(item.songCollection)}</span> :
                                     <span>{item.addedCollection}</span>}

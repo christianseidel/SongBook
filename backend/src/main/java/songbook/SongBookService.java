@@ -99,7 +99,8 @@ public class SongBookService {
                 referencesRepository.save(ref);
             }
             // Todo: updated version to be tested...
-            return "All references are reinserted into Reference Index. References with no existing record were created.";
+            return "All references are reinserted into Reference Index. " +
+                    "References with no existing record were created.";
         }
     }
 }
