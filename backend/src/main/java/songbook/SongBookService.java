@@ -87,8 +87,7 @@ public class SongBookService {
         } else {
             Song song = lookupResult.get();
             List<Reference> references = song.getReferences();
-            for (int i = 0; i < references.size(); i++) {
-                Reference ref = references.get(i);
+            for (Reference ref : references) {
                 ref.setTitle(song.getTitle());
                 ref.setAuthor(song.getAuthor());
                 ref.setYear(song.getYear());
@@ -100,7 +99,7 @@ public class SongBookService {
                 referencesRepository.save(ref);
             }
             // Todo: updated version to be tested...
-            return "All songs are reinserted into Reference Index.";
+            return "All references are reinserted into Reference Index. References with no existing record were created.";
         }
     }
 }

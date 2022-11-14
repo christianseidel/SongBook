@@ -96,27 +96,28 @@ function SongItemDetailsView(props: SongItemProps) {
                                 sessionStorage.setItem('message', 'Your song could not be deleted!');
                             }
                         })
-                        .then(props.doReturn);
+                        .then(props.doReturn)
                 }
-            )
-    }
-
-    // function needs work asynchronous for references need to be
-    // repatriated first before song can then be deleted //
-    const unhideAllReferencesAttached = (songId: string) => {
-        return new Promise((resolve) => {
-            resolve(
-                fetch('api/songbook/unhideReferences/' + songId, {
-                    method: 'PUT'
-                })
-                    .then(response => {
-                        return response.json();
-                    })
-            );
+            ).catch(() => {
+                console.log("Unhiding references did not succeed.")
         })
     }
 
-    //ToDo: Check This Again... //
+    // References must be repatriated first before the song item can be deleted.
+    // Hence, this Promise //
+    const unhideAllReferencesAttached = (songId: string) => {
+        return new Promise((resolve, failure) => {
+            fetch('api/songbook/unhideReferences/' + songId, {
+                method: 'PUT'
+            }).then((response) => {
+                if (response.ok) {
+                    resolve('success');
+                } else {
+                    failure('failure');
+                }
+            })
+        })
+    }
 
     function saveSongItem() {
         let responseStatus: number;
