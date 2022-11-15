@@ -34,6 +34,12 @@ export function songCollectionToRealName (volume: string) {
             return 'Liederwelt (14)';
         case 'LIEDERFEST_15':
             return 'Liederfest (15)';
+        case 'TEST_COLLECTION_1':
+            return 'Your Test Collection #1'
+        case 'TEST_COLLECTION_2':
+            return 'Your Test Collection #2'
+        case 'TEST_COLLECTION_3':
+            return 'Your Test Collection #3'
         case 'MANUALLY_ADDED_COLLECTION':
             return 'manually added';
     }

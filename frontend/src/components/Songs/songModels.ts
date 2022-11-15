@@ -16,10 +16,15 @@ export interface Song {
 export class Link {
     linkText: string;
     linkTarget: string;
+    linkKey: string;
+    linkStrumming: string;
 
-    constructor(linkText: string, linkTarget: string) {
+
+    constructor(linkText: string, linkTarget: string, linkKey: string, linkStrumming: string) {
         this.linkText = linkText;
         this.linkTarget = linkTarget;
+        this.linkKey = linkKey;
+        this.linkStrumming = linkStrumming;
     }
 }
 

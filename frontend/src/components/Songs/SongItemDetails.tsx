@@ -5,13 +5,11 @@ import DisplayMessageSongs from "./DisplayMessageSongs";
 import EditSongTitle from "./handleTitleLine/EditSongTitle";
 import CreateSongTitle from "./handleTitleLine/CreateSongTitle";
 import DisplaySongTitle from "./handleTitleLine/DisplaySongTitle";
-import DisplayLinks from "./handleLink/DisplayLinks";
-import EditLink from "./handleLink/EditLink";
-import CreateLink from "./handleLink/CreateLink";
 import {Song} from './songModels'
 import {Reference} from "../References/referenceModels";
 import {songCollectionToRealName} from "../literals/collectionNames";
 import {keys} from "../literals/keys";
+import EditLink from "./EditLink";
 
 interface SongItemProps {
     song: Song;
@@ -21,7 +19,7 @@ interface SongItemProps {
     clear: () => void;
 }
 
-function SongItemDetailsView(props: SongItemProps) {
+function SongItemDetails(props: SongItemProps) {
 
     const [songState, setSongState] = useState(props.song.status);
     const [message, setMessage] = useState('');
@@ -33,18 +31,20 @@ function SongItemDetailsView(props: SongItemProps) {
     }, [description]);
 
     const [displayDescription, setDisplayDescription] = useState(true);
-    const [toggleAddDescription, setToggleAddDescription] = useState(false);
-    const [toggleAddReference, setToggleAddReference] = useState(false);
-    const [toggleAddLink, setToggleAddLink] = useState(false);
-    const [toggleAddSongSheet, setToggleAddSongSheet] = useState(false);
+    const [toggleEditDescription, setToggleEditDescription] = useState(false);
+    const [toggleEditReference, setToggleEditReference] = useState(false);
+    const [toggleEditLink, setToggleEditLink] = useState(false);
+    const [toggleEditSongSheet, setToggleEditSongSheet] = useState(false);
+    // controls whether a new item will be created or an existing will be updated
+    // this value is used both for reference and link items
     const [toggleCreateOrUpdate, setToggleCreateOrUpdate] = useState('create');
 
 
     useEffect(() => {
-        setToggleAddDescription(false);
-        setToggleAddReference(false);
-        setToggleAddLink(false);
-        setToggleAddSongSheet(false);
+        setToggleEditDescription(false);
+        setToggleEditReference(false);
+        setToggleEditLink(false);
+        setToggleEditSongSheet(false);
         setCollection('');
         setPage('');
         setKey('');
@@ -54,12 +54,12 @@ function SongItemDetailsView(props: SongItemProps) {
 
     // description will be hidden, whenever the Working Space is used, but visible if it's not
     useEffect(() => {
-        if (!toggleAddDescription && !toggleAddReference && !toggleAddLink && !toggleAddSongSheet) {
+        if (!toggleEditDescription && !toggleEditReference && !toggleEditLink && !toggleEditSongSheet) {
             setDisplayDescription(true);
         } else {
             setDisplayDescription(false);
         }
-    }, [toggleAddDescription, toggleAddReference, toggleAddLink, toggleAddSongSheet]);
+    }, [toggleEditDescription, toggleEditReference, toggleEditLink, toggleEditSongSheet]);
 
 
     // controls rendering of the first two lines within Song Details View //
@@ -102,7 +102,7 @@ function SongItemDetailsView(props: SongItemProps) {
                         .then(props.doReturn)
                 }
             ).catch(() => {
-                console.log("Unhiding references did not succeed.")
+            console.log("Unhiding references did not succeed.")
         })
     }
 
@@ -114,12 +114,12 @@ function SongItemDetailsView(props: SongItemProps) {
                 method: 'PUT'
             })
                 .then((response) => {
-                if (response.ok) {
-                    resolve('success');
-                } else {
-                    failure('failure');
-                }
-            })
+                    if (response.ok) {
+                        resolve('success');
+                    } else {
+                        failure('failure');
+                    }
+                })
         })
     }
 
@@ -160,11 +160,10 @@ function SongItemDetailsView(props: SongItemProps) {
     // --- DESCRIPTION ELEMENTS --- //
 
     const openOrCloseAddDescription = () => {
-        setToggleAddDescription(!toggleAddDescription);
-        setToggleAddReference(false);
-        setToggleAddLink(false);
-        setLinkRendering('display');
-        setToggleAddSongSheet(false);
+        setToggleEditDescription(!toggleEditDescription);
+        setToggleEditReference(false);
+        setToggleEditLink(false);
+        setToggleEditSongSheet(false);
         setDescription(props.song.description ?? '');
     }
 
@@ -172,7 +171,7 @@ function SongItemDetailsView(props: SongItemProps) {
         ev.preventDefault();
         props.song.description = description;
         saveSongItem();
-        setToggleAddDescription(false);
+        setToggleEditDescription(false);
         setDescription('');
         sessionStorage.removeItem('description');
     }
@@ -188,11 +187,10 @@ function SongItemDetailsView(props: SongItemProps) {
     // --- REFERENCES ELEMENTS --- //
 
     const openOrCloseAddReference = () => {
-        setToggleAddDescription(false);
-        setToggleAddLink(false);
-        setToggleAddSongSheet(false);
-        setLinkRendering('display');
-        setToggleAddReference(!toggleAddReference);
+        setToggleEditDescription(false);
+        setToggleEditLink(false);
+        setToggleEditSongSheet(false);
+        setToggleEditReference(!toggleEditReference);
         setToggleCreateOrUpdate('create');
     }
 
@@ -215,17 +213,17 @@ function SongItemDetailsView(props: SongItemProps) {
             console.log("the resources array is undefined!");
         }
         saveSongItem();
-        setToggleAddReference(false);
+        setToggleEditReference(false);
         setCollection('');
         setPage('');
         setKey('');
     }
 
-    const openEditReference = (index: number) => {
-        setToggleAddDescription(false);
-        setToggleAddLink(false);
-        setToggleAddSongSheet(false);
-        setToggleAddReference(true);
+    const openUpdateReference = (index: number) => {
+        setToggleEditDescription(false);
+        setToggleEditLink(false);
+        setToggleEditSongSheet(false);
+        setToggleEditReference(true);
         setRefIndex(index);
         console.log("index: " + index);
         if (props.song.references !== undefined) {
@@ -242,7 +240,9 @@ function SongItemDetailsView(props: SongItemProps) {
                 }
             }
             ref.page !== 0 ? setPage(String(ref.page)) : setPage('');
-            let checkIfNotMinor = keys.every(k => {return k.mood[1].value !== ref.key;});
+            let checkIfNotMinor = keys.every(k => {
+                return k.mood[1].value !== ref.key;
+            });
             (checkIfNotMinor) ? console.log('major') : console.log('minor');
             checkIfNotMinor || ref.key === ''
                 ? setMood(0)
@@ -254,7 +254,7 @@ function SongItemDetailsView(props: SongItemProps) {
         setToggleCreateOrUpdate('update');
     }
 
-    const handleEditReference = () => {
+    const doUpdateReference = () => {
         if (props.song.references !== undefined) {
             let ref: Reference = props.song.references[refIndex];
             if (ref.songCollection === 'MANUALLY_ADDED_COLLECTION') {
@@ -265,17 +265,19 @@ function SongItemDetailsView(props: SongItemProps) {
             ref.author = props.song.author;
             ref.year = props.song.year;
             ref.key = key;
+        } else {
+            console.log("ERROR: props.song.references is \"undefined\"!?")
         }
         saveSongItem();
-        setToggleAddReference(false);
+        setToggleEditReference(false);
         setCollection('');
         setPage('');
         setKey('');
     }
 
-    function deleteReference () {
+    function deleteReference() {
         props.song.status = 'display';
-        setToggleAddReference(false);
+        setToggleEditReference(false);
         if (refIndex !== -1) {
             props.song.references!.splice(refIndex, 1)
         }
@@ -285,7 +287,7 @@ function SongItemDetailsView(props: SongItemProps) {
         setToggleCreateOrUpdate('create');
     }
 
-    function clearReference () {
+    function clearReference() {
         setRefIndex(-1);
         setCollection('');
         setPage('');
@@ -300,61 +302,37 @@ function SongItemDetailsView(props: SongItemProps) {
 
 // --- LINK ELEMENTS --- //
 
-    const openOrCloseAddLink = () => {
-        setToggleAddDescription(false);
-        setToggleAddReference(false);
-        setToggleAddSongSheet(false);
-        setToggleAddLink(!toggleAddLink);
-        setLinkRendering('display');
-        sessionStorage.setItem('linkText', '');
-        sessionStorage.setItem('linkTarget', '');
+        const openOrCloseAddLink = () => {
+        setToggleEditDescription(false);
+        setToggleEditReference(false);
+        setToggleEditSongSheet(false);
+        setToggleEditLink(!toggleEditLink);
+        setToggleCreateOrUpdate('create');
     }
 
-    // Display OR Edit Existing Links  // value may be 'display' or 'edit'
-    const [linkRendering, setLinkRendering] = useState('display');
-    useEffect(() => {
-        setLinkRendering('display')
-    }, [props.song.id]);
+    const [linkIndex, setLinkIndex] = useState(-1)
 
-    let handleLinkRendering;  // controls rendering of Link Data
-    const [linkIndex, setLinkIndex] = useState(0)
-    if (linkRendering === 'display') {
-        handleLinkRendering = <DisplayLinks
-            links={props.song.links}
-            doEditLink={(index) => {
-                setLinkIndex(index);
-                setToggleAddLink(false);
-                setLinkRendering('edit');
-            }}
-        />;
-    }
-    if (linkRendering === 'edit') {
-        handleLinkRendering = <EditLink
-            link={props.song.links![linkIndex]}
-            saveLink={
-                () => {
-                    saveSongItem();
-                    setLinkRendering('display');
-                }}
-            onCancel={() => setLinkRendering('display')}
-            onDeletion={
-                () => {
-                    props.song.links!.splice(linkIndex, 1);
-                    saveSongItem();
-                    setLinkRendering('display');
-                }}
-        />;
+    const openUpdateLink = (index: number) => {
+        setLinkIndex(index);
+        sessionStorage.setItem('linkText', props.song.links![index].linkText);
+        sessionStorage.setItem('linkTarget', props.song.links![index].linkTarget);
+        sessionStorage.setItem('linkKey', props.song.links![index].linkKey);
+        sessionStorage.setItem('linkStrumming', props.song.links![index].linkStrumming);
+        setToggleEditDescription(false);
+        setToggleEditSongSheet(false);
+        setToggleEditReference(false);
+        setToggleEditLink(true);
+        setToggleCreateOrUpdate('update')
     }
 
 
     // --- SONG SHEET FILES --- //
 
     const openOrCloseAddSongSheet = () => {
-        setToggleAddDescription(false);
-        setToggleAddReference(false);
-        setToggleAddSongSheet(!toggleAddSongSheet);
-        setToggleAddLink(false);
-        setLinkRendering('display');
+        setToggleEditDescription(false);
+        setToggleEditReference(false);
+        setToggleEditSongSheet(!toggleEditSongSheet);
+        setToggleEditLink(false);
         sessionStorage.setItem('linkText', '');
         sessionStorage.setItem('linkTarget', '');
     }
@@ -426,14 +404,14 @@ function SongItemDetailsView(props: SongItemProps) {
             </div>
 
             <div id={'workingSpace'} className={'songDataSheetElement'}>
-                {props.song.description && !toggleAddDescription && displayDescription &&
+                {props.song.description && !toggleEditDescription && displayDescription &&
                     <div id={'displayDescription'} className={'workingSpaceElement'}
                          onClick={openOrCloseAddDescription}>
                         {props.song.description}
                     </div>
                 }
 
-                {toggleAddDescription && <div>
+                {toggleEditDescription && <div>
                     <form id={'addADescription'} className={'workingSpaceElement'}
                           onSubmit={ev => doAddDescription(ev)}>
                         <label>{((props.song.description !== null
@@ -460,26 +438,29 @@ function SongItemDetailsView(props: SongItemProps) {
                 </div>}
 
 
-                {toggleAddReference && <div>
+                {toggleEditReference && <div>
                     <form id={'inputFormRef'} onSubmit={ev => {
-                        toggleCreateOrUpdate === 'create' ? createReference(ev) : handleEditReference();
+                        toggleCreateOrUpdate === 'create' ? createReference(ev) : doUpdateReference();
                     }}>
-                        <label>{toggleCreateOrUpdate === 'create' ? <span>Add a</span>: <span>Edit your</span>} Song Sheet Reference:</label>
+                        <label>{toggleCreateOrUpdate === 'create' ? <span>Add a</span> : <span>Edit your</span>} Song
+                            Sheet Reference:</label>
                         <div id={'secondLineRef'}>
-                        <label>Coll.:</label>
-                        <input id={'inputRefCollection'} type='text' value={collection}
-                               placeholder={'Song Collection'}
-                               onChange={ev => setCollection(ev.target.value)} required autoFocus tabIndex={1}/>
-                        <label id={'labelInputRefPage'}>Page:</label>
-                        <input id={'inputRefPage'} type='number' value={page} placeholder={'Page'}
-                               onChange={ev => setPage(ev.target.value)} tabIndex={2}/>
-                        <button id={'buttonAddReference'} className={'workingSpaceElement'} type='submit' tabIndex={5}>
-                            &#10004; {toggleCreateOrUpdate}
-                        </button>
+                            <label>Coll.:</label>
+                            <input id={'inputRefCollection'} type='text' value={collection}
+                                   placeholder={'Song Collection'}
+                                   onChange={ev => setCollection(ev.target.value)} required autoFocus tabIndex={1}/>
+                            <label id={'labelInputRefPage'}>Page:</label>
+                            <input id={'inputRefPage'} type='number' value={page} placeholder={'Page'}
+                                   onChange={ev => setPage(ev.target.value)} tabIndex={2}/>
+                            <button id={'buttonAddReference'} className={'workingSpaceElement'} type='submit'
+                                    tabIndex={5}>
+                                &#10004; {toggleCreateOrUpdate}
+                            </button>
                         </div>
                         <div id={'thirdLineRef'}>
                             <label>Author:</label>
-                            <input id={'inputRefAuthor'} type='text' value={props.song.author !== null ? props.song.author : ''}
+                            <input id={'inputRefAuthor'} type='text'
+                                   value={props.song.author !== null ? props.song.author : ''}
                                    placeholder={'(Author)'} className={'readOnly'} disabled/>
                             <label id={'labelInputRefYear'}>Year:</label>
                             <input id={'inputRefYear'} type='text' value={props.song.year !== 0 ? props.song.year : ''}
@@ -488,8 +469,10 @@ function SongItemDetailsView(props: SongItemProps) {
                         <span id={'fourthLineRef'}>
                         <label htmlFor={'inputKey'}>Key:</label>
                             <select name={'inputKey'} id={'inputKey'} form={'inputFormRef'}
-                                    value={key} onChange={ev => setKey(ev.target.value)} tabIndex={3}>{keys.map((songKey) => (
-                                <option value={songKey.mood[mood].value} key={songKey.mood[mood].value}>{songKey.mood[mood].label}</option>
+                                    value={key} onChange={ev => setKey(ev.target.value)}
+                                    tabIndex={3}>{keys.map((songKey) => (
+                                <option value={songKey.mood[mood].value}
+                                        key={songKey.mood[mood].value}>{songKey.mood[mood].label}</option>
                             ))}
                         </select>
                         <input type={'radio'} id={'major'} name={'majorOrMinor'}
@@ -507,39 +490,52 @@ function SongItemDetailsView(props: SongItemProps) {
                                }}/>
                         <label htmlFor={'minor'} className={'labelInputMajorOrMinor'}>minor</label>
                         <button id={'buttonCancelAddReference'} type='button' onClick={() => {
-                                props.song.status = 'display';
-                                setToggleAddReference(false);
-                                setRefIndex(-1)}
+                            props.song.status = 'display';
+                            setToggleEditReference(false);
+                            setRefIndex(-1)
+                        }
                         } tabIndex={6}>
                             cancel
                         </button>
                     </span>
                     </form>
-                    <button id={'buttonClearReference'} type='button' onClick={() => {clearReference()}} tabIndex={9}>
+                    <button id={'buttonClearReference'} type='button' onClick={() => {
+                        clearReference()
+                    }} tabIndex={9}>
                         ! clear
                     </button>
                     {toggleCreateOrUpdate === 'update' &&
-                        <button id={'buttonDeleteReference'} type='button' onClick={() => {deleteReference()}}>
+                        <button id={'buttonDeleteReference'} type='button' onClick={() => {
+                            deleteReference()
+                        }}>
                             &#10008; delete
                         </button>
                     }
                 </div>}
 
-
-                {toggleAddLink && <CreateLink
+                {toggleEditLink && <EditLink
+                    toggleCreateOrUpdate={toggleCreateOrUpdate}
                     links={props.song.links}
-                    onCancel={() => setToggleAddLink(false)}
-                    onCreation={
+                    linkIndex={linkIndex}
+                    returnAndSave={
                         () => {
                             saveSongItem();
-                            setToggleAddLink(false);
+                            setToggleEditLink(false);
                         }}
+                    onCancel={() => {
+                        setToggleEditLink(false);
+                        setLinkIndex(-1);
+                    }}
+                    onClear={() => {
+                        setLinkIndex(-1);
+                        setToggleCreateOrUpdate('create');
+                    }}
                 />}
 
 
-                {toggleAddSongSheet && <div className={'workingSpaceElement'}>
+                {toggleEditSongSheet && <div className={'workingSpaceElement'}>
                     <form id={'formAddSongSheet'} className={'workingSpaceElement'} encType={'multipart/form-data'}>
-                        <label >Add a Song Sheet File:</label>
+                        <label>Add a Song Sheet File:</label>
                         <div id={'secondLineSongSheet'}>Please, go and fetch a song sheet file:
                             <input type={'file'} id={'inputAddSongSheet'}
                                    onChange={event => uploadSongSheet(event.target.files)}/>
@@ -558,28 +554,35 @@ function SongItemDetailsView(props: SongItemProps) {
                         <div id={'listOfReferences'}>
                             {props.song.references.map((item, index) =>
                                 <div key={index} className={'retainedReferenceItem'}
-                                     onClick={() => openEditReference(index)}>
+                                     onClick={() => openUpdateReference(index)}>
                                     &ndash;&#129174;&nbsp; {(item.addedCollection === null) ?
                                     <span>{songCollectionToRealName(item.songCollection)}</span> :
                                     <span>{item.addedCollection}</span>}
                                     {item.page !== 0 && <span>, page {item.page} </span>}
                                     {item.key && <span>– </span>}
                                     {item.key && <span id={'displayRefKey'}>({item.key})</span>}
-                                    {/*{(item.author || item.year !== 0) && <span> –</span>}
-                                    {item.author && <span id={'displayRefAuthor'}> ({item.author}</span>}
-                                    {!item.author && item.year !== 0 && <span> (</span>}
-                                    {item.author && item.year === 0 && <span id={'displayRefAuthor'}>)</span>}
-                                    {item.author && item.year !== 0 && <span>, </span>}
-                                    {item.year !== 0 && <span>{item.year})</span>}*/}
                                 </div>)}
                         </div>
                     </div>}
 
                 <div>
-                    <div>{handleLinkRendering}</div>
+                    {(props.song.links !== undefined && props.song.links?.length > 0)
+                        && <div id={'displayLinks'}>
+                            {props.song.links.map((item, index) =>
+                                <div key={index} className={'link'}>
+                                    <span className={'linkDot'} onClick={() => openUpdateLink(index)}>&#8734;</span>&nbsp;
+                                    <a href={item.linkTarget} target={'_blank'} rel={'noreferrer'}>
+                                        <span className={'linkText'}>{item.linkText}</span></a>
+                                    {item.linkKey && <span>– </span>}
+                                    {item.linkKey && <span id={'displayLinkKey'}>({item.linkKey})</span>}
+                                    {item.linkStrumming && <span id={'displayLinkStrumming'}>({item.linkStrumming})</span>}
+                                </div>)
+                            }
+                        </div>
+                    }
                 </div>
-
             </div>
+
 
             <div id={'songFooter'}>
                 created: {props.song.dayOfCreation.day}.
@@ -606,4 +609,4 @@ function SongItemDetailsView(props: SongItemProps) {
     )
 }
 
-export default SongItemDetailsView
+export default SongItemDetails

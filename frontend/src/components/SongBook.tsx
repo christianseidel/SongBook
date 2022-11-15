@@ -3,7 +3,7 @@ import './styles/landingPage.css';
 import './styles/common.css';
 import {Song, SongsDTO, DayOfCreation} from "./Songs/songModels";
 import SongItemWithinList from "./Songs/SongItemWithinList";
-import SongItemDetailsView from "./Songs/SongItemDetailsView";
+import SongItemDetails from "./Songs/SongItemDetails";
 import ukulele from "./media/images/ukulele.png";
 import References from "./References/References";
 import DisplayMessageSongs from "./Songs/DisplayMessageSongs";
@@ -258,23 +258,23 @@ function SongBook() {
                 >
                     {
                         songChosen.title
-                            ? <SongItemDetailsView song={songChosen}
-                                                   onItemCreation={(message: string) => {
+                            ? <SongItemDetails song={songChosen}
+                                               onItemCreation={(message: string) => {
                                                        setMessage(message);
                                                        getAllSongs(true);
                                                    }}
-                                                   onItemRevision={(song) => {
+                                               onItemRevision={(song: Song) => {
                                                        song.dayOfCreation = new DayOfCreation( // = displayable format of "dateCreated"
                                                            song.dateCreated as string
                                                        );
                                                        getAllSongs(false);
                                                        setSongChosen(song);
                                                    }}
-                                                   doReturn={() => {
+                                               doReturn={() => {
                                                        getAllSongs(true);
                                                        trigger()
                                                    }}
-                                                   clear={() => setSongChosen({} as Song)}
+                                               clear={() => setSongChosen({} as Song)}
                             />
                             : <span className={"doSomething"}
                                     id={"chooseASong"}>&#129172; &nbsp; please, choose a song</span>

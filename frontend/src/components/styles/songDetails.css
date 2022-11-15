@@ -300,7 +300,7 @@
 
 #inputFormRef {}
 
-#titleLineRef, #secondLineRef, #thirdLineRef {
+#secondLineRef, #thirdLineRef {
     display: block;
     margin-top: 6px;
     /*border: 1px solid steelblue;*/
@@ -315,11 +315,11 @@
     float: right;
 }
 
-#buttonDeleteReference {
+#buttonDeleteReference, #buttonDeleteLink {
     margin-left: 12px;
 }
 
-#buttonClearReference {
+#buttonClearReference, #buttonClearLink {
     margin-top: 8px;
     margin-left: 54px;
 }
@@ -354,10 +354,7 @@
     width: 70px;
 }
 
-#displayRefAuthor, #displayRefKey {
-
-}
-
+#displayRefAuthor, #displayRefKey {}
 
 #inputKey {
     margin-left: 25px;
@@ -483,44 +480,25 @@
     margin-bottom: 3px;
 }
 
-/*.link:hover {
-    background-color: gold;
-    border-style: solid;
-    border-width: 2px;
-    border-color: darkgoldenrod;
-    border-radius: 2px;
-    width: fit-content;
-    box-shadow: 3px 3px darkgoldenrod;
-    cursor: pointer;
-    color: black;
-
-    padding: 1px 8px;
-}
-
-.link:hover + .link {
-    margin-top: -6px;
-}
-
-.link:hover:last-child {
-    margin-top: -4px;
-    margin-bottom: -2px;
-}*/
-
 #inputFormLink {}
 
-#titleLineLink, #secondLineLink{
+#secondLineKey, #thirdLineKey{
     display: block;
     margin-top: 6px;
 }
 
-#buttonAddLink {
+#fourthLineKey {
+    display: block;
+    margin-top: 6px;
+}
+
+#buttonEditLink {
     float: right;
 }
 
-#buttonCancelAddLink, #buttonDeleteLink{
+#buttonCancelEditLink {
     float: right;
     clear: right;
-    margin-top: 6px;
 }
 
 #inputLinkText {
@@ -534,6 +512,12 @@
     margin-top: 8px;
     width: 308px;
 }
+
+#displayLinkKey {}
+
+#displayLinkStrumming {}
+
+#displayLinkDescription {}
 
 /*  SONG SHEETS  */
 
