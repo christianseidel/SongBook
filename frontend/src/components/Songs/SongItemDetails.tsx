@@ -5,7 +5,7 @@ import DisplayMessageSongs from "./DisplayMessageSongs";
 import EditSongTitle from "./handleTitleLine/EditSongTitle";
 import CreateSongTitle from "./handleTitleLine/CreateSongTitle";
 import DisplaySongTitle from "./handleTitleLine/DisplaySongTitle";
-import {Song} from './songModels'
+import {Mood, Song} from './songModels'
 import {Reference} from "../References/referenceModels";
 import {songCollectionToRealName} from "../literals/collectionNames";
 import {keys} from "../literals/keys";
@@ -24,7 +24,6 @@ function SongItemDetails(props: SongItemProps) {
     const [songState, setSongState] = useState(props.song.status);
     const [message, setMessage] = useState('');
     useEffect(() => setSongState(props.song.status), [props.song.status]);
-
     const [description, setDescription] = useState(sessionStorage.getItem('description') ?? '');
     useEffect(() => {
         sessionStorage.setItem('description', description)
@@ -225,7 +224,6 @@ function SongItemDetails(props: SongItemProps) {
         setToggleEditSongSheet(false);
         setToggleEditReference(true);
         setRefIndex(index);
-        console.log("index: " + index);
         if (props.song.references !== undefined) {
             let ref: Reference = props.song.references[index];
             if (ref.songCollection === 'MANUALLY_ADDED_COLLECTION') {
@@ -240,13 +238,7 @@ function SongItemDetails(props: SongItemProps) {
                 }
             }
             ref.page !== 0 ? setPage(String(ref.page)) : setPage('');
-            let checkIfNotMinor = keys.every(k => {
-                return k.mood[1].value !== ref.key;
-            });
-            (checkIfNotMinor) ? console.log('major') : console.log('minor');
-            checkIfNotMinor || ref.key === ''
-                ? setMood(0)
-                : setMood(1);
+            Mood.checkIfMajorOrEmpty(ref.key) ? setMood(0) : setMood(1);
             ref.key === null || ref.key === undefined
                 ? setKey('')
                 : setKey(ref.key);
@@ -314,10 +306,6 @@ function SongItemDetails(props: SongItemProps) {
 
     const openUpdateLink = (index: number) => {
         setLinkIndex(index);
-        sessionStorage.setItem('linkText', props.song.links![index].linkText);
-        sessionStorage.setItem('linkTarget', props.song.links![index].linkTarget);
-        sessionStorage.setItem('linkKey', props.song.links![index].linkKey);
-        sessionStorage.setItem('linkStrumming', props.song.links![index].linkStrumming);
         setToggleEditDescription(false);
         setToggleEditSongSheet(false);
         setToggleEditReference(false);
@@ -333,8 +321,6 @@ function SongItemDetails(props: SongItemProps) {
         setToggleEditReference(false);
         setToggleEditSongSheet(!toggleEditSongSheet);
         setToggleEditLink(false);
-        sessionStorage.setItem('linkText', '');
-        sessionStorage.setItem('linkTarget', '');
     }
 
     function uploadSongSheet(files: FileList | null) {
@@ -403,7 +389,9 @@ function SongItemDetails(props: SongItemProps) {
                     </span>
             </div>
 
+
             <div id={'workingSpace'} className={'songDataSheetElement'}>
+
                 {props.song.description && !toggleEditDescription && displayDescription &&
                     <div id={'displayDescription'} className={'workingSpaceElement'}
                          onClick={openOrCloseAddDescription}>
@@ -444,7 +432,7 @@ function SongItemDetails(props: SongItemProps) {
                     }}>
                         <label>{toggleCreateOrUpdate === 'create' ? <span>Add a</span> : <span>Edit your</span>} Song
                             Sheet Reference:</label>
-                        <div id={'secondLineRef'}>
+                        <div className={'nextLine'}>
                             <label>Coll.:</label>
                             <input id={'inputRefCollection'} type='text' value={collection}
                                    placeholder={'Song Collection'}
@@ -457,7 +445,7 @@ function SongItemDetails(props: SongItemProps) {
                                 &#10004; {toggleCreateOrUpdate}
                             </button>
                         </div>
-                        <div id={'thirdLineRef'}>
+                        <div className={'nextLine'}>
                             <label>Author:</label>
                             <input id={'inputRefAuthor'} type='text'
                                    value={props.song.author !== null ? props.song.author : ''}
@@ -466,7 +454,7 @@ function SongItemDetails(props: SongItemProps) {
                             <input id={'inputRefYear'} type='text' value={props.song.year !== 0 ? props.song.year : ''}
                                    placeholder={'(Year)'} className={'readOnly'} disabled readOnly/>
                         </div>
-                        <span id={'fourthLineRef'}>
+                        <span className={'nextLine'}>
                         <label htmlFor={'inputKey'}>Key:</label>
                             <select name={'inputKey'} id={'inputKey'} form={'inputFormRef'}
                                     value={key} onChange={ev => setKey(ev.target.value)}
@@ -517,10 +505,9 @@ function SongItemDetails(props: SongItemProps) {
                     toggleCreateOrUpdate={toggleCreateOrUpdate}
                     links={props.song.links}
                     linkIndex={linkIndex}
-                    returnAndSave={
-                        () => {
-                            saveSongItem();
-                            setToggleEditLink(false);
+                    returnAndSave={() => {
+                        saveSongItem();
+                        setToggleEditLink(false);
                         }}
                     onCancel={() => {
                         setToggleEditLink(false);
@@ -531,7 +518,6 @@ function SongItemDetails(props: SongItemProps) {
                         setToggleCreateOrUpdate('create');
                     }}
                 />}
-
 
                 {toggleEditSongSheet && <div className={'workingSpaceElement'}>
                     <form id={'formAddSongSheet'} className={'workingSpaceElement'} encType={'multipart/form-data'}>
@@ -547,6 +533,7 @@ function SongItemDetails(props: SongItemProps) {
 
             </div>
 
+
             <div id={'displaySpace'} className={'songDataSheetElement'}>
 
                 {props.song.references !== undefined && props.song.references.length > 0 && // display References
@@ -560,7 +547,7 @@ function SongItemDetails(props: SongItemProps) {
                                     <span>{item.addedCollection}</span>}
                                     {item.page !== 0 && <span>, page {item.page} </span>}
                                     {item.key && <span>– </span>}
-                                    {item.key && <span id={'displayRefKey'}>({item.key})</span>}
+                                    {item.key && <span className={'displayKey'}>({item.key})</span>}
                                 </div>)}
                         </div>
                     </div>}
@@ -573,9 +560,10 @@ function SongItemDetails(props: SongItemProps) {
                                     <span className={'linkDot'} onClick={() => openUpdateLink(index)}>&#8734;</span>&nbsp;
                                     <a href={item.linkTarget} target={'_blank'} rel={'noreferrer'}>
                                         <span className={'linkText'}>{item.linkText}</span></a>
-                                    {item.linkKey && <span>– </span>}
-                                    {item.linkKey && <span id={'displayLinkKey'}>({item.linkKey})</span>}
-                                    {item.linkStrumming && <span id={'displayLinkStrumming'}>({item.linkStrumming})</span>}
+                                    {item.linkKey && <span> – </span>}
+                                    {item.linkKey && <span className={'displayKey'}>({item.linkKey})</span>}
+                                    {item.linkAuthor && <span id={'displayLinkAuthor'}> – by: {item.linkAuthor}</span>}
+                                    {item.linkStrumming && <span id={'displayLinkStrumming'}> – {item.linkStrumming}</span>}
                                 </div>)
                             }
                         </div>

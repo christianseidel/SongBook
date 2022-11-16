@@ -1,4 +1,5 @@
 import {Reference} from "../References/referenceModels";
+import {keys} from "../literals/keys";
 
 export interface Song {
     id: string;
@@ -17,14 +18,29 @@ export class Link {
     linkText: string;
     linkTarget: string;
     linkKey: string;
+    linkAuthor: string;
     linkStrumming: string;
 
-
-    constructor(linkText: string, linkTarget: string, linkKey: string, linkStrumming: string) {
+    constructor(linkText: string, linkTarget: string, linkKey: string, linkAuthor: string, linkStrumming: string) {
         this.linkText = linkText;
         this.linkTarget = linkTarget;
         this.linkKey = linkKey;
+        this.linkAuthor = linkAuthor;
         this.linkStrumming = linkStrumming;
+    }
+}
+
+export class Mood {
+    static checkIfMajorOrEmpty(key: string | undefined) {
+        if (key === undefined) {
+            return true;
+        } else if (key === '') {
+            return true;
+        } else {
+            return keys.every(k => {
+                return k.mood[1].value !== key;
+            })
+        }
     }
 }
 

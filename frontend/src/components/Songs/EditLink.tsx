@@ -1,6 +1,6 @@
 import React, {FormEvent, useEffect, useState} from "react";
 import '../styles/songDetails.css'
-import {Link} from "./songModels";
+import {Link, Mood} from "./songModels";
 import {keys} from "../literals/keys";
 
 interface SongItemLinksProps {
@@ -14,34 +14,47 @@ interface SongItemLinksProps {
 
 function EditLink(props: SongItemLinksProps) {
 
-    const [linkText, setLinkText] = useState(sessionStorage.getItem('linkText') ?? '');
-    useEffect(() => {
-        sessionStorage.setItem('linkText', linkText)
-    }, [linkText]);
-    const [linkTarget, setLinkTarget] = useState(sessionStorage.getItem('linkTarget') ?? '');
-    useEffect(() => {
-        sessionStorage.setItem('linkTarget', linkTarget)
-    }, [linkTarget]);
+    const [linkText, setLinkText] = useState('');
+    const [linkTarget, setLinkTarget] = useState('');
+    const [linkAuthor, setLinkAuthor] = useState('');
+    const [strumming, setStrumming] = useState('');
     const [key, setKey] = useState('');
     const [mood, setMood] = useState(0);
-    const [strumming, setStrumming] = useState(sessionStorage.getItem('linkStrumming') ?? '');
 
-    const createLink = (ev: FormEvent<HTMLFormElement>) => {
+    const clearLink = () => {
+        setLinkText('')
+        setLinkTarget('');
+        setKey('');
+        setMood(0);
+        setLinkAuthor('')
+        setStrumming('');
+    }
+
+    useEffect(() => {
+        if (props.toggleCreateOrUpdate === 'update' && props.links) {
+            setLinkText(props.links[props.linkIndex].linkText);
+            setLinkTarget(props.links[props.linkIndex].linkTarget);
+            let key = props.links[props.linkIndex].linkKey;
+            setKey(key);
+            setMood(Mood.checkIfMajorOrEmpty(key) ? 0 : 1);
+            setLinkAuthor(props.links[props.linkIndex].linkAuthor);
+            setStrumming(props.links[props.linkIndex].linkStrumming);
+        }
+    }, [props.linkIndex, props.links, props.toggleCreateOrUpdate]);
+
+    const doCreateLink = (ev: FormEvent<HTMLFormElement>) => {
         ev.preventDefault();
-        console.log("create link");
         let finalTarget = linkTarget;
         if (linkTarget.slice(0, 4) !== 'http') {
             finalTarget = 'https://' + finalTarget;
         }
-        let link = new Link(linkText, finalTarget, key, strumming);
+        let link = new Link(linkText, finalTarget, key, linkAuthor, strumming);
         if (props.links !== undefined) {
             let next: number;
             next = props.links.length;
             props.links[next] = link;
-        } else {
-            alert("the resources array is undefined!");
-            console.log("the resources array is undefined!");
         }
+        clearLink();
         props.returnAndSave();
     }
 
@@ -57,86 +70,82 @@ function EditLink(props: SongItemLinksProps) {
             link.linkKey = key;
             link.linkStrumming = strumming;
             props.links[props.linkIndex] = link;
-        } else {
-            console.log("ERROR: props.song.links is \"undefined\"!?")
         }
         clearLink();
-        console.log("update fertig")
         props.returnAndSave();
     }
 
     const doClearLink = () => {
         clearLink();
-        if (document.getElementById('inputRefCollection') != null) {
-            document.getElementById('inputRefCollection')!.className = '';
-        }
         props.onClear();
     }
 
-    const clearLink = () => {
-        setLinkText('')
-        setLinkTarget('');
-        setKey('');
-        setMood(0);
-        setStrumming('');
-    }
-
-
     const deleteLink = () => {
         props.links!.splice(props.linkIndex, 1);
+        clearLink();
         props.returnAndSave();
     }
 
     return (
         <div>
             <form id={'inputFormLink'} onSubmit={ev => {
-                props.toggleCreateOrUpdate === 'create' ? createLink(ev) : doUpdateLink();
-            }} className={'workingSpaceElement'}>
-                <label>{props.toggleCreateOrUpdate === 'create' ? <span>Add a</span> :
-                    <span>Edit your</span>} Link:</label>
-                <span id={'secondLineKey'}>
-                            <label>Text:</label>
-                            <input id={'inputLinkText'} type='text' value={linkText} placeholder={'Link Description'}
-                                   onChange={ev => setLinkText(ev.target.value)} autoFocus tabIndex={1} required/>
-                            <button id={'buttonEditLink'} type='submit' tabIndex={3}>
-                                &#10004; {props.toggleCreateOrUpdate === 'create' ? <span>create</span> :
-                                <span>update</span>}
-                            </button><br/>
-                            <label>Target:</label>
-                            <input id={'inputLinkTarget'} type='text' value={linkTarget} placeholder={'Link Target'}
-                                   onChange={ev => setLinkTarget(ev.target.value)} tabIndex={2} required/>
-                                <br/>
-                        </span>
-                <span id={'fourthLineKey'}>
-                            <label htmlFor={'inputKey'}>Key:</label>
-                                <select name={'inputKey'} id={'inputKey'} form={'inputFormRef'}
-                                        value={key} onChange={ev => setKey(ev.target.value)}
-                                        tabIndex={3}>{keys.map((songKey) => (
-                                    <option value={songKey.mood[mood].value}
-                                            key={songKey.mood[mood].value}>{songKey.mood[mood].label}</option>
-                                ))}
-                            </select>
-                            <input type={'radio'} id={'major'} name={'majorOrMinor'}
-                                   value={0} className={'inputMajorOrMinor'} checked={mood === 0}
-                                   onChange={ev => {
-                                       setMood(Number(ev.target.value));
-                                       setKey('');
-                                   }} tabIndex={4}/>
-                            <label htmlFor={'major'} className={'labelInputMajorOrMinor'}>major</label>
-                            <input type={'radio'} id={'minor'} name={'majorOrMinor'}
-                                   value={1} className={'inputMajorOrMinor'} checked={mood === 1}
-                                   onChange={ev => {
-                                       setMood(Number(ev.target.value));
-                                       setKey('');
-                                   }}/>
-                            <label htmlFor={'minor'} className={'labelInputMajorOrMinor'}>minor</label>
-                            <button id={'buttonCancelEditLink'} type='button' onClick={() => {
-                                props.onCancel()
-                            }}
-                                    tabIndex={6}>
-                                cancel
-                            </button>
-                        </span>
+                props.toggleCreateOrUpdate === 'create' ? doCreateLink(ev) : doUpdateLink();
+            }}>
+                <label>{props.toggleCreateOrUpdate === 'create'
+                    ? <span>Add a</span>
+                    : <span>Edit your</span>} Link:</label>
+                <span className={'nextLine'}>
+                    <label>Text:</label>
+                    <input id={'inputLinkText'} type='text' value={linkText} placeholder={'Link Description'}
+                           onChange={ev => setLinkText(ev.target.value)} autoFocus tabIndex={1} required/>
+                    <button id={'buttonEditLink'} type='submit' tabIndex={7}>
+                        &#10004; {props.toggleCreateOrUpdate === 'create'
+                            ? <span>create</span>
+                            : <span>update</span>}
+                    </button>
+                    <label className={'labelSecondInLine'}>Target:</label>
+                    <input id={'inputLinkTarget'} type='text' value={linkTarget} placeholder={'Link Target'}
+                           onChange={ev => setLinkTarget(ev.target.value)} tabIndex={2} required/>
+
+                <span className={'nextLine'}> </span>
+                    <label>Author:</label>
+                    <input id={'inputLinkAuthor'} type='text' value={linkAuthor} placeholder={'Author'}
+                           onChange={ev => setLinkAuthor(ev.target.value)} tabIndex={3}/>
+                    <label className={'labelSecondInLine'}>Strm.: </label>
+                    <input id={'inputLinkStrumming'} type='text' value={strumming} placeholder={'d- -D-u- -u-D-u-'}
+                           onChange={ev => setStrumming(ev.target.value)} tabIndex={4}/>
+                </span>
+
+                <span className={'nextLine'}>
+                        <label htmlFor={'inputKey'}>Key:</label>
+                            <select name={'inputKey'} id={'inputKey'} form={'inputFormRef'}
+                                    value={key} onChange={ev => setKey(ev.target.value)}
+                                    tabIndex={5}>{keys.map((songKey) => (
+                                <option value={songKey.mood[mood].value}
+                                        key={songKey.mood[mood].value}>{songKey.mood[mood].label}</option>
+                            ))}
+                        </select>
+                        <input type={'radio'} id={'major'} name={'majorOrMinor'}
+                               value={0} className={'inputMajorOrMinor'} checked={mood === 0}
+                               onChange={ev => {
+                                   setMood(Number(ev.target.value));
+                                   setKey('');
+                               }} tabIndex={6}/>
+                        <label htmlFor={'major'} className={'labelInputMajorOrMinor'}>major</label>
+                        <input type={'radio'} id={'minor'} name={'majorOrMinor'}
+                               value={1} className={'inputMajorOrMinor'} checked={mood === 1}
+                               onChange={ev => {
+                                   setMood(Number(ev.target.value));
+                                   setKey('');
+                               }}/>
+                        <label htmlFor={'minor'} className={'labelInputMajorOrMinor'}>minor</label>
+                        <button id={'buttonCancelEditLink'} type='button' onClick={() => {
+                            props.onCancel()
+                        }}
+                                tabIndex={8}>
+                            cancel
+                        </button>
+                    </span>
             </form>
             <button id={'buttonClearLink'} type='button' onClick={() => {
                 doClearLink()
@@ -146,7 +155,7 @@ function EditLink(props: SongItemLinksProps) {
             {props.toggleCreateOrUpdate === 'update' &&
                 <button id={'buttonDeleteLink'} type='button' onClick={() => {
                     deleteLink()
-                }}>
+                }} tabIndex={10}>
                     &#10008; delete
                 </button>}
         </div>

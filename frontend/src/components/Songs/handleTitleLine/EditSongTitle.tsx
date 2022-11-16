@@ -63,7 +63,7 @@ function EditSongTitle(props: SongItemProps) {
                         <label>By:</label>
                         <input id={'inputAuthor'} type="text" value={author} placeholder={'Author'}
                                onChange={ev => setAuthor(ev.target.value)}/>
-                        <label id={'labelInputYear'}>Year:</label>
+                        <label className={'labelSecondInLine'}>Year:</label>
                         <input id={'inputYear'} type="number" value={year === 0 ? '' : year}
                                placeholder={'Year created'}
                                onChange={ev => setYear(Number(ev.target.value))}/>

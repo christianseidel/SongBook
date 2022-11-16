@@ -89,10 +89,6 @@
     margin-left: 6px;
 }
 
-#labelInputYear {
-    margin-left: 12px;
-}
-
 #inputYear {
     margin-left: 8px;
     width: 90px;
@@ -300,13 +296,7 @@
 
 #inputFormRef {}
 
-#secondLineRef, #thirdLineRef {
-    display: block;
-    margin-top: 6px;
-    /*border: 1px solid steelblue;*/
-}
-
-#fourthLineRef {
+.nextLine {
     display: block;
     margin-top: 6px;
 }
@@ -354,7 +344,12 @@
     width: 70px;
 }
 
-#displayRefAuthor, #displayRefKey {}
+#displayRefAuthor {}
+
+.displayKey {
+    font-style: normal;
+    color: #850808;
+}
 
 #inputKey {
     margin-left: 25px;
@@ -376,11 +371,6 @@
 
 #major {
     margin-left: 26px;
-}
-
-#displayRefKey {
-    font-style: normal;
-    color: #850808;
 }
 
 /*  LINK  */
@@ -482,16 +472,6 @@
 
 #inputFormLink {}
 
-#secondLineKey, #thirdLineKey{
-    display: block;
-    margin-top: 6px;
-}
-
-#fourthLineKey {
-    display: block;
-    margin-top: 6px;
-}
-
 #buttonEditLink {
     float: right;
 }
@@ -504,18 +484,36 @@
 #inputLinkText {
     margin-left: 21px;
     margin-top: 2px;
-    width: 308px;
+    width: 147px;
+}
+
+.labelSecondInLine {
+    margin-left: 12px;
 }
 
 #inputLinkTarget {
     margin-left: 8px;
-    margin-top: 8px;
-    width: 308px;
+    width: 169px;
 }
 
-#displayLinkKey {}
+#inputLinkAuthor {
+    margin-left: 6px;
+    margin-top: 2px;
+    width: 147px;
+}
 
-#displayLinkStrumming {}
+#inputLinkStrumming {
+    margin-left: 11px;
+    width: 169px;
+}
+
+#displayLinkAuthor {
+    font-style: italic;
+}
+
+#displayLinkStrumming {
+    color: #850808;
+}
 
 #displayLinkDescription {}
 
