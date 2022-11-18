@@ -30,6 +30,7 @@ public class SongCollectionService {
     @Value("${root.directory}")
     private String rootDirectory;
 
+
     public ReferencesDTO getAllReferences() {
         List<Reference> list = referencesRepository.findAll().stream()
                 .filter(e -> !e.isHidden())
@@ -90,7 +91,7 @@ public class SongCollectionService {
         return new ReferencesDTO(list);
     }
 
-    public UploadResult processMultipartFileUpload(MultipartFile file) throws IOException {
+    public UploadResult processCollectionUpload(MultipartFile file) throws IOException {
 
         System.out.println(rootDirectory);
         Path tempDir = Path.of(rootDirectory, "temporary");

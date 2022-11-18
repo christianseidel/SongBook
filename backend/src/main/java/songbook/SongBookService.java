@@ -1,11 +1,13 @@
 package songbook;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import songbook.collections.ReferencesRepository;
 import songbook.collections.SongCollectionService;
 import songbook.collections.exceptions.NoSuchIdException;
 import songbook.collections.models.Reference;
 import songbook.models.Song;
+import songbook.models.SongSheetFile;
 
 import java.util.*;
 
@@ -15,12 +17,16 @@ public class SongBookService {
     private final SongsRepository songsRepository;
     private final SongCollectionService songCollectionService;
     private final ReferencesRepository referencesRepository;
+    private final SongSheetsRepository songSheetsRepository;
 
-
-    public SongBookService(SongsRepository songsRepository, SongCollectionService songCollectionService, ReferencesRepository referencesRepository) {
+    public SongBookService(SongsRepository songsRepository,
+                           SongCollectionService songCollectionService,
+                           ReferencesRepository referencesRepository,
+                           SongSheetsRepository songSheetsRepository) {
         this.songsRepository = songsRepository;
         this.songCollectionService = songCollectionService;
         this.referencesRepository = referencesRepository;
+        this.songSheetsRepository = songSheetsRepository;
     }
 
     public Song createSong(Song song) {
@@ -39,9 +45,12 @@ public class SongBookService {
 
     public Optional<Song> editSong(String id, Song song) {
         var item = songsRepository.findById(id);
+        int n = 0;
+        System.out.println(n + "th walkthrough");
+        n++;
         if (item.isEmpty()) {
-            throw new RuntimeException("This song has NOT been CHANGED! " +
-                    "A song with Id no. \"" + id + "\" could not be found.");
+            throw new RuntimeException("A song with Id no. \"" + id + "\" could not be found. " +
+                    "Consequently, your song has not been changed!");
         } else {
             return songsRepository.findById(id).map(e -> songsRepository.save(song));
         }
@@ -100,6 +109,15 @@ public class SongBookService {
             // Todo: updated version to be tested...
             return "All references are reinserted into Reference Index. " +
                     "References with no existing record were created.";
+        }
+    }
+
+    public String uploadSongSheet(MultipartFile file, String id) {
+        songSheetsRepository.save(new SongSheetFile(file, id));
+        if (songSheetsRepository.findById(id).isPresent()) {
+            return "Your song sheet has successfully been saved";
+        } else {
+            return "Server Error occurred: Your song sheet could not be saved.";
         }
     }
 }

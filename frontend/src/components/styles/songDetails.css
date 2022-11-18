@@ -34,6 +34,12 @@
     background-color: #eaba5e;
 }
 
+/*  COMMON ELEMENTS  */
+
+.buttonFloatRight {
+    float: right;
+}
+
 /*  SONG HEAD /// DISPLAY / EDIT / CREATE TITLE  */
 
 #displayTitle {
@@ -99,6 +105,7 @@
     float: right;
     transform: translateY(-5px);
 }
+
 
 #buttonCancelEditSong, #buttonCancelCreateSong {
     float: right;
@@ -175,7 +182,7 @@
     border-radius: 6px;
     position: absolute;
     transform: translate(25px, -10px);
-    z-index: 1;
+    z-index: 2;
     font-size: 11px;
     font-weight: normal;
     user-select: none;
@@ -250,20 +257,17 @@
 
 /*  REFERENCE  */
 
-.displayReferences, #displayLinks {
+#displayReferences, #displayLinks, #displaySongSheets {
     display: block;
     /*border: 1px solid darkgoldenrod;*/
     padding: 5px;
 }
 
-#displayLinks:nth-of-type(1) {
+#displayLinks:nth-of-type(1), #displaySongSheets:nth-of-type(1) {
     margin-top: 20px;
 }
 
-#listOfReferences {
-}
-
-.retainedReferenceItem {
+.reference {
     font-family: Verdana, Trebuchet MS, Lucida Sans Unicode, Lucida Grande, Lucida Sans, Arial, sans-serif;
     font-size: 8pt;
     color: #3b6363;
@@ -271,7 +275,7 @@
     font-style: italic;
 }
 
-.retainedReferenceItem:hover {
+.reference:hover, .songSheet:hover {
     background-color: lightyellow;
     border-style: solid;
     border-width: 2px;
@@ -283,18 +287,17 @@
     color: black;
     user-select: none;
     padding: 1px 6px;
+    z-index: 2;
 }
 
-.retainedReferenceItem:hover + .retainedReferenceItem {
+.reference:hover + .reference, .songSheet:hover + .songSheet {
     margin-top: -6px;
 }
 
-.retainedReferenceItem:hover:last-child {
+.reference:hover:last-child, .songSheet:hover:last-child {
     margin-top: -4px;
     margin-bottom: -2px;
 }
-
-#inputFormRef {}
 
 .nextLine {
     display: block;
@@ -316,7 +319,6 @@
 
 #inputRefCollection {
     margin-left: 21px;
-    margin-top: 2px;
     width: 172px;
 }
 
@@ -331,7 +333,6 @@
 
 #inputRefAuthor {
     margin-left: 6px;
-    margin-top: 2px;
     width: 172px;
 }
 
@@ -372,6 +373,7 @@
 #major {
     margin-left: 26px;
 }
+
 
 /*  LINK  */
 
@@ -438,29 +440,6 @@
 
 }
 
-.retainedReferenceItem:hover {
-    background-color: lightyellow;
-    border-style: solid;
-    border-width: 2px;
-    border-color: darkgoldenrod;
-    border-radius: 2px;
-    width: fit-content;
-    box-shadow: 3px 3px darkgoldenrod;
-    cursor: pointer;
-    color: black;
-    user-select: none;
-    padding: 1px 6px;
-}
-
-.retainedReferenceItem:hover + .retainedReferenceItem {
-    margin-top: -6px;
-}
-
-.retainedReferenceItem:hover:last-child {
-    margin-top: -4px;
-    margin-bottom: -2px;
-}
-
 .link {
     font-family: Verdana, Trebuchet MS, Lucida Sans Unicode, Lucida Grande, Lucida Sans, Arial, sans-serif;
     font-size: 10pt;
@@ -483,7 +462,6 @@
 
 #inputLinkText {
     margin-left: 21px;
-    margin-top: 2px;
     width: 147px;
 }
 
@@ -498,7 +476,6 @@
 
 #inputLinkAuthor {
     margin-left: 6px;
-    margin-top: 2px;
     width: 147px;
 }
 
@@ -517,21 +494,74 @@
 
 #displayLinkDescription {}
 
+
+
 /*  SONG SHEETS  */
 
-#formAddSongSheet {
+#inputSongSheetName {
+    margin-left: 12px;
+    width: 147px;
 }
 
-#secondLineSongSheet {
-    margin-top: 8px;
+#inputSongSheetSource {
+    margin-left: 8px;
+    width: 166px;
+}
+
+#inputSongSheetDescription {
+    margin-left: 8px;
+    width: 392px;
 }
 
 #inputAddSongSheet {
     float: right;
+
     width: 96px;
     background-color: #f0c579;
 }
 
+
+.songSheet {
+    font-family: Verdana, Trebuchet MS, Lucida Sans Unicode, Lucida Grande, Lucida Sans, Arial, sans-serif;
+    font-size: 8pt;
+    color: #3b6363;
+    margin-left: 27px;
+}
+
+.songSheetDescriptive {
+    font-family: Verdana, Trebuchet MS, Lucida Sans Unicode, Lucida Grande, Lucida Sans, Arial, sans-serif;
+    font-size: 8pt;
+    color: #3b6363;
+}
+
+.songSheetDescriptive:hover {
+    font-family: Verdana, Trebuchet MS, Lucida Sans Unicode, Lucida Grande, Lucida Sans, Arial, sans-serif;
+    font-size: 8pt;
+    color: #3b6363;
+    cursor: pointer;
+}
+
+.songSheet:hover + .songSheetDescriptive {
+    margin-left: -16px;
+}
+
+.separator {
+    margin-left: 12px;
+    margin-right: 6px;
+}
+
+.separator:nth-of-type(1) {
+    margin-left: 14px;
+}
+
+#labelUploadSongSheetForm {
+    margin-left: 186px;
+}
+
+#uploadSongSheetForm {
+    float: right;
+    margin-top: 8px;
+}
 
 /*  FOOTER  */
 

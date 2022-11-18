@@ -3,8 +3,6 @@ package songbook;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.mockito.Mockito;
 import org.springframework.mock.web.MockMultipartFile;
 import songbook.collections.ReferencesRepository;
@@ -22,22 +20,16 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static songbook.collections.models.SongCollection.*;
 
-// @SpringBootTest
+
 class SongCollectionServiceTest {
     
     private final ReferencesRepository repo = Mockito.mock((ReferencesRepository.class));
     private final SongCollectionService service = new SongCollectionService(repo);
-
-/*
-    @Value("${root.Directory}")
-    private String rootDirectory;
-*/
 
     @Test
     void shouldReturnAllReferences() {
@@ -170,7 +162,7 @@ class SongCollectionServiceTest {
 
         UploadResult actual = new UploadResult();
         try {
-            actual = service.processMultipartFileUpload(oneRefUpload);
+            actual = service.processCollectionUpload(oneRefUpload);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -209,7 +201,7 @@ class SongCollectionServiceTest {
 
         UploadResult actual = new UploadResult();
         try {
-            actual = service.processMultipartFileUpload(oneRefUpload);
+            actual = service.processCollectionUpload(oneRefUpload);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -238,7 +230,7 @@ class SongCollectionServiceTest {
 
         UploadResult actual = new UploadResult();
         try {
-            actual = service.processMultipartFileUpload(oneRefUpload);
+            actual = service.processCollectionUpload(oneRefUpload);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -265,7 +257,7 @@ class SongCollectionServiceTest {
 
         UploadResult actual = new UploadResult();
         try {
-            actual = service.processMultipartFileUpload(oneRefUpload);
+            actual = service.processCollectionUpload(oneRefUpload);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -295,7 +287,7 @@ class SongCollectionServiceTest {
 
         UploadResult actual = new UploadResult();
         try {
-            actual = service.processMultipartFileUpload(oneRefUpload);
+            actual = service.processCollectionUpload(oneRefUpload);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -315,7 +307,7 @@ class SongCollectionServiceTest {
 
         Exception exception = assertThrows(EmptyFileException.class,
                 () -> {
-                    service.processMultipartFileUpload(zeroRefUpload);
+                    service.processCollectionUpload(zeroRefUpload);
                 });
         assertEquals("EmptyFileException", exception.getClass().getSimpleName());
         assertEquals("The file 'importZeroReference.txt' is empty. There are no references to process.", exception.getMessage());
@@ -382,4 +374,5 @@ class SongCollectionServiceTest {
 
         assertEquals(new ReferencesDTO(List.of(ref01, ref03, ref02)), actual);
     }
+
 }

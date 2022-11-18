@@ -11,6 +11,7 @@ public class Link {
     private String linkStrumming;
 
     public Link (String linkText, String linkTarget, String linkKey, String linkAuthor, String linkStrumming) {
+        System.out.println("Link Text: " + linkText);
         this.linkText = linkText;
         this.linkTarget = linkTarget;
         this.linkKey = linkKey;

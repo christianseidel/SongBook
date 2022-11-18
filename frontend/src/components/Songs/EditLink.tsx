@@ -4,7 +4,7 @@ import {Link, Mood} from "./songModels";
 import {keys} from "../literals/keys";
 
 interface SongItemLinksProps {
-    toggleCreateOrUpdate: string
+    toggleCreateOrUpdate: string;
     links: Link[] | undefined;
     linkIndex: number;
     returnAndSave: () => void;
@@ -98,16 +98,17 @@ function EditLink(props: SongItemLinksProps) {
                     <label>Text:</label>
                     <input id={'inputLinkText'} type='text' value={linkText} placeholder={'Link Description'}
                            onChange={ev => setLinkText(ev.target.value)} autoFocus tabIndex={1} required/>
-                    <button id={'buttonEditLink'} type='submit' tabIndex={7}>
-                        &#10004; {props.toggleCreateOrUpdate === 'create'
-                            ? <span>create</span>
-                            : <span>update</span>}
-                    </button>
                     <label className={'labelSecondInLine'}>Target:</label>
                     <input id={'inputLinkTarget'} type='text' value={linkTarget} placeholder={'Link Target'}
                            onChange={ev => setLinkTarget(ev.target.value)} tabIndex={2} required/>
+                    <button id={'buttonEditLink'} type='submit' tabIndex={7}>
+                        &#10004; {props.toggleCreateOrUpdate === 'create'
+                        ? <span>create</span>
+                        : <span>update</span>}
+                    </button>
+                </span>
 
-                <span className={'nextLine'}> </span>
+                <span className={'nextLine'}>
                     <label>Author:</label>
                     <input id={'inputLinkAuthor'} type='text' value={linkAuthor} placeholder={'Author'}
                            onChange={ev => setLinkAuthor(ev.target.value)} tabIndex={3}/>
@@ -118,7 +119,7 @@ function EditLink(props: SongItemLinksProps) {
 
                 <span className={'nextLine'}>
                         <label htmlFor={'inputKey'}>Key:</label>
-                            <select name={'inputKey'} id={'inputKey'} form={'inputFormRef'}
+                            <select name={'inputKey'} id={'inputKey'}
                                     value={key} onChange={ev => setKey(ev.target.value)}
                                     tabIndex={5}>{keys.map((songKey) => (
                                 <option value={songKey.mood[mood].value}

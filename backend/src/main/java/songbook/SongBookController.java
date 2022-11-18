@@ -1,5 +1,7 @@
 package songbook;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,13 +18,10 @@ import static org.springframework.http.ResponseEntity.status;
 @RestController
 @RequestMapping("/api/songbook")
 @CrossOrigin
+@RequiredArgsConstructor
 public class SongBookController {
 
     private final SongBookService songBookService;
-
-    public SongBookController(SongBookService songBookService) {
-        this.songBookService = songBookService;
-    }
 
     @PostMapping
     public Song createSong(@RequestBody Song song) {
@@ -34,6 +33,7 @@ public class SongBookController {
         songBookService.deleteSong(id);
     }
 
+    // Todo: I need to handle error message: "This file does not have a three-digit file extension."
     @PutMapping("/{id}")
     public Optional<Song> editSong(@PathVariable String id, @RequestBody Song song) {
         return songBookService.editSong(id, song);
@@ -66,9 +66,8 @@ public class SongBookController {
     }
 
     @PostMapping(path = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Object> uploadSongSheet(@RequestParam("file") MultipartFile file) {
-        // TODO: This function has yet to be implemented...
-        return ResponseEntity.status(200).body(jsonifyToMessage("Application not yet set-up to run this function"));
+    public ResponseEntity<Object> uploadSongSheet(@RequestParam("file") MultipartFile file, String id) {
+        return ResponseEntity.status(200).body(jsonifyToMessage(songBookService.uploadSongSheet(file, id)));
     }
 
     private String jsonifyToMessage(String errorMessage) {

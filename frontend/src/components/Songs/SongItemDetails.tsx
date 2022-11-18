@@ -10,6 +10,7 @@ import {Reference} from "../References/referenceModels";
 import {songCollectionToRealName} from "../literals/collectionNames";
 import {keys} from "../literals/keys";
 import EditLink from "./EditLink";
+import EditSongSheet from "./EditSongSheet";
 
 interface SongItemProps {
     song: Song;
@@ -138,6 +139,7 @@ function SongItemDetails(props: SongItemProps) {
                 description: props.song.description,
                 references: props.song.references,
                 links: props.song.links,
+                songSheets: props.song.songSheets,
             })
         })
             .then(response => {
@@ -294,15 +296,15 @@ function SongItemDetails(props: SongItemProps) {
 
 // --- LINK ELEMENTS --- //
 
-        const openOrCloseAddLink = () => {
+    const [linkIndex, setLinkIndex] = useState(-1)
+
+    const openOrCloseAddLink = () => {
         setToggleEditDescription(false);
         setToggleEditReference(false);
         setToggleEditSongSheet(false);
         setToggleEditLink(!toggleEditLink);
         setToggleCreateOrUpdate('create');
     }
-
-    const [linkIndex, setLinkIndex] = useState(-1)
 
     const openUpdateLink = (index: number) => {
         setLinkIndex(index);
@@ -316,55 +318,27 @@ function SongItemDetails(props: SongItemProps) {
 
     // --- SONG SHEET FILES --- //
 
+    const [sheetIndex, setSheetIndex] = useState(-1)
+
     const openOrCloseAddSongSheet = () => {
         setToggleEditDescription(false);
         setToggleEditReference(false);
         setToggleEditSongSheet(!toggleEditSongSheet);
         setToggleEditLink(false);
+        setToggleCreateOrUpdate('create');
     }
 
-    function uploadSongSheet(files: FileList | null) {
-        sessionStorage.setItem('messageType', 'red');
-        if (files === null) {
-            alert('Ops, somehow the FormData Object produced a glitch.')
-        } else {
-            const formData = new FormData();
-            formData.append('file', files[0]);
-            let responseStatus = 0;
-            fetch('api/songbook/upload/', {
-                method: 'POST',
-                body: formData,
-            })
-                .then((response) => {
-                    responseStatus = response.status;
-                    return response.json();
-                })
-                .then((responseBody) => {
-                    if (responseStatus === 200) {
-                        // Todo: Do The Magic
-                        // Yet to implement...
-                        console.log('File "' + files[0].name + '" successfully transmitted to backend!');
-                        console.log(responseBody);
-                    } else if (responseStatus === 400) {
-                        sessionStorage.setItem('message', 'Sorry, the server does not accept your request (Bad Request).');
-                    } else if (responseStatus === 404) {
-                        sessionStorage.setItem('message', 'Sorry, the server is unable to respond to your request.');
-                    } else if (responseStatus === 405) {
-                        console.log("sorry, the entire set of methods has yet to be written...")
-                    } else if (responseStatus === 406) {
-                        sessionStorage.setItem('message', responseBody.message);
-                    } else if (responseStatus === 500) {
-                        sessionStorage.setItem('message', responseBody.message);
-                    } else if (responseStatus !== 201) {
-                        sessionStorage.setItem('message', responseBody.message);
-                    } else {
-                        alert('Something Unexpected happened.');
-                    }
-                })
-        }
+    const openUpdateSongSheet = (index: number) => {
+        setSheetIndex(index);
+        setToggleEditDescription(false);
+        setToggleEditReference(false);
+        setToggleEditLink(false);
+        setToggleEditSongSheet(true);
+        setToggleCreateOrUpdate('update')
     }
 
-    return (
+
+        return (
         <div>
             <div id={'songHead'} className={'songDataSheetElement'}>
                 <div>{handelTitleLine}</div>
@@ -427,7 +401,7 @@ function SongItemDetails(props: SongItemProps) {
 
 
                 {toggleEditReference && <div>
-                    <form id={'inputFormRef'} onSubmit={ev => {
+                    <form onSubmit={ev => {
                         toggleCreateOrUpdate === 'create' ? createReference(ev) : doUpdateReference();
                     }}>
                         <label>{toggleCreateOrUpdate === 'create' ? <span>Add a</span> : <span>Edit your</span>} Song
@@ -456,7 +430,7 @@ function SongItemDetails(props: SongItemProps) {
                         </div>
                         <span className={'nextLine'}>
                         <label htmlFor={'inputKey'}>Key:</label>
-                            <select name={'inputKey'} id={'inputKey'} form={'inputFormRef'}
+                            <select name={'inputKey'} id={'inputKey'}
                                     value={key} onChange={ev => setKey(ev.target.value)}
                                     tabIndex={3}>{keys.map((songKey) => (
                                 <option value={songKey.mood[mood].value}
@@ -519,37 +493,39 @@ function SongItemDetails(props: SongItemProps) {
                     }}
                 />}
 
-                {toggleEditSongSheet && <div className={'workingSpaceElement'}>
-                    <form id={'formAddSongSheet'} className={'workingSpaceElement'} encType={'multipart/form-data'}>
-                        <label>Add a Song Sheet File:</label>
-                        <div id={'secondLineSongSheet'}>Please, go and fetch a song sheet file:
-                            <input type={'file'} id={'inputAddSongSheet'}
-                                   onChange={event => uploadSongSheet(event.target.files)}/>
-                        </div>
-                    </form>
-                    <p><i> This feature is yet to be implemented </i></p>
-                </div>
-                }
-
+                {toggleEditSongSheet && <EditSongSheet
+                    toggleCreateOrUpdate={toggleCreateOrUpdate}
+                    songSheets={props.song.songSheets}
+                    sheetIndex={sheetIndex}
+                    returnAndSave={() => {
+                        saveSongItem();
+                        setToggleEditSongSheet(false);
+                    }}
+                    onCancel={() => {
+                        setToggleEditSongSheet(false);
+                        setSheetIndex(-1);
+                    }}
+                    onClear={() => {
+                        setSheetIndex(-1);
+                        setToggleCreateOrUpdate('create');
+                    }}
+                />}
             </div>
 
 
             <div id={'displaySpace'} className={'songDataSheetElement'}>
 
                 {props.song.references !== undefined && props.song.references.length > 0 && // display References
-                    <div className={'displayReferences'}>
-                        <div id={'listOfReferences'}>
-                            {props.song.references.map((item, index) =>
-                                <div key={index} className={'retainedReferenceItem'}
-                                     onClick={() => openUpdateReference(index)}>
-                                    &ndash;&#129174;&nbsp; {(item.addedCollection === null) ?
-                                    <span>{songCollectionToRealName(item.songCollection)}</span> :
-                                    <span>{item.addedCollection}</span>}
-                                    {item.page !== 0 && <span>, page {item.page} </span>}
-                                    {item.key && <span>– </span>}
-                                    {item.key && <span className={'displayKey'}>({item.key})</span>}
-                                </div>)}
-                        </div>
+                    <div id={'displayReferences'}>
+                        {props.song.references.map((item, index) =>
+                            <div key={index} className={'reference'}
+                                 onClick={() => openUpdateReference(index)}>
+                                &ndash;&#129174;&nbsp; {(item.addedCollection === null) ?
+                                <span>{songCollectionToRealName(item.songCollection)}</span> :
+                                <span>{item.addedCollection}</span>}
+                                {item.page !== 0 && <span>, page {item.page} </span>}
+                                {item.key && <span> – <span className={'displayKey'}>({item.key})</span></span>}
+                            </div>)}
                     </div>}
 
                 <div>
@@ -560,12 +536,30 @@ function SongItemDetails(props: SongItemProps) {
                                     <span className={'linkDot'} onClick={() => openUpdateLink(index)}>&#8734;</span>&nbsp;
                                     <a href={item.linkTarget} target={'_blank'} rel={'noreferrer'}>
                                         <span className={'linkText'}>{item.linkText}</span></a>
-                                    {item.linkKey && <span> – </span>}
-                                    {item.linkKey && <span className={'displayKey'}>({item.linkKey})</span>}
+                                    {item.linkKey && <span> – <span className={'displayKey'}>({item.linkKey})</span></span>}
                                     {item.linkAuthor && <span id={'displayLinkAuthor'}> – by: {item.linkAuthor}</span>}
                                     {item.linkStrumming && <span id={'displayLinkStrumming'}> – {item.linkStrumming}</span>}
                                 </div>)
                             }
+                        </div>
+                    }
+                </div>
+
+                <div>
+                    {(props.song.songSheets !== undefined && props.song.songSheets?.length > 0)
+                    && <div id={'displaySongSheets'}>
+                            {props.song.songSheets.map((item, index) =>
+                                <div key={index}>
+                                    <span className={'songSheet'} onClick={() => openUpdateSongSheet(index)}>
+                                        <span>&#x266b;&nbsp; &nbsp;{item.name} </span>
+                                        {item.key && <span> – <span className={'displayKey'}>({item.key})</span></span>}
+                                    </span>
+                                    <span className={'songSheetDescriptive'} onClick={() => openUpdateSongSheet(index)}>
+                                        {item.source && <span className={'displaySource'}><span className={'separator'}>&#x2669;</span>{item.source}</span>}
+                                        {item.description && <span className={'displayDescription'}><span className={'separator'}>&#x2669;</span>{item.description}</span>}
+                                    </span>
+                                </div>)}
+
                         </div>
                     }
                 </div>

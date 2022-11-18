@@ -42,7 +42,7 @@ public class SongCollectionController {
         System.out.println("\n-> Received file \"" + file.getOriginalFilename()
                 + "\" with Content Type: \"" + file.getContentType() + "\"");
         try {
-            return new ResponseEntity<>(songCollectionService.processMultipartFileUpload(file), HttpStatus.OK);
+            return new ResponseEntity<>(songCollectionService.processCollectionUpload(file), HttpStatus.OK);
         } catch (MalformedFileException e) { // wrong file encoding
             return ResponseEntity.status(406).body(jsonifyToMessage(e.getMessage()));
         } catch (RuntimeException e) {
@@ -121,7 +121,6 @@ public class SongCollectionController {
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
-
 
     private String jsonifyToMessage(String errorMessage) {
         return "{\"message\": \"" + errorMessage + "\"}";

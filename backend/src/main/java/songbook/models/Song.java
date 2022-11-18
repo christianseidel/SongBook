@@ -1,6 +1,7 @@
 package songbook.models;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import songbook.collections.models.Reference;
@@ -23,6 +24,7 @@ public class Song {
     private String description;
     private List<Reference> references = new ArrayList<>();
     private List<Link> links = new ArrayList<>();
+    private List<SongSheet> songSheets = new ArrayList<>();
 
     public Song() {
         this.id = UUID.randomUUID().toString();
@@ -30,6 +32,7 @@ public class Song {
     }
 
     public Song(String title) {
+        System.out.println("wie oft im song drin?");
         this.id = UUID.randomUUID().toString();
         this.title = title;
         this.dateCreated = LocalDate.now();

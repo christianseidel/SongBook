@@ -9,9 +9,10 @@ export interface Song {
     dateCreated?: string;
     dayOfCreation: DayOfCreation;
     description?: string;
-    references?: Array<Reference>;
     status: string;
+    references?: Array<Reference>;
     links?: Array<Link>;
+    songSheets?: Array<SongSheet>;
 }
 
 export class Link {
@@ -29,6 +30,24 @@ export class Link {
         this.linkStrumming = linkStrumming;
     }
 }
+
+export class SongSheet {
+    name: string;
+    source?: string;
+    description?: string;
+    key?: string;
+    fileName: string;
+    dateUploaded?: string;
+
+    constructor(name: string, source: string, description: string, key: string) {
+        this.name = name;
+        this.source = source;
+        this.description = description;
+        this.key = key;
+        this.fileName = "IAmStillADummyFileName.pdf";
+    }
+}
+
 
 export class Mood {
     static checkIfMajorOrEmpty(key: string | undefined) {
