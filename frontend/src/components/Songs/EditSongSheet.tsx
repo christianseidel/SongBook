@@ -1,5 +1,5 @@
 import React, {FormEvent, useEffect, useState} from "react";
-import {SongSheet} from "./songModels";
+import {Mood, SongSheet} from "./songModels";
 import ChooseKey from "./WorkingSpace/ChooseKey";
 
 interface SongSheetProps {
@@ -17,14 +17,16 @@ function EditSongSheet(props: SongSheetProps) {
     const [name, setName] = useState('');
     const [source, setSource] = useState('');
     const [description, setDescription] = useState('');
-    const [key, setKey] = useState('');
+    const [songKey, setSongKey] = useState('');
+    const [songKeyReturned, setSongKeyReturned] = useState('')
+    const [songMood, setSongMood] = useState(0);
 
 
     const clearSheet = () => {
         setName('')
         setSource('');
         setDescription('')
-        setKey('');
+        setSongKey('');
     }
 
     useEffect(() => {
@@ -32,9 +34,10 @@ function EditSongSheet(props: SongSheetProps) {
             setName(props.songSheets[props.sheetIndex].name);
             setSource(props.songSheets[props.sheetIndex].source ?? ``);
             setDescription(props.songSheets[props.sheetIndex].description ?? ``);
-            setKey(props.songSheets[props.sheetIndex].key ?? ``);
+            setSongKey(props.songSheets[props.sheetIndex].key ?? ``);
+            setSongMood(Mood.checkIfMajorOrEmpty(songKey) ? 0 : 1);
         }
-    }, [props.sheetIndex, props.songSheets, props.toggleCreateOrUpdate]);
+    }, [props.sheetIndex, props.songSheets, props.toggleCreateOrUpdate, songKey]);
 
 
     function uploadSongSheet(files: FileList | null) {
@@ -76,13 +79,13 @@ function EditSongSheet(props: SongSheetProps) {
                     }
                 })
 
-            console.log("man weiß es noch nicht.")
+            console.log("uploading song sheets not yet working...")
         }
     }
 
     const doCreateSongSheet = (ev: FormEvent<HTMLFormElement>) => {
         ev.preventDefault();
-        let songSheet = new SongSheet(name, source, description, key);
+        let songSheet = new SongSheet(name, source, description, songKeyReturned);
         if (props.songSheets !== undefined) {
             let next: number;
             next = props.songSheets.length;
@@ -98,7 +101,7 @@ function EditSongSheet(props: SongSheetProps) {
             songSheet.name = name;
             songSheet.source = source;
             songSheet.description = description;
-            songSheet.key = key;
+            songSheet.key = songKeyReturned;
             props.songSheets[props.sheetIndex] = songSheet;
         }
         clearSheet();
@@ -145,8 +148,10 @@ function EditSongSheet(props: SongSheetProps) {
                 </span>
 
                 <ChooseKey
+                    songKey={songKey}
+                    songMood={songMood}
                     onCancel={props.onCancel}
-                    escalateKey={(key: string) => setKey(key)}
+                    sendUpKey={(key: string) => setSongKeyReturned(key)}
                 />
 
             </form>

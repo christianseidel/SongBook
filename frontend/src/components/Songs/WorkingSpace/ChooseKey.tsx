@@ -3,8 +3,10 @@ import React, {useEffect, useState} from "react";
 import "../../styles/songDetails.css"
 
 interface SetKeyProps {
+    songKey: string;
+    songMood: number;
     onCancel: () => void;
-    escalateKey: (key: string) => void;
+    sendUpKey: (key: string) => void;
 }
 
 function ChooseKey(props: SetKeyProps) {
@@ -12,9 +14,12 @@ function ChooseKey(props: SetKeyProps) {
     const [key, setKey] = useState('');
     const [mood, setMood] = useState(0);
 
-    useEffect(() => props.escalateKey(key));
+    useEffect(() => {
+        setMood(props.songMood);
+        setKey(props.songKey)
+    }, [props.songMood, props.songKey]);
 
-///    useEffect(() => setMood(Mood.checkIfMajorOrEmpty(key) ? 0 : 1));
+    useEffect(() => props.sendUpKey(key));
 
     return(
         <span className={'nextLine'}>
