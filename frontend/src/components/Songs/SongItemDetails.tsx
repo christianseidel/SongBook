@@ -26,9 +26,7 @@ function SongItemDetails(props: SongItemProps) {
     const [message, setMessage] = useState('');
     useEffect(() => setSongState(props.song.status), [props.song.status]);
     const [description, setDescription] = useState(sessionStorage.getItem('description') ?? '');
-    useEffect(() => {
-        sessionStorage.setItem('description', description)
-    }, [description]);
+    useEffect(() => sessionStorage.setItem('description', description), [description]);
 
     const [displayDescription, setDisplayDescription] = useState(true);
     const [toggleEditDescription, setToggleEditDescription] = useState(false);
@@ -36,7 +34,6 @@ function SongItemDetails(props: SongItemProps) {
     const [toggleEditLink, setToggleEditLink] = useState(false);
     const [toggleEditSongSheet, setToggleEditSongSheet] = useState(false);
     // controls whether a new item will be created or an existing will be updated
-    // this value is used both for reference and link items
     const [toggleCreateOrUpdate, setToggleCreateOrUpdate] = useState('create');
 
 
@@ -200,6 +197,7 @@ function SongItemDetails(props: SongItemProps) {
     const [key, setKey] = useState('');
     const [mood, setMood] = useState(0);
     const [refIndex, setRefIndex] = useState(-1);
+    const [readOnly, setReadOnly] = useState('')
 
     const createReference = (ev: FormEvent<HTMLFormElement>) => {
         ev.preventDefault();
@@ -222,22 +220,19 @@ function SongItemDetails(props: SongItemProps) {
 
     const openUpdateReference = (index: number) => {
         setToggleEditDescription(false);
+        setToggleEditReference(true);
         setToggleEditLink(false);
         setToggleEditSongSheet(false);
-        setToggleEditReference(true);
+        setToggleCreateOrUpdate('update');
         setRefIndex(index);
         if (props.song.references !== undefined) {
             let ref: Reference = props.song.references[index];
             if (ref.songCollection === 'MANUALLY_ADDED_COLLECTION') {
                 setCollection(ref.addedCollection);
-                if (document.getElementById('inputRefCollection') != null) {
-                    document.getElementById('inputRefCollection')!.className = '';
-                }
+                setReadOnly('');
             } else {
                 setCollection(songCollectionToRealName(ref.songCollection) ?? '');
-                if (document.getElementById('inputRefCollection') != null) {
-                    document.getElementById('inputRefCollection')!.className = 'readOnly';
-                }
+                setReadOnly('readOnly');
             }
             ref.page !== 0 ? setPage(String(ref.page)) : setPage('');
             Mood.checkIfMajorOrEmpty(ref.key) ? setMood(0) : setMood(1);
@@ -245,7 +240,6 @@ function SongItemDetails(props: SongItemProps) {
                 ? setKey('')
                 : setKey(ref.key);
         }
-        setToggleCreateOrUpdate('update');
     }
 
     const doUpdateReference = () => {
@@ -287,7 +281,7 @@ function SongItemDetails(props: SongItemProps) {
         setPage('');
         setKey('');
         setMood(0);
-        if (document.getElementById('inputRefCollection') != null) {
+        if (document.getElementById('inputRefCollection') !== null) {
             document.getElementById('inputRefCollection')!.className = '';
         }
         setToggleCreateOrUpdate('create');
@@ -336,7 +330,6 @@ function SongItemDetails(props: SongItemProps) {
         setToggleEditSongSheet(true);
         setToggleCreateOrUpdate('update')
     }
-
 
         return (
         <div>
@@ -409,7 +402,7 @@ function SongItemDetails(props: SongItemProps) {
                         <div className={'nextLine'}>
                             <label>Coll.:</label>
                             <input id={'inputRefCollection'} type='text' value={collection}
-                                   placeholder={'Song Collection'}
+                                   placeholder={'Song Collection'} className={readOnly}
                                    onChange={ev => setCollection(ev.target.value)} required autoFocus tabIndex={1}/>
                             <label id={'labelInputRefPage'}>Page:</label>
                             <input id={'inputRefPage'} type='number' value={page} placeholder={'Page'}
@@ -567,7 +560,7 @@ function SongItemDetails(props: SongItemProps) {
 
 
             <div id={'songFooter'}>
-                created: {props.song.dayOfCreation.day}.
+                <span id={'crea'}>created:</span> {props.song.dayOfCreation.day}.
                 {props.song.dayOfCreation.month}.
                 {props.song.dayOfCreation.year}
             </div>
