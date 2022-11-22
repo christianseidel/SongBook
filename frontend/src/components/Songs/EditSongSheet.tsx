@@ -153,8 +153,8 @@ function EditSongSheet(props: SongSheetProps) {
                     onCancel={props.onCancel}
                     sendUpKey={(key: string) => setSongKeyReturned(key)}
                 />
-
             </form>
+
             <button id={'buttonClearLink'} type='button' onClick={() => {
                 doClearSongSheet()
             }} tabIndex={9}>

@@ -1,7 +1,7 @@
 import React, {FormEvent, useEffect, useState} from "react";
 import '../styles/songDetails.css'
 import {Link, Mood} from "./songModels";
-import {keys} from "../literals/keys";
+import ChooseKey from "./WorkingSpace/ChooseKey";
 
 interface SongItemLinksProps {
     toggleCreateOrUpdate: string;
@@ -18,14 +18,14 @@ function EditLink(props: SongItemLinksProps) {
     const [linkTarget, setLinkTarget] = useState('');
     const [linkAuthor, setLinkAuthor] = useState('');
     const [strumming, setStrumming] = useState('');
-    const [key, setKey] = useState('');
-    const [mood, setMood] = useState(0);
+    const [songKey, setSongKey] = useState('');
+    const [songKeyReturned, setSongKeyReturned] = useState('')
+    const [songMood, setSongMood] = useState(0);
 
     const clearLink = () => {
         setLinkText('')
         setLinkTarget('');
-        setKey('');
-        setMood(0);
+        setSongKey('');
         setLinkAuthor('')
         setStrumming('');
     }
@@ -34,13 +34,13 @@ function EditLink(props: SongItemLinksProps) {
         if (props.toggleCreateOrUpdate === 'update' && props.links) {
             setLinkText(props.links[props.linkIndex].linkText);
             setLinkTarget(props.links[props.linkIndex].linkTarget);
-            let key = props.links[props.linkIndex].linkKey;
-            setKey(key);
-            setMood(Mood.checkIfMajorOrEmpty(key) ? 0 : 1);
             setLinkAuthor(props.links[props.linkIndex].linkAuthor);
             setStrumming(props.links[props.linkIndex].linkStrumming);
+            setSongKey(props.links[props.linkIndex].linkKey ?? ``);
+            console.log("useEffect Edit Link: " + props.links[props.linkIndex].linkKey);
+            setSongMood(Mood.checkIfMajorOrEmpty(songKey) ? 0 : 1);
         }
-    }, [props.linkIndex, props.links, props.toggleCreateOrUpdate]);
+    }, [props.linkIndex, props.links, props.toggleCreateOrUpdate, songKey]);
 
     const doCreateLink = (ev: FormEvent<HTMLFormElement>) => {
         ev.preventDefault();
@@ -48,7 +48,7 @@ function EditLink(props: SongItemLinksProps) {
         if (linkTarget.slice(0, 4) !== 'http') {
             finalTarget = 'https://' + finalTarget;
         }
-        let link = new Link(linkText, finalTarget, key, linkAuthor, strumming);
+        let link = new Link(linkText, finalTarget, songKeyReturned, linkAuthor, strumming);
         if (props.links !== undefined) {
             let next: number;
             next = props.links.length;
@@ -67,7 +67,7 @@ function EditLink(props: SongItemLinksProps) {
                 finalTarget = 'https://' + finalTarget;
             }
             link.linkTarget = finalTarget;
-            link.linkKey = key;
+            link.linkKey = songKeyReturned;
             link.linkStrumming = strumming;
             props.links[props.linkIndex] = link;
         }
@@ -117,37 +117,14 @@ function EditLink(props: SongItemLinksProps) {
                            onChange={ev => setStrumming(ev.target.value)} tabIndex={4}/>
                 </span>
 
-                <span className={'nextLine'}>
-                        <label htmlFor={'inputKey'}>Key:</label>
-                            <select name={'inputKey'} id={'inputKey'}
-                                    value={key} onChange={ev => setKey(ev.target.value)}
-                                    tabIndex={5}>{keys.map((songKey) => (
-                                <option value={songKey.mood[mood].value}
-                                        key={songKey.mood[mood].value}>{songKey.mood[mood].label}</option>
-                            ))}
-                        </select>
-                        <input type={'radio'} id={'major'} name={'majorOrMinor'}
-                               value={0} className={'inputMajorOrMinor'} checked={mood === 0}
-                               onChange={ev => {
-                                   setMood(Number(ev.target.value));
-                                   setKey('');
-                               }} tabIndex={6}/>
-                        <label htmlFor={'major'} className={'labelInputMajorOrMinor'}>major</label>
-                        <input type={'radio'} id={'minor'} name={'majorOrMinor'}
-                               value={1} className={'inputMajorOrMinor'} checked={mood === 1}
-                               onChange={ev => {
-                                   setMood(Number(ev.target.value));
-                                   setKey('');
-                               }}/>
-                        <label htmlFor={'minor'} className={'labelInputMajorOrMinor'}>minor</label>
-                        <button id={'buttonCancelEditLink'} type='button' onClick={() => {
-                            props.onCancel()
-                        }}
-                                tabIndex={8}>
-                            cancel
-                        </button>
-                    </span>
+                <ChooseKey
+                    songKey={songKey}
+                    songMood={songMood}
+                    onCancel={props.onCancel}
+                    sendUpKey={(key: string) => setSongKeyReturned(key)}
+                />
             </form>
+
             <button id={'buttonClearLink'} type='button' onClick={() => {
                 doClearLink()
             }} tabIndex={9}>
