@@ -108,7 +108,6 @@ public class SongCollectionService {
         // save file
         String fileLocation = tempDir + File.separator + file.getOriginalFilename();
         File storedSongCollection = new File(fileLocation);
-        System.out.println("die datei: " + fileLocation);
         file.transferTo(storedSongCollection);
         System.out.println("-> File created: " + file.getOriginalFilename());
 
@@ -234,6 +233,7 @@ public class SongCollectionService {
             case "liederzug_13" -> LIEDERZUG_13;
             case "liederwelt_14" -> LIEDERWELT_14;
             case "liederfest_15" -> LIEDERFEST_15;
+            case "frohe weihnachten" -> FROHE_WEIHNACHTEN;
             case "test collection #1" -> TEST_COLLECTION_1;
             case "test collection #2" -> TEST_COLLECTION_2;
             case "test collection #3" -> TEST_COLLECTION_3;

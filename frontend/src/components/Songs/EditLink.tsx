@@ -37,7 +37,6 @@ function EditLink(props: SongItemLinksProps) {
             setLinkAuthor(props.links[props.linkIndex].linkAuthor);
             setStrumming(props.links[props.linkIndex].linkStrumming);
             setSongKey(props.links[props.linkIndex].linkKey ?? ``);
-            console.log("useEffect Edit Link: " + props.links[props.linkIndex].linkKey);
             setSongMood(Mood.checkIfMajorOrEmpty(songKey) ? 0 : 1);
         }
     }, [props.linkIndex, props.links, props.toggleCreateOrUpdate, songKey]);

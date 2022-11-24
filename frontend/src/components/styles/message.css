@@ -12,6 +12,7 @@
     padding: 15px;
     box-shadow: 12px 8px 16px 0 dimgray, 0 6px 20px 0 dimgray;
     transition: 400ms;
+    z-index: 3;
 }
 
 #uploadResultContainer {
