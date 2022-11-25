@@ -570,12 +570,21 @@
 
 
 #labelUploadSongSheetForm {
-    margin-left: 186px;
+    margin-right: 68px;
 }
 
 #uploadSongSheetForm {
     float: right;
     margin-top: 8px;
+}
+
+#fileId {
+    margin-left: 47px;
+}
+
+#buttonDiscardSongSheetFile {
+    float: right;
+    margin-top: 6px;
 }
 
 /*  FOOTER  */

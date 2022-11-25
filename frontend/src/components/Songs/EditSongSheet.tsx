@@ -20,6 +20,7 @@ function EditSongSheet(props: SongSheetProps) {
     const [songKey, setSongKey] = useState('');
     const [songKeyReturned, setSongKeyReturned] = useState('')
     const [songMood, setSongMood] = useState(0);
+    const [fileId, setFileId] =  useState('');
 
 
     const clearSheet = () => {
@@ -36,6 +37,7 @@ function EditSongSheet(props: SongSheetProps) {
             setDescription(props.songSheets[props.sheetIndex].description ?? ``);
             setSongKey(props.songSheets[props.sheetIndex].key ?? ``);
             setSongMood(Mood.checkIfMajorOrEmpty(songKey) ? 0 : 1);
+            setFileId(props.songSheets[props.sheetIndex].fileId ?? ``);
         }
     }, [props.sheetIndex, props.songSheets, props.toggleCreateOrUpdate, songKey]);
 
@@ -44,6 +46,8 @@ function EditSongSheet(props: SongSheetProps) {
         sessionStorage.setItem('messageType', 'red');
         if (files === null) {
             alert('Ops, somehow the FormData Object produced a glitch.')
+        } else if (files[0].name.slice(files[0].name.length-3, files[0].name.length) !== 'pdf') {
+            alert('Please, choose a PDF or a JPG file.')
         } else {
             const formData = new FormData();
             formData.append('file', files[0]);
@@ -58,10 +62,9 @@ function EditSongSheet(props: SongSheetProps) {
                 })
                 .then((responseBody) => {
                     if (responseStatus === 200) {
-                        // Todo: Do The Magic
-                        // Yet to implement...
                         console.log('File "' + files[0].name + '" successfully transmitted to backend!');
                         console.log(responseBody);
+                        setFileId(responseBody.message);
                     } else if (responseStatus === 400) {
                         sessionStorage.setItem('message', 'Sorry, the server does not accept your request (Bad Request).');
                     } else if (responseStatus === 404) {
@@ -83,9 +86,27 @@ function EditSongSheet(props: SongSheetProps) {
         }
     }
 
+    const doCancel = () => {
+        if (fileId !== '') {
+            deleteSongSheetFile();
+        }
+        props.onCancel();
+    }
+
+    const deleteSongSheetFile = () => {
+        fetch('api/songbook/upload/' + fileId, {
+            method: 'DELETE',
+        })
+            .then((response) => {
+                if (response.status !== 200) {
+                    alert("Song Sheet could not be deleted!");
+                }
+            })
+    }
+
     const doCreateSongSheet = (ev: FormEvent<HTMLFormElement>) => {
         ev.preventDefault();
-        let songSheet = new SongSheet(name, source, description, songKeyReturned);
+        let songSheet = new SongSheet(name, source, description, songKeyReturned, fileId);
         if (props.songSheets !== undefined) {
             let next: number;
             next = props.songSheets.length;
@@ -102,6 +123,7 @@ function EditSongSheet(props: SongSheetProps) {
             songSheet.source = source;
             songSheet.description = description;
             songSheet.key = songKeyReturned;
+            songSheet.fileId = fileId;
             props.songSheets[props.sheetIndex] = songSheet;
         }
         clearSheet();
@@ -148,13 +170,13 @@ function EditSongSheet(props: SongSheetProps) {
                 </span>
 
                 <div id={'ContainerInsertingDateUploaded'}>
-                <ChooseKey
+                    <ChooseKey
                     songKey={songKey}
                     songMood={songMood}
-                    onCancel={props.onCancel}
+                    onCancel={doCancel}
                     sendUpKey={(key: string) => setSongKeyReturned(key)}
-                />
-                {props.toggleCreateOrUpdate === 'update' && <span id={'dateUploaded'} >created: {props.songSheets![props.sheetIndex].dateUploaded}</span>}
+                    />
+                    {props.toggleCreateOrUpdate === 'update' && <span id={'dateUploaded'} >created: {props.songSheets![props.sheetIndex].dateUploaded}</span>}
                 </div>
 
             </form>
@@ -173,13 +195,19 @@ function EditSongSheet(props: SongSheetProps) {
                     &#10008; delete
                 </button>}
 
-            <label id={'labelUploadSongSheetForm'}>Add file:</label>
-
-                <form encType={'multipart/form-data'} id={'uploadSongSheetForm'}>
-                    <input type={'file'} id={'inputAddSongSheet'}
-                           onChange={event => uploadSongSheet(event.target.files)}/>
-                </form>
-
+            {fileId === ''
+                ?   <form encType={'multipart/form-data'} id={'uploadSongSheetForm'}>
+                        <label id={'labelUploadSongSheetForm'}>Add file:</label>
+                        <input type={'file'} id={'inputAddSongSheet'} accept={'application/pdf'}
+                               onChange={event => uploadSongSheet(event.target.files)}/>
+                    </form>
+                : <span id={'fileId'}><label>id:</label> {fileId}
+                    <button onClick={() => {
+                        deleteSongSheetFile();
+                        setFileId('')}} id={'buttonDiscardSongSheetFile'}
+                        >discard</button>
+                  </span>
+            }
         </div>
     )
 }

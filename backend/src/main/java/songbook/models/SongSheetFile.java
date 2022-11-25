@@ -1,6 +1,7 @@
 package songbook.models;
 
 import lombok.Data;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -8,11 +9,13 @@ import org.springframework.web.multipart.MultipartFile;
 @Data
 public class SongSheetFile {
 
-    private MultipartFile file;
+    @Id
     private String id;
+    private String fileName;
+    // private MultipartFile file;
 
-    public SongSheetFile(MultipartFile file, String id) {
-        this.file = file;
-        this.id = id;
+    public SongSheetFile(MultipartFile file) {
+        this.fileName = file.getOriginalFilename();
+       // this.file = file;
     }
 }

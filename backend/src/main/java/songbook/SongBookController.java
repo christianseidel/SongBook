@@ -65,8 +65,14 @@ public class SongBookController {
     }
 
     @PostMapping(path = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Object> uploadSongSheet(@RequestParam("file") MultipartFile file, String id) {
-        return ResponseEntity.status(200).body(jsonifyToMessage(songBookService.uploadSongSheet(file, id)));
+    public ResponseEntity<Object> uploadSongSheetFile(@RequestParam("file") MultipartFile file) {
+        System.out.println("content type: " + file.getContentType() + ", name: "+ file.getOriginalFilename());
+        return ResponseEntity.status(200).body(jsonifyToMessage(songBookService.uploadSongSheetFile(file)));
+    }
+
+    @DeleteMapping("/upload/{fileId}")
+    public void deleteSongSheetFile(@PathVariable String fileId) {
+        songBookService.deleteSongSheetFile(fileId);
     }
 
     private String jsonifyToMessage(String errorMessage) {

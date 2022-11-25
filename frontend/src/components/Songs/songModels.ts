@@ -36,15 +36,15 @@ export class SongSheet {
     source?: string;
     description?: string;
     key?: string;
-    fileName: string;
+    fileId?: string;
     dateUploaded: string;
 
-    constructor(name: string, source: string, description: string, key: string) {
+    constructor(name: string, source: string, description: string, key: string, fileId: string) {
         this.name = name;
         this.source = source;
         this.description = description;
         this.key = key;
-        this.fileName = "IAmStillADummyFileName.pdf";
+        this.fileId = fileId;
         this.dateUploaded = getCurrentDate();
     }
 }

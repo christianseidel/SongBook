@@ -109,12 +109,11 @@ public class SongBookService {
         }
     }
 
-    public String uploadSongSheet(MultipartFile file, String id) {
-        songSheetsRepository.save(new SongSheetFile(file, id));
-        if (songSheetsRepository.findById(id).isPresent()) {
-            return "Your song sheet has successfully been saved";
-        } else {
-            return "Server Error occurred: Your song sheet could not be saved.";
-        }
+    public String uploadSongSheetFile(MultipartFile file) {
+        return songSheetsRepository.save(new SongSheetFile(file)).getId();
+    }
+
+    public void deleteSongSheetFile(String fileId) {
+        songSheetsRepository.deleteById(fileId);
     }
 }
