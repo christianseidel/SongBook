@@ -37,7 +37,7 @@ export class SongSheet {
     description?: string;
     key?: string;
     fileName: string;
-    dateUploaded?: string;
+    dateUploaded: string;
 
     constructor(name: string, source: string, description: string, key: string) {
         this.name = name;
@@ -45,7 +45,15 @@ export class SongSheet {
         this.description = description;
         this.key = key;
         this.fileName = "IAmStillADummyFileName.pdf";
+        this.dateUploaded = getCurrentDate();
     }
+}
+
+const getCurrentDate = () => {
+    let date = new Date();
+    return String(date.getDate()).padStart(2, '0') + '.'
+        + String(date.getMonth() + 1).padStart(2, '0') +'.'
+        + date.getFullYear();
 }
 
 

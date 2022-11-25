@@ -32,7 +32,6 @@ public class Song {
     }
 
     public Song(String title) {
-        System.out.println("wie oft im song drin?");
         this.id = UUID.randomUUID().toString();
         this.title = title;
         this.dateCreated = LocalDate.now();

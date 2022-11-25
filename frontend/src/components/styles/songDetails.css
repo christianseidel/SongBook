@@ -554,6 +554,21 @@
     margin-left: 14px;
 }
 
+#ContainerInsertingDateUploaded {
+    height: 24px;
+}
+
+#dateUploaded {
+    position: relative;
+    left: 359px;
+    top: -24px;
+    color: darkslategray;
+    font-family: "Times New Roman", sans-serif;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+
 #labelUploadSongSheetForm {
     margin-left: 186px;
 }

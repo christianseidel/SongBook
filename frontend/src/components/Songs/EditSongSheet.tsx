@@ -147,13 +147,19 @@ function EditSongSheet(props: SongSheetProps) {
                            onChange={ev => setDescription(ev.target.value)} tabIndex={3}/>
                 </span>
 
+                <div id={'ContainerInsertingDateUploaded'}>
                 <ChooseKey
                     songKey={songKey}
                     songMood={songMood}
                     onCancel={props.onCancel}
                     sendUpKey={(key: string) => setSongKeyReturned(key)}
                 />
+                {props.toggleCreateOrUpdate === 'update' && <span id={'dateUploaded'} >created: {props.songSheets![props.sheetIndex].dateUploaded}</span>}
+                </div>
+
             </form>
+
+
 
             <button id={'buttonClearLink'} type='button' onClick={() => {
                 doClearSongSheet()

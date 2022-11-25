@@ -45,9 +45,6 @@ public class SongBookService {
 
     public Optional<Song> editSong(String id, Song song) {
         var item = songsRepository.findById(id);
-        int n = 0;
-        System.out.println(n + "th walkthrough");
-        n++;
         if (item.isEmpty()) {
             throw new RuntimeException("A song with Id no. \"" + id + "\" could not be found. " +
                     "Consequently, your song has not been changed!");
