@@ -205,7 +205,7 @@ function EditSongSheet(props: SongSheetProps) {
                     <button onClick={() => {
                         deleteSongSheetFile();
                         setFileId('')}} id={'buttonDiscardSongSheetFile'}
-                        >discard</button>
+                        >&#9986; discard</button>
                   </span>
             }
         </div>

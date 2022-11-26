@@ -11,6 +11,8 @@ import {songCollectionToRealName} from "../literals/collectionNames";
 import {keys} from "../literals/keys";
 import EditLink from "./EditLink";
 import EditSongSheet from "./EditSongSheet";
+import {feedback} from "../feedbackModel";
+import Eins from "../Eins";
 
 interface SongItemProps {
     song: Song;
@@ -60,21 +62,21 @@ function SongItemDetails(props: SongItemProps) {
 
 
     // controls rendering of the first two lines within Song Details View //
-    let handelTitleLine;
+    let handleTitleLine;
     if (songState === 'display') {
-        handelTitleLine = <DisplaySongTitle
+        handleTitleLine = <DisplaySongTitle
             song={props.song}
             updateDetailsView={() => setSongState(props.song.status)}
             clear={props.clear}
         />;
     } else if (songState === 'edit') {
-        handelTitleLine = <EditSongTitle
+        handleTitleLine = <EditSongTitle
             song={props.song}
             updateDetailsView={() => setSongState(props.song.status)}
             onItemRevision={(song) => props.onItemRevision(song)}
         />;
     } else if (songState === 'create') {
-        handelTitleLine = <CreateSongTitle
+        handleTitleLine = <CreateSongTitle
             song={props.song}
             onItemCreation={(song) => props.onItemRevision(song)}
             clear={props.clear}
@@ -331,11 +333,23 @@ function SongItemDetails(props: SongItemProps) {
         setToggleCreateOrUpdate('update')
     }
 
-        return (
+    const [bingo, setBingo] = useState<feedback>()
+
+    function createMessage() {
+        setBingo(new feedback('song', 'ding', 1.5));
+    }
+
+    return (
         <div>
             <div id={'songHead'} className={'songDataSheetElement'}>
-                <div>{handelTitleLine}</div>
+                <div>{handleTitleLine}</div>
+                <button onClick={createMessage}>start show</button>
+
+                <Eins feedback={bingo}/>
+
             </div>
+
+
 
             <div id={'iconContainer'}>
                     <span className={'icon tooltip'} id={'iconInfo'} onClick={openOrCloseAddDescription}>
@@ -475,7 +489,7 @@ function SongItemDetails(props: SongItemProps) {
                     returnAndSave={() => {
                         saveSongItem();
                         setToggleEditLink(false);
-                        }}
+                    }}
                     onCancel={() => {
                         setToggleEditLink(false);
                         setLinkIndex(-1);
@@ -526,12 +540,15 @@ function SongItemDetails(props: SongItemProps) {
                         && <div id={'displayLinks'}>
                             {props.song.links.map((item, index) =>
                                 <div key={index} className={'link'}>
-                                    <span className={'linkDot'} onClick={() => openUpdateLink(index)}>&#8734;</span>&nbsp;
+                                    <span className={'linkDot'}
+                                          onClick={() => openUpdateLink(index)}>&#8734;</span>&nbsp;
                                     <a href={item.linkTarget} target={'_blank'} rel={'noreferrer'}>
                                         <span className={'linkText'}>{item.linkText}</span></a>
-                                    {item.linkKey && <span> – <span className={'displayKey'}>({item.linkKey})</span></span>}
+                                    {item.linkKey &&
+                                        <span> – <span className={'displayKey'}>({item.linkKey})</span></span>}
                                     {item.linkAuthor && <span id={'displayLinkAuthor'}> – by: {item.linkAuthor}</span>}
-                                    {item.linkStrumming && <span id={'displayLinkStrumming'}> – {item.linkStrumming}</span>}
+                                    {item.linkStrumming &&
+                                        <span id={'displayLinkStrumming'}> – {item.linkStrumming}</span>}
                                 </div>)
                             }
                         </div>
@@ -540,7 +557,7 @@ function SongItemDetails(props: SongItemProps) {
 
                 <div>
                     {(props.song.songSheets !== undefined && props.song.songSheets?.length > 0)
-                    && <div id={'displaySongSheets'}>
+                        && <div id={'displaySongSheets'}>
                             {props.song.songSheets.map((item, index) =>
                                 <div key={index}>
                                     <span className={'songSheet'} onClick={() => openUpdateSongSheet(index)}>
@@ -548,8 +565,10 @@ function SongItemDetails(props: SongItemProps) {
                                         {item.key && <span> – <span className={'displayKey'}>({item.key})</span></span>}
                                     </span>
                                     <span className={'songSheetDescriptive'} onClick={() => openUpdateSongSheet(index)}>
-                                        {item.source && <span className={'displaySource'}><span className={'separator'}>&#x2669;</span>{item.source}</span>}
-                                        {item.description && <span className={'displayDescription'}><span className={'separator'}>&#x2669;</span>{item.description}</span>}
+                                        {item.source && <span className={'displaySource'}><span
+                                            className={'separator'}>&#x2669;</span>{item.source}</span>}
+                                        {item.description && <span className={'displayDescription'}><span
+                                            className={'separator'}>&#x2669;</span>{item.description}</span>}
                                     </span>
                                 </div>)}
 
