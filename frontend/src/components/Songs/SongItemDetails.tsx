@@ -11,8 +11,8 @@ import {songCollectionToRealName} from "../literals/collectionNames";
 import {keys} from "../literals/keys";
 import EditLink from "./EditLink";
 import EditSongSheet from "./EditSongSheet";
-import {feedback} from "../feedbackModel";
-import Eins from "../Eins";
+import {feedback, Message} from "../feedbackModel";
+import Feedback from "../Feedback";
 
 interface SongItemProps {
     song: Song;
@@ -333,19 +333,18 @@ function SongItemDetails(props: SongItemProps) {
         setToggleCreateOrUpdate('update')
     }
 
-    const [bingo, setBingo] = useState<feedback>()
+    const [myFeedback, setMyFeedback] = useState<feedback>()
 
-    function createMessage() {
-        setBingo(new feedback('song', 'ding', 1.5));
-    }
 
     return (
         <div>
             <div id={'songHead'} className={'songDataSheetElement'}>
                 <div>{handleTitleLine}</div>
-                <button onClick={createMessage}>start show</button>
 
-                <Eins feedback={bingo}/>
+                <button onClick={() =>
+                    setMyFeedback(Message.start('song', 'ding', 1.5))
+                }>start show</button>
+                <Feedback feedback={myFeedback}/>
 
             </div>
 

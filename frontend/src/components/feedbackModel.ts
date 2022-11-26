@@ -10,3 +10,9 @@ export class feedback {
         this.lifetime = lifetime;
     }
 }
+
+export class Message {
+    static start(message: string, icon: string, lifetime: number) {
+        return new feedback(message, icon, lifetime);
+    }
+}

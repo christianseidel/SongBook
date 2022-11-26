@@ -61,6 +61,7 @@ function EditSongSheet(props: SongSheetProps) {
                     return response.json();
                 })
                 .then((responseBody) => {
+
                     if (responseStatus === 200) {
                         console.log('File "' + files[0].name + '" successfully transmitted to backend!');
                         console.log(responseBody);
@@ -176,7 +177,10 @@ function EditSongSheet(props: SongSheetProps) {
                     onCancel={doCancel}
                     sendUpKey={(key: string) => setSongKeyReturned(key)}
                     />
-                    {props.toggleCreateOrUpdate === 'update' && <span id={'dateUploaded'} >created: {props.songSheets![props.sheetIndex].dateUploaded}</span>}
+                    {props.toggleCreateOrUpdate === 'update' &&
+                        <span id={'dateUploaded'}>
+                            created: {props.songSheets![props.sheetIndex].dateUploaded}
+                        </span>}
                 </div>
 
             </form>

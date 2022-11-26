@@ -1,72 +1,37 @@
-import '././styles/message.css'
-import React, {useEffect} from "react";
 import {feedback} from "./feedbackModel";
+import React, {useEffect, useState} from "react";
 
-interface FeedProps {
-    feed: feedback | null;
-    onCreateFeedback: () => void;
-    onDeleteFeedback: () => void;
+interface FeedbackProps {
+    feedback: feedback | undefined;
 }
 
-function Feedback(props: FeedProps) {
+function Feedback(props: FeedbackProps) {
+
+    const [message, setMessage] = useState(props.feedback?.message);
+
+    let lifetime = 0;
+    if (props.feedback) {
+        lifetime = props.feedback.lifetime * 1000
+    }
 
     useEffect(() => {
-        let messageContainer = document.getElementById('messageContainer') as HTMLDivElement | null;
-        let messageIcon = document.getElementById('messageIcon') as HTMLDivElement | null;
-        let messageType = sessionStorage.getItem('messageType');
-        if (messageType !== null) {
-            if (messageContainer !== null) {
-                messageContainer.style.borderColor = messageType;
-            }
-            if (messageIcon !== null) {
-                messageIcon.style.color = messageType;
-                if (messageType === 'red') {
-                    messageIcon.innerHTML = '!';
-                }
-                if (messageType === 'green') {
-                    messageIcon.innerHTML = '&#10003;';
-                }
-            }
-        }
-        if (messageType === 'green') {
-            setTimeout(() => {
-                let messageContainer = document.getElementById('messageContainer') as HTMLDivElement | null;
-                if (messageContainer !== null) {
-                    messageContainer.style.animation = 'fadeOut ease 1s'
-                }}, 2000);
-            setTimeout(() => {
-                    /*props.onClose()*/},
-                3000);
-        }
-    }, [/*props*/]);
+        setMessage(props.feedback?.message);
+        const timeoutFeedback = setTimeout(() => {
+                setMessage(undefined)},
+            lifetime);
+        return () => clearTimeout(timeoutFeedback);
+    }, [props.feedback, lifetime])
 
+    const deleteFeedback = () => {
+        setMessage(undefined);
+    }
 
     return (
         <div>
             <label>
-                {props.feed?.message != null
-                && <span>{props.feed?.message} + <button onClick={props.onDeleteFeedback}>delete</button></span>}
+                {message !== undefined
+                    && <span>{message} + <button onClick={deleteFeedback}>OK</button></span>}
             </label>
-
-            {props.feed?.message == null && <button onClick={props.onCreateFeedback}>button</button>}
-
-            {/*
-            <label>{((props.song.description !== null
-                && props.song.description!.length > 0) && true)
-                ? <span>Edit your </span>
-                : <span>Add a </span>} Comment or Description:</label><br/>
-*/}
-
-
-            {/*<div className={'Container'} id={'messageContainer'}>
-                <div id={'messageIcon'}>{props.feedback.icon}</div>
-                <div className={'message'}>
-                    {props.message}
-                    <div id={'buttonOKContainer'}>
-                        <button id={'buttonOK'} type={'button'} >OK</button>
-                    </div>
-                </div>
-            </div>*/}
         </div>
     )
 }
