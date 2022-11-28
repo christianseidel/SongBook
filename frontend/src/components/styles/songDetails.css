@@ -382,6 +382,7 @@
     margin-top: 20px;
     border: 1px solid darkgoldenrod;
     padding: 5px;
+    z-index: 1;
 }
 
 #listOfLinks {
@@ -390,12 +391,12 @@
 .linkDot {
     color: dodgerblue;
     font-weight: normal;
-    margin-right: 1px;
+    margin-right: 2px;
+    z-index: 2;
 }
 
 .linkDot:hover {
-    font-weight: bold;
-
+    position: relative;
     background-color: lightyellow;
     border-style: solid;
     border-width: 2px;
@@ -405,23 +406,32 @@
     box-shadow: 3px 3px darkgoldenrod;
     cursor: pointer;
     user-select: none;
-    padding: 1px 2px 1px 30px;
-    margin-left: -33px;
+    padding: 1px 8px 1px 36px;
+    z-index: 2;
+}
+
+.linkDot:hover + a {
+    margin-left: -43px;
+    z-index: 1;
 }
 
 .linkDot:hover:before {
     font-weight: normal;
+    color: black;
     content: 'edit ';
     margin-left: -28px;
     letter-spacing: -1px;
+    z-index: 2;
 }
 
 .linkText {
+    z-index: 1;
 }
 
 .linkText:hover {
     font-weight: bold;
-    background-color: #eaba5e;
+    /*background-color: #eaba5e;*/
+    color: darkorchid;
     border-style: solid;
     border-width: 2px;
     border-color: darkgoldenrod;
@@ -436,13 +446,15 @@
 
 .linkText:hover:before {
     content: '\2013\1F896\00A0 ';
+    font-weight: bold;
+   /* color: darkorchid;*/
     line-height: 0.9;
 
 }
 
 .link {
     font-family: Verdana, Trebuchet MS, Lucida Sans Unicode, Lucida Grande, Lucida Sans, Arial, sans-serif;
-    font-size: 10pt;
+
     color: #3b6363;
     margin-left: 26px;
     margin-top: 3px;
