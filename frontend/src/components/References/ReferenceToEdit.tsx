@@ -3,11 +3,12 @@ import {songCollectionToRealName} from "../literals/collectionNames";
 import '../styles/references.css';
 import '../styles/common.css';
 import React, {FormEvent, useState} from "react";
-import DisplayMessageReferences from "./DisplayMessageReferences";
+import {message, MessageType, NewMessage} from "../messageModel";
 
 interface ReferenceItemProps {
     reference: Reference;
     doCancel: () => void;
+    displayMsg: (msg: message | undefined) => void;
 }
 
 function ReferenceToEdit(props: ReferenceItemProps) {
@@ -16,7 +17,6 @@ function ReferenceToEdit(props: ReferenceItemProps) {
     const [page, setPage] = useState(props.reference.page !== 0 ? props.reference.page : '');
     const [author, setAuthor] = useState(props.reference.author == null ? '' : props.reference.author);
     const [year, setYear] = useState(props.reference.year !== 0 ? props.reference.year : '');
-    const [message, setMessage] = useState('');
 
     const editReference = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -41,11 +41,12 @@ function ReferenceToEdit(props: ReferenceItemProps) {
             })
             .then((responseBody) => {
                 if (responseStatus === 200) {
-                    sessionStorage.setItem('message', 'Your reference "' + title + '" was updated.');
-                    sessionStorage.setItem('messageType', 'green');
+                    props.displayMsg(NewMessage.create(
+                        'Your reference "' + title + '" was updated.',
+                        MessageType.GREEN
+                    ))
                 } else {
-                    sessionStorage.setItem('message', responseBody.message);
-                    sessionStorage.setItem('messageType', 'red');
+                    props.displayMsg(NewMessage.create(responseBody.message, MessageType.RED));
                 }
             })
             .then(props.doCancel)
@@ -59,12 +60,14 @@ function ReferenceToEdit(props: ReferenceItemProps) {
         })
             .then(response => {
                 if (response.ok) {
-                // ToDo: check error logics
-                    sessionStorage.setItem('messageType', 'green');
-                    setMessage('Your reference "' + props.reference.title + '" was copied.');
-            } else {
-                sessionStorage.setItem('message', 'Oups! Something didn\'t work when trying to copy your reference' + response.text());
-                sessionStorage.setItem('messageType', 'red');
+                    // ToDo: check error logics
+                    props.displayMsg(NewMessage.create(
+                        'Your reference "' + props.reference.title + '" was copied.',
+                        MessageType.GREEN));
+                } else {
+                    props.displayMsg(NewMessage.create(
+                        'Oups! Something didn\'t work when trying to copy your reference' + response.text(),
+                        MessageType.RED));
                 props.doCancel()
             }
         })
@@ -80,11 +83,12 @@ function ReferenceToEdit(props: ReferenceItemProps) {
         })
             .then((responseBody) => {
             if (responseStatus === 200) {
-                sessionStorage.setItem('message', 'Your reference "' + props.reference.title + '" was deleted.')
-                sessionStorage.setItem('messageType', 'green');
+                props.displayMsg(NewMessage.create(
+                    'Your reference "' + props.reference.title + '" was deleted.',
+                    MessageType.GREEN
+                    ));
             } else {
-                sessionStorage.setItem('message', responseBody.message);
-                sessionStorage.setItem('messageType', 'red');
+                props.displayMsg(NewMessage.create(responseBody.message, MessageType.RED));
             }
         })
             .then(props.doCancel)
@@ -93,7 +97,7 @@ function ReferenceToEdit(props: ReferenceItemProps) {
     const checkIfEscapeKey = (key: string) => {
         if (key === "Escape") {
             props.doCancel()
-        };
+        }
     }
 
     return(
@@ -136,17 +140,6 @@ function ReferenceToEdit(props: ReferenceItemProps) {
             </div>
             <div>
                 <button onClick={() => {props.doCancel()}}> &#10008; cancel</button>
-            </div>
-
-            <div>
-                {message && <DisplayMessageReferences
-                    message={message}
-                    onClose={() => {
-                        setMessage('');
-                        sessionStorage.setItem('message', '');
-                        sessionStorage.removeItem('messageType')
-                    }}
-                />}
             </div>
             </div>
 

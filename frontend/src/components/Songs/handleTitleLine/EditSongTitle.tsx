@@ -1,5 +1,7 @@
 import React, {FormEvent, useState} from "react";
 import {Song} from "../songModels";
+import {message, MessageType, NewMessage} from "../../messageModel";
+import DisplayMessage from "../../DisplayMessage";
 
 interface SongItemProps {
     song: Song;
@@ -11,9 +13,9 @@ interface SongItemProps {
 function EditSongTitle(props: SongItemProps) {
 
     const [title, setTitle] = useState(props.song.title);
-    const [author, setAuthor] = useState(props.song.author);
+    const [author, setAuthor] = useState(props.song.author ?? '');
     const [year, setYear] = useState(props.song.year);
-    // if (props.song.year === 0) {props.song.year = ''}
+    const [message, setMessage] = useState<message | undefined>(undefined);
 
     const doEditSong = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -43,14 +45,17 @@ function EditSongTitle(props: SongItemProps) {
                     responseBody.status = 'display';
                     props.onItemRevision(responseBody);
                 } else {
-                    sessionStorage.setItem('messageType', 'red');
-                    sessionStorage.setItem('message', 'An item with Id no. ' + props.song.id + ' could not be found.');
+                    setMessage(NewMessage.create(
+                        'An item with Id no. "' + props.song.id + '" could not be found.',
+                        MessageType.RED
+                    ))
                 }
             });
     }
 
     return (
         <div>
+            <DisplayMessage message={message}/>
             <form onSubmit={ev => doEditSong(ev)}>
                 <div>
                     <span id={'titleFirstLine'}>
@@ -77,6 +82,7 @@ function EditSongTitle(props: SongItemProps) {
                     </span>
                 </div>
             </form>
+
         </div>
     )
 }

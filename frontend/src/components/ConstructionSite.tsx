@@ -1,9 +1,9 @@
 import '././styles/message.css'
 import React, {useEffect} from "react";
-import {feedback} from "./feedbackModel";
+import {message} from "./messageModel";
 
 interface FeedProps {
-    feed: feedback | null;
+    feed: message | null;
     onCreateFeedback: () => void;
     onDeleteFeedback: () => void;
 }
@@ -44,11 +44,11 @@ function ConstructionSite(props: FeedProps) {
     return (
         <div>
             <label>
-                {props.feed?.message != null
-                && <span>{props.feed?.message} + <button onClick={props.onDeleteFeedback}>delete</button></span>}
+                {props.feed?.text != null
+                && <span>{props.feed?.text} + <button onClick={props.onDeleteFeedback}>delete</button></span>}
             </label>
 
-            {props.feed?.message == null && <button onClick={props.onCreateFeedback}>button</button>}
+            {props.feed?.text == null && <button onClick={props.onCreateFeedback}>button</button>}
 
             {/*
             <label>{((props.song.description !== null

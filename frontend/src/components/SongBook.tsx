@@ -1,19 +1,20 @@
 import React, {useEffect, useState} from 'react';
 import './styles/landingPage.css';
 import './styles/common.css';
-import {Song, SongsDTO, DayOfCreation} from "./Songs/songModels";
+import {DayOfCreation, Song, SongsDTO} from "./Songs/songModels";
 import SongItemWithinList from "./Songs/SongItemWithinList";
 import SongItemDetails from "./Songs/SongItemDetails";
 import ukulele from "./media/images/ukulele.png";
 import References from "./References/References";
-import DisplayMessageSongs from "./Songs/DisplayMessageSongs";
 import {Reference, ReferencesDTO} from "./References/referenceModels";
+import {message, MessageType, NewMessage} from "./messageModel";
+import DisplayMessage from "./DisplayMessage";
 
 function SongBook() {
 
     const [songsDTO, setSongsDTO] = useState({} as SongsDTO);
     const [songChosen, setSongChosen] = useState({} as Song);
-    const [message, setMessage] = useState('');
+    const [myFeedback, setMyFeedback] = useState<message | undefined>(undefined);
 
     const [dragOverLeft, setDragOverLeft] = useState(false)
     const handleDragOverStartLeft = () => setDragOverLeft(true);
@@ -44,7 +45,9 @@ function SongBook() {
                 if (response.ok) {
                     return response.json()
                 } else {
-                    throw Error("An Item with Id no. " + id + " could not be found.")
+                    setMyFeedback(NewMessage.create(
+                        "An Item with Id no. " + id + " could not be found.",
+                        MessageType.RED));
                 }
             })
             .then((responseBody: Song) => {
@@ -55,8 +58,7 @@ function SongBook() {
                 setSongChosen(responseBody);
             })
             .catch((e) => {
-                setMessage(e.message);
-                sessionStorage.setItem('messageType', 'red');
+                setMyFeedback(NewMessage.create(e.message, MessageType.RED));
             });
     }
 
@@ -71,7 +73,6 @@ function SongBook() {
                     setSongChosen({} as Song)
                 }
             });
-        setMessage(sessionStorage.getItem('message') ?? '');
     }
 
     let newSong: Song = {
@@ -144,7 +145,6 @@ function SongBook() {
             .then((responseBody: ReferencesDTO) =>
                 referenceRetrieved = responseBody.referenceList[0])
             .then(() => {
-
                 // create new Song from Reference Retrieved
                 let responseStatus: number;
                 fetch(`api/songbook/add/${id}`, {
@@ -157,13 +157,11 @@ function SongBook() {
                     .then((responseBody) => {
                         if (responseStatus === 200) {
                             songCreatedFromReference = responseBody;
-                            sessionStorage.setItem('messageType', 'green');
-                            sessionStorage.setItem('message', 'Your song "' + responseBody.title
-                                + '" was successfully created!');
+                            setMyFeedback(NewMessage.create('Your song "' + responseBody.title
+                            + '" was successfully created!', MessageType.GREEN));
                         } else {
-                            sessionStorage.setItem('message', 'Your reference could not be retrieved ' +
-                                'form the server (error code: ' + responseStatus + ')');
-                            sessionStorage.setItem('messageType', 'red');
+                            setMyFeedback(NewMessage.create('Your reference could not be retrieved ' +
+                                'form the server (error code: ' + responseStatus + ')', MessageType.RED));
                         }
                     })
                     .then(() => {
@@ -174,14 +172,13 @@ function SongBook() {
                         })
                             .then(response => {
                                     if (response.status !== 200) {
-                                        sessionStorage.setItem('message', 'Your source reference could not be hidden!');
-                                        sessionStorage.setItem('messageType', 'red');
+                                        setMyFeedback(NewMessage.create('Your source reference could not be hidden!', MessageType.RED));
                                     }
                                 }
                             )
-
                     })
                     .then(() => {
+
                         // display freshly created Song
                         songCreatedFromReference.status = 'display';
                         songCreatedFromReference.dayOfCreation = new DayOfCreation( // = displayable format of "dateCreated"
@@ -191,8 +188,6 @@ function SongBook() {
                         getAllSongs(false);
                         // rerenders Reference List:
                         trigger();
-                        // Todo: message gets called twice -- once by setSongChosen, once by trigger
-                        //  -- need to fix this....
                     });
             })
         setDragOverLeft(false);
@@ -245,9 +240,7 @@ function SongBook() {
                         <References
                             receiverRerenderSignal={receiverRerenderSignal}/>
                     </div>
-
                 </div>
-
 
                <div className={'flex-container-right'}
                      onDragOver={enableDropping}
@@ -259,10 +252,6 @@ function SongBook() {
                     {
                         songChosen.title
                             ? <SongItemDetails song={songChosen}
-                                               onItemCreation={(message: string) => {
-                                                       setMessage(message);
-                                                       getAllSongs(true);
-                                                   }}
                                                onItemRevision={(song: Song) => {
                                                        song.dayOfCreation = new DayOfCreation( // = displayable format of "dateCreated"
                                                            song.dateCreated as string
@@ -275,6 +264,7 @@ function SongBook() {
                                                        trigger()
                                                    }}
                                                clear={() => setSongChosen({} as Song)}
+                                               displayMsg={(msg) => setMyFeedback(msg)}
                             />
                             : <span className={"doSomething"}
                                     id={"chooseASong"}>&#129172; &nbsp; please, choose a song</span>
@@ -282,16 +272,7 @@ function SongBook() {
                 </div>
             </div>
 
-            <div>
-                {message && <DisplayMessageSongs
-                    message={message}
-                    onClose={() => {
-                        setMessage('');
-                        sessionStorage.setItem('message', '');
-                        sessionStorage.removeItem('messageType')
-                    }}
-                />}
-            </div>
+            <DisplayMessage message={myFeedback}/>
         </div>
     );
 }

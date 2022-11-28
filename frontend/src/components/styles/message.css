@@ -1,5 +1,9 @@
-.Container {
+#Container {
     display: flex;
+    position: absolute;
+    left: 48%;
+    right: 10%;
+    top: 70%;
     background-color: blanchedalmond;
     font-family: Verdana, Trebuchet MS, Lucida Sans Unicode, Lucida Grande, Lucida Sans, Arial, sans-serif;
     font-size: 12px;
@@ -7,10 +11,10 @@
     line-height: 1.6;
     border-width: 3px 22px;
     border-style: solid;
-    border-color: transparent;
     border-radius: 2px;
     padding: 15px;
     box-shadow: 12px 8px 16px 0 dimgray, 0 6px 20px 0 dimgray;
+    max-width: 580px;
     transition: 400ms;
     z-index: 3;
 }
@@ -31,13 +35,16 @@
     bottom: 8.2%;
 }
 
-#messageContainer {
-    position: absolute;
-    left: 48%;
-    right: 10%;
-    top: 70%;
-    max-width: 580px;
+.red {
+    color: red;
+    border-color: red;
 }
+
+.green {
+    color: green;
+    border-color: green;
+}
+
 
 #messageContainer:hover {
     box-shadow: 12px 12px 24px 1px dimgray, 0 12px 24px 2px dimgray;
@@ -53,7 +60,6 @@
     text-align: center;
     font-family: Georgia, serif;
     font-size: 48pt;
-    color: green;
 }
 
 .message {
@@ -81,15 +87,12 @@
 #buttonOK:hover {
     color: white;
     background-color: goldenrod;
+    border-color: darkgoldenrod;
     cursor: pointer;
 }
 
 .bold {
     font-weight: bold;
-}
-
-.resultTitle {
-
 }
 
 .listOfErrorItems {

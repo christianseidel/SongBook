@@ -1,10 +1,12 @@
 import React, {FormEvent, useState} from "react";
 import {Song} from "../songModels";
 import '../../styles/songDetails.css'
+import {message, MessageType, NewMessage} from "../../messageModel";
 
 interface SongItemProps {
     song: Song;
     onItemCreation: (song: Song) => void;
+    displayMsg: (msg: message) => void;
     clear: () => void;
 }
 
@@ -34,9 +36,9 @@ function CreateSongTitle(props: SongItemProps) {
                 if (responseStatus === 200) {
                     responseBody.status = 'display';
                     props.onItemCreation(responseBody);
+                    props.displayMsg(NewMessage.create('Your song "' + title + '" was successfully created.', MessageType.GREEN))
                 } else {
-                    sessionStorage.setItem('message', responseBody.message);
-                    sessionStorage.setItem('messageType', 'red');
+                    props.displayMsg(NewMessage.create('Your song "' + title + '" could not be created. ' + responseBody.message, MessageType.RED))
                 }
             })
     }

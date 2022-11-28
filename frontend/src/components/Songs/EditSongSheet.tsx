@@ -1,16 +1,17 @@
 import React, {FormEvent, useEffect, useState} from "react";
 import {Mood, SongSheet} from "./songModels";
 import ChooseKey from "./WorkingSpace/ChooseKey";
+import {message, MessageType, NewMessage} from "../messageModel";
 
 interface SongSheetProps {
     toggleCreateOrUpdate: string;
     songSheets: SongSheet[] | undefined;
     sheetIndex: number;
     returnAndSave: () => void;
+    displayMsg: (msg: message | undefined) => void;
     onCancel: () => void;
     onClear: () => void;
 }
-
 
 function EditSongSheet(props: SongSheetProps) {
 
@@ -43,11 +44,13 @@ function EditSongSheet(props: SongSheetProps) {
 
 
     function uploadSongSheet(files: FileList | null) {
-        sessionStorage.setItem('messageType', 'red');
         if (files === null) {
             alert('Ops, somehow the FormData Object produced a glitch.')
         } else if (files[0].name.slice(files[0].name.length-3, files[0].name.length) !== 'pdf') {
-            alert('Please, choose a PDF or a JPG file.')
+            props.displayMsg(NewMessage.create(
+                'Please, choose a PDF or a JPG file.',
+                MessageType.RED
+            ))
         } else {
             const formData = new FormData();
             formData.append('file', files[0]);
@@ -61,28 +64,32 @@ function EditSongSheet(props: SongSheetProps) {
                     return response.json();
                 })
                 .then((responseBody) => {
-
                     if (responseStatus === 200) {
                         console.log('File "' + files[0].name + '" successfully transmitted to backend!');
                         console.log(responseBody);
                         setFileId(responseBody.message);
                     } else if (responseStatus === 400) {
-                        sessionStorage.setItem('message', 'Sorry, the server does not accept your request (Bad Request).');
+                        props.displayMsg(NewMessage.create(
+                            'The server did not accept your request (Bad Request).',
+                            MessageType.RED
+                        ))
                     } else if (responseStatus === 404) {
-                        sessionStorage.setItem('message', 'Sorry, the server is unable to respond to your request.');
+                        props.displayMsg(NewMessage.create(
+                            'The server is unable to respond to your request.',
+                            MessageType.RED
+                        ))
                     } else if (responseStatus === 405) {
-                        console.log("sorry, the entire set of methods has yet to be written...")
+                        console.log("Sorry, the entire set of methods has yet to be written...")
                     } else if (responseStatus === 406) {
-                        sessionStorage.setItem('message', responseBody.message);
+                        props.displayMsg(NewMessage.create(responseBody.message, MessageType.RED))
                     } else if (responseStatus === 500) {
-                        sessionStorage.setItem('message', responseBody.message);
+                        props.displayMsg(NewMessage.create(responseBody.message, MessageType.RED))
                     } else if (responseStatus !== 201) {
-                        sessionStorage.setItem('message', responseBody.message);
+                        props.displayMsg(NewMessage.create(responseBody.message, MessageType.RED))
                     } else {
-                        alert('Something Unexpected happened.');
+                        alert('Something unexpected happened.');
                     }
                 })
-
             console.log("uploading song sheets not yet working...")
         }
     }
@@ -100,7 +107,9 @@ function EditSongSheet(props: SongSheetProps) {
         })
             .then((response) => {
                 if (response.status !== 200) {
-                    alert("Song Sheet could not be deleted!");
+                    props.displayMsg(NewMessage.create(
+                        'Song Sheet could not be deleted!', MessageType.RED
+                    ));
                 }
             })
     }

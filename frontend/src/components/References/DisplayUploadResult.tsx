@@ -54,7 +54,7 @@ function DisplayMessage(props: ResultProps) {
                     </p>
 
                     <div>
-                        <p className={'resultTitle'}>{props.uploadResult.listOfLinesWithInvalidCollectionName.length > 0
+                        <p>{props.uploadResult.listOfLinesWithInvalidCollectionName.length > 0
                             && <span>These references have <span className={"bold"}>incorrect volume information:</span></span>}
                         </p>
                         <div className={'listOfErrorItems'}>
@@ -63,7 +63,7 @@ function DisplayMessage(props: ResultProps) {
                     </div>
 
                     <div>
-                        <p className={'resultTitle'}>{props.uploadResult.listOfLinesWithInvalidPageData.length > 0
+                        <p>{props.uploadResult.listOfLinesWithInvalidPageData.length > 0
                             && <span>These references have <span className={"bold"}>incorrect page data:</span></span>}
                         </p>
                     </div>

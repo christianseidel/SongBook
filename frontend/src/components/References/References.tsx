@@ -3,9 +3,10 @@ import '../styles/common.css';
 import React, {FormEvent, useEffect, useState} from "react";
 import ReferenceItemWithinList from "./ReferenceItemWithinList";
 import {ReferencesDTO, UploadResult} from "./referenceModels";
-import DisplayMessageReferences from "./DisplayMessageReferences";
 import ReferenceToEdit from "./ReferenceToEdit";
 import DisplayUploadResult from "./DisplayUploadResult";
+import DisplayMessage from "../DisplayMessage";
+import {message, MessageType, NewMessage} from "../messageModel";
 
 interface Props {
     receiverRerenderSignal: (getAllReferences: () => void) => void;
@@ -13,12 +14,13 @@ interface Props {
 
 function References(props: Props) {
 
+
     const [toggleDisplaySearchResultsButNotReference, setToggleDisplaySearchResultsButNotReference] = useState(true);
     const [toggleDisplayUploadFunction, setToggleDisplayUploadFunction] = useState(false);
     const [toggleDisplayUploadResult, setToggleDisplayUploadResult] = useState(false);
 
     const [searchWord, setSearchWord] = useState('');
-    const [message, setMessage] = useState('');
+    const [myFeedback, setMyFeedback] = useState<message | undefined>(undefined);
     const [uploadResult, setUploadResult] = useState({} as UploadResult);
     const [referencesDTO, setReferencesDTO] = useState({} as ReferencesDTO);
 
@@ -35,7 +37,6 @@ function References(props: Props) {
             .then(response => response.json())
             .then((responseBody: ReferencesDTO) => setReferencesDTO(responseBody));
         setToggleDisplaySearchResultsButNotReference(true);
-        setMessage(sessionStorage.getItem('message') ?? '');
     }
 
     props.receiverRerenderSignal(getAllReferences)
@@ -71,11 +72,13 @@ function References(props: Props) {
     }
 
     function uploadFile(files: FileList | null) {       // ToDo: Introduce Check Sum
-        sessionStorage.setItem('messageType', 'red');   // ToDO: Check Error Paths
         if (files === null) {
             alert('Somehow the FormData Object did not work properly.')
         } else if (!files[0].name.endsWith('.txt')) {
-            setMessage('Sorry, file "' + files[0].name + '" will not work...\nPlease, choose a regular text file.')
+            setMyFeedback(NewMessage.create(
+                'Unfortunately, file "' + files[0].name + '" will not work...\nPlease, choose a regular text file.',
+                MessageType.RED
+            ));
         } else {
             const formData = new FormData();
             formData.append('file', files[0]);
@@ -96,15 +99,21 @@ function References(props: Props) {
                         console.log('File "' + files[0].name + '" successfully transmitted to backend!');
                         console.log(responseBody);
                     } else if (responseStatus === 400) {
-                        sessionStorage.setItem('message', 'Sorry, the server does not accept your request (Bad Request).');
+                        setMyFeedback(NewMessage.create(
+                            'Sorry, the server does not accept your request (Bad Request).',
+                            MessageType.RED
+                        ));
                     } else if (responseStatus === 404) {
-                        sessionStorage.setItem('message', 'Sorry, the server is unable to respond to your request.');
+                        setMyFeedback(NewMessage.create(
+                            'Sorry, the server is unable to respond to your request.'
+                            , MessageType.RED
+                        ))
                     } else if (responseStatus === 406) {
-                        sessionStorage.setItem('message', responseBody.message);
+                        setMyFeedback(NewMessage.create( responseBody.message, MessageType.RED));
                     } else if (responseStatus === 500) {
-                        sessionStorage.setItem('message', responseBody.message);
+                        setMyFeedback(NewMessage.create( responseBody.message, MessageType.RED));
                     } else if (responseStatus !== 201) {
-                        sessionStorage.setItem('message', responseBody.message);
+                        setMyFeedback(NewMessage.create( responseBody.message, MessageType.RED));
                     } else {
                         alert('Something Unexpected happened.');
                     }
@@ -165,6 +174,7 @@ function References(props: Props) {
                             referencesDTO.referenceList.map(item =>
                             <ReferenceToEdit key={item.id} reference={item}
                                              doCancel={getAllReferences}
+                                             displayMsg={(msg) => setMyFeedback(msg)}
                             />)
                     }
 
@@ -177,17 +187,6 @@ function References(props: Props) {
                     </div>
 
                     <div>
-                        {message && <DisplayMessageReferences
-                            message={message}
-                            onClose={() => {
-                                setMessage('');
-                                sessionStorage.setItem('message', '');
-                                sessionStorage.removeItem('messageType')
-                            }}
-                        />}
-                    </div>
-
-                    <div>
                         {toggleDisplayUploadResult && <DisplayUploadResult
                             uploadResult={uploadResult}
                             fileName={fileName}
@@ -196,6 +195,9 @@ function References(props: Props) {
                             }}
                         />}
                     </div>
+
+                <DisplayMessage message={myFeedback}/>
+
                 </div>
 
     )

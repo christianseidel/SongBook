@@ -1,7 +1,6 @@
 import React, {FormEvent, useEffect, useState} from "react";
 import '../styles/common.css'
 import '../styles/songDetails.css'
-import DisplayMessageSongs from "./DisplayMessageSongs";
 import EditSongTitle from "./handleTitleLine/EditSongTitle";
 import CreateSongTitle from "./handleTitleLine/CreateSongTitle";
 import DisplaySongTitle from "./handleTitleLine/DisplaySongTitle";
@@ -11,21 +10,20 @@ import {songCollectionToRealName} from "../literals/collectionNames";
 import {keys} from "../literals/keys";
 import EditLink from "./EditLink";
 import EditSongSheet from "./EditSongSheet";
-import {feedback, Message} from "../feedbackModel";
-import Feedback from "../Feedback";
+import {message, MessageType, NewMessage} from "../messageModel";
+
 
 interface SongItemProps {
     song: Song;
-    onItemCreation: (message: string) => void;
     onItemRevision: (song: Song) => void;
     doReturn: () => void;
     clear: () => void;
+    displayMsg: (msg: message | undefined) => void;
 }
 
 function SongItemDetails(props: SongItemProps) {
 
     const [songState, setSongState] = useState(props.song.status);
-    const [message, setMessage] = useState('');
     useEffect(() => setSongState(props.song.status), [props.song.status]);
     const [description, setDescription] = useState(sessionStorage.getItem('description') ?? '');
     useEffect(() => sessionStorage.setItem('description', description), [description]);
@@ -79,6 +77,7 @@ function SongItemDetails(props: SongItemProps) {
         handleTitleLine = <CreateSongTitle
             song={props.song}
             onItemCreation={(song) => props.onItemRevision(song)}
+            displayMsg={(msg) => props.displayMsg(msg)}
             clear={props.clear}
         />;
     }
@@ -91,11 +90,13 @@ function SongItemDetails(props: SongItemProps) {
                     })
                         .then(response => {
                             if (response.ok) {
-                                sessionStorage.setItem('messageType', 'green');
-                                sessionStorage.setItem('message', 'Your song "' + props.song.title + '" was deleted!');
+                                props.displayMsg(NewMessage.create(
+                                    'Your song "' + props.song.title + '" was deleted!',
+                                    MessageType.GREEN));
                             } else {
-                                sessionStorage.setItem('messageType', 'red');
-                                sessionStorage.setItem('message', 'Your song could not be deleted!');
+                                props.displayMsg(NewMessage.create(
+                                    'Your song could not be deleted!',
+                                    MessageType.RED));
                             }
                         })
                         .then(props.doReturn)
@@ -150,8 +151,9 @@ function SongItemDetails(props: SongItemProps) {
                     responseBody.status = 'display';
                     props.onItemRevision(responseBody);
                 } else {
-                    sessionStorage.setItem('messageType', 'red');
-                    sessionStorage.setItem('message', 'The item Id no. ' + props.song.id + ' could not be saved.');
+                    props.displayMsg(NewMessage.create(
+                        'The item Id no. ' + props.song.id + ' could not be saved.',
+                        MessageType.RED));
                 }
             });
     }
@@ -333,19 +335,11 @@ function SongItemDetails(props: SongItemProps) {
         setToggleCreateOrUpdate('update')
     }
 
-    const [myFeedback, setMyFeedback] = useState<feedback>()
-
 
     return (
         <div>
             <div id={'songHead'} className={'songDataSheetElement'}>
                 <div>{handleTitleLine}</div>
-
-                <button onClick={() =>
-                    setMyFeedback(Message.start('song', 'ding', 1.5))
-                }>start show</button>
-                <Feedback feedback={myFeedback}/>
-
             </div>
 
 
@@ -368,7 +362,6 @@ function SongItemDetails(props: SongItemProps) {
                     <span className="tooltipText">add a file</span>
                     </span>
             </div>
-
 
             <div id={'workingSpace'} className={'songDataSheetElement'}>
 
@@ -507,6 +500,7 @@ function SongItemDetails(props: SongItemProps) {
                         saveSongItem();
                         setToggleEditSongSheet(false);
                     }}
+                    displayMsg={(msg) => {props.displayMsg(msg)}}
                     onCancel={() => {
                         setToggleEditSongSheet(false);
                         setSheetIndex(-1);
@@ -587,17 +581,6 @@ function SongItemDetails(props: SongItemProps) {
                     &#10008; delete
                 </button>
             </span>
-
-            <div>
-                {message && <DisplayMessageSongs
-                    message={message}
-                    onClose={() => {
-                        setMessage('');
-                        sessionStorage.setItem('message', '');
-                        sessionStorage.removeItem('messageType')
-                    }}
-                />}
-            </div>
         </div>
     )
 }
