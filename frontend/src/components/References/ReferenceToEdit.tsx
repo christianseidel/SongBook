@@ -1,9 +1,9 @@
-import {Reference} from "./referenceModels";
 import {songCollectionToRealName} from "../literals/collectionNames";
 import '../styles/references.css';
 import '../styles/common.css';
 import React, {FormEvent, useState} from "react";
 import {message, MessageType, NewMessage} from "../messageModel";
+import {Reference} from "./modelsReference";
 
 interface ReferenceItemProps {
     reference: Reference;

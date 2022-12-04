@@ -1,8 +1,8 @@
-import {Reference} from "./referenceModels";
 import {songCollectionToRealName} from "../literals/collectionNames";
 import '../styles/references.css';
 import '../styles/common.css';
 import React from "react";
+import {Reference} from "./modelsReference";
 
 interface ReferenceItemProps {
     reference: Reference

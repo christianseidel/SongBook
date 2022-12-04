@@ -1,7 +1,8 @@
 import React, {FormEvent, useEffect, useState} from "react";
 import '../styles/songDetails.css'
-import {Link, Mood} from "./songModels";
-import ChooseKey from "./WorkingSpace/ChooseKey";
+
+import ChooseKey from "./ChooseKey";
+import {Link, Mood} from "./modelsSong";
 
 interface SongItemLinksProps {
     toggleCreateOrUpdate: string;

@@ -1,14 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import './styles/landingPage.css';
 import './styles/common.css';
-import {DayOfCreation, Song, SongsDTO} from "./Songs/songModels";
 import SongItemWithinList from "./Songs/SongItemWithinList";
 import SongItemDetails from "./Songs/SongItemDetails";
 import ukulele from "./media/images/ukulele.png";
 import References from "./References/References";
-import {Reference, ReferencesDTO} from "./References/referenceModels";
 import {message, MessageType, NewMessage} from "./messageModel";
 import DisplayMessage from "./DisplayMessage";
+import {DayOfCreation, Song, SongsDTO} from "./Songs/modelsSong";
+import {Reference, ReferencesDTO} from "./References/modelsReference";
 
 function SongBook() {
 

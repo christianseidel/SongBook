@@ -566,6 +566,17 @@
     margin-left: 14px;
 }
 
+.separatorFileName {
+    margin-left: 12px;
+    margin-right: 6px;
+    font-weight: bold;
+}
+
+.displayFileName {
+
+}
+
+
 #ContainerInsertingDateUploaded {
     height: 24px;
 }

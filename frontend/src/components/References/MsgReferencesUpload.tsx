@@ -1,6 +1,7 @@
-import '../styles/referencesUploaded.css'
+import '../styles/msgRefUpload.css'
 import {useEffect} from "react";
-import {UploadResult} from "./referenceModels";
+import {UploadResult} from "./modelsReference";
+
 
 interface ResultProps {
     uploadResult: UploadResult
@@ -20,7 +21,7 @@ function DisplayMessage(props: ResultProps) {
     return (
         <div>
             <div className={'Container'} id={'uploadResultContainer'}>
-                <div id={'messageIcon'}>&#10003;</div>
+                <div id={'resultIcon'}>&#10003;</div>
                 <div className={'message'}>
                     <p>
                         Your file {props.fileName} was successfully uploaded.

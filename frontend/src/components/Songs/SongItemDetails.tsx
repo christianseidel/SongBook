@@ -1,16 +1,16 @@
 import React, {FormEvent, useEffect, useState} from "react";
 import '../styles/common.css'
 import '../styles/songDetails.css'
-import EditSongTitle from "./handleTitleLine/EditSongTitle";
-import CreateSongTitle from "./handleTitleLine/CreateSongTitle";
-import DisplaySongTitle from "./handleTitleLine/DisplaySongTitle";
-import {Mood, Song} from './songModels'
-import {Reference} from "../References/referenceModels";
+import EditSongTitle from "./TitleLine/EditSongTitle";
+import CreateSongTitle from "./TitleLine/CreateSongTitle";
+import DisplaySongTitle from "./TitleLine/DisplaySongTitle";
 import {songCollectionToRealName} from "../literals/collectionNames";
 import {keys} from "../literals/keys";
 import EditLink from "./EditLink";
-import EditSongSheet from "./EditSongSheet";
+import EditSongSheet from "./SongSheet/EditSongSheet";
 import {message, MessageType, NewMessage} from "../messageModel";
+import {Mood, Song} from "./modelsSong";
+import {Reference} from "../References/modelsReference";
 
 
 interface SongItemProps {
@@ -335,6 +335,32 @@ function SongItemDetails(props: SongItemProps) {
         setToggleCreateOrUpdate('update')
     }
 
+    const displaySongSheet = (index: number) => {
+        let contentType = 'application/pdf'
+        let id = '';
+        if (props.song.songSheets !== undefined) {
+            id = props.song.songSheets[index].fileId!;
+        }
+        fetch('api/sheets/download/' + id, {
+            method: 'GET',
+            headers: {
+                'Content-Type': contentType
+            }})
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else if (response.status === 500) {
+                    props.displayMsg(NewMessage.create('Server unable to find your song sheet.', MessageType.RED));
+                } else {
+                    props.displayMsg(NewMessage.create('Unable to fetch song sheet (error code ' + response.status + ' – ' + response.statusText + ').', MessageType.RED));
+                }
+            })
+            .then((responseBody) => {
+                console.log(responseBody)}
+            )
+    }
+
+
 
     return (
         <div>
@@ -557,11 +583,15 @@ function SongItemDetails(props: SongItemProps) {
                                         <span>&#x266b;&nbsp; &nbsp;{item.name} </span>
                                         {item.key && <span> – <span className={'displayKey'}>({item.key})</span></span>}
                                     </span>
-                                    <span className={'songSheetDescriptive'} onClick={() => openUpdateSongSheet(index)}>
+                                    <span className={'songSheetDescriptive'}>
                                         {item.source && <span className={'displaySource'}><span
-                                            className={'separator'}>&#x2669;</span>{item.source}</span>}
+                                            className={'separator'}></span>source: {item.source}</span>}
                                         {item.description && <span className={'displayDescription'}><span
-                                            className={'separator'}>&#x2669;</span>{item.description}</span>}
+                                            className={'separator'}></span>({item.description})</span>}
+                                    </span>
+                                    <span className={'songSheetDescriptive'} onClick={() => displaySongSheet(index)}>
+                                        {item.fileName && <span className={'displayFileName'}><span
+                                            className={'separatorFileName'}>&#x266b;</span>{item.fileName}</span>}
                                     </span>
                                 </div>)}
 

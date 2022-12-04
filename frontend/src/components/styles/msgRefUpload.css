@@ -31,14 +31,14 @@
     bottom: 8.2%;
 }
 
-#messageIcon {
+#resultIcon {
     display: inline;
     line-height: 1;
     width: 76px;
     text-align: center;
     font-family: Georgia, serif;
     font-size: 48pt;
-    color: green;
+    color: blue;
 }
 
 .message {

@@ -2,11 +2,11 @@ import '../styles/references.css';
 import '../styles/common.css';
 import React, {FormEvent, useEffect, useState} from "react";
 import ReferenceItemWithinList from "./ReferenceItemWithinList";
-import {ReferencesDTO, UploadResult} from "./referenceModels";
 import ReferenceToEdit from "./ReferenceToEdit";
-import DisplayUploadResult from "./DisplayUploadResult";
+import DisplayUploadResult from "./MsgReferencesUpload";
 import DisplayMessage from "../DisplayMessage";
 import {message, MessageType, NewMessage} from "../messageModel";
+import {ReferencesDTO, UploadResult} from "./modelsReference";
 
 interface Props {
     receiverRerenderSignal: (getAllReferences: () => void) => void;

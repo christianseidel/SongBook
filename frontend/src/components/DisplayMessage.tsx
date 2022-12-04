@@ -17,13 +17,16 @@ function DisplayMessage(props: MessageProps) {
         lifetime = props.message.lifetime * 1000
     }
 
+/*
     useEffect(() => {
         setColor(props.message?.color);
     }, [props.message])
+*/
 
     useEffect(() => {
         setTextLine(props.message?.text);
         setIcon(props.message?.icon)
+        setColor(props.message?.color)
         const timeoutFeedback = setTimeout(() => {
                 setTextLine(undefined);
                 setIcon(undefined);

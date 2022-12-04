@@ -1,7 +1,7 @@
 import React, {FormEvent, useState} from "react";
-import {Song} from "../songModels";
 import '../../styles/songDetails.css'
 import {message, MessageType, NewMessage} from "../../messageModel";
+import {Song} from "../modelsSong";
 
 interface SongItemProps {
     song: Song;

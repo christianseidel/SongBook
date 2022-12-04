@@ -1,6 +1,6 @@
-import {keys} from "../../literals/keys";
+import {keys} from "../literals/keys";
 import React, {useEffect, useState} from "react";
-import "../../styles/songDetails.css"
+import "../styles/songDetails.css"
 
 interface SetKeyProps {
     songKey: string;
