@@ -1,4 +1,4 @@
-import '../styles/message.css'
+import '../styles/referencesUploaded.css'
 import {useEffect} from "react";
 import {UploadResult} from "./referenceModels";
 

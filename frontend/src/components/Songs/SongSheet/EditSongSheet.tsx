@@ -25,10 +25,10 @@ function EditSongSheet(props: SongSheetProps) {
 
 
     const clearSheet = () => {
-        setName('')
+        setName('');
         setSource('');
-        setDescription('')
-        setSongKey('');
+        setDescription('');
+        setSongMood(0);
     }
 
     useEffect(() => {
@@ -46,51 +46,40 @@ function EditSongSheet(props: SongSheetProps) {
     function uploadSongSheet(files: FileList | null) {
         if (files === null) {
             alert('Ops, somehow the FormData Object produced a glitch.')
-        } else if (files[0].name.slice(files[0].name.length-3, files[0].name.length) !== 'pdf') {
-            props.displayMsg(NewMessage.create(
-                'Please, choose a PDF or a JPG file.',
-                MessageType.RED
-            ))
         } else {
-            const formData = new FormData();
-            formData.append('file', files[0]);
-            let responseStatus = 0;
-            fetch('api/songbook/upload/', {
-                method: 'POST',
-                body: formData,
-            })
-                .then((response) => {
-                    responseStatus = response.status;
-                    return response.json();
-                })
-                .then((responseBody) => {
-                    if (responseStatus === 200) {
-                        console.log('File "' + files[0].name + '" successfully transmitted to backend!');
-                        console.log(responseBody);
-                        setFileId(responseBody.message);
-                    } else if (responseStatus === 400) {
-                        props.displayMsg(NewMessage.create(
-                            'The server did not accept your request (Bad Request).',
-                            MessageType.RED
-                        ))
-                    } else if (responseStatus === 404) {
-                        props.displayMsg(NewMessage.create(
-                            'The server is unable to respond to your request.',
-                            MessageType.RED
-                        ))
-                    } else if (responseStatus === 405) {
-                        console.log("Sorry, the entire set of methods has yet to be written...")
-                    } else if (responseStatus === 406) {
-                        props.displayMsg(NewMessage.create(responseBody.message, MessageType.RED))
-                    } else if (responseStatus === 500) {
-                        props.displayMsg(NewMessage.create(responseBody.message, MessageType.RED))
-                    } else if (responseStatus !== 201) {
-                        props.displayMsg(NewMessage.create(responseBody.message, MessageType.RED))
-                    } else {
-                        alert('Something unexpected happened.');
-                    }
-                })
-            console.log("uploading song sheets not yet working...")
+            let fileExt = files[0].name.slice(files[0].name.length-3, files[0].name.length);
+            if (fileExt !== 'pdf' && fileExt !== 'jpg') {
+                props.displayMsg(NewMessage.create(
+                    'Please, choose a PDF or a JPG file.',
+                    MessageType.RED
+                ))
+                } else {
+                    const formData = new FormData();
+                    formData.append('file', files[0]);
+                    let responseStatus = 0;
+                    fetch('api/sheets/upload/', {
+                        method: 'POST',
+                        body: formData,
+                    })
+                        .then((response) => {
+                            responseStatus = response.status;
+                            return response.json();
+                        })
+                        .then((responseBody) => {
+                            if (responseStatus === 200) {
+                                console.log('File "' + files[0].name + '" successfully transmitted to backend.');
+                                console.log(responseBody);
+                                setFileId(responseBody.message);
+                            } else if (responseStatus === 400) {
+                                props.displayMsg(NewMessage.create(
+                                    'The server did not accept your request (Bad Request).',
+                                    MessageType.RED
+                                ))
+                            } else {
+                                props.displayMsg(NewMessage.create(responseBody.message, MessageType.RED))
+                            }
+                        })
+            }
         }
     }
 

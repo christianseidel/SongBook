@@ -1,0 +1,91 @@
+.Container {
+    display: flex;
+    background-color: blanchedalmond;
+    font-family: Verdana, Trebuchet MS, Lucida Sans Unicode, Lucida Grande, Lucida Sans, Arial, sans-serif;
+    font-size: 12px;
+    color: black;
+    line-height: 1.6;
+    border-width: 3px 22px;
+    border-style: solid;
+    border-color: transparent;
+    border-radius: 2px;
+    padding: 15px;
+    box-shadow: 12px 8px 16px 0 dimgray, 0 6px 20px 0 dimgray;
+    transition: 400ms;
+    z-index: 3;
+}
+
+#uploadResultContainer {
+    border-color: blue;
+    position: absolute;
+    left: 8%;
+    right: 42%;
+    bottom: 8%;
+    max-width: 580px;
+}
+
+#uploadResultContainer:hover {
+    box-shadow: 12px 12px 24px 1px dimgray, 0 12px 24px 2px dimgray;
+    left: 8.2%;
+    right: 41.8%;
+    bottom: 8.2%;
+}
+
+#messageIcon {
+    display: inline;
+    line-height: 1;
+    width: 76px;
+    text-align: center;
+    font-family: Georgia, serif;
+    font-size: 48pt;
+    color: green;
+}
+
+.message {
+    display: inline-block;
+    margin-top: auto;
+    padding-left: 16px;
+    height: 100%;
+    width: 100%;
+}
+
+#buttonOKContainer {
+    position: relative;
+    height: 18px;
+    margin-top: 18px;
+    margin-bottom: 2px;
+    transform: translate(0, -16px);
+}
+
+#buttonOK {
+    position: absolute;
+    top: 10px;
+    right: 3%;
+}
+
+#buttonOK:hover {
+    color: white;
+    background-color: goldenrod;
+    cursor: pointer;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.listOfErrorItems {
+    font-family: Verdana, Trebuchet MS, Lucida Sans Unicode, Lucida Grande, Lucida Sans, Arial, sans-serif;
+    font-size: 8pt;
+    line-height: .8;
+    margin-left: 24px;
+    color: darkblue;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: 0;
+    max-height: 120px;
+    max-width: 452px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow-y: auto;
+    overflow-x: visible;
+}
