@@ -144,6 +144,7 @@ class SongCollectionServiceTest {
     }
 
     @Test
+    @Disabled
     void shouldAddNewReferenceToCollection() {
         MockMultipartFile oneRefUpload = new MockMultipartFile(
                 "importOneReference.txt",
