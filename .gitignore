@@ -63,3 +63,4 @@ yarn-error.log*
 /temporary/
 /backend/src/main/java/songbook/collections/source-files/
 /backend/.env.development
+/fileStorage/

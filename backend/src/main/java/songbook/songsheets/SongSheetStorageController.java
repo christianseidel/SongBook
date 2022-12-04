@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import songbook.songsheets.models.SongSheetUploadResponse;
 import songbook.songsheets.models.SongSheetFile;
 
@@ -15,42 +16,38 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/api/sheets")
 @CrossOrigin
-public class SheetUploadController {
+public class SongSheetStorageController {
 
-    private SongSheetRepository songSheetRepository;
+    private final SongSheetStorageService songSheetStorageService;
 
-    public SheetUploadController(SongSheetRepository songSheetRepository) {
-        this.songSheetRepository = songSheetRepository;
+    public SongSheetStorageController(SongSheetStorageService songSheetStorageService) {
+        this.songSheetStorageService = songSheetStorageService;
     }
 
     @PostMapping("/upload")
-    SongSheetUploadResponse uploadSongSheet(@RequestParam("file") MultipartFile file) throws IOException {
-
-        String name = StringUtils.cleanPath(file.getOriginalFilename());
-        SongSheetFile songSheetFile = new SongSheetFile();
-        songSheetFile.setFileName(name);
-        songSheetFile.setFile(file.getBytes());
-
-        songSheetRepository.save(songSheetFile);
-
-
+    SongSheetUploadResponse uploadSongSheetFile(@RequestParam("file") MultipartFile file) throws IOException {
+        SongSheetFile songSheetFile = songSheetStorageService.saveSongSheetFile(file);
         String contentType = file.getContentType();
-
-        SongSheetUploadResponse response = new SongSheetUploadResponse(name, contentType, songSheetFile.getId());
-
-        return response;
+        String name = StringUtils.cleanPath(file.getOriginalFilename());
+        String url = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/api/sheets/download/")
+                .path(name)
+                .toUriString();
+        return new SongSheetUploadResponse(songSheetFile.getFileName(), contentType, songSheetFile.getId(), url);
     }
 
-    @GetMapping("/download")
-    ResponseEntity<byte[]> downloadSongSheet(@PathVariable String fileName, HttpServletRequest request) {
-
-        SongSheetFile sheet = songSheetRepository.findByFileName(fileName);
-
-        String mimeType= request.getServletContext().getMimeType(sheet.getFileName());
-
+    @GetMapping("/download/{fileName}")
+    ResponseEntity<byte[]> downloadSongSheetFile(@PathVariable String fileName, HttpServletRequest request) {
+        SongSheetFile file = songSheetStorageService.retrieveSongSheetFile(fileName);
+        String mimeType= request.getServletContext().getMimeType(file.getFileName());
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(mimeType))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "inline;fileName=" + sheet.getFileName())
-                .body(sheet.getFile());
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline;fileName=" + file.getFileName())
+                .body(file.getFile());
+    }
+
+    @DeleteMapping("{id}")
+    void deleteSongSheetFile(@PathVariable String id) {
+        songSheetStorageService.deleteSongSheetFile(id);
     }
 }

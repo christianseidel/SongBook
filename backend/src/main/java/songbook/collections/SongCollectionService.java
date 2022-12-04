@@ -91,7 +91,7 @@ public class SongCollectionService {
         return new ReferencesDTO(list);
     }
 
-    public UploadResult processCollectionUpload(MultipartFile file) throws IOException {
+    public CollectionUploadResponse processCollectionUpload(MultipartFile file) throws IOException {
 
         System.out.println(rootDirectory);
         Path tempDir = Path.of(rootDirectory, "temporary");
@@ -112,9 +112,9 @@ public class SongCollectionService {
         System.out.println("-> File created: " + file.getOriginalFilename());
 
         // process new SongCollection
-        UploadResult uploadResult;
+        CollectionUploadResponse collectionUploadResponse;
         try {
-            uploadResult = importNewSongCollection(storedSongCollection.toPath());
+            collectionUploadResponse = importNewSongCollection(storedSongCollection.toPath());
         } catch (MalformedFileException e) {
             deleteFileAndTempDir(fileLocation);
             throw e;
@@ -123,26 +123,26 @@ public class SongCollectionService {
         // undo file and directory
         deleteFileAndTempDir(fileLocation);
 
-        return uploadResult;
+        return collectionUploadResponse;
     }
 
-    private UploadResult importNewSongCollection(Path filePath) {
-        UploadResult uploadResult = new UploadResult();
+    private CollectionUploadResponse importNewSongCollection(Path filePath) {
+        CollectionUploadResponse collectionUploadResponse = new CollectionUploadResponse();
         List<String> listOfItems = readListOfReferences(filePath);
         for (String line : listOfItems) {
-            uploadResult.setTotalNumberOfReferences(uploadResult.getTotalNumberOfReferences() + 1); // will serve as check sum
+            collectionUploadResponse.setTotalNumberOfReferences(collectionUploadResponse.getTotalNumberOfReferences() + 1); // will serve as check sum
             String[] elements = line.split(";");
             SongCollection songCollection;
             // check song collection
             try {
                 songCollection = mapSongCollection(elements[1]);
             } catch (IllegalSongCollectionException e) {
-                uploadResult.addLineWithInvalidCollectionName(line);
-                uploadResult.setNumberOfReferencesRejected(uploadResult.getNumberOfReferencesRejected() + 1);
+                collectionUploadResponse.addLineWithInvalidCollectionName(line);
+                collectionUploadResponse.setNumberOfReferencesRejected(collectionUploadResponse.getNumberOfReferencesRejected() + 1);
                 continue;
             } catch (IndexOutOfBoundsException e) {
-                uploadResult.addLineWithInvalidCollectionName(elements[0] + " // song collection information missing ");
-                uploadResult.setNumberOfReferencesRejected(uploadResult.getNumberOfReferencesRejected() + 1);
+                collectionUploadResponse.addLineWithInvalidCollectionName(elements[0] + " // song collection information missing ");
+                collectionUploadResponse.setNumberOfReferencesRejected(collectionUploadResponse.getNumberOfReferencesRejected() + 1);
                 continue;
             }
             // create reference
@@ -154,19 +154,19 @@ public class SongCollectionService {
                     try {
                         item.setPage(Integer.parseInt(elements[2].trim()));
                     } catch (IllegalArgumentException e) {
-                        uploadResult.addLineWithInvalidPageDatum(line);
-                        uploadResult.setNumberOfReferencesRejected(uploadResult.getNumberOfReferencesRejected() + 1);
+                        collectionUploadResponse.addLineWithInvalidPageDatum(line);
+                        collectionUploadResponse.setNumberOfReferencesRejected(collectionUploadResponse.getNumberOfReferencesRejected() + 1);
                         continue;
                     }
                 }
-                uploadResult.setNumberOfReferencesAccepted(uploadResult.getNumberOfReferencesAccepted() + 1);
+                collectionUploadResponse.setNumberOfReferencesAccepted(collectionUploadResponse.getNumberOfReferencesAccepted() + 1);
                 referencesRepository.save(item);
             } else {
-                uploadResult.setNumberOfExistingReferences(uploadResult.getNumberOfExistingReferences() + 1);
+                collectionUploadResponse.setNumberOfExistingReferences(collectionUploadResponse.getNumberOfExistingReferences() + 1);
                 System.out.println("-- Already exists: " + line);
             }
         }
-        return uploadResult;
+        return collectionUploadResponse;
     }
 
     private boolean checkIfReferenceExists(String title, SongCollection collection1) {

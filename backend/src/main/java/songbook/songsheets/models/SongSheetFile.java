@@ -1,19 +1,17 @@
 package songbook.songsheets.models;
 
-import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.web.multipart.MultipartFile;
 
-@Document(collection = "SongSheetFilesGreen")
-public class SongSheetFileGreenVersion {
+@Document(collection = "SongSheetFiles")
+public class SongSheetFile {
 
     @Id
     private String id;
     private String fileName;
     private byte[] file;
 
-    public SongSheetFileGreenVersion() {
+    public SongSheetFile() {
         // this.fileName = file.getOriginalFilename();
         // this.file = file;
     }

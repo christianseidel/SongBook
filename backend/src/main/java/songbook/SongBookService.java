@@ -7,7 +7,7 @@ import songbook.collections.SongCollectionService;
 import songbook.collections.exceptions.NoSuchIdException;
 import songbook.collections.models.Reference;
 import songbook.models.Song;
-import songbook.models.SongSheetFile;
+import songbook.models.SongSheetFileMyVersion;
 
 import java.util.*;
 
@@ -110,7 +110,7 @@ public class SongBookService {
     }
 
     public String uploadSongSheetFile(MultipartFile file) {
-        return songSheetsRepository.save(new SongSheetFile(file)).getId();
+        return songSheetsRepository.save(new SongSheetFileMyVersion(file)).getId();
     }
 
     public void deleteSongSheetFile(String fileId) {

@@ -2,12 +2,12 @@ package songbook;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
-import songbook.models.SongSheetFile;
+import songbook.models.SongSheetFileMyVersion;
 
 
 @Repository
-public interface SongSheetsRepository extends MongoRepository<SongSheetFile, String> {
+public interface SongSheetsRepository extends MongoRepository<SongSheetFileMyVersion, String> {
 
     @Override
-    <S extends SongSheetFile> S save(S entity);
+    <S extends SongSheetFileMyVersion> S save(S entity);
 }

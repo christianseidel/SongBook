@@ -1,12 +1,14 @@
 package songbook.songsheets.models;
 
-public class FileUploadResponse {
+public class SongSheetUploadResponse {
 
+    private String id;
     private String fileName;
     private String contentType;
     private String url;
 
-    public FileUploadResponse(String fileName, String contentType, String url) {
+    public SongSheetUploadResponse(String fileName, String contentType, String id, String url) {
+        this.id = id;
         this.fileName = fileName;
         this.contentType = contentType;
         this.url = url;
@@ -26,6 +28,14 @@ public class FileUploadResponse {
 
     public void setContentType(String contentType) {
         this.contentType = contentType;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getUrl() {

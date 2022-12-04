@@ -2,22 +2,15 @@ package songbook;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.mock.web.MockMultipartFile;
 import songbook.collections.ReferencesRepository;
 import songbook.collections.SongCollectionService;
-import songbook.collections.UploadResult;
 import songbook.collections.exceptions.NoSuchIdException;
 import songbook.collections.models.Reference;
 import songbook.models.Song;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 

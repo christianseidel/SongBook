@@ -2,10 +2,12 @@ package songbook.songsheets;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
-import songbook.songsheets.models.SongSheetFileGreenVersion;
+import songbook.songsheets.models.SongSheetFile;
+
+import java.util.Optional;
 
 @Repository
-public interface SheetRepository extends MongoRepository<SongSheetFileGreenVersion, String> {
+public interface SongSheetRepository extends MongoRepository<SongSheetFile, String> {
 
-    SongSheetFileGreenVersion findByFileName(String fileName);
+    Optional<SongSheetFile> findByFileName(String fileName);
 }

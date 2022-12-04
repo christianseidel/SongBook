@@ -7,14 +7,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Document(collection = "SongSheetFiles")
 @Data
-public class SongSheetFile {
+public class SongSheetFileMyVersion {
 
     @Id
     private String id;
     private String fileName;
     // private MultipartFile file;
 
-    public SongSheetFile(MultipartFile file) {
+    public SongSheetFileMyVersion(MultipartFile file) {
         this.fileName = file.getOriginalFilename();
        // this.file = file;
     }

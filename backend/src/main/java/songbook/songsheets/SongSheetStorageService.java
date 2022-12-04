@@ -1,67 +1,46 @@
 package songbook.songsheets;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
+
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import songbook.songsheets.models.SongSheetFile;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
+import java.util.Objects;
 
 @Service
-public class SheetStorageService {
+public class SongSheetStorageService {
 
-    private Path fileStoragePath;
-    private String fileStorageLocation;
+    private final SongSheetRepository songSheetRepository;
 
-    public SheetStorageService(@Value("${file.storage.location:tmp}") String fileStorageLocation) {
-
-        this.fileStorageLocation = fileStorageLocation;
-        fileStoragePath = Path.of(fileStorageLocation).toAbsolutePath().normalize();
-
-        try {
-            Files.createDirectories(fileStoragePath);
-            System.out.println("File Storage Path:   " + fileStoragePath);
-            System.out.println("fileStorageLocation: " + fileStorageLocation);
-        } catch (IOException e) {
-            throw new RuntimeException("File directory could not be created.");
-        }
+    public SongSheetStorageService(SongSheetRepository songSheetRepository) {
+        this.songSheetRepository = songSheetRepository;
     }
 
-    public String storeFile(MultipartFile file) {
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-
-        Path filePath = Path.of(fileStoragePath + "\\" + fileName);
-
-        try {
-            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            throw new RuntimeException("Unable to store the song sheet file.", e);
+    public SongSheetFile saveSongSheetFile(MultipartFile file) throws IOException {
+        if (file.getSize() > 8_000_000) {
+            System.out.println(file.getSize());
+            throw new RuntimeException("The size of your file exceeds 8 MB!");
         }
-
-        return fileName;
+        String name = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+        SongSheetFile songSheetFile = new SongSheetFile();
+        songSheetFile.setFileName(name);
+        songSheetFile.setFile(file.getBytes());
+        return songSheetRepository.save(songSheetFile);
     }
 
-    public Resource downloadSongSheet(String fileName) {
+    public SongSheetFile retrieveSongSheetFile(String fileName) throws RuntimeException {
+        SongSheetFile file = songSheetRepository
+                .findByFileName(fileName)
+                .orElseThrow(() -> new RuntimeException("Server is unable to find your song sheet."));
+        return file;
+    }
 
-        Path path = Path.of(fileStorageLocation).toAbsolutePath().resolve(fileName);
-
-        Resource resource;
-        try {
-            resource = new UrlResource(path.toUri());
-        } catch (MalformedURLException e) {
-            throw new RuntimeException("Server is unable to retrieve the song sheet file.", e);
-        }
-
-        if (resource.exists() && resource.isReadable()) {
-            return resource;
-        } else {
-            throw new RuntimeException("The file either does not exist or is not readable.");
-        }
+    public void deleteSongSheetFile(String id) {
+        if (songSheetRepository.findById(id).isEmpty()) {
+            throw new RuntimeException("Song sheet file with Id No. \"" + id + "\" could not be found.");
+        };
+        songSheetRepository.deleteById(id);
     }
 }

@@ -4,7 +4,7 @@ import lombok.Data;
 import java.util.ArrayList;
 
 @Data
-public class UploadResult {
+public class CollectionUploadResponse {
     private int numberOfReferencesAccepted;
     private int numberOfExistingReferences;
     private int numberOfReferencesRejected;
@@ -12,7 +12,7 @@ public class UploadResult {
     private ArrayList<String> listOfLinesWithInvalidCollectionName;
     private ArrayList<String> listOfLinesWithInvalidPageData;
 
-    public UploadResult() {
+    public CollectionUploadResponse() {
         this.numberOfReferencesAccepted = 0;
         this.numberOfExistingReferences = 0;
         this.numberOfReferencesRejected = 0;

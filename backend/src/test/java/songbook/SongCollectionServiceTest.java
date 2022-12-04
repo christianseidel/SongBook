@@ -7,7 +7,7 @@ import org.mockito.Mockito;
 import org.springframework.mock.web.MockMultipartFile;
 import songbook.collections.ReferencesRepository;
 import songbook.collections.SongCollectionService;
-import songbook.collections.UploadResult;
+import songbook.collections.CollectionUploadResponse;
 import songbook.collections.exceptions.EmptyFileException;
 import songbook.collections.exceptions.NoSuchIdException;
 import songbook.collections.models.Reference;
@@ -144,7 +144,6 @@ class SongCollectionServiceTest {
     }
 
     @Test
-    @Disabled
     void shouldAddNewReferenceToCollection() {
         MockMultipartFile oneRefUpload = new MockMultipartFile(
                 "importOneReference.txt",
@@ -156,18 +155,18 @@ class SongCollectionServiceTest {
 
         Collection<Reference> collection = List.of();
         Mockito.when(repo.findAllByTitleAndSongCollection("This Is My Song, Yeah", THE_DAILY_UKULELE_BLUE)).thenReturn(collection);
-        UploadResult uploadResult = new UploadResult();
-        uploadResult.setNumberOfReferencesAccepted(1);
-        uploadResult.setTotalNumberOfReferences(1);
+        CollectionUploadResponse collectionUploadResponse = new CollectionUploadResponse();
+        collectionUploadResponse.setNumberOfReferencesAccepted(1);
+        collectionUploadResponse.setTotalNumberOfReferences(1);
 
-        UploadResult actual = new UploadResult();
+        CollectionUploadResponse actual = new CollectionUploadResponse();
         try {
             actual = service.processCollectionUpload(oneRefUpload);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        assertEquals(uploadResult, actual);
+        assertEquals(collectionUploadResponse, actual);
     }
 
     @Test
@@ -195,18 +194,18 @@ class SongCollectionServiceTest {
         Mockito.when(repo.findAllByTitleAndSongCollection(title3, LIEDERBUCH_1)).thenReturn(collection);
         Mockito.when(repo.findAllByTitleAndSongCollection(title4, LIEDERBUCH_1)).thenReturn(collection);
 
-        UploadResult uploadResult = new UploadResult();
-        uploadResult.setNumberOfReferencesAccepted(4);
-        uploadResult.setTotalNumberOfReferences(4);
+        CollectionUploadResponse collectionUploadResponse = new CollectionUploadResponse();
+        collectionUploadResponse.setNumberOfReferencesAccepted(4);
+        collectionUploadResponse.setTotalNumberOfReferences(4);
 
-        UploadResult actual = new UploadResult();
+        CollectionUploadResponse actual = new CollectionUploadResponse();
         try {
             actual = service.processCollectionUpload(oneRefUpload);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        assertEquals(uploadResult, actual);
+        assertEquals(collectionUploadResponse, actual);
     }
 
     @Test
@@ -223,19 +222,19 @@ class SongCollectionServiceTest {
         String title = "This Is My Song, Yeah";
         Collection<Reference> collection = List.of(new Reference("This Is My Song, Yeah", THE_DAILY_UKULELE_BLUE));
         Mockito.when(repo.findAllByTitleAndSongCollection(title, THE_DAILY_UKULELE_BLUE)).thenReturn(collection);
-        UploadResult uploadResult = new UploadResult();
-        uploadResult.setNumberOfReferencesAccepted(0);
-        uploadResult.setNumberOfExistingReferences(1);
-        uploadResult.setTotalNumberOfReferences(1);
+        CollectionUploadResponse collectionUploadResponse = new CollectionUploadResponse();
+        collectionUploadResponse.setNumberOfReferencesAccepted(0);
+        collectionUploadResponse.setNumberOfExistingReferences(1);
+        collectionUploadResponse.setTotalNumberOfReferences(1);
 
-        UploadResult actual = new UploadResult();
+        CollectionUploadResponse actual = new CollectionUploadResponse();
         try {
             actual = service.processCollectionUpload(oneRefUpload);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        assertEquals(uploadResult, actual);
+        assertEquals(collectionUploadResponse, actual);
     }
 
     @Test
@@ -248,21 +247,21 @@ class SongCollectionServiceTest {
                 "This Is Not My Song, Bro; The Daily Ukulele (Blue); ab23ab".getBytes(StandardCharsets.UTF_8)
         );
 
-        UploadResult uploadResult = new UploadResult();
-        uploadResult.setNumberOfReferencesAccepted(0);
-        uploadResult.setNumberOfExistingReferences(0);
-        uploadResult.setTotalNumberOfReferences(1);
-        uploadResult.setNumberOfReferencesRejected(1);
-        uploadResult.addLineWithInvalidPageDatum("This Is Not My Song, Bro; The Daily Ukulele (Blue); ab23ab");
+        CollectionUploadResponse collectionUploadResponse = new CollectionUploadResponse();
+        collectionUploadResponse.setNumberOfReferencesAccepted(0);
+        collectionUploadResponse.setNumberOfExistingReferences(0);
+        collectionUploadResponse.setTotalNumberOfReferences(1);
+        collectionUploadResponse.setNumberOfReferencesRejected(1);
+        collectionUploadResponse.addLineWithInvalidPageDatum("This Is Not My Song, Bro; The Daily Ukulele (Blue); ab23ab");
 
-        UploadResult actual = new UploadResult();
+        CollectionUploadResponse actual = new CollectionUploadResponse();
         try {
             actual = service.processCollectionUpload(oneRefUpload);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        assertEquals(uploadResult, actual);
+        assertEquals(collectionUploadResponse, actual);
     }
 
     @Test
@@ -277,22 +276,22 @@ class SongCollectionServiceTest {
                         .getBytes(StandardCharsets.UTF_8)
         );
 
-        UploadResult uploadResult = new UploadResult();
-        uploadResult.setNumberOfReferencesAccepted(0);
-        uploadResult.setNumberOfExistingReferences(0);
-        uploadResult.setTotalNumberOfReferences(2);
-        uploadResult.setNumberOfReferencesRejected(2);
-        uploadResult.addLineWithInvalidCollectionName("This Is Not My Song, Bro; The Daily Ukulele (Green); 333");
-        uploadResult.addLineWithInvalidCollectionName("This Isn't My Song Either, Sister; The Daily Song Book; 444");
+        CollectionUploadResponse collectionUploadResponse = new CollectionUploadResponse();
+        collectionUploadResponse.setNumberOfReferencesAccepted(0);
+        collectionUploadResponse.setNumberOfExistingReferences(0);
+        collectionUploadResponse.setTotalNumberOfReferences(2);
+        collectionUploadResponse.setNumberOfReferencesRejected(2);
+        collectionUploadResponse.addLineWithInvalidCollectionName("This Is Not My Song, Bro; The Daily Ukulele (Green); 333");
+        collectionUploadResponse.addLineWithInvalidCollectionName("This Isn't My Song Either, Sister; The Daily Song Book; 444");
 
-        UploadResult actual = new UploadResult();
+        CollectionUploadResponse actual = new CollectionUploadResponse();
         try {
             actual = service.processCollectionUpload(oneRefUpload);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        assertEquals(uploadResult, actual);
+        assertEquals(collectionUploadResponse, actual);
     }
 
     @Test
