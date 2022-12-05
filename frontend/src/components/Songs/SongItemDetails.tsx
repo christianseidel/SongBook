@@ -83,6 +83,11 @@ function SongItemDetails(props: SongItemProps) {
     }
 
     function deleteSongItem(id: string) {
+        props.song.songSheets?.forEach((file) => {
+            if (file.fileId !== undefined) {
+                deleteSongSheetFile(file.fileId)
+            }
+        });
         unhideAllReferencesAttached(id)
             .then(() => {
                     fetch('/api/songbook/' + id, {
@@ -104,6 +109,19 @@ function SongItemDetails(props: SongItemProps) {
             ).catch(() => {
             console.log("Unhiding references did not succeed.")
         })
+    }
+
+    const deleteSongSheetFile = (fileId: string) => {
+        fetch('api/sheets/' + fileId, {
+            method: 'DELETE',
+        })
+            .then((response) => {
+                if (response.status !== 200) {
+                    props.displayMsg(NewMessage.create(
+                        'Song Sheet File could not be deleted!', MessageType.RED
+                    ));
+                }
+            })
     }
 
     // References must be repatriated first before the song item can be deleted.
@@ -335,32 +353,6 @@ function SongItemDetails(props: SongItemProps) {
         setToggleCreateOrUpdate('update')
     }
 
-    const displaySongSheet = (index: number) => {
-        let contentType = 'application/pdf'
-        let id = '';
-        if (props.song.songSheets !== undefined) {
-            id = props.song.songSheets[index].fileId!;
-        }
-        fetch('api/sheets/download/' + id, {
-            method: 'GET',
-            headers: {
-                'Content-Type': contentType
-            }})
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else if (response.status === 500) {
-                    props.displayMsg(NewMessage.create('Server unable to find your song sheet.', MessageType.RED));
-                } else {
-                    props.displayMsg(NewMessage.create('Unable to fetch song sheet (error code ' + response.status + ' – ' + response.statusText + ').', MessageType.RED));
-                }
-            })
-            .then((responseBody) => {
-                console.log(responseBody)}
-            )
-    }
-
-
 
     return (
         <div>
@@ -383,7 +375,7 @@ function SongItemDetails(props: SongItemProps) {
                         &#8734;
                     <span className="tooltipText">add a link</span>
                     </span>
-                <span className={'icon tooltip'} id={'iconFile'} onClick={openOrCloseAddSongSheet}>
+                <span className={'icon tooltip'} id={'iconSongSheetFile'} onClick={openOrCloseAddSongSheet}>
                         &#128195;
                     <span className="tooltipText">add a file</span>
                     </span>
@@ -401,10 +393,11 @@ function SongItemDetails(props: SongItemProps) {
                 {toggleEditDescription && <div>
                     <form id={'addADescription'} className={'workingSpaceElement'}
                           onSubmit={ev => doAddDescription(ev)}>
-                        <label>{((props.song.description !== null
+                        <label className={'editDescriptionTitle'}>{((props.song.description !== null
                             && props.song.description!.length > 0) && true)
                             ? <span>Edit your </span>
-                            : <span>Add a </span>} Comment or Description:</label><br/>
+                            : <span>Add a </span>}
+                            Comment or Description</label><label>:</label><br/>
                         <textarea id={'inputDescription'} value={description}
                                   rows={3}
                                   cols={60}
@@ -429,8 +422,10 @@ function SongItemDetails(props: SongItemProps) {
                     <form onSubmit={ev => {
                         toggleCreateOrUpdate === 'create' ? createReference(ev) : doUpdateReference();
                     }}>
-                        <label>{toggleCreateOrUpdate === 'create' ? <span>Add a</span> : <span>Edit your</span>} Song
-                            Sheet Reference:</label>
+                        <label className={'editReferenceTitle'}>{toggleCreateOrUpdate === 'create'
+                            ? <span>Add a</span>
+                            : <span>Edit your</span>}
+                            Song Sheet Reference</label><label>:</label>
                         <div className={'nextLine'}>
                             <label>Coll.:</label>
                             <input id={'inputRefCollection'} type='text' value={collection}
@@ -535,6 +530,7 @@ function SongItemDetails(props: SongItemProps) {
                         setSheetIndex(-1);
                         setToggleCreateOrUpdate('create');
                     }}
+                    onDeleteSongSheetFile={(fileId) => deleteSongSheetFile(fileId)}
                 />}
             </div>
 
@@ -546,7 +542,7 @@ function SongItemDetails(props: SongItemProps) {
                         {props.song.references.map((item, index) =>
                             <div key={index} className={'reference'}
                                  onClick={() => openUpdateReference(index)}>
-                                &ndash;&#129174;&nbsp; {(item.addedCollection === null) ?
+                                <span className={'referenceIndicator'}>&ndash;&#129174;</span>&nbsp; {(item.addedCollection === null) ?
                                 <span>{songCollectionToRealName(item.songCollection)}</span> :
                                 <span>{item.addedCollection}</span>}
                                 {item.page !== 0 && <span>, page {item.page} </span>}
@@ -559,7 +555,7 @@ function SongItemDetails(props: SongItemProps) {
                         && <div id={'displayLinks'}>
                             {props.song.links.map((item, index) =>
                                 <div key={index} className={'link'}>
-                                    <span className={'linkDot'}
+                                    <span className={'linkIndicator'}
                                           onClick={() => openUpdateLink(index)}>&#8734;</span>&nbsp;
                                     <a href={item.linkTarget} target={'_blank'} rel={'noreferrer'}>
                                         <span className={'linkText'}>{item.linkText}</span></a>
@@ -580,7 +576,7 @@ function SongItemDetails(props: SongItemProps) {
                             {props.song.songSheets.map((item, index) =>
                                 <div key={index}>
                                     <span className={'songSheet'} onClick={() => openUpdateSongSheet(index)}>
-                                        <span>&#x266b;&nbsp; &nbsp;{item.name} </span>
+                                        <span><span className={'songSheetIndicator'}>&#x266b;</span>&nbsp; &nbsp;{item.name} </span>
                                         {item.key && <span> – <span className={'displayKey'}>({item.key})</span></span>}
                                     </span>
                                     <span className={'songSheetDescriptive'}>
@@ -589,9 +585,12 @@ function SongItemDetails(props: SongItemProps) {
                                         {item.description && <span className={'displayDescription'}><span
                                             className={'separator'}></span>({item.description})</span>}
                                     </span>
-                                    <span className={'songSheetDescriptive'} onClick={() => displaySongSheet(index)}>
-                                        {item.fileName && <span className={'displayFileName'}><span
-                                            className={'separatorFileName'}>&#x266b;</span>{item.fileName}</span>}
+                                    <span className={'songSheetDescriptive'}>
+                                        {item.fileName && <span className={'displayFileName'}>
+                                            <span className={'separatorFileName'}>&#x266b;</span>
+                                        <a href={item.fileUrl} target={'_blank'} rel={'noreferrer'}
+                                             className={'coloredSongSheetLink'}>{item.fileName}</a>
+                                            </span>}
                                     </span>
                                 </div>)}
 

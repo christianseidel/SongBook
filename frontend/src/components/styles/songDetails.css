@@ -149,24 +149,25 @@
 }
 
 #iconInfo {
-    border-color: dimgray;
+    border-color: #936b09;  /* brown */
+    /*border-color: dimgray;*/
     font-size: 12px;
     font-weight: bold;
 }
 
 #iconReference {
-    border-color: rgba(157, 54, 210, 0.85);
+    border-color: green;
     font-size: 11px;
 }
 
 #iconLink {
-    border-color: #936b09;
+    border-color: #4280c9;  /* blue */
     font-weight: bold;
     font-size: 13px;
 }
 
-#iconFile {
-    border-color: #4280c9;
+#iconSongSheetFile {
+    border-color: rgb(157, 54, 210);  /* magenta */
     font-size: 10px;
 }
 
@@ -222,6 +223,12 @@
 
 /*  DESCRIPTION  */
 
+.editDescriptionTitle {
+    text-decoration: underline;
+    text-decoration-color: #936b09;
+    text-decoration-thickness: 2px;
+}
+
 #displayDescription {
     margin-top: 6px;
     font-weight: lighter;
@@ -229,9 +236,7 @@
 }
 
 
-#addADescription {
-
-}
+#addADescription {}
 
 #inputDescription {
     margin-top: 12px;
@@ -255,13 +260,32 @@
     margin-left: 54px;
 }
 
+
 /*  REFERENCE  */
+
+.editReferenceTitle {
+    text-decoration: underline;
+    text-decoration-color: green;
+    text-decoration-thickness: 2px;
+}
 
 #displayReferences, #displayLinks, #displaySongSheets {
     display: block;
     /*border: 1px solid darkgoldenrod;*/
     padding: 5px;
 }
+
+/*
+.displayLinks {
+    display: block;
+    margin-top: 20px;
+    border: 1px solid darkgoldenrod;
+    font-size: 3pt;
+    padding: 5px;
+    z-index: 1;
+}
+*/
+
 
 #displayLinks:nth-of-type(1), #displaySongSheets:nth-of-type(1) {
     margin-top: 20px;
@@ -273,6 +297,11 @@
     color: #3b6363;
     margin-left: 26px;
     font-style: italic;
+}
+
+.referenceIndicator {
+    color: green;
+    font-weight: bold;
 }
 
 .reference:hover, .songSheet:hover {
@@ -348,8 +377,9 @@
 #displayRefAuthor {}
 
 .displayKey {
-    font-style: normal;
     color: #850808;
+    /*color: #3b6363;*/
+    font-weight: normal;
 }
 
 #inputKey {
@@ -377,25 +407,23 @@
 
 /*  LINK  */
 
-.displayLinks {
-    display: block;
-    margin-top: 20px;
-    border: 1px solid darkgoldenrod;
-    padding: 5px;
-    z-index: 1;
+.editLinkTitle {
+    text-decoration: underline;
+    text-decoration-color: #4280c9;
+    text-decoration-thickness: 2px;
 }
 
 #listOfLinks {
 }
 
-.linkDot {
-    color: dodgerblue;
-    font-weight: normal;
+.linkIndicator {
+    color: #4280c9;
+    font-weight: bold;
     margin-right: 2px;
     z-index: 2;
 }
 
-.linkDot:hover {
+.linkIndicator:hover {
     position: relative;
     background-color: lightyellow;
     border-style: solid;
@@ -410,12 +438,12 @@
     z-index: 2;
 }
 
-.linkDot:hover + a {
+.linkIndicator:hover + a {
     margin-left: -43px;
     z-index: 1;
 }
 
-.linkDot:hover:before {
+.linkIndicator:hover:before {
     font-weight: normal;
     color: black;
     content: 'edit ';
@@ -425,36 +453,40 @@
 }
 
 .linkText {
+    /*color: #3b6363;*/
+    color: #4280c9;
+    text-decoration: underline;
+    text-decoration-color: #4280c9;
     z-index: 1;
 }
 
 .linkText:hover {
-    font-weight: bold;
+    /*font-weight: bold;*/
     /*background-color: #eaba5e;*/
-    color: darkorchid;
+    background-color: #eaf6fa;
+    /*color: darkorchid;*/
     border-style: solid;
-    border-width: 2px;
+    border-width: 1px;
     border-color: darkgoldenrod;
     border-radius: 2px;
     width: fit-content;
-    box-shadow: 3px 3px darkgoldenrod;
+    box-shadow: 1px 1px darkgoldenrod;
     cursor: pointer;
     user-select: none;
     padding: 1px 6px 2px 6px;
-    margin-left: -3px;
+    margin-left: -4px;
 }
 
-.linkText:hover:before {
+/*.linkText:hover:before {
     content: '\2013\1F896\00A0 ';
     font-weight: bold;
-   /* color: darkorchid;*/
+   !* color: darkorchid;*!
     line-height: 0.9;
 
-}
+}*/
 
 .link {
     font-family: Verdana, Trebuchet MS, Lucida Sans Unicode, Lucida Grande, Lucida Sans, Arial, sans-serif;
-
     color: #3b6363;
     margin-left: 26px;
     margin-top: 3px;
@@ -510,6 +542,12 @@
 
 /*  SONG SHEETS  */
 
+.editSongSheetTitle {
+    text-decoration: underline;
+    text-decoration-color: rgb(157, 54, 210);
+    text-decoration-thickness: 2px;
+}
+
 #inputSongSheetName {
     margin-left: 12px;
     width: 147px;
@@ -539,6 +577,10 @@
     color: #3b6363;
     margin-left: 27px;
 }
+.songSheetIndicator {
+    color: rgb(157, 54, 210);
+    font-weight: bold;
+}
 
 .songSheetDescriptive {
     font-family: Verdana, Trebuchet MS, Lucida Sans Unicode, Lucida Grande, Lucida Sans, Arial, sans-serif;
@@ -567,14 +609,35 @@
 }
 
 .separatorFileName {
-    margin-left: 12px;
     margin-right: 6px;
     font-weight: bold;
 }
 
 .displayFileName {
-
+    margin-left: 12px;
 }
+
+.displayFileName:hover {
+    font-weight: bold;
+    /*background-color: #eaba5e;*/
+    background-color: #eaf6fa;
+    color: darkorchid;
+    border-style: solid;
+    border-width: 1px;
+    border-color: darkgoldenrod;
+    border-radius: 2px;
+    width: fit-content;
+    box-shadow: 1px 1px darkgoldenrod;
+    cursor: pointer;
+    user-select: none;
+    padding: 1px 6px 2px 6px;
+}
+
+.displayFileName:hover > .separatorFileName {
+    color: #3b6363;
+}
+
+
 
 
 #ContainerInsertingDateUploaded {
@@ -591,18 +654,26 @@
     font-weight: normal;
 }
 
-
-#labelUploadSongSheetForm {
-    margin-right: 68px;
-}
-
 #uploadSongSheetForm {
     float: right;
     margin-top: 8px;
 }
 
-#fileId {
-    margin-left: 47px;
+#labelUploadSongSheetForm {
+    margin-right: 18px;
+}
+
+#fileName {
+    display: inline-block;
+    width: 223px;
+    margin-left: 32px;
+    text-align: right;
+}
+
+.coloredSongSheetLink {
+    color: rgb(157, 54, 210);
+    font-weight: normal;
+    /*color: #237323;*/
 }
 
 #buttonDiscardSongSheetFile {
