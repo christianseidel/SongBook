@@ -5,8 +5,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import songbook.collections.exceptions.NoSuchIdException;
-import songbook.collections.exceptions.SongAlreadyExistsException;
+import songbook.exceptions.NoSuchIdException;
+import songbook.exceptions.SongAlreadyExistsException;
 import songbook.models.Song;
 import songbook.models.SongsDTO;
 

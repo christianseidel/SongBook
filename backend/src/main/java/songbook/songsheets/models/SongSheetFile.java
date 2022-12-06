@@ -12,8 +12,6 @@ public class SongSheetFile {
     private byte[] file;
 
     public SongSheetFile() {
-        // this.fileName = file.getOriginalFilename();
-        // this.file = file;
     }
 
     public String getId() {
@@ -39,5 +37,4 @@ public class SongSheetFile {
     public void setFile(byte[] file) {
         this.file = file;
     }
-
 }

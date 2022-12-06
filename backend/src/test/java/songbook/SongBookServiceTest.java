@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import songbook.collections.ReferencesRepository;
 import songbook.collections.SongCollectionService;
-import songbook.collections.exceptions.NoSuchIdException;
+import songbook.exceptions.NoSuchIdException;
 import songbook.collections.models.Reference;
 import songbook.models.Song;
 

@@ -18,9 +18,8 @@ public class SongSheetStorageService {
         this.songSheetRepository = songSheetRepository;
     }
 
-    public SongSheetFile saveSongSheetFile(MultipartFile file) throws IOException {
+    public SongSheetFile saveSongSheetFile(MultipartFile file) throws IOException, RuntimeException {
         if (file.getSize() > 8_000_000) {
-            System.out.println(file.getSize());
             throw new RuntimeException("The size of your file exceeds 8 MB!");
         }
         String name = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));

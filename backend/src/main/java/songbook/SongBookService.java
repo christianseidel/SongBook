@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import songbook.collections.ReferencesRepository;
 import songbook.collections.SongCollectionService;
-import songbook.collections.exceptions.NoSuchIdException;
+import songbook.exceptions.NoSuchIdException;
 import songbook.collections.models.Reference;
 import songbook.models.Song;
 import songbook.models.SongSheetFileMyVersion;

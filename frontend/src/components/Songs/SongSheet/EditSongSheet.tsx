@@ -2,7 +2,7 @@ import React, {FormEvent, useEffect, useState} from "react";
 
 import ChooseKey from "../ChooseKey";
 import {message, MessageType, NewMessage} from "../../messageModel";
-import {SongSheet, SongSheetUploadResponse} from "./modelsSongSheet";
+import {SongSheet} from "./modelsSongSheet";
 import {Mood} from "../modelsSong";
 
 interface SongSheetProps {
@@ -72,7 +72,7 @@ function EditSongSheet(props: SongSheetProps) {
                             responseStatus = response.status;
                             return response.json();
                         })
-                        .then((responseBody: SongSheetUploadResponse) => {
+                        .then((responseBody) => {
                             if (responseStatus === 200) {
                                 setFileId(responseBody.id);
                                 setFileName(responseBody.fileName);
@@ -82,8 +82,10 @@ function EditSongSheet(props: SongSheetProps) {
                                     'The server did not accept your request (Bad Request).',
                                     MessageType.RED
                                 ))
+                            } else if (responseStatus === 500) {
+                                props.displayMsg(NewMessage.create(responseBody.message, MessageType.RED));
                             } else {
-                                props.displayMsg(NewMessage.create('The server is unable to respond to your request – error code: ' + responseStatus, MessageType.RED));
+                                props.displayMsg(NewMessage.create('The server is unable to respond to your request – (error code: ' + responseStatus + ')', MessageType.RED));
                             }
                         })
             }
@@ -147,7 +149,7 @@ function EditSongSheet(props: SongSheetProps) {
             }}>
                 <label className={'editSongSheetTitle'}>{props.toggleCreateOrUpdate === 'create'
                     ? <span>Add a</span>
-                    : <span>Edit your</span>} Song Sheet</label><label>:</label>
+                    : <span>Edit your</span>} Song Sheet File</label><label>:</label>
                 <span className={'nextLine'}>
                     <label>Name:</label>
                     <input id={'inputSongSheetName'} type='text' value={name} placeholder={'Name'}

@@ -1,4 +1,4 @@
-package songbook.collections.exceptions;
+package songbook.exceptions;
 
 public class SongAlreadyExistsException extends RuntimeException {
 
