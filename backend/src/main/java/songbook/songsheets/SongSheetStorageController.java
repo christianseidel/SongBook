@@ -34,7 +34,7 @@ public class SongSheetStorageController {
             String name = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
             String url = ServletUriComponentsBuilder.fromCurrentContextPath()
                     .path("/api/sheets/download/")
-                    .path(name)
+                    .path(songSheetFile.getFileName())
                     .toUriString();
             return ResponseEntity.ok().body(new SongSheetUploadResponse(songSheetFile.getFileName(), contentType, songSheetFile.getId(), url));
         } catch (RuntimeException e) {
