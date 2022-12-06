@@ -67,8 +67,9 @@ function EditLink(props: SongItemLinksProps) {
                 finalTarget = 'https://' + finalTarget;
             }
             link.linkTarget = finalTarget;
-            link.linkKey = songKeyReturned;
+            link.linkAuthor = linkAuthor;
             link.linkStrumming = strumming;
+            link.linkKey = songKeyReturned;
             props.links[props.linkIndex] = link;
         }
         clearLink();

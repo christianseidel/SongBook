@@ -475,6 +475,8 @@ function SongItemDetails(props: SongItemProps) {
                             props.song.status = 'display';
                             setToggleEditReference(false);
                             setRefIndex(-1)
+                            clearReference();
+                            setReadOnly('');
                         }
                         } tabIndex={6}>
                             cancel
@@ -521,6 +523,7 @@ function SongItemDetails(props: SongItemProps) {
                         saveSongItem();
                         setToggleEditSongSheet(false);
                     }}
+                    save={saveSongItem}
                     displayMsg={(msg) => {props.displayMsg(msg)}}
                     onCancel={() => {
                         setToggleEditSongSheet(false);

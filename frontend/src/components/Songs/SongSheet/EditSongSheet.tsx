@@ -10,6 +10,7 @@ interface SongSheetProps {
     songSheets: SongSheet[] | undefined;
     sheetIndex: number;
     returnAndSave: () => void;
+    save: () => void;
     displayMsg: (msg: message | undefined) => void;
     onCancel: () => void;
     onClear: () => void;
@@ -112,6 +113,7 @@ function EditSongSheet(props: SongSheetProps) {
         props.returnAndSave();
     }
 
+
     const doUpdateSongSheet = () => {
         if (props.songSheets !== undefined) {
             let songSheet: SongSheet = props.songSheets[props.sheetIndex];
@@ -129,6 +131,14 @@ function EditSongSheet(props: SongSheetProps) {
     }
 
     const doClearSongSheet = () => {
+        if (fileId !== '') {
+            props.onDeleteSongSheetFile(fileId);
+        }
+        setFileId('');
+        setFileName('');
+        setFileUrl('');
+        setSongMood(0);
+        setSongKey('');
         clearSheet();
         props.onClear();
     }
@@ -185,9 +195,7 @@ function EditSongSheet(props: SongSheetProps) {
 
             </form>
 
-
-
-            <button id={'buttonClearLink'} type='button' onClick={() => {
+            <button id={'buttonClearSongSheet'} type='button' onClick={() => {
                 doClearSongSheet()
             }} tabIndex={9}>
                 ! clear
@@ -205,13 +213,13 @@ function EditSongSheet(props: SongSheetProps) {
                         <input type={'file'} id={'inputAddSongSheet'} accept={'application/pdf'}
                                onChange={event => uploadSongSheet(event.target.files)}/>
                     </form>
-                : <span>
+                : <span id={'fileNameContainer'}>
                     <span id={'fileName'}><a href={fileUrl} target={'_blank'} rel={'noreferrer'}
                         className={'coloredSongSheetLink'}>
                     {fileName}</a></span>
                     <button onClick={() => {
                         props.onDeleteSongSheetFile(fileId);
-                        setFileId('');
+                        /*setFileId('');*/
                         setFileName('');
                         setFileUrl('');}} id={'buttonDiscardSongSheetFile'}
                         >&#9986; discard</button>
