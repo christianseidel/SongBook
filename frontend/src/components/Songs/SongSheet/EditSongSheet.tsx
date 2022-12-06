@@ -34,7 +34,11 @@ function EditSongSheet(props: SongSheetProps) {
         setName('');
         setSource('');
         setDescription('');
+        setFileId('');
+        setFileName('');
+        setFileUrl('');
         setSongMood(0);
+        setSongKey('');
     }
 
     useEffect(() => {
@@ -49,7 +53,6 @@ function EditSongSheet(props: SongSheetProps) {
             setFileUrl(props.songSheets[props.sheetIndex].fileUrl ?? '');
         }
     }, [props.sheetIndex, props.songSheets, props.toggleCreateOrUpdate, songKey]);
-
 
     function uploadSongSheet(files: FileList | null) {
         if (files === null) {
@@ -75,6 +78,12 @@ function EditSongSheet(props: SongSheetProps) {
                         })
                         .then((responseBody) => {
                             if (responseStatus === 200) {
+                                if (props.toggleCreateOrUpdate === 'update' && props.songSheets !== undefined) {
+                                    props.songSheets[props.sheetIndex].fileId = responseBody.id;
+                                    props.songSheets[props.sheetIndex].fileName = responseBody.fileName;
+                                    props.songSheets[props.sheetIndex].fileUrl = responseBody.url;
+                                }
+                                props.save();
                                 setFileId(responseBody.id);
                                 setFileName(responseBody.fileName);
                                 setFileUrl(responseBody.url);
@@ -91,11 +100,10 @@ function EditSongSheet(props: SongSheetProps) {
                         })
             }
         }
-        /*ToDo: Lock "Delete Song" Button here. If not, song might get deleted, leaving an idling song sheet file (when open)*/
     }
 
     const doCancel = () => {
-        if (fileId !== '') {
+        if (fileId !== '' && props.toggleCreateOrUpdate === 'create') {
             props.onDeleteSongSheetFile(fileId);
         }
         props.onCancel();
@@ -112,7 +120,6 @@ function EditSongSheet(props: SongSheetProps) {
         clearSheet();
         props.returnAndSave();
     }
-
 
     const doUpdateSongSheet = () => {
         if (props.songSheets !== undefined) {
@@ -134,11 +141,6 @@ function EditSongSheet(props: SongSheetProps) {
         if (fileId !== '') {
             props.onDeleteSongSheetFile(fileId);
         }
-        setFileId('');
-        setFileName('');
-        setFileUrl('');
-        setSongMood(0);
-        setSongKey('');
         clearSheet();
         props.onClear();
     }
@@ -150,6 +152,29 @@ function EditSongSheet(props: SongSheetProps) {
         props.songSheets!.splice(props.sheetIndex, 1);
         clearSheet();
         props.returnAndSave();
+    }
+
+    const doDiscardSongSheetFile = () => {
+        props.onDeleteSongSheetFile(fileId);
+        if (props.toggleCreateOrUpdate === 'update') {
+            /*
+                if (props.songSheets !== undefined) {
+                    let songSheet: SongSheet = props.songSheets[props.sheetIndex];
+                    songSheet.name = name;
+                    songSheet.source = source;
+                    songSheet.description = description;
+                    songSheet.key = songKeyReturned;*/
+                props.songSheets![props.sheetIndex].fileId = ``;
+                props.songSheets![props.sheetIndex].fileName = ``;
+                props.songSheets![props.sheetIndex].fileUrl = '';
+
+                    /*props.songSheets[props.sheetIndex] = songSheet;*/
+        }
+        setFileId('');
+        setFileName('');
+        setFileUrl('');
+
+/*        props.returnAndSave();*/
     }
 
     return(
@@ -195,12 +220,13 @@ function EditSongSheet(props: SongSheetProps) {
 
             </form>
 
-            <button id={'buttonClearSongSheet'} type='button' onClick={() => {
-                doClearSongSheet()
-            }} tabIndex={9}>
-                ! clear
-            </button>
-            {props.toggleCreateOrUpdate === 'update' &&
+            {props.toggleCreateOrUpdate === 'create'
+                ? <button id={'buttonClearSongSheet'} type='button' onClick={() => {
+                    doClearSongSheet()
+                }} tabIndex={9}>
+                    ! clear
+                </button>
+                :
                 <button id={'buttonDeleteSongSheet'} type='button' onClick={() => {
                     deleteSongSheet()
                 }} tabIndex={10}>
@@ -217,11 +243,7 @@ function EditSongSheet(props: SongSheetProps) {
                     <span id={'fileName'}><a href={fileUrl} target={'_blank'} rel={'noreferrer'}
                         className={'coloredSongSheetLink'}>
                     {fileName}</a></span>
-                    <button onClick={() => {
-                        props.onDeleteSongSheetFile(fileId);
-                        /*setFileId('');*/
-                        setFileName('');
-                        setFileUrl('');}} id={'buttonDiscardSongSheetFile'}
+                    <button onClick={doDiscardSongSheetFile} id={'buttonDiscardSongSheetFile'}
                         >&#9986; discard</button>
                   </span>
             }

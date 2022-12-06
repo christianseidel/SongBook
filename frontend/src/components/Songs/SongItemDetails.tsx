@@ -345,12 +345,14 @@ function SongItemDetails(props: SongItemProps) {
     }
 
     const openUpdateSongSheet = (index: number) => {
-        setSheetIndex(index);
-        setToggleEditDescription(false);
-        setToggleEditReference(false);
-        setToggleEditLink(false);
-        setToggleEditSongSheet(true);
-        setToggleCreateOrUpdate('update')
+        if (toggleCreateOrUpdate === "create") {
+            setSheetIndex(index);
+            setToggleEditDescription(false);
+            setToggleEditReference(false);
+            setToggleEditLink(false);
+            setToggleEditSongSheet(true);
+            setToggleCreateOrUpdate('update')
+        }
     }
 
 
@@ -434,7 +436,7 @@ function SongItemDetails(props: SongItemProps) {
                             <label id={'labelInputRefPage'}>Page:</label>
                             <input id={'inputRefPage'} type='number' value={page} placeholder={'Page'}
                                    onChange={ev => setPage(ev.target.value)} tabIndex={2}/>
-                            <button id={'buttonAddReference'} className={'workingSpaceElement'} type='submit'
+                            <button id={'buttonAddReference'} type='submit'
                                     tabIndex={5}>
                                 &#10004; {toggleCreateOrUpdate}
                             </button>
@@ -522,12 +524,14 @@ function SongItemDetails(props: SongItemProps) {
                     returnAndSave={() => {
                         saveSongItem();
                         setToggleEditSongSheet(false);
+                        setToggleCreateOrUpdate('create');
                     }}
                     save={saveSongItem}
                     displayMsg={(msg) => {props.displayMsg(msg)}}
                     onCancel={() => {
                         setToggleEditSongSheet(false);
                         setSheetIndex(-1);
+                        setToggleCreateOrUpdate('create');
                     }}
                     onClear={() => {
                         setSheetIndex(-1);
@@ -578,7 +582,7 @@ function SongItemDetails(props: SongItemProps) {
                         && <div id={'displaySongSheets'}>
                             {props.song.songSheets.map((item, index) =>
                                 <div key={index}>
-                                    <span className={'songSheet'} onClick={() => openUpdateSongSheet(index)}>
+                                    <span className={toggleCreateOrUpdate === 'create' ?'songSheet' : 'songSheetDeaf'} onClick={() => openUpdateSongSheet(index)}>
                                         <span><span className={'songSheetIndicator'}>&#x266b;</span>&nbsp; &nbsp;{item.name} </span>
                                         {item.key && <span> – <span className={'displayKey'}>({item.key})</span></span>}
                                     </span>

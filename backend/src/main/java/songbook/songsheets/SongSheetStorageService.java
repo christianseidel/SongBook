@@ -34,7 +34,6 @@ public class SongSheetStorageService {
                 int startFileExtension = name.lastIndexOf(".");
                 String fileExtension = name.substring(startFileExtension);
                 name = name.substring(0, startFileExtension);
-                System.out.println(name);
                 if (name.contains("_")) {
                     int lastUnderscore = name.lastIndexOf("_");
                     name = name.substring(0, lastUnderscore);

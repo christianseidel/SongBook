@@ -28,7 +28,7 @@ import static songbook.collections.models.SongCollection.*;
 
 class SongCollectionServiceTest {
     
-    private final ReferencesRepository repo = Mockito.mock((ReferencesRepository.class));
+    private final ReferencesRepository repo = Mockito.mock(ReferencesRepository.class);
     private final SongCollectionService service = new SongCollectionService(repo);
 
     @Test
