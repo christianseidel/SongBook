@@ -59,10 +59,21 @@ class SongSheetStorageServiceTest {
         System.out.println(fileSystem.getPath("text.txt").toAbsolutePath());
         // -> D:\Ukulele\SongBook\backend\text.txt
 
-        String fileOrigin = "src\\test\\resources\\songSheets\\mockSongSheet.pdf";
         SongSheetFile testFile = new SongSheetFile();
-        testFile.setFileName("/mockURL/mockSongSheet.pdf");
-        testFile.setFile(fileOrigin.getBytes());
+
+        try {
+            String fileOrigin = "src\\test\\resources\\songSheets\\mockSongSheet.pdf";
+            testFile.setFileName("/mockURL/mockSongSheet.pdf");
+            testFile.setFile(fileOrigin.getBytes());
+            System.out.println("I used \\\\");
+        } catch (Exception e) {  // Alternative to be used on GitHub CI
+            String fileOrigin = "src/test/resources/songSheets/mockSongSheet.pdf";
+            testFile.setFileName("/mockURL/mockSongSheet.pdf");
+            testFile.setFile(fileOrigin.getBytes());
+            System.out.println("I used /");
+        }
+
+
         Mockito.when(songSheetRepository.findByFileName("/mockURL/mockSongSheet.pdf")).thenReturn(Optional.of(testFile));
 
         SongSheetFile actual = storageService.retrieveSongSheetFile("/mockURL/mockSongSheet.pdf");
