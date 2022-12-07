@@ -6,18 +6,11 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
-import songbook.exceptions.EmptyFileException;
-import songbook.exceptions.ErrorMessage;
-import songbook.exceptions.NoSuchIdException;
-import songbook.models.SongSheet;
-import songbook.models.SongSheetFileMyVersion;
 import songbook.songsheets.SongSheetRepository;
 import songbook.songsheets.SongSheetStorageService;
 import songbook.songsheets.models.SongSheetFile;
 
 import java.io.*;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -34,11 +27,6 @@ class SongSheetStorageServiceTest {
     void shouldSaveSongSheetFile() {
 
         String fileOrigin = "src\\test\\resources\\songSheets\\mockSongSheet.pdf";
-        /*SongSheetFile testFile = new SongSheetFile();
-        testFile.setFileName("mockSongSheet.pdf");
-        testFile.setFile(fileOrigin.getBytes());
-*/
-        /*Mockito.when(songSheetRepository.findByFileName("mockSongSheet.pdf")).thenReturn(Optional.empty());*/
 
         try {
             MultipartFile testFile = new MockMultipartFile("mock.pdf", "mockSongSheet.pdf", "application/pdf", new FileInputStream(fileOrigin));
@@ -53,27 +41,7 @@ class SongSheetStorageServiceTest {
     @Test
     void shouldDeliverSongSheetFile() {
 
-
-        FileSystem fileSystem = FileSystems.getDefault();
-
-        System.out.println(fileSystem.getPath("text.txt").toAbsolutePath());
-        // -> D:\Ukulele\SongBook\backend\text.txt
-
         SongSheetFile testFile = new SongSheetFile();
-
-        try {
-            String fileOrigin = "src\\test\\resources\\songSheets\\mockSongSheet.pdf";
-            testFile.setFileName("/mockURL/mockSongSheet.pdf");
-            testFile.setFile(fileOrigin.getBytes());
-            System.out.println("I used \\\\");
-        } catch (Exception e) {  // Alternative to be used on GitHub CI
-            String fileOrigin = "src/test/resources/songSheets/mockSongSheet.pdf";
-            testFile.setFileName("/mockURL/mockSongSheet.pdf");
-            testFile.setFile(fileOrigin.getBytes());
-            System.out.println("I used /");
-        }
-
-
         Mockito.when(songSheetRepository.findByFileName("/mockURL/mockSongSheet.pdf")).thenReturn(Optional.of(testFile));
 
         SongSheetFile actual = storageService.retrieveSongSheetFile("/mockURL/mockSongSheet.pdf");
