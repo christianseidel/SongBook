@@ -31,15 +31,17 @@ class SongSheetStorageServiceTest {
         try {
             MultipartFile testFile = new MockMultipartFile("mock.pdf", "mockSongSheet.pdf", "application/pdf", new FileInputStream(fileOrigin));
             storageService.saveSongSheetFile(testFile);
+            System.out.println("I am in try");
         } catch (IOException e) {
             System.out.println(e.getMessage());
+            System.out.println("I am in catch");
         }
 
         verify(songSheetRepository).save(any(SongSheetFile.class));
     }
 
     @Test
-    void shouldDeliverSongSheetFile() {
+    void shouldRetrieveSongSheetFile() {
 
         SongSheetFile testFile = new SongSheetFile();
         Mockito.when(songSheetRepository.findByFileName("/mockURL/mockSongSheet.pdf")).thenReturn(Optional.of(testFile));
@@ -50,7 +52,7 @@ class SongSheetStorageServiceTest {
     }
 
     @Test
-    void shouldThrowExceptionWhenLookingUpSongSheetFile() {
+    void shouldThrowExceptionWhenLookingUpNonExistingSongSheetFile() {
 
         Mockito.when(songSheetRepository.findByFileName("/mockURL/mockSongSheet.pdf")).thenReturn(Optional.empty());
 
