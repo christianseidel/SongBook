@@ -16,6 +16,8 @@ import songbook.songsheets.SongSheetStorageService;
 import songbook.songsheets.models.SongSheetFile;
 
 import java.io.*;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -50,6 +52,12 @@ class SongSheetStorageServiceTest {
 
     @Test
     void shouldDeliverSongSheetFile() {
+
+
+        FileSystem fileSystem = FileSystems.getDefault();
+
+        System.out.println(fileSystem.getPath("text.txt").toAbsolutePath());
+        // -> D:\Ukulele\SongBook\backend\text.txt
 
         String fileOrigin = "src\\test\\resources\\songSheets\\mockSongSheet.pdf";
         SongSheetFile testFile = new SongSheetFile();
