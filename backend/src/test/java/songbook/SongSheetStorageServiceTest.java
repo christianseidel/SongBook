@@ -26,15 +26,22 @@ class SongSheetStorageServiceTest {
     @Test
     void shouldSaveSongSheetFile() {
 
-        String fileOrigin = "src\\test\\resources\\songSheets\\mockSongSheet.pdf";
+
 
         try {
+            String fileOrigin = "src\\test\\resources\\songSheets\\mockSongSheet.pdf";
             MultipartFile testFile = new MockMultipartFile("mock.pdf", "mockSongSheet.pdf", "application/pdf", new FileInputStream(fileOrigin));
             storageService.saveSongSheetFile(testFile);
             System.out.println("I am in try");
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            String fileOrigin = "src/test/resources/songSheets/mockSongSheet.pdf";
+            MultipartFile testFile = new MockMultipartFile("mock.pdf", "mockSongSheet.pdf", "application/pdf", new FileInputStream(fileOrigin));
             System.out.println("I am in catch");
+            try {
+                storageService.saveSongSheetFile(testFile);
+            } catch (IOException ex) {
+                System.out.println(ex.getMessage());
+            }
         }
 
         verify(songSheetRepository).save(any(SongSheetFile.class));
