@@ -69,10 +69,6 @@
     cursor: pointer;
 }
 
-.bold {
-    font-weight: bold;
-}
-
 .listOfErrorItems {
     font-family: Verdana, Trebuchet MS, Lucida Sans Unicode, Lucida Grande, Lucida Sans, Arial, sans-serif;
     font-size: 8pt;

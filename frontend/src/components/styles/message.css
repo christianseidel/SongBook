@@ -4,6 +4,7 @@
     left: 48%;
     right: 10%;
     top: 70%;
+    width: 464px;
     background-color: blanchedalmond;
     font-family: Verdana, Trebuchet MS, Lucida Sans Unicode, Lucida Grande, Lucida Sans, Arial, sans-serif;
     font-size: 12px;
@@ -91,10 +92,7 @@
     cursor: pointer;
 }
 
-.bold {
-    font-weight: bold;
-}
-
+/*
 .listOfErrorItems {
     font-family: Verdana, Trebuchet MS, Lucida Sans Unicode, Lucida Grande, Lucida Sans, Arial, sans-serif;
     font-size: 8pt;
@@ -110,4 +108,4 @@
     text-overflow: ellipsis;
     overflow-y: auto;
     overflow-x: visible;
-}
+}*/

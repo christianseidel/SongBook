@@ -1,0 +1,112 @@
+.border {
+    border: 3px double darkgoldenrod;
+}
+
+#welcomeContainer {
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    width: 460px;
+    height: 278px;
+    border: 3px double darkgoldenrod;
+    border-radius: 8px;
+    margin: auto;
+    padding: 24px 42px 42px;
+}
+
+#welcomeTitleLeft {
+    display: inline-block;
+}
+
+#ukuleleLogin {
+    height: 62px;
+    width: 62px;
+}
+
+#welcomeTitleRight {
+    display: inline-block;
+    margin-left: 40px;
+    margin-bottom: 26px;
+}
+
+#titleSecondPart {
+    margin-left: 60px;
+}
+
+
+/*  LOGIN  */
+
+.nextLineUsers {
+    margin-top: 8px;
+    display: block;
+}
+
+#coverPassword {
+    font-size: 5pt;
+    vertical-align: 2px;
+}
+
+#buttonCoverPassword {
+    float: right;
+    margin-top: 1px;
+}
+
+#iconUncoverPassword {
+    transform: translate(-4px, 2px);
+    height: 12px;
+    width: 12px;
+}
+
+.buttonUserMgt {
+    width: 86px;
+    margin-left: 16px;
+    margin-right: 12px;
+}
+
+#buttonLogin {
+    float: right;
+    clear: right;
+    margin-top: -1px;
+}
+
+#buttonRegister {
+    float: right;
+    margin-top: -4px;
+}
+
+#notRegistered {
+    margin-top: 42px;
+    margin-bottom: 10px;
+}
+
+
+/*  REGISTER  */
+
+#plsCreate {
+    margin-top: 36px;
+    margin-bottom: 16px;
+    font-weight: bold;
+}
+
+#buttonCreateUser, #buttonCancelRegistration {
+    float: right;
+}
+
+#lineBeforePassword {
+    margin-top: 20px;
+    display: block;
+    /*border: 1px solid blue;*/
+}
+
+
+
+/*   LOGOUT   */
+
+#titleLogout {
+    margin-left: 32px;
+}
+
+#buttonLogout {
+    margin-top: 32px;
+    float: right;
+}
