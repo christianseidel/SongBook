@@ -25,9 +25,10 @@ function LoginUser() {
                 if (response.status === 200) {
                     nav('/songbook');
                 } else if (response.status === 401 || response.status === 403) {
-                    NewMessage.create(
+                    setMessage(NewMessage.create(
                         'User name or user password is invalid.',
-                        MessageType.RED);
+                        MessageType.RED));
+                    console.log(response.status)
                 } else if (response.status === 404) {
                     setMessage(NewMessage.create(
                         'Server currently unable to check user data.',

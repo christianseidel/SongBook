@@ -28,11 +28,10 @@ function CreateUser() {
         register(username, password, passwordAgain)
             .then(response => {
                 if (response.status === 201) {
-                    setMessage(NewMessage.create(
-                        'Your account was created.',
-                        MessageType.RED));
-                    console.log("ok");
-                    nav('/songbook');
+                    clearForm();
+                    setMessage(NewMessage.createAndWait(
+                        'Your account was successfully created.',
+                        '/songbook'));
                 } else if (response.status === 400) {
                     setMessage(NewMessage.create(
                         'Passwords are not identical.',
@@ -50,11 +49,13 @@ function CreateUser() {
                         'Server currently unable to create new user.',
                         MessageType.RED));
                     clearForm();
+                } else {
+                    setMessage(NewMessage.create(
+                        'Something unexpected happened (error code: ' + response.status + ').',
+                        MessageType.RED));
+                    clearForm();
                 }
             })
-            .then(clearForm)
-//            .then(() => login(username, password))
-//            .then(() => nav('/expenses'));
     }
 
     const clearForm = () => {
