@@ -9,13 +9,12 @@ import ukulele from "../media/images/ukulele.png";
 
 function LoginUser() {
 
-    const nav = useNavigate();
-
     const [loginUsername, setLoginUsername] = useState('');
     const [loginPassword, setLoginPassword] = useState('');
     const [passwordToggle, setPasswordToggle] = useState('password');
     const [message, setMessage] = useState<message | undefined>(undefined);
 
+    const nav = useNavigate();
     const {login} = useAuth();
 
     const doLogin = (event: FormEvent<HTMLFormElement>) => {
@@ -32,6 +31,10 @@ function LoginUser() {
                 } else if (response.status === 404) {
                     setMessage(NewMessage.create(
                         'Server currently unable to check user data.',
+                        MessageType.RED));
+                } else {
+                    setMessage(NewMessage.create(
+                        'Something unexpected happened (error code: ' + response + ').',
                         MessageType.RED));
                 }
             })

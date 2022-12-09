@@ -30,7 +30,7 @@ function CreateUser() {
                 if (response.status === 201) {
                     clearForm();
                     setMessage(NewMessage.createAndWait(
-                        'Your account was successfully created.',
+                        'You successfully created your personal user account. Your username is "' + username + '".',
                         '/songbook'));
                 } else if (response.status === 400) {
                     setMessage(NewMessage.create(
