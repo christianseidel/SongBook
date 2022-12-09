@@ -1,5 +1,6 @@
 import AuthContext from "./AuthContext";
 import {useContext, useState} from "react";
+import {useNavigate} from "react-router-dom";
 
 /*
 interface Token {
@@ -14,6 +15,7 @@ interface Param {
 export default function AuthProvider({children}: Param) {
 
     const [token, setToken] = useState(localStorage.getItem('jwt') ?? '');
+    const nav = useNavigate();
 
     const register = (username: string, password: string, passwordAgain: string) => {
         /*return fetch(`${process.env.REACT_APP_BASE_URL}/api/user/register`, {*/
@@ -50,7 +52,7 @@ export default function AuthProvider({children}: Param) {
         setToken('');
         localStorage.removeItem('jwt');
         localStorage.removeItem('username');
-//        nav("/users/logout");
+        nav('/users/logout');
     };
 
     return (
