@@ -9,9 +9,13 @@ import {message, MessageType, NewMessage} from "./messageModel";
 import DisplayMessage from "./DisplayMessage";
 import {DayOfCreation, Song, SongsDTO} from "./Songs/modelsSong";
 import {Reference, ReferencesDTO} from "./References/modelsReference";
+import {useAuth} from "./UserManagement/AuthProvider";
+import {useNavigate} from "react-router-dom";
 
 function SongBook() {
 
+    const {token, logout} = useAuth();
+    const nav = useNavigate();
     const [songsDTO, setSongsDTO] = useState({} as SongsDTO);
     const [songChosen, setSongChosen] = useState({} as Song);
     const [myFeedback, setMyFeedback] = useState<message | undefined>(undefined);
@@ -23,10 +27,18 @@ function SongBook() {
     const handleDragOverStartRight = () => setDragOverRight(true);
     const handleDragOverEndRight = () => setDragOverRight(false);
 
+    useEffect(() => {
+        if (!localStorage.getItem('jwt')) {
+            nav('/users/login')
+        }
+    }, [nav])
 
     useEffect(() => {
         fetch('/api/songbook', {
             method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
         })
             .then(response => {
                 return response.json()
@@ -39,6 +51,7 @@ function SongBook() {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             }
         })
             .then(response => {
@@ -65,6 +78,9 @@ function SongBook() {
     function getAllSongs(clearSong: boolean) {
         fetch('/api/songbook', {
             method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
         })
             .then(response => response.json())
             .then((responseBody: SongsDTO) => setSongsDTO(responseBody))
@@ -140,6 +156,9 @@ function SongBook() {
         let referenceRetrieved: Reference;
         fetch('api/collections/edit/' + id, {
             method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
         })
             .then(response => response.json())
             .then((responseBody: ReferencesDTO) =>

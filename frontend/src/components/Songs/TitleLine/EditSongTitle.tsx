@@ -2,28 +2,30 @@ import React, {FormEvent, useState} from "react";
 import {message, MessageType, NewMessage} from "../../messageModel";
 import DisplayMessage from "../../DisplayMessage";
 import {Song} from "../modelsSong";
+import {useAuth} from "../../UserManagement/AuthProvider";
 
 interface SongItemProps {
     song: Song;
     updateDetailsView: () => void;
     onItemRevision: (song: Song) => void;
+    displayMsg: (msg: message) => void;
 }
 // TODO: I still need to go via session storage in order to not loose entered data inadvertently
 
 function EditSongTitle(props: SongItemProps) {
 
+    const {token} = useAuth();
     const [title, setTitle] = useState(props.song.title);
     const [author, setAuthor] = useState(props.song.author ?? '');
     const [year, setYear] = useState(props.song.year);
-    const [message, setMessage] = useState<message | undefined>(undefined);
 
     const doEditSong = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        let responseStatus: number;
         fetch('api/songbook/' + props.song.id, {
             method: 'PUT',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({
                 id: props.song.id,
@@ -37,25 +39,21 @@ function EditSongTitle(props: SongItemProps) {
             })
         })
             .then(response => {
-                responseStatus = response.status;
+                if (response.status !== 200) {
+                    throw Error ('Something unexpected happened! Error type: "' +
+                        response.statusText + '". Error code: ' + response.status + '.')
+                }
                 return response.json();
             })
             .then((responseBody: Song) => {
-                if (responseStatus === 200) {
-                    responseBody.status = 'display';
-                    props.onItemRevision(responseBody);
-                } else {
-                    setMessage(NewMessage.create(
-                        'An item with Id no. "' + props.song.id + '" could not be found.',
-                        MessageType.RED
-                    ))
-                }
-            });
+                responseBody.status = 'display';
+                props.onItemRevision(responseBody);
+            })
+            .catch(e => props.displayMsg(NewMessage.create(e.message, MessageType.RED)));
     }
 
     return (
         <div>
-            <DisplayMessage message={message}/>
             <form onSubmit={ev => doEditSong(ev)}>
                 <div>
                     <span id={'titleFirstLine'}>

@@ -2,6 +2,8 @@ import React, {FormEvent, useState} from "react";
 import '../../styles/songDetails.css'
 import {message, MessageType, NewMessage} from "../../messageModel";
 import {Song} from "../modelsSong";
+import {useAuth} from "../../UserManagement/AuthProvider";
+
 
 interface SongItemProps {
     song: Song;
@@ -12,16 +14,19 @@ interface SongItemProps {
 
 function CreateSongTitle(props: SongItemProps) {
 
+    const {token} = useAuth();
     const [title, setTitle] = useState('');
     const [author, setAuthor] = useState(props.song.author);
     const [year, setYear] = useState(props.song.year);
 
     const doCreateSong = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        let responseStatus: number;
         fetch('api/songbook', {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
             body: JSON.stringify({
                 title: title,
                 author: author,
@@ -29,18 +34,18 @@ function CreateSongTitle(props: SongItemProps) {
             })
         })
             .then(response => {
-                responseStatus = response.status;
+                if (response.status !== 200) {
+                    throw Error ('Something unexpected happened! Error type: "' + response.statusText
+                        + '". Error code: ' + response.status + '.')
+                }
                 return response.json();
             })
             .then((responseBody) => {
-                if (responseStatus === 200) {
-                    responseBody.status = 'display';
-                    props.onItemCreation(responseBody);
-                    props.displayMsg(NewMessage.create('Your song "' + title + '" was successfully created.', MessageType.GREEN))
-                } else {
-                    props.displayMsg(NewMessage.create('Your song "' + title + '" could not be created. ' + responseBody.message, MessageType.RED))
-                }
+                responseBody.status = 'display';
+                props.onItemCreation(responseBody);
+                props.displayMsg(NewMessage.create('Your song "' + title + '" was successfully created.', MessageType.GREEN))
             })
+            .catch(e => props.displayMsg(NewMessage.create(e.message, MessageType.RED)));
     }
 
     return (

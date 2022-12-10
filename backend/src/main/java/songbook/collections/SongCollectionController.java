@@ -43,7 +43,7 @@ public class SongCollectionController {
         System.out.println("\n-> Received file \"" + file.getOriginalFilename()
                 + "\" with Content Type: \"" + file.getContentType() + "\"");
         try {
-            return new ResponseEntity<>(songCollectionService.processCollectionUpload(file), HttpStatus.OK);
+            return new ResponseEntity<>(songCollectionService.processCollectionUpload(file), HttpStatus.CREATED);
         } catch (MalformedFileException e) { // wrong file encoding
             return ResponseEntity.status(406).body(ErrorMessage.jsonify(e.getMessage()));
         } catch (RuntimeException e) {
@@ -69,6 +69,7 @@ public class SongCollectionController {
 
     @PostMapping("/edit/{id}")
     public ResponseEntity<ReferencesDTO> copyReferenceById(@PathVariable String id){
+        System.out.println("püht");
         return status(200).body((songCollectionService.copyReferenceById(id)));
     }
 
@@ -92,7 +93,6 @@ public class SongCollectionController {
     }
 
 
-    // I AM HERE
     @PutMapping("/edit/hide/{id}")
     public ResponseEntity<Object> hideReference(@PathVariable String id) {
         try {

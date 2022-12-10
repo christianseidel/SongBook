@@ -72,6 +72,7 @@ function SongItemDetails(props: SongItemProps) {
             song={props.song}
             updateDetailsView={() => setSongState(props.song.status)}
             onItemRevision={(song) => props.onItemRevision(song)}
+            displayMsg={(msg) => props.displayMsg(msg)}
         />;
     } else if (songState === 'create') {
         handleTitleLine = <CreateSongTitle

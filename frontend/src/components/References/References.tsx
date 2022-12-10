@@ -7,6 +7,7 @@ import DisplayUploadResult from "./MsgReferencesUpload";
 import DisplayMessage from "../DisplayMessage";
 import {message, MessageType, NewMessage} from "../messageModel";
 import {ReferencesDTO, UploadResult} from "./modelsReference";
+import {useAuth} from "../UserManagement/AuthProvider";
 
 interface Props {
     receiverRerenderSignal: (getAllReferences: () => void) => void;
@@ -14,13 +15,13 @@ interface Props {
 
 function References(props: Props) {
 
-
+    const {token} = useAuth();
     const [toggleDisplaySearchResultsButNotReference, setToggleDisplaySearchResultsButNotReference] = useState(true);
     const [toggleDisplayUploadFunction, setToggleDisplayUploadFunction] = useState(false);
     const [toggleDisplayUploadResult, setToggleDisplayUploadResult] = useState(false);
 
     const [searchWord, setSearchWord] = useState('');
-    const [myFeedback, setMyFeedback] = useState<message | undefined>(undefined);
+    const [message, setMessage] = useState<message | undefined>(undefined);
     const [uploadResult, setUploadResult] = useState({} as UploadResult);
     const [referencesDTO, setReferencesDTO] = useState({} as ReferencesDTO);
 
@@ -33,6 +34,9 @@ function References(props: Props) {
     const getAllReferences = () => {
         fetch('api/collections/', {
             method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
         })
             .then(response => response.json())
             .then((responseBody: ReferencesDTO) => setReferencesDTO(responseBody));
@@ -45,6 +49,9 @@ function References(props: Props) {
         event.preventDefault();
         fetch('api/collections/' + searchWord, {
             method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
         })
             .then(response => response.json())
             .then((responseBody: ReferencesDTO) => setReferencesDTO(responseBody));
@@ -65,59 +72,61 @@ function References(props: Props) {
     const editItem = (id: string) => {
         fetch('api/collections/edit/' + id, {
             method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
         })
-            .then(response => response.json())
+            .then(response => {
+                if (response.status === 200) {
+                    return response.json()
+                } else {
+                    throw Error (response.statusText + '". Error code: ' + response.status + '.')
+                }
+        })
             .then((responseBody: ReferencesDTO) => setReferencesDTO(responseBody))
-            .then(() => setToggleDisplaySearchResultsButNotReference(false));
-    }
+            .then(() => setToggleDisplaySearchResultsButNotReference(false))
+            .catch(e => setMessage(NewMessage.create(e.message, MessageType.RED)))
+        }
+
 
     function uploadFile(files: FileList | null) {       // ToDo: Introduce Check Sum
         if (files === null) {
             alert('Somehow the FormData Object did not work properly.')
         } else if (!files[0].name.endsWith('.txt')) {
-            setMyFeedback(NewMessage.create(
+            setMessage(NewMessage.create(
                 'Unfortunately, file "' + files[0].name + '" will not work...\nPlease, choose a regular text file.',
                 MessageType.RED
             ));
         } else {
             const formData = new FormData();
             formData.append('file', files[0]);
-            let responseStatus = 0;
             fileName = files[0].name
             fetch('api/collections/upload/', {
                 method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
                 body: formData,
             })
                 .then((response) => {
-                    responseStatus = response.status;
-                    return response.json();
+                    if (response.status === 201) {
+                        return response.json();
+                    } else if (response.status === 400) {
+                        throw Error('Server does not accept your request (error message: Bad Request, error code: ' + response.status + ').');
+                    } else if (response.status === 404) {
+                        throw Error('Server is unable to respond to your request (error code: ' + response.status + ').')
+                    } else if (response.status === 500) {
+                            throw Error('Server is unable to respond to your request (error code: ' + response.status + ').')
+                    } else {
+                        throw Error(response.statusText + ' (error code: ' + response.status + ').');
+                    }
                 })
                 .then((responseBody) => {
-                    if (responseStatus === 200) {
-                        setUploadResult(responseBody);
-                        setToggleDisplayUploadResult(true);
-                        console.log('File "' + files[0].name + '" successfully transmitted to backend!');
-                        console.log(responseBody);
-                    } else if (responseStatus === 400) {
-                        setMyFeedback(NewMessage.create(
-                            'Sorry, the server does not accept your request (Bad Request).',
-                            MessageType.RED
-                        ));
-                    } else if (responseStatus === 404) {
-                        setMyFeedback(NewMessage.create(
-                            'Sorry, the server is unable to respond to your request.'
-                            , MessageType.RED
-                        ))
-                    } else if (responseStatus === 406) {
-                        setMyFeedback(NewMessage.create( responseBody.message, MessageType.RED));
-                    } else if (responseStatus === 500) {
-                        setMyFeedback(NewMessage.create( responseBody.message, MessageType.RED));
-                    } else if (responseStatus !== 201) {
-                        setMyFeedback(NewMessage.create( responseBody.message, MessageType.RED));
-                    } else {
-                        alert('Something Unexpected happened.');
-                    }
-                }).then(getAllReferences);
+                    setUploadResult(responseBody);
+                    setToggleDisplayUploadResult(true);
+                })
+                .then(getAllReferences)
+                .catch(e => setMessage(NewMessage.create(e.message, MessageType.RED)));
         }
     }
 
@@ -174,7 +183,7 @@ function References(props: Props) {
                             referencesDTO.referenceList.map(item =>
                             <ReferenceToEdit key={item.id} reference={item}
                                              doCancel={getAllReferences}
-                                             displayMsg={(msg) => setMyFeedback(msg)}
+                                             displayMsg={(msg) => setMessage(msg)}
                             />)
                     }
 
@@ -196,7 +205,7 @@ function References(props: Props) {
                         />}
                     </div>
 
-                <DisplayMessage message={myFeedback}/>
+                <DisplayMessage message={message}/>
 
                 </div>
 

@@ -4,6 +4,7 @@ import '../styles/common.css';
 import React, {FormEvent, useState} from "react";
 import {message, MessageType, NewMessage} from "../messageModel";
 import {Reference} from "./modelsReference";
+import {useAuth} from "../UserManagement/AuthProvider";
 
 interface ReferenceItemProps {
     reference: Reference;
@@ -13,6 +14,7 @@ interface ReferenceItemProps {
 
 function ReferenceToEdit(props: ReferenceItemProps) {
 
+    const {token} = useAuth();
     const [title, setTitle] = useState(props.reference.title);
     const [page, setPage] = useState(props.reference.page !== 0 ? props.reference.page : '');
     const [author, setAuthor] = useState(props.reference.author == null ? '' : props.reference.author);
@@ -24,7 +26,8 @@ function ReferenceToEdit(props: ReferenceItemProps) {
         fetch('api/collections/edit/' + props.reference.id, {
             method: 'PUT',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({
                 id: props.reference.id,
@@ -56,7 +59,9 @@ function ReferenceToEdit(props: ReferenceItemProps) {
         fetch('api/collections/edit/' + id, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'},
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
         })
             .then(response => {
                 if (response.ok) {
@@ -77,6 +82,9 @@ function ReferenceToEdit(props: ReferenceItemProps) {
         let responseStatus: number;
         fetch('api/collections/edit/' + id, {
             method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
         }).then(response => {
             responseStatus = response.status;
             return response.json();

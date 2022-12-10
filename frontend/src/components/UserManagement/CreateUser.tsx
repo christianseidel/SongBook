@@ -30,28 +30,33 @@ function CreateUser() {
                 if (response.status === 201) {
                     clearForm();
                     setMessage(NewMessage.createAndWait(
-                        'You successfully created your personal user account. Your username is "' + username + '".',
+                        'You successfully created your personal user account. ' +
+                        'Your username is "' + username + '".',
                         '/songbook'));
                 } else if (response.status === 400) {
                     setMessage(NewMessage.create(
                         'Passwords are not identical.',
                         MessageType.RED));
                     clearForm();
-//                    nav('/users/login');
                 } else if (response.status === 409) {
                     setMessage(NewMessage.create(
                         'User name already exists.',
                         MessageType.RED))
                     clearForm();
-//                    nav('/users/login');
                 } else if (response.status === 404) {
                     setMessage(NewMessage.create(
                         'Server currently unable to create new user.',
                         MessageType.RED));
                     clearForm();
+                } else if (response.status === 500) {
+                    setMessage(NewMessage.create(
+                        'Server cannot respond to your request.',
+                        MessageType.RED));
+                    clearForm();
                 } else {
                     setMessage(NewMessage.create(
-                        'Something unexpected happened (error code: ' + response.status + ').',
+                        'Something unexpected happened.  Error type: "' + response.statusText +
+                        'Error code: ' + response.status + '.',
                         MessageType.RED));
                     clearForm();
                 }
@@ -97,7 +102,9 @@ function CreateUser() {
                             onClick={() => ((passwordToggle==='text')
                                 ? setPasswordToggle('password')
                                 : setPasswordToggle("text"))}>
-                        {passwordToggle==='text' && <><span id={'coverPassword'}> &#10005;&#10005;&nbsp;</span> hide</>}
+                        {passwordToggle==='text' && <span id={'coverPassword'}>
+                            <span id={'sign01CoverPassword'}>( </span><span id={'sign02CoverPassword'}> ( </span>
+                                hide</span>}
                             {passwordToggle==='password' && <><img id={'iconUncoverPassword'} src={icon_eyes} alt={'eyes closed'} />
                                 show </>}
                     </button>
@@ -107,7 +114,7 @@ function CreateUser() {
                            onChange={ev => setPasswordAgain(ev.target.value)} tabIndex={3}/>
                     <button id={"buttonCancelRegistration"} className={'buttonUserMgt'} type="button"
                             onClick={cancelCreation}>
-                    &#10008; cancel
+                    <span id={'textButtonCancelRegistration'}><span className={'leftArrow'}>&#10140;</span> back</span>
                 </button>
 
                 </span>

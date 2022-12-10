@@ -49,8 +49,8 @@ function DisplayMessage(props: ResultProps) {
                             && <span>.</span>}
                     </p>
                     <p>
-                        {props.uploadResult.numberOfExistingReferences !== 0 && <span className={"bold"}>
-                            {props.uploadResult.numberOfExistingReferences} already exist.</span>}
+                        {props.uploadResult.numberOfExistingReferences !== 0 && <span><span className={"bold"}>
+                            {props.uploadResult.numberOfExistingReferences} already exist</span>.</span>}
 
                     </p>
 

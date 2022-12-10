@@ -66,7 +66,9 @@ function LoginUser() {
                             onClick={() => ((passwordToggle==='text')
                                 ? setPasswordToggle('password')
                                 : setPasswordToggle('text'))}>
-                        {passwordToggle==='text' && <> <span id={'coverPassword'}> &#10005;&#10005;&nbsp;</span> hide</>}
+                        {passwordToggle==='text' && <span id={'coverPassword'}>
+                            <span id={'sign01CoverPassword'}>( </span><span id={'sign02CoverPassword'}> ( </span>
+                                hide</span>}
                         {passwordToggle==='password' && <><img id={'iconUncoverPassword'} src={icon_eyes} alt={'eyes closed'} />
                             show </>}
                     </button>

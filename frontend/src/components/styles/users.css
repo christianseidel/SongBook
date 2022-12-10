@@ -2,6 +2,11 @@
     border: 3px double darkgoldenrod;
 }
 
+.leftArrow {
+    display: inline-block;
+    transform: rotate(180deg) translate(2px, -2px);
+}
+
 #welcomeContainer {
     position: absolute;
     top: 25%;
@@ -42,8 +47,20 @@
 }
 
 #coverPassword {
+    display: inline-block;
+    transform: translateX(2px);
+}
+
+#sign01CoverPassword {
+    display: inline-block;
     font-size: 5pt;
-    vertical-align: 2px;
+    transform: rotate(270deg) translate(1px, -12px);
+}
+
+#sign02CoverPassword {
+    display: inline-block;
+    font-size: 5pt;
+    transform: rotate(270deg) translate(1px, -8px);
 }
 
 #buttonCoverPassword {
@@ -98,6 +115,10 @@
     /*border: 1px solid blue;*/
 }
 
+#textButtonCancelRegistration {
+    display: inline-block;
+    transform: translateX(-2px);
+}
 
 
 /*   LOGOUT   */
