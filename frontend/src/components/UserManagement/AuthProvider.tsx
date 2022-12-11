@@ -1,6 +1,7 @@
 import AuthContext from "./AuthContext";
 import {useContext, useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
+import {MessageType, NewMessage} from "../messageModel";
 
 interface Token {
     token: string;
@@ -61,19 +62,20 @@ export default function AuthProvider({children}: Param) {
             })
         })
     .then(response => {
-            loginResponse = response;
-            // todo: needs to be mended
-        // todo: here is the same now repeated
             if (response.status === 401 || response.status === 403) {
-                throw Error ('Benutzername oder Passwort ist nicht korrekt');
+                throw Error ('User name or user password is invalid.');
+            } else if (response.status === 404) {
+                throw Error('Server currently unable to check user data.');
+            } else if (response.status !== 200) {
+                throw Error ('Something unexpected happened! Error type: "' + response.statusText + '". Error code: ' + response.status + ').');
+            } else {
+                return response.json();
             }
-            return response.json();
         })
             .then((token: Token) => {
                 setToken(token.token);
                 localStorage.setItem('jwt', token.token);
                 localStorage.setItem('username', username)
-                return loginResponse;
             })
     }
 

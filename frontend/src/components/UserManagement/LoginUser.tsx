@@ -20,24 +20,8 @@ function LoginUser() {
     const doLogin = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         login(loginUsername, loginPassword)
-            .then(response => {
-                if (response.status === 200) {
-                    nav('/songbook');
-                } else if (response.status === 401 || response.status === 403) {
-                    setMessage(NewMessage.create(
-                        'User name or user password is invalid.',
-                        MessageType.RED));
-                    console.log(response.status)
-                } else if (response.status === 404) {
-                    setMessage(NewMessage.create(
-                        'Server currently unable to check user data.',
-                        MessageType.RED));
-                } else {
-                    setMessage(NewMessage.create(
-                        'Something unexpected happened (error code: ' + response + ').',
-                        MessageType.RED));
-                }
-            })
+            .then(() => nav('/songbook'))
+            .catch(e => setMessage(NewMessage.create(e.message, MessageType.RED)))
     }
 
 
