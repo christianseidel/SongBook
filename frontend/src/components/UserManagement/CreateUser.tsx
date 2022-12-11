@@ -26,41 +26,13 @@ function CreateUser() {
     function doRegister (ev: FormEvent<HTMLFormElement>) {
         ev.preventDefault();
         register(username, password, passwordAgain)
-            .then(response => {
-                if (response.status === 201) {
-                    clearForm();
-                    setMessage(NewMessage.createAndWait(
-                        'You successfully created your personal user account. ' +
-                        'Your username is "' + username + '".',
-                        '/songbook'));
-                } else if (response.status === 400) {
-                    setMessage(NewMessage.create(
-                        'Passwords are not identical.',
-                        MessageType.RED));
-                    clearForm();
-                } else if (response.status === 409) {
-                    setMessage(NewMessage.create(
-                        'User name already exists.',
-                        MessageType.RED))
-                    clearForm();
-                } else if (response.status === 404) {
-                    setMessage(NewMessage.create(
-                        'Server currently unable to create new user.',
-                        MessageType.RED));
-                    clearForm();
-                } else if (response.status === 500) {
-                    setMessage(NewMessage.create(
-                        'Server cannot respond to your request.',
-                        MessageType.RED));
-                    clearForm();
-                } else {
-                    setMessage(NewMessage.create(
-                        'Something unexpected happened.  Error type: "' + response.statusText +
-                        '". Error code: ' + response.status + '.',
-                        MessageType.RED));
-                    clearForm();
-                }
+            .then(() => {
+                setMessage(NewMessage.createAndWait(
+                    'You successfully created your personal user account. ' +
+                    'Your username is "' + username + '".',
+                    '/songbook'));
             })
+            .catch(e => setMessage(NewMessage.create(e.message, MessageType.RED)));
     }
 
     const clearForm = () => {

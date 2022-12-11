@@ -1,7 +1,6 @@
 import AuthContext from "./AuthContext";
 import {useContext, useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {MessageType, NewMessage} from "../messageModel";
 
 interface Token {
     token: string;
@@ -14,17 +13,15 @@ interface Param {
 export default function AuthProvider({children}: Param) {
 
     const [token, setToken] = useState(localStorage.getItem('jwt') ?? '');
-    let loginResponse: Response;
     const nav = useNavigate();
 
-    useEffect(() =>{
+    useEffect(() => {
         localStorage.setItem('jwt', token);
     }, [token])
 
 
     const register = (username: string, password: string, passwordAgain: string) => {
-        /*return fetch(`${process.env.REACT_APP_BASE_URL}/api/user/register`, {*/
-        return fetch(`/api/user/register`, {
+        return fetch(`${process.env.REACT_APP_BASE_URL}/api/user/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -38,15 +35,26 @@ export default function AuthProvider({children}: Param) {
             )
         })
             .then(response => {
-            loginResponse = response;
-            return response.json();
-        })
-        .then((token: Token) => {
-            setToken(token.token);
-            localStorage.setItem('jwt', token.token);
-            localStorage.setItem('username', username)
-            return loginResponse;
-        })
+                if (response.status === 201) {
+                    return response.json();
+                } else if (response.status === 400) {
+                    throw Error('Passwords are not identical.');
+                } else if (response.status === 409) {
+                    throw Error('User name already exists.');
+                } else if (response.status === 404) {
+                    throw Error('Server currently unable to create new user.')
+                } else if (response.status === 500) {
+                    throw Error('Server cannot respond to your request.');
+                } else {
+                    throw Error('Something unexpected happened.  Error type: "' +
+                        response.statusText + '". Error code: ' + response.status + '.');
+                }
+            })
+            .then((token: Token) => {
+                setToken(token.token);
+                localStorage.setItem('jwt', token.token);
+                localStorage.setItem('username', username)
+            })
 
     }
 
@@ -61,24 +69,23 @@ export default function AuthProvider({children}: Param) {
                 password: password
             })
         })
-    .then(response => {
-            if (response.status === 401 || response.status === 403) {
-                throw Error ('User name or user password is invalid.');
-            } else if (response.status === 404) {
-                throw Error('Server currently unable to check user data.');
-            } else if (response.status !== 200) {
-                throw Error ('Something unexpected happened! Error type: "' + response.statusText + '". Error code: ' + response.status + ').');
-            } else {
-                return response.json();
-            }
-        })
+            .then(response => {
+                if (response.status === 401 || response.status === 403) {
+                    throw Error('User name or user password is invalid.');
+                } else if (response.status === 404) {
+                    throw Error('Server currently unable to check user data.');
+                } else if (response.status !== 200) {
+                    throw Error('Something unexpected happened! Error type: "' + response.statusText + '". Error code: ' + response.status + ').');
+                } else {
+                    return response.json();
+                }
+            })
             .then((token: Token) => {
                 setToken(token.token);
                 localStorage.setItem('jwt', token.token);
                 localStorage.setItem('username', username)
             })
     }
-
 
     const logout = () => {
         setToken('');
@@ -94,7 +101,7 @@ export default function AuthProvider({children}: Param) {
                 register,
                 login,
                 logout
-            }} >
+            }}>
             {children}
         </AuthContext.Provider>
     )
