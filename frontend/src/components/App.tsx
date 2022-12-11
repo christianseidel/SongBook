@@ -5,6 +5,7 @@ import AuthProvider from "./UserManagement/AuthProvider";
 import CreateUser from "./UserManagement/CreateUser";
 import LoginUser from "./UserManagement/LoginUser";
 import LogoutUser from "./UserManagement/LogoutUser";
+import InfoUser from "./UserManagement/InfoUser";
 
 function App() {
 
@@ -17,8 +18,9 @@ function App() {
                         <Route path={'/*'} element={<SongBook />} />
                         <Route path={'/songbook'} element={<SongBook />} />
 
-                        <Route path={'/users/login'} element={<LoginUser />} />
                         <Route path={'/users/register'} element={<CreateUser />} />
+                        <Route path={'/users/login'} element={<LoginUser />} />
+                        <Route path={'/users/info'} element={<InfoUser />} />
                         <Route path={'/users/logout'} element={<LogoutUser />}/>
                     </Routes>
                     </AuthProvider>

@@ -1,16 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import './styles/landingPage.css';
 import './styles/common.css';
-import SongItemWithinList from "./Songs/SongItemWithinList";
-import SongItemDetails from "./Songs/SongItemDetails";
-import ukulele from "./media/images/ukulele.png";
-import References from "./References/References";
-import {message, MessageType, NewMessage} from "./messageModel";
-import DisplayMessage from "./DisplayMessage";
-import {DayOfCreation, Song, SongsDTO} from "./Songs/modelsSong";
-import {Reference, ReferencesDTO} from "./References/modelsReference";
-import {useAuth} from "./UserManagement/AuthProvider";
-import {useNavigate} from "react-router-dom";
+import SongItemWithinList from './Songs/SongItemWithinList';
+import SongItemDetails from './Songs/SongItemDetails';
+import ukulele from './media/images/ukulele.png';
+import References from './References/References';
+import {message, MessageType, NewMessage} from './messageModel';
+import DisplayMessage from './DisplayMessage';
+import {DayOfCreation, Song, SongsDTO} from './Songs/modelsSong';
+import {Reference, ReferencesDTO} from './References/modelsReference';
+import {useAuth} from './UserManagement/AuthProvider';
+import {useNavigate} from 'react-router-dom';
 
 function SongBook() {
 
@@ -59,7 +59,7 @@ function SongBook() {
                     return response.json()
                 } else {
                     setMessage(NewMessage.create(
-                        "An Item with Id no. " + id + " could not be found.",
+                        'An Item with Id no. ' + id + ' could not be found.',
                         MessageType.RED));
                 }
             })
@@ -92,7 +92,7 @@ function SongBook() {
     }
 
     let newSong: Song = {
-        title: "no title", author: "", id: "", status: "create",
+        title: 'no title', author: '', id: '', status: 'create',
         dayOfCreation: new DayOfCreation(new Date().toISOString().slice(0, 10))
     };
 
@@ -233,30 +233,29 @@ function SongBook() {
     return (
         <div>
             <h1>
-                <img src={ukulele} alt="Ukulele" id={'ukulele'}/>
+                <img src={ukulele} alt='Ukulele' id={'ukulele'}/>
                 My Song Book
-                <span id={'logout'}>
-                    <label htmlFor={'inputKey'}>User</label>
-<select name={'inputKey'} id={'inputKey'}>
-	<option>User</option>
-    <option>Info</option>
-	<option>&#10140; logout</option>
-</select>
 
-                    <button type={'button'} onClick={logout}>logout</button></span>
+                <div id='dropdownUser'>
+                    <button id='buttonDropdownUser' type={'button'}>user</button>
+                    <div className='contentDropdownUser'>
+                        <span className={'menuItem'} onClick={() => nav('/users/info')}>Info</span>
+                        <span className={'menuItem'} onClick={logout}>&#10140; logout </span>
+                    </div>
+                </div>
             </h1>
 
-            <div className={"flex-parent"}>
-                <div className={"flex-container-left"}>
-                    <div className={"flex-child"}
+            <div className={'flex-parent'}>
+                <div className={'flex-container-left'}>
+                    <div className={'flex-child'}
                          onDragOver={enableDropping}
                          onDrop={handleDropAndCreateSongFromReference}
                          onDragEnter={handleDragOverStartLeft}
                          onDragLeave={handleDragOverEndLeft}
                          style={dragOverLeft ? {backgroundColor: 'rgb(243, 217, 167)'} : {}}
                     >
-                        <h2 className={"inline"}>List of Songs</h2>
-                        <span onClick={createItem} className={"doSomething"} id={"addANewSong"}>
+                        <h2 className={'inline'}>List of Songs</h2>
+                        <span onClick={createItem} className={'doSomething'} id={'addANewSong'}>
                         + add new song
                     </span>
 
@@ -271,7 +270,7 @@ function SongBook() {
                         </div>
                     </div>
 
-                    <div className={"flex-child"}>
+                    <div className={'flex-child'}>
                         <References
                             receiverRerenderSignal={receiverRerenderSignal}/>
                     </div>
@@ -288,7 +287,7 @@ function SongBook() {
                         songChosen.title
                             ? <SongItemDetails song={songChosen}
                                                onItemRevision={(song: Song) => {
-                                                   song.dayOfCreation = new DayOfCreation( // = displayable format of "dateCreated"
+                                                   song.dayOfCreation = new DayOfCreation( // = displayable format of 'dateCreated'
                                                        song.dateCreated as string
                                                    );
                                                    getAllSongs(false);
@@ -301,8 +300,8 @@ function SongBook() {
                                                clear={() => setSongChosen({} as Song)}
                                                displayMsg={(msg) => setMessage(msg)}
                             />
-                            : <span className={"doSomething"}
-                                    id={"chooseASong"}>&#129172; &nbsp; please, choose a song</span>
+                            : <span className={'doSomething'}
+                                    id={'chooseASong'}>&#129172; &nbsp; please, choose a song</span>
                     }
                 </div>
             </div>

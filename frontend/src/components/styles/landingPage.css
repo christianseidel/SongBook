@@ -25,6 +25,55 @@ h1 {
     top: 12px;
 }
 
+#dropdownUser {
+    float: right;
+    float: right;
+    display: inline-block;
+    margin-right: 148px;
+}
+
+#buttonDropdownUser {
+    border: 2px solid darkgoldenrod;
+    height: 23px;
+}
+
+.contentDropdownUser {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 100px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.4);
+    z-index: 1;
+    cursor: pointer;
+}
+
+.menuItem {
+}
+
+.contentDropdownUser .menuItem {
+    display: block;
+    padding: 2px 15px;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: normal;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+
+.contentDropdownUser .menuItem:hover {
+    background-color: #ddd;
+}
+
+#dropdownUser:hover .contentDropdownUser {
+    display: block;
+}
+
+#dropdownUser:hover #buttonDropdownUser {
+    background-color: goldenrod;
+    border-color: darkgoldenrod;
+    cursor: auto;
+}
+
 .flex-parent {
     display: flex;
     width: 100%;

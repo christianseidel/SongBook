@@ -1,8 +1,8 @@
-import React, {FormEvent, useState} from "react";
+import React, {FormEvent, useState} from 'react';
 import '../../styles/songDetails.css'
-import {message, MessageType, NewMessage} from "../../messageModel";
-import {Song} from "../modelsSong";
-import {useAuth} from "../../UserManagement/AuthProvider";
+import {message, MessageType, NewMessage} from '../../messageModel';
+import {Song} from '../modelsSong';
+import {useAuth} from '../../UserManagement/AuthProvider';
 
 
 interface SongItemProps {
@@ -59,10 +59,10 @@ function CreateSongTitle(props: SongItemProps) {
                         <button id={'buttonCreateSong'} type='submit'> &#10004; create</button>
                     </span>
                     <label>By:</label>
-                    <input id={'inputAuthor'} type="text" value={author} placeholder={'Author'}
+                    <input id={'inputAuthor'} type='text' value={author} placeholder={'Author'}
                            onChange={ev => setAuthor(ev.target.value)}/>
                     <label className={'labelSecondInLine'}>Year:</label>
-                    <input id={'inputYear'} type="number" value={year === 0 ? '' : year}
+                    <input id={'inputYear'} type='number' value={year === 0 ? '' : year}
                            placeholder={'Year created'}
                            onChange={ev => setYear(Number(ev.target.value))}/>
                     <button id={'buttonCancelCreateSong'} type={'button'}

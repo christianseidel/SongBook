@@ -7,6 +7,11 @@
     transform: rotate(180deg) translate(2px, -2px);
 }
 
+.leftArrowOnLeft {
+    display: inline-block;
+    transform: rotate(180deg) translate(6px, -2px);
+}
+
 #welcomeContainer {
     position: absolute;
     top: 25%;
@@ -118,7 +123,7 @@
 
 #buttonCancelRegistration {
     margin-left: 0;
-    margin-top: 24px;
+    margin-top: 33px;
 }
 
 #textButtonCancelRegistration {
@@ -126,6 +131,36 @@
     transform: translateX(-2px);
 }
 
+/*   USER INFO   */
+
+.workingSpaceUserInfo {
+    position: relative;
+    margin-top: 20px;
+    border: 1px solid darkgoldenrod;
+    border-radius: 8px;
+    padding: 18px;
+    background-color: #f0c579;
+    box-shadow: -2px -2px darkgoldenrod;
+}
+
+#buttonBackToMain {
+    position: relative;
+    margin-top: 30px;
+    margin-left: 0;
+}
+
+#textButtonReturn {
+      display: inline-block;
+      transform: translateX(1px);
+}
+
+#deleteUserLine {
+    margin-top: 18px;
+}
+
+#buttonDeleteUser {
+    margin-right: 6px;
+}
 
 /*   LOGOUT   */
 

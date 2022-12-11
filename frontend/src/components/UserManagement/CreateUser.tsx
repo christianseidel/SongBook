@@ -27,6 +27,7 @@ function CreateUser() {
         ev.preventDefault();
         register(username, password, passwordAgain)
             .then(() => {
+                clearForm();
                 setMessage(NewMessage.createAndWait(
                     'You successfully created your personal user account. ' +
                     'Your username is "' + username + '".',
