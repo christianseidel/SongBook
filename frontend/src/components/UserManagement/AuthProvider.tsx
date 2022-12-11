@@ -36,6 +36,17 @@ export default function AuthProvider({children}: Param) {
                 }
             )
         })
+            .then(response => {
+            loginResponse = response;
+            return response.json();
+        })
+        .then((token: Token) => {
+            setToken(token.token);
+            localStorage.setItem('jwt', token.token);
+            localStorage.setItem('username', username)
+            return loginResponse;
+        })
+
     }
 
     const login = (username: string, password: string) => {
@@ -51,6 +62,8 @@ export default function AuthProvider({children}: Param) {
         })
     .then(response => {
             loginResponse = response;
+            // todo: needs to be mended
+        // todo: here is the same now repeated
             if (response.status === 401 || response.status === 403) {
                 throw Error ('Benutzername oder Passwort ist nicht korrekt');
             }

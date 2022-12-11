@@ -10,6 +10,7 @@ import ukulele from "../media/images/ukulele.png";
 function CreateUser() {
 
     const nav = useNavigate();
+    const {login} = useAuth();
 
     const [username, setUsername] = useState(localStorage.getItem('registerUsername') ?? '');
     const [password, setPassword] = useState('');
@@ -56,7 +57,7 @@ function CreateUser() {
                 } else {
                     setMessage(NewMessage.create(
                         'Something unexpected happened.  Error type: "' + response.statusText +
-                        'Error code: ' + response.status + '.',
+                        '". Error code: ' + response.status + '.',
                         MessageType.RED));
                     clearForm();
                 }

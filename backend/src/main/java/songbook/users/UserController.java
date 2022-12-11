@@ -1,6 +1,7 @@
 package songbook.users;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,10 +28,15 @@ public class UserController {
 
 
     @PostMapping("/register")
-    public ResponseEntity<String> createUser(@RequestBody UserCreationData userCreationData) {
+    public ResponseEntity<Object> createUser(@RequestBody UserCreationData userCreationData) {
         try {
             userService.createUser(userCreationData);
-            return ResponseEntity.status(201).body("User successfully created.");
+            ResponseEntity<Object> responseEntity = loginUser(new UserLoginData(userCreationData.getUsername(), userCreationData.getPassword()));
+            if (responseEntity.getStatusCode().value() == 200) {
+                return ResponseEntity.status(201).body(responseEntity.getBody());
+            } else {
+                return responseEntity;
+            }
         } catch (UserAlreadyExistsException e) {
             return ResponseEntity.status(409).body(e.getMessage());
         } catch (PasswordsDoNotMatchException e) {
@@ -39,7 +45,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Token> loginUser(@RequestBody UserLoginData userLoginData) {
+    public ResponseEntity<Object> loginUser(@RequestBody UserLoginData userLoginData) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     userLoginData.getUsername(), userLoginData.getPassword()));

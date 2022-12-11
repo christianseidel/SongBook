@@ -86,7 +86,7 @@ class UserServiceTest {
         // then
         assertThatExceptionOfType(UserAlreadyExistsException.class)
                 .isThrownBy(() -> userService.createUser(newUser))
-                .withMessage("The user name you choose already exists.");
+                .withMessage("Chosen user name already exists.");
     }
 
 }
