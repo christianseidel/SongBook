@@ -18,7 +18,7 @@ function SongBook() {
     const nav = useNavigate();
     const [songsDTO, setSongsDTO] = useState({} as SongsDTO);
     const [songChosen, setSongChosen] = useState({} as Song);
-    const [myFeedback, setMyFeedback] = useState<message | undefined>(undefined);
+    const [message, setMessage] = useState<message | undefined>(undefined);
 
     const [dragOverLeft, setDragOverLeft] = useState(false)
     const handleDragOverStartLeft = () => setDragOverLeft(true);
@@ -34,17 +34,17 @@ function SongBook() {
     }, [nav])
 
     useEffect(() => {
-        fetch('/api/songbook', {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
-            .then(response => {
-                return response.json()
+        if (localStorage.getItem('jwt')) {
+            fetch('/api/songbook', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
             })
-            .then((responseBody: SongsDTO) => setSongsDTO(responseBody))
-    }, []);
+                .then(response => response.json())
+                .then((responseBody: SongsDTO) => setSongsDTO(responseBody))
+        }
+    }, [token])
 
     function displaySongChosen(id: string) {
         fetch('/api/songbook/' + id, {
@@ -58,7 +58,7 @@ function SongBook() {
                 if (response.ok) {
                     return response.json()
                 } else {
-                    setMyFeedback(NewMessage.create(
+                    setMessage(NewMessage.create(
                         "An Item with Id no. " + id + " could not be found.",
                         MessageType.RED));
                 }
@@ -71,7 +71,7 @@ function SongBook() {
                 setSongChosen(responseBody);
             })
             .catch((e) => {
-                setMyFeedback(NewMessage.create(e.message, MessageType.RED));
+                setMessage(NewMessage.create(e.message, MessageType.RED));
             });
     }
 
@@ -167,7 +167,10 @@ function SongBook() {
                 // create new Song from Reference Retrieved
                 let responseStatus: number;
                 fetch(`api/songbook/add/${id}`, {
-                    method: 'POST'
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
                 })
                     .then(response => {
                         responseStatus = response.status;
@@ -176,10 +179,10 @@ function SongBook() {
                     .then((responseBody) => {
                         if (responseStatus === 200) {
                             songCreatedFromReference = responseBody;
-                            setMyFeedback(NewMessage.create('Your song "' + responseBody.title
-                            + '" was successfully created!', MessageType.GREEN));
+                            setMessage(NewMessage.create('Your song "' + responseBody.title
+                                + '" was successfully created!', MessageType.GREEN));
                         } else {
-                            setMyFeedback(NewMessage.create('Your reference could not be retrieved ' +
+                            setMessage(NewMessage.create('Your reference could not be retrieved ' +
                                 'form the server (error code: ' + responseStatus + ')', MessageType.RED));
                         }
                     })
@@ -188,10 +191,13 @@ function SongBook() {
                         // hide Reference Retrieved
                         fetch('api/collections/edit/hide/' + referenceRetrieved.id, {
                             method: 'PUT',
+                            headers: {
+                                'Authorization': `Bearer ${token}`
+                            }
                         })
                             .then(response => {
                                     if (response.status !== 200) {
-                                        setMyFeedback(NewMessage.create('Your source reference could not be hidden!', MessageType.RED));
+                                        setMessage(NewMessage.create('Your source reference could not be hidden!', MessageType.RED));
                                     }
                                 }
                             )
@@ -229,7 +235,17 @@ function SongBook() {
             <h1>
                 <img src={ukulele} alt="Ukulele" id={'ukulele'}/>
                 My Song Book
+                <span id={'logout'}>
+                    <label htmlFor={'inputKey'}>User</label>
+<select name={'inputKey'} id={'inputKey'}>
+	<option>User</option>
+    <option>Info</option>
+	<option>&#10140; logout</option>
+</select>
+
+                    <button type={'button'} onClick={logout}>logout</button></span>
             </h1>
+
             <div className={"flex-parent"}>
                 <div className={"flex-container-left"}>
                     <div className={"flex-child"}
@@ -261,7 +277,7 @@ function SongBook() {
                     </div>
                 </div>
 
-               <div className={'flex-container-right'}
+                <div className={'flex-container-right'}
                      onDragOver={enableDropping}
                      onDrop={handleDropAndCreateSongFromReference}
                      onDragEnter={handleDragOverStartRight}
@@ -272,18 +288,18 @@ function SongBook() {
                         songChosen.title
                             ? <SongItemDetails song={songChosen}
                                                onItemRevision={(song: Song) => {
-                                                       song.dayOfCreation = new DayOfCreation( // = displayable format of "dateCreated"
-                                                           song.dateCreated as string
-                                                       );
-                                                       getAllSongs(false);
-                                                       setSongChosen(song);
-                                                   }}
+                                                   song.dayOfCreation = new DayOfCreation( // = displayable format of "dateCreated"
+                                                       song.dateCreated as string
+                                                   );
+                                                   getAllSongs(false);
+                                                   setSongChosen(song);
+                                               }}
                                                doReturn={() => {
-                                                       getAllSongs(true);
-                                                       trigger()
-                                                   }}
+                                                   getAllSongs(true);
+                                                   trigger()
+                                               }}
                                                clear={() => setSongChosen({} as Song)}
-                                               displayMsg={(msg) => setMyFeedback(msg)}
+                                               displayMsg={(msg) => setMessage(msg)}
                             />
                             : <span className={"doSomething"}
                                     id={"chooseASong"}>&#129172; &nbsp; please, choose a song</span>
@@ -291,7 +307,7 @@ function SongBook() {
                 </div>
             </div>
 
-            <DisplayMessage message={myFeedback}/>
+            <DisplayMessage message={message}/>
         </div>
     );
 }

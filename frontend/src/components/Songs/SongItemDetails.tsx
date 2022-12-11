@@ -11,6 +11,7 @@ import EditSongSheet from "./SongSheet/EditSongSheet";
 import {message, MessageType, NewMessage} from "../messageModel";
 import {Mood, Song} from "./modelsSong";
 import {Reference} from "../References/modelsReference";
+import {useAuth} from "../UserManagement/AuthProvider";
 
 
 interface SongItemProps {
@@ -23,6 +24,7 @@ interface SongItemProps {
 
 function SongItemDetails(props: SongItemProps) {
 
+    const {token} = useAuth();
     const [songState, setSongState] = useState(props.song.status);
     useEffect(() => setSongState(props.song.status), [props.song.status]);
     const [description, setDescription] = useState(sessionStorage.getItem('description') ?? '');
@@ -92,7 +94,10 @@ function SongItemDetails(props: SongItemProps) {
         unhideAllReferencesAttached(id)
             .then(() => {
                     fetch('/api/songbook/' + id, {
-                        method: 'DELETE'
+                        method: 'DELETE',
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
                     })
                         .then(response => {
                             if (response.ok) {
@@ -115,6 +120,9 @@ function SongItemDetails(props: SongItemProps) {
     const deleteSongSheetFile = (fileId: string) => {
         fetch('api/sheets/' + fileId, {
             method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
         })
             .then((response) => {
                 if (response.status !== 200) {
@@ -130,7 +138,10 @@ function SongItemDetails(props: SongItemProps) {
     const unhideAllReferencesAttached = (songId: string) => {
         return new Promise((resolve, failure) => {
             fetch('api/songbook/unhideReferences/' + songId, {
-                method: 'PUT'
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
             })
                 .then((response) => {
                     if (response.ok) {
@@ -147,7 +158,8 @@ function SongItemDetails(props: SongItemProps) {
         fetch('api/songbook/' + props.song.id, {
             method: 'PUT',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({
                 id: props.song.id,
@@ -362,7 +374,6 @@ function SongItemDetails(props: SongItemProps) {
             <div id={'songHead'} className={'songDataSheetElement'}>
                 <div>{handleTitleLine}</div>
             </div>
-
 
 
             <div id={'iconContainer'}>

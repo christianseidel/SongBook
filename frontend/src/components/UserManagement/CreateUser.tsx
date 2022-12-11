@@ -112,14 +112,12 @@ function CreateUser() {
                 <span className={'nextLineUsers'}>
                     <input type={passwordToggle} placeholder={'password again'} value={passwordAgain} required
                            onChange={ev => setPasswordAgain(ev.target.value)} tabIndex={3}/>
-                    <button id={"buttonCancelRegistration"} className={'buttonUserMgt'} type="button"
-                            onClick={cancelCreation}>
-                    <span id={'textButtonCancelRegistration'}><span className={'leftArrow'}>&#10140;</span> back</span>
-                </button>
-
                 </span>
             </form>
-
+            <button id={"buttonCancelRegistration"} className={'buttonUserMgt'} type="button"
+                    onClick={cancelCreation}>
+                <span id={'textButtonCancelRegistration'}><span className={'leftArrow'}>&#10140;</span> back</span>
+            </button>
 
 
             <DisplayMessage message={message}/>

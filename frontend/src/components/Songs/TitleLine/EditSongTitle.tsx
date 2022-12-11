@@ -1,6 +1,5 @@
 import React, {FormEvent, useState} from "react";
 import {message, MessageType, NewMessage} from "../../messageModel";
-import DisplayMessage from "../../DisplayMessage";
 import {Song} from "../modelsSong";
 import {useAuth} from "../../UserManagement/AuthProvider";
 

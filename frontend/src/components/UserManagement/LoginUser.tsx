@@ -59,7 +59,7 @@ function LoginUser() {
                        onChange={ev => setLoginUsername(ev.target.value)} tabIndex={1}/>
                 <button id={'buttonLogin'} className={'buttonUserMgt'} type="submit">
                     &#10004; login</button>
-                <span className={'nextLineUsers'}>
+                <span id={'lineBeforePassword'}>
                     <input type={passwordToggle} placeholder={'password'} value={loginPassword} required
                            onChange={ev => setLoginPassword(ev.target.value)} tabIndex={2}/>
                     <button id={'buttonCoverPassword'} className={'buttonUserMgt'} type='button'

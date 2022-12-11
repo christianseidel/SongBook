@@ -23,7 +23,7 @@ function LogoutUser() {
             </div>
 
             <div>
-                <button id={"buttonLogout"} className={'buttonUserMgt'}
+                <button id={"buttonLoginAgain"} className={'buttonUserMgt'}
                         type={'button'} onClick={() => nav('/users/login')}>
                     &#10140; return</button>
             </div>

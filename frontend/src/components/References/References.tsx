@@ -28,8 +28,17 @@ function References(props: Props) {
     var fileName = '';
 
     useEffect(() => {
-        getAllReferences()
-    }, []);
+        if (localStorage.getItem('jwt')) {
+            fetch('api/collections/', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+                .then(response => response.json())
+                .then((responseBody: ReferencesDTO) => setReferencesDTO(responseBody));
+        }
+    }, [token]);
 
     const getAllReferences = () => {
         fetch('api/collections/', {

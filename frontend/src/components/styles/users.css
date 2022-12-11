@@ -66,6 +66,8 @@
 #buttonCoverPassword {
     float: right;
     margin-top: 1px;
+    height: 23px;
+    transform: translateY(-1px);
 }
 
 #iconUncoverPassword {
@@ -83,7 +85,6 @@
 #buttonLogin {
     float: right;
     clear: right;
-    margin-top: -1px;
 }
 
 #buttonRegister {
@@ -100,19 +101,24 @@
 /*  REGISTER  */
 
 #plsCreate {
-    margin-top: 36px;
-    margin-bottom: 16px;
+    margin-top: 14px;
+    margin-bottom: 14px;
     font-weight: bold;
 }
 
-#buttonCreateUser, #buttonCancelRegistration {
+#buttonCreateUser {
     float: right;
 }
 
 #lineBeforePassword {
-    margin-top: 20px;
+    margin-top: 16px;
     display: block;
     /*border: 1px solid blue;*/
+}
+
+#buttonCancelRegistration {
+    margin-left: 0;
+    margin-top: 24px;
 }
 
 #textButtonCancelRegistration {
@@ -127,7 +133,7 @@
     margin-left: 32px;
 }
 
-#buttonLogout {
-    margin-top: 32px;
+#buttonLoginAgain {
+    margin-top: 40px;
     float: right;
 }
