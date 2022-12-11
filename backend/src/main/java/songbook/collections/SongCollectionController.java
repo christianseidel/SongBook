@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import songbook.exceptions.ErrorMessage;
+import songbook.exceptions.SongBookMessage;
 import songbook.exceptions.NoSuchIdException;
 import songbook.exceptions.MalformedFileException;
 import songbook.collections.models.Reference;
@@ -45,11 +45,11 @@ public class SongCollectionController {
         try {
             return new ResponseEntity<>(songCollectionService.processCollectionUpload(file), HttpStatus.CREATED);
         } catch (MalformedFileException e) { // wrong file encoding
-            return ResponseEntity.status(406).body(ErrorMessage.jsonify(e.getMessage()));
+            return ResponseEntity.status(406).body(SongBookMessage.jsonify(e.getMessage()));
         } catch (RuntimeException e) {
-            return ResponseEntity.status(500).body(ErrorMessage.jsonify(e.getMessage()));
+            return ResponseEntity.status(500).body(SongBookMessage.jsonify(e.getMessage()));
         } catch (IOException e) {  // could not create directory
-            return ResponseEntity.status(500).body(ErrorMessage.jsonify(e.getMessage() + " (" + e.getClass().getSimpleName() + ")"));
+            return ResponseEntity.status(500).body(SongBookMessage.jsonify(e.getMessage() + " (" + e.getClass().getSimpleName() + ")"));
     }
 }
 
@@ -63,7 +63,7 @@ public class SongCollectionController {
         try {
             return status(200).body((songCollectionService.getReferenceById(id)));
         } catch (NoSuchIdException e) {
-            return ResponseEntity.status(404).body(ErrorMessage.jsonify(e.getMessage()));
+            return ResponseEntity.status(404).body(SongBookMessage.jsonify(e.getMessage()));
         }
     }
 
@@ -77,9 +77,9 @@ public class SongCollectionController {
     public ResponseEntity<String> deleteReference(@PathVariable String id) {
         try {
             songCollectionService.deleteReference(id);
-            return ResponseEntity.ok(ErrorMessage.jsonify("Your reference was deleted."));
+            return ResponseEntity.ok(SongBookMessage.jsonify("Your reference was deleted."));
         } catch (NoSuchIdException e) {
-            return ResponseEntity.status(404).body(ErrorMessage.jsonify(e.getMessage()));
+            return ResponseEntity.status(404).body(SongBookMessage.jsonify(e.getMessage()));
         }
     }
 
@@ -88,7 +88,7 @@ public class SongCollectionController {
         try {
             return new ResponseEntity<>(songCollectionService.editReference(id, reference), HttpStatus.OK);
         } catch (NoSuchIdException e) {
-            return ResponseEntity.status(404).body(ErrorMessage.jsonify(e.getMessage()));
+            return ResponseEntity.status(404).body(SongBookMessage.jsonify(e.getMessage()));
         }
     }
 
@@ -97,9 +97,9 @@ public class SongCollectionController {
     public ResponseEntity<Object> hideReference(@PathVariable String id) {
         try {
             songCollectionService.hideReference(id);
-            return ResponseEntity.ok(ErrorMessage.jsonify("Your reference now is HIDDEN."));
+            return ResponseEntity.ok(SongBookMessage.jsonify("Your reference now is HIDDEN."));
         } catch (NoSuchIdException e) {
-            return ResponseEntity.status(404).body(ErrorMessage.jsonify(e.getMessage()));
+            return ResponseEntity.status(404).body(SongBookMessage.jsonify(e.getMessage()));
         }
     }
 
@@ -107,16 +107,16 @@ public class SongCollectionController {
     public ResponseEntity<Object> unhideReference(@PathVariable String id) {
         try {
             songCollectionService.unhideReference(id);
-            return ResponseEntity.ok(ErrorMessage.jsonify("Your reference now is no longer HIDDEN."));
+            return ResponseEntity.ok(SongBookMessage.jsonify("Your reference now is no longer HIDDEN."));
         } catch (NoSuchIdException e) {
-            return ResponseEntity.status(404).body(ErrorMessage.jsonify(e.getMessage()));
+            return ResponseEntity.status(404).body(SongBookMessage.jsonify(e.getMessage()));
         }
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<String> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
         if (e.getMessage().startsWith("JSON parse error: Cannot deserialize value of type `int` from String")) {
-            return ResponseEntity.status(406).body(ErrorMessage.jsonify("The server received invalid data. " +
+            return ResponseEntity.status(406).body(SongBookMessage.jsonify("The server received invalid data. " +
                     "Please ensure that all numbers are entered in a number format."));
         } else {
             return ResponseEntity.status(400).body(e.getMessage());

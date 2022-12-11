@@ -1,5 +1,6 @@
 package songbook;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -14,6 +15,7 @@ import songbook.users.UserCreationData;
 import songbook.users.UserRepository;
 import songbook.users.UserService;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -26,17 +28,17 @@ class UserServiceTest {
     void shouldCreateUser() {
         // given
         UserCreationData newUserCreationData = new UserCreationData(null, "Cynthia", "cyn2cyn", "cyn2cyn");
-        User user = new User(null, "Cynthia", "SomePerfectlySecureHash");
-        User savedUser = new User("654654654", "Cynthia", "SomePerfectlySecureHash");
+        User user = new User("Cynthia", "SomePerfectlySecureHash");
+        User savedUser = new User("Cynthia", "SomePerfectlySecureHash");
 
-        UserRepository repo = mock(UserRepository.class);
-        when(repo.save(user)).thenReturn(savedUser);
+        UserRepository userRepository = mock(UserRepository.class);
+        when(userRepository.save(user)).thenReturn(savedUser);
 
         PasswordEncoder passwordEncoder = mock(PasswordEncoder.class);
         when(passwordEncoder.encode("cyn2cyn")).thenReturn("SomePerfectlySecureHash");
 
         // when
-        UserService userService = new UserService(repo, passwordEncoder);
+        UserService userService = new UserService(userRepository, passwordEncoder);
         User actual = userService.createUser(newUserCreationData);
 
         // then
@@ -52,11 +54,11 @@ class UserServiceTest {
         newUser.setPassword("MyJoeyPassword");
         newUser.setPasswordAgain("JoeyDoesntRememberPwd");
 
-        UserRepository repo = Mockito.mock(UserRepository.class);
+        UserRepository userRepository = Mockito.mock(UserRepository.class);
         PasswordEncoder passwordEncoder = mock(PasswordEncoder.class);
 
         // when
-        UserService userService = new UserService(repo, passwordEncoder);
+        UserService userService = new UserService(userRepository, passwordEncoder);
 
         // then
         assertThatExceptionOfType(PasswordsDoNotMatchException.class)
@@ -72,16 +74,16 @@ class UserServiceTest {
         newUser.setUsername("Alice");
         newUser.setPassword("RabbitHole01");
         newUser.setPasswordAgain("RabbitHole01");
-        User existingUser = new User("123456789", "Fox", "RabbitHole02");
+        User existingUser = new User("Fox", "RabbitHole02");
 
-        UserRepository repo = Mockito.mock(UserRepository.class);
-        when(repo.findByUsername("Alice")).thenReturn(Optional.of(existingUser));
+        UserRepository userRepository = Mockito.mock(UserRepository.class);
+        when(userRepository.findByUsername("Alice")).thenReturn(Optional.of(existingUser));
 
         PasswordEncoder passwordEncoder = mock(PasswordEncoder.class);
         when(passwordEncoder.encode("123456789")).thenReturn("BestSecuredPassword");
 
         // when
-        UserService userService = new UserService(repo, passwordEncoder);
+        UserService userService = new UserService(userRepository, passwordEncoder);
 
         // then
         assertThatExceptionOfType(UserAlreadyExistsException.class)
@@ -89,4 +91,46 @@ class UserServiceTest {
                 .withMessage("Chosen user name already exists.");
     }
 
+    @Test
+    @DisplayName("user account creation date retrieved")
+    void shouldFetchUserAccountCreationDate() {
+        // given
+        User user = new User("Alice", "RabbitHole00");
+        user.setId("555666777");
+        user.setDateCreated(LocalDate.of(2022, 12, 11));
+
+        UserRepository userRepository = Mockito.mock(UserRepository.class);
+        PasswordEncoder passwordEncoder = mock(PasswordEncoder.class);
+        when(passwordEncoder.encode("555666777")).thenReturn("PrimeSecuredPassword");
+        UserService userService = new UserService(userRepository, passwordEncoder);
+
+        when(userRepository.findByUsername("Alice")).thenReturn(Optional.of(user));
+
+        // when
+        String actual = userService.getDateCreated("Alice");
+
+        // then
+        Assertions.assertEquals("2022-12-11", actual);
+    }
+
+    @Test
+    @DisplayName("user deleted")
+    void shouldDeleteUser() {
+        // given
+        User existingUser = new User("Alice", "RabbitHole03");
+        existingUser.setId("123456789");
+
+        UserRepository userRepository = Mockito.mock(UserRepository.class);
+        PasswordEncoder passwordEncoder = mock(PasswordEncoder.class);
+        when(passwordEncoder.encode("123456789")).thenReturn("PrimeSecuredPassword");
+        UserService userService = new UserService(userRepository, passwordEncoder);
+
+        when(userRepository.findByUsername("Alice")).thenReturn(Optional.of(existingUser));
+
+        // when
+        userService.deleteUser("Alice");
+
+        // then
+        Mockito.verify(userRepository).deleteById("123456789");
+    }
 }

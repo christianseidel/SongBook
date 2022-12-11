@@ -7,7 +7,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import songbook.exceptions.ErrorMessage;
+import songbook.exceptions.SongBookMessage;
 import songbook.songsheets.models.SongSheetUploadResponse;
 import songbook.songsheets.models.SongSheetFile;
 
@@ -38,7 +38,7 @@ public class SongSheetStorageController {
                     .toUriString();
             return ResponseEntity.ok().body(new SongSheetUploadResponse(songSheetFile.getFileName(), contentType, songSheetFile.getId(), url));
         } catch (RuntimeException e) {
-            return ResponseEntity.status(500).body(ErrorMessage.jsonify(e.getMessage()));
+            return ResponseEntity.status(500).body(SongBookMessage.jsonify(e.getMessage()));
         }
     }
 

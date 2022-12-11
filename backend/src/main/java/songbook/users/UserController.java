@@ -6,11 +6,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+import songbook.exceptions.NoSuchUserException;
 import songbook.exceptions.PasswordsDoNotMatchException;
+import songbook.exceptions.SongBookMessage;
 import songbook.exceptions.UserAlreadyExistsException;
 import songbook.users.authentification.JwtUtils;
 import songbook.users.authentification.Token;
@@ -53,6 +53,21 @@ public class UserController {
         } catch (AuthenticationException e) {
             return ResponseEntity.status(401).build();
         }
+    }
+
+    @GetMapping("/info/{username}")
+    public String getDateCreated(@PathVariable String username) {
+        return SongBookMessage.jsonify(userService.getDateCreated(username));
+    }
+
+    @DeleteMapping("/info/{username}")
+    public ResponseEntity<String> deleteUser(@PathVariable String username) {
+        try {
+            userService.deleteUser(username);
+        } catch (NoSuchUserException e) {
+            return ResponseEntity.status(404).build();
+        }
+        return ResponseEntity.ok().build();
     }
 }
 

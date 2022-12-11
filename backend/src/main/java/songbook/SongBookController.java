@@ -75,6 +75,7 @@ public class SongBookController {
         songBookService.deleteSongSheetFile(fileId);
     }
 
+    // Todo: This should not be here anymore
     private String jsonifyToMessage(String errorMessage) {
         return "{\"message\": \"" + errorMessage + "\"}";
     }
