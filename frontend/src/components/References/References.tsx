@@ -29,7 +29,7 @@ function References(props: Props) {
 
     useEffect(() => {
         if (localStorage.getItem('jwt')) {
-            fetch('api/collections/', {
+            fetch(`${process.env.REACT_APP_BASE_URL}/api/collections/`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -41,7 +41,7 @@ function References(props: Props) {
     }, [token]);
 
     const getAllReferences = () => {
-        fetch('api/collections/', {
+        fetch(`${process.env.REACT_APP_BASE_URL}/api/collections/`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -56,7 +56,7 @@ function References(props: Props) {
 
     const searchReference = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        fetch('api/collections/' + searchWord, {
+        fetch(`${process.env.REACT_APP_BASE_URL}/api/collections/` + searchWord, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -79,7 +79,7 @@ function References(props: Props) {
     }
 
     const editItem = (id: string) => {
-        fetch('api/collections/edit/' + id, {
+        fetch(`${process.env.REACT_APP_BASE_URL}/api/collections/edit/` + id, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -89,17 +89,17 @@ function References(props: Props) {
                 if (response.status === 200) {
                     return response.json()
                 } else {
-                    throw Error (response.statusText + '". Error code: ' + response.status + '.')
+                    throw Error(response.statusText + '". Error code: ' + response.status + '.')
                 }
-        })
+            })
             .then((responseBody: ReferencesDTO) => setReferencesDTO(responseBody))
             .then(() => setToggleDisplaySearchResultsButNotReference(false))
             .catch(e => setMessage(NewMessage.create(e.message, MessageType.RED)))
-        }
+    }
 
 
     function uploadFile(files: FileList | null) {       // ToDo: Introduce Check Sum
-        if (files === null) {
+        if (files === null) {                           // ToDo: Add Info with Upload Requirements
             alert('Somehow the FormData Object did not work properly.')
         } else if (!files[0].name.endsWith('.txt')) {
             setMessage(NewMessage.create(
@@ -110,7 +110,7 @@ function References(props: Props) {
             const formData = new FormData();
             formData.append('file', files[0]);
             fileName = files[0].name
-            fetch('api/collections/upload/', {
+            fetch(`${process.env.REACT_APP_BASE_URL}/api/collections/upload/`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -125,7 +125,7 @@ function References(props: Props) {
                     } else if (response.status === 404) {
                         throw Error('Server is unable to respond to your request (error code: ' + response.status + ').')
                     } else if (response.status === 500) {
-                            throw Error('Server is unable to respond to your request (error code: ' + response.status + ').')
+                        throw Error('Server is unable to respond to your request (error code: ' + response.status + ').')
                     } else {
                         throw Error(response.statusText + ' (error code: ' + response.status + ').');
                     }
@@ -141,82 +141,82 @@ function References(props: Props) {
 
     return (
         <div>
-                    <h2>List of References</h2>
+            {toggleDisplaySearchResultsButNotReference && <h2>List of References</h2>}
 
-                    {toggleDisplaySearchResultsButNotReference
-                        ?   <div>
-                            <div id={'searchForm'}>
-                                    <form onSubmit={ev => searchReference(ev)}>
-                                        <div className={'header'}>
-                                            <input id={'inputSearchWord'} type="text" value={searchWord}
-                                                   placeholder={'your search word here...'}
-                                                   onChange={(ev) =>
-                                                       setSearchWord(ev.target.value)
-                                                   }
-                                                   onKeyDown={(event) => {
-                                                       if (event.key === "Escape") {
-                                                           undoSearch()
-                                                       }
-                                                   }}
-                                                   required/>
-                                        </div>
-                                    </form>
-                                    <div>
-                                        <button id={'undoSearch'} type={'button'} onClick={undoSearch}
-                                                onKeyDown={(event) => {
-                                                    if (event.key === "Enter") {
-                                                        undoSearch()
-                                                    }
-                                                }}>clear
-                                        </button>
-                                    </div>
-                                </div>
+            {toggleDisplaySearchResultsButNotReference
+                ? <div>
+                    <div id={'searchForm'}>
+                        <form onSubmit={ev => searchReference(ev)}>
+                            <div className={'header'}>
+                                <input id={'inputSearchWord'} type="text" value={searchWord}
+                                       placeholder={'your search word here...'}
+                                       onChange={(ev) =>
+                                           setSearchWord(ev.target.value)
+                                       }
+                                       onKeyDown={(event) => {
+                                           if (event.key === "Escape") {
+                                               undoSearch()
+                                           }
+                                       }}
+                                       required/>
+                            </div>
+                        </form>
+                        <div>
+                            <button id={'undoSearch'} type={'button'} onClick={undoSearch}
+                                    onKeyDown={(event) => {
+                                        if (event.key === "Enter") {
+                                            undoSearch()
+                                        }
+                                    }}>clear
+                            </button>
+                        </div>
+                    </div>
 
-                                <div id={"referenceSearchResult"}>
-                                    {referencesDTO.referenceList
-                                        ? referencesDTO.referenceList.map(item =>
-                                            <ReferenceItemWithinList key={item.id} reference={item}
-                                                                     onItemClick={editItem}
-                                            />)
-                                        : <span>... loading</span>
-                                    }
-                                </div>
-                            <span className={"doSomething"} id={"addNewCollection"}
-                                  onClick={openUpload}>
+                    <div id={"referenceSearchResult"}>
+                        {referencesDTO.referenceList
+                            ? referencesDTO.referenceList.map(item =>
+                                <ReferenceItemWithinList key={item.id} reference={item}
+                                                         onItemClick={editItem}
+                                />)
+                            : <span>... loading</span>
+                        }
+                    </div>
+                    <span className={"doSomething"} id={"addNewCollection"}
+                          onClick={openUpload}>
                                 {toggleDisplayUploadFunction
                                     ? <span>&lt;</span>
                                     : <span>+</span>}
-                                &nbsp;add a new collection</span>
-                        </div>
-                        :
-                            referencesDTO.referenceList.map(item =>
-                            <ReferenceToEdit key={item.id} reference={item}
-                                             doCancel={getAllReferences}
-                                             displayMsg={(msg) => setMessage(msg)}
-                            />)
-                    }
-
-                    <div>{toggleDisplayUploadFunction && toggleDisplaySearchResultsButNotReference &&
-                        <form id={'formAddFile'} encType={'multipart/form-data'}>
-                            <label id={'labelAddFile'}>Choose your file: </label>
-                            <input type={'file'} id={'inputAddFile'}
-                                   onChange={event => uploadFile(event.target.files)}/>
-                        </form>}
-                    </div>
-
-                    <div>
-                        {toggleDisplayUploadResult && <DisplayUploadResult
-                            uploadResult={uploadResult}
-                            fileName={fileName}
-                            onClose={() => {
-                                setToggleDisplayUploadResult(false);
-                            }}
-                        />}
-                    </div>
-
-                <DisplayMessage message={message}/>
-
+                        &nbsp;add a new collection</span>
                 </div>
+                :
+                referencesDTO.referenceList.map(item =>
+                    <ReferenceToEdit key={item.id} reference={item}
+                                     doCancel={getAllReferences}
+                                     displayMsg={(msg) => setMessage(msg)}
+                    />)
+            }
+
+            <div>{toggleDisplayUploadFunction && toggleDisplaySearchResultsButNotReference &&
+                <form id={'formAddFile'} encType={'multipart/form-data'}>
+                    <label id={'labelAddFile'}>Choose your file: </label>
+                    <input type={'file'} id={'inputAddFile'}
+                           onChange={event => uploadFile(event.target.files)}/>
+                </form>}
+            </div>
+
+            <div>
+                {toggleDisplayUploadResult && <DisplayUploadResult
+                    uploadResult={uploadResult}
+                    fileName={fileName}
+                    onClose={() => {
+                        setToggleDisplayUploadResult(false);
+                    }}
+                />}
+            </div>
+
+            <DisplayMessage message={message}/>
+
+        </div>
 
     )
 }

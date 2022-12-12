@@ -27,14 +27,14 @@ h1 {
 
 #dropdownUser {
     float: right;
-    float: right;
     display: inline-block;
-    margin-right: 148px;
+    margin-right: 36px;
 }
 
 #buttonDropdownUser {
     border: 2px solid darkgoldenrod;
     height: 23px;
+    background-color: #f0c579;
 }
 
 .contentDropdownUser {

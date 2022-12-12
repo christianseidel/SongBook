@@ -19,9 +19,7 @@ h2 {
     overflow: auto;
 }
 
-#editReferenceItem {
-    height: 322px;
-}
+
 
 .referenceItem {
     font-size: 11px;
@@ -99,9 +97,88 @@ h2 {
     width: 312px;
 }
 
-#collectionTitle {
-    color: darkblue;
+
+
+/*  EDIT REFERENCE */
+
+#editReferenceItem {
+    height: 322px;
+
 }
 
-/* todo: Add Info Field with Requirements*/
+#editRef_labelTitle {
+    grid-area: labelTitle;
+}
+#editRef_inputTitle {
+    grid-area: inputTitle;
+    width: 300px;
+}
+
+#editRef_labelCollection {
+    grid-area: labelCollection;
+    width: 210px;
+}
+
+#editRef_collection {
+    grid-area: collection;
+    color: black;
+    width: 180px;
+}
+
+#editRef_labelPage {
+    grid-area: labelPage;
+}
+#editRef_inputPage {
+    grid-area: inputPage;
+    width: 40px;
+}
+
+#editRef_labelAuthor {
+    grid-area: labelAuthor;
+}
+#editRef_inputAuthor {
+    grid-area: inputAuthor;
+    width: 180px;
+}
+#editRef_labelYear {
+    grid-area: labelYear;
+}
+#editRef_inputYear {
+    grid-area: inputYear;
+    width: 40px;
+}
+
+#editRef_buttonUpdate {
+    grid-area: btnUpdate;
+    justify-self: right;
+}
+
+#editRef_buttonDelete {
+    grid-area: btnDelete;
+}
+
+#editRef_buttonCopy {
+    grid-area: btnCopy;
+    justify-self: right;
+}
+
+#editRef_buttonCancel {
+    grid-area: btnCancel;
+    justify-self: right;
+}
+
+
+.gridContainerReferenceToEdit {
+    display: grid;
+    width: 506px;
+    margin-top: 24px;
+    grid-template-columns: 55px 204px 55px 40px 124px;
+    grid-template-rows: 24px 24px 24px;
+    grid-template-areas:
+        "labelTitle inputTitle inputTitle inputTitle btnUpdate"
+        "labelCollection collection labelPage inputPage btnCopy"
+        "labelAuthor inputAuthor labelYear inputYear btnCancel"
+        ". btnDelete . . .";
+}
+
 

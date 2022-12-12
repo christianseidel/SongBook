@@ -12,7 +12,7 @@
     line-height: 1.6;
     border-width: 3px 22px;
     border-style: solid;
-    border-radius: 2px;
+    border-radius: 8px;
     padding: 15px;
     box-shadow: 12px 8px 16px 0 dimgray, 0 6px 20px 0 dimgray;
     max-width: 580px;
@@ -22,6 +22,7 @@
 
 #uploadResultContainer {
     border-color: blue;
+    border-radius: 8px;
     position: absolute;
     left: 8%;
     right: 42%;
