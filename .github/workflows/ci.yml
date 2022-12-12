@@ -8,5 +8,3 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: 17
-      - name: verify
-        run: mvn -B verify
