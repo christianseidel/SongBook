@@ -152,7 +152,7 @@ class SongCollectionServiceTest {
                 "This Is My Song, Yeah; The Daily Ukulele (Blue); 477"
                         .getBytes(StandardCharsets.UTF_8)
         );
-        songCollectionService.setRootDirectory("D:\\Ukulele\\SongBook\\backend\\target\\test-classes");
+        songCollectionService.setRootDirectory("/backend/target/test-classes");
 
         Collection<Reference> collection = List.of();
         Mockito.when(referencesRepository.findAllByTitleAndSongCollection("This Is My Song, Yeah", THE_DAILY_UKULELE_BLUE)).thenReturn(collection);
@@ -182,7 +182,7 @@ class SongCollectionServiceTest {
                         "i forgot to sing my song today; Liederbuch ; 2" )
                         .getBytes(StandardCharsets.UTF_8)
         );
-        songCollectionService.setRootDirectory("D:\\Ukulele\\SongBook\\backend\\target\\test-classes");
+        songCollectionService.setRootDirectory("/backend/target/test-classes");
 
         String title1 = "This Is My Song, Yeah";
         String title2 = " What Is This You Are Singing";
@@ -218,7 +218,7 @@ class SongCollectionServiceTest {
                 "This Is My Song, Yeah; The Daily Ukulele (Blue); 477"
                         .getBytes(StandardCharsets.UTF_8)
         );
-        songCollectionService.setRootDirectory("D:\\Ukulele\\SongBook\\backend\\target\\test-classes");
+        songCollectionService.setRootDirectory("/backend/target/test-classes");
 
         String title = "This Is My Song, Yeah";
         Collection<Reference> collection = List.of(new Reference("This Is My Song, Yeah", THE_DAILY_UKULELE_BLUE));
@@ -246,7 +246,7 @@ class SongCollectionServiceTest {
                 "text/plain",
                 "This Is Not My Song, Bro; The Daily Ukulele (Blue); ab23ab".getBytes(StandardCharsets.UTF_8)
         );
-        songCollectionService.setRootDirectory("D:\\Ukulele\\SongBook\\backend\\target\\test-classes");
+        songCollectionService.setRootDirectory("/backend/target/test-classes");
 
         CollectionUploadResponse collectionUploadResponse = new CollectionUploadResponse();
         collectionUploadResponse.setNumberOfReferencesAccepted(0);
@@ -275,7 +275,7 @@ class SongCollectionServiceTest {
                         "This Isn't My Song Either, Sister; The Daily Song Book; 444")
                         .getBytes(StandardCharsets.UTF_8)
         );
-        songCollectionService.setRootDirectory("D:\\Ukulele\\SongBook\\backend\\target\\test-classes");
+        songCollectionService.setRootDirectory("/backend/target/test-classes");
 
         CollectionUploadResponse collectionUploadResponse = new CollectionUploadResponse();
         collectionUploadResponse.setNumberOfReferencesAccepted(0);
@@ -303,7 +303,7 @@ class SongCollectionServiceTest {
                 "text/plain",
                 "".getBytes(StandardCharsets.UTF_8)
         );
-        songCollectionService.setRootDirectory("\\Ukulele\\SongBook\\backend\\target\\test-classes");
+        songCollectionService.setRootDirectory("/backend/target/test-classes");
 
         Exception exception = assertThrows(EmptyFileException.class,
                 () -> {
