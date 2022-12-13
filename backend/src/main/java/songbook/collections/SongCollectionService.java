@@ -95,17 +95,11 @@ public class SongCollectionService {
 
     public CollectionUploadResponse processCollectionUpload(MultipartFile file) throws IOException {
 
-        System.out.println(rootDirectory);
         Path tempDir = Path.of(rootDirectory, "temporary");
-        System.out.println(tempDir);
-        String basePath = new File("").getAbsolutePath();
-        System.out.println("Base: " + basePath);
 
         try {
             Files.createDirectory(tempDir);
-            System.out.println("-> Temporary directory created.");
         } catch (IOException e) {
-            System.out.println("!  Could not create temporary directory!");
             throw new RuntimeException("The server could not create the temporary directory needed.");
         }
 
@@ -113,7 +107,6 @@ public class SongCollectionService {
         String fileLocation = tempDir + File.separator + file.getOriginalFilename();
         File storedSongCollection = new File(fileLocation);
         file.transferTo(storedSongCollection);
-        System.out.println("-> File created: " + file.getOriginalFilename());
 
         // process new SongCollection
         CollectionUploadResponse collectionUploadResponse;
@@ -205,15 +198,13 @@ public class SongCollectionService {
         try {
             Files.delete(path);
         } catch (IOException e) {
-            System.out.println("! Could not delete file" + fileName + ".");
-            throw new RuntimeException("! File \"" + fileName + "\" could not be deleted.");
+            throw new RuntimeException("File \"" + fileName + "\" could not be deleted.");
         }
         Path parent = path.getParent();
         try {
             Files.delete(parent);
-            System.out.println("-> Directory \"" + parent + "\" deleted.");
         } catch (IOException e) {
-            System.out.println("! Could not delete temporary directory.");
+            System.out.println("Could not delete temporary directory.");
         }
     }
 

@@ -99,6 +99,17 @@ h2 {
 
 /*  EDIT REFERENCE */
 
+.songDataSheetElement {
+    position: relative;
+    min-width: 450px;
+    border: 1px solid darkgoldenrod;
+    border-radius: 8px;
+    padding: 18px;
+    background-color: #f0c579;
+    box-shadow: -2px -2px darkgoldenrod;
+}
+
+
 #editReferenceItem {
     height: 322px;
 
