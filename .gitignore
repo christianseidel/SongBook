@@ -64,3 +64,4 @@ yarn-error.log*
 /backend/src/main/java/songbook/collections/source-files/
 /backend/.env.development
 /fileStorage/
+/frontend/src/components/media/images/bak/
