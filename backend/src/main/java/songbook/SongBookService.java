@@ -85,6 +85,7 @@ public class SongBookService {
         return song;
     }
 
+
     public String unhideAllReferencesOfASong(String id) {
         Optional<Song> lookupResult = songsRepository.findById(id);
         if (lookupResult.isEmpty()) {
