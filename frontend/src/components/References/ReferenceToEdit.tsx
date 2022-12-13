@@ -28,7 +28,7 @@ function ReferenceToEdit(props: ReferenceItemProps) {
     useEffect(() => {
         setKey(props.reference.key ?? '');
         setMood(Mood.checkIfMajorOrEmpty(props.reference.key) ? 0 : 1);
-    }, []);
+    }, [props.reference.key]);
 
 
     const updateReference = (event: FormEvent<HTMLFormElement>) => {
