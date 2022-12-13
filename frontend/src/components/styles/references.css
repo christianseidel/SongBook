@@ -163,6 +163,13 @@ h2 {
     justify-self: right;
 }
 
+#iconHide {
+    width: 12px;
+    height: 12px;
+    margin-right: 5px;
+    transform: translateY(2px);
+}
+
 #editRef_buttonHide {
     grid-area: finalButtons;
     margin-top: 2px;
@@ -173,6 +180,44 @@ h2 {
     margin-left: 90px;
     margin-top: 2px;
 }
+
+#editRef_labelKey {
+    grid-area: labelKey;
+}
+
+#editRef_inputKey {
+    grid-area: inputKey;
+    background-color: blanchedalmond;
+    border-color: darkgoldenrod;
+    width: 46px;
+}
+
+#editRef_majorOrMinor {
+    grid-area: inputKeyAndMood;
+}
+
+#editRef_inputMajor {
+    margin-left: 26px;
+    width: revert;
+    background-color: goldenrod;
+    transition: 0ms;
+
+}
+#editRef_labelMajor {
+    font-weight: normal;
+}
+
+#editRef_inputMinor {
+    margin-left: 10px;
+    width: revert;
+    background-color: goldenrod;
+    transition: 0ms;
+
+}
+#editRef_labelMinor {
+    font-weight: normal;
+}
+
 
 
 .gridContainerReferenceToEdit {
@@ -185,12 +230,13 @@ h2 {
     width: 480px;
     margin-top: 24px;
     grid-template-columns: 55px 204px 55px 40px 120px;
-    grid-template-rows: 24px 24px 24px;
+    grid-template-rows: 24px 24px 24px 24px;
     row-gap: 10px;
     grid-template-areas:
         "labelTitle inputTitle inputTitle inputTitle btnUpdate"
         "labelCollection collection labelPage inputPage btnCopy"
         "labelAuthor inputAuthor labelYear inputYear btnCancel"
+        "labelKey inputKeyAndMood inputKeyAndMood inputKeyAndMood inputKeyAndMood"
         ". finalButtons . . . ";
 }
 

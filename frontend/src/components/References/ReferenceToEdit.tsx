@@ -1,9 +1,12 @@
 import {songCollectionToRealName} from "../literals/collectionNames";
 import '../styles/references.css';
-import React, {FormEvent, useState} from "react";
+import React, {FormEvent, useEffect, useState} from "react";
 import {message, MessageType, NewMessage} from "../messageModel";
 import {Reference} from "./modelsReference";
 import {useAuth} from "../UserManagement/AuthProvider";
+import {keys} from "../literals/keys";
+import {Mood} from "../Songs/modelsSong";
+import hide from '../media/images/hide.png';
 
 interface ReferenceItemProps {
     reference: Reference;
@@ -19,10 +22,20 @@ function ReferenceToEdit(props: ReferenceItemProps) {
     const [author, setAuthor] = useState(props.reference.author == null ? '' : props.reference.author);
     const [year, setYear] = useState(props.reference.year !== 0 ? props.reference.year : '');
 
-    const editReference = (event: FormEvent<HTMLFormElement>) => {
+    const [key, setKey] = useState('');
+    const [mood, setMood] = useState(0);
+
+    useEffect(() => {
+        setKey(props.reference.key ?? '');
+        setMood(Mood.checkIfMajorOrEmpty(props.reference.key) ? 0 : 1);
+    }, []);
+
+
+    const updateReference = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         // todo: implement error thrown. Here and elsewhere.
         let responseStatus: number;
+        console.log(key)
         fetch(`${process.env.REACT_APP_BASE_URL}/api/collections/edit/` + props.reference.id, {
             method: 'PUT',
             headers: {
@@ -36,6 +49,7 @@ function ReferenceToEdit(props: ReferenceItemProps) {
                 page: page,
                 author: author,
                 year: year,
+                key: key,
             })
         })
             .then(response => {
@@ -88,7 +102,7 @@ function ReferenceToEdit(props: ReferenceItemProps) {
             .then(response => {
                 if (response.status === 200) {
                     console.log('Reference "' + props.reference.title + '" now is hidden.');
-                } else  {
+                } else {
                     throw Error(response.statusText);
                 }
             })
@@ -109,7 +123,7 @@ function ReferenceToEdit(props: ReferenceItemProps) {
                     'Your reference "' + props.reference.title + '" was deleted.',
                     MessageType.GREEN
                 ));
-            } else  {
+            } else {
                 throw Error(response.statusText);
             }
         })
@@ -128,7 +142,7 @@ function ReferenceToEdit(props: ReferenceItemProps) {
         <div>
             <div id={'editReferenceItem'}>
                 <h2>Update Your Reference</h2>
-                <form onSubmit={ev => editReference(ev)} className={'gridContainerReferenceToEdit'}>
+                <form onSubmit={ev => updateReference(ev)} className={'gridContainerReferenceToEdit'}>
                     <label id={'editRef_labelTitle'}>Title:</label>
                     <input id={'editRef_inputTitle'} type={'text'} value={title}
                            onChange={ev => setTitle(ev.target.value)} autoFocus required
@@ -153,6 +167,34 @@ function ReferenceToEdit(props: ReferenceItemProps) {
                     <input id={'editRef_inputYear'} type={'text'} placeholder={'Year'} value={year}
                            onChange={ev => setYear(ev.target.value)}
                            onKeyDown={ev => checkIfEscapeKey(ev.key)}/>
+
+
+                    <label id={'editRef_labelKey'} htmlFor={'inputKey'}>Key:</label>
+                    <div id={'editRef_majorOrMinor'}>
+                        <select name={'inputKey'} id={'editRef_inputKey'}
+                                value={key} onChange={ev => setKey(ev.target.value)}
+                                tabIndex={5}>{keys.map((key) => (
+                            <option value={key.mood[mood].value}
+                                    key={key.mood[mood].value}>{key.mood[mood].label}</option>
+                        ))}
+                        </select>
+                        <input type={'radio'} id={'editRef_inputMajor'} name={'majorOrMinor'}
+                               value={0} className={'inputMajorOrMinor'} checked={mood === 0}
+                               onChange={ev => {
+                                   setMood(Number(ev.target.value));
+                                   setKey('');
+                               }} tabIndex={6}/>
+                        <label htmlFor={'major'} id={'editRef_labelMajor'}>major</label>
+
+                        <input type={'radio'} id={'editRef_inputMinor'} name={'majorOrMinor'}
+                               value={1} className={'inputMajorOrMinor'} checked={mood === 1}
+                               onChange={ev => {
+                                   setMood(Number(ev.target.value));
+                                   setKey('');
+                               }}/>
+                        <label htmlFor={'minor'} id={'editRef_labelMinor'}>minor</label>
+                    </div>
+
                     <button id={'editRef_buttonUpdate'} type={'submit'}> &#10004; update</button>
 
                     <button id={'editRef_buttonCopy'} type={'button'}
@@ -163,10 +205,13 @@ function ReferenceToEdit(props: ReferenceItemProps) {
                     }}> cancel
                     </button>
                     <button id={'editRef_buttonHide'} type={'button'}
-                            onClick={() => hideReference(props.reference.id!)}>&#10008; hide
+                            onClick={() => hideReference(props.reference.id!)}>
+                        <img src={hide} alt='hide' id={'iconHide'}/>
+                            hide
                     </button>
                     <button id={'editRef_buttonDelete'} type={'button'}
-                            onClick={() => deleteReference(props.reference.id!)}>&#10008; delete
+                            onClick={() => deleteReference(props.reference.id!)}>
+                        &#10008; delete
                     </button>
                 </form>
 
