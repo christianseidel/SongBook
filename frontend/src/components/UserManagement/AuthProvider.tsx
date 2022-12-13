@@ -75,7 +75,7 @@ export default function AuthProvider({children}: Param) {
                 } else if (response.status === 404) {
                     throw Error('Server currently unable to check user data.');
                 } else if (response.status !== 200) {
-                    throw Error('Something unexpected happened! Error type: "' + response.statusText + '". Error code: ' + response.status + ').');
+                    throw Error('Something unexpected happened! Error type: "' + response.statusText + '". Error code: ' + response.status + '.');
                 } else {
                     return response.json();
                 }

@@ -47,7 +47,7 @@ function InfoUser() {
                     if (response.status === 404) {
                         throw Error('User could not be found.');
                     } else {
-                        throw Error('Something unexpected happened! Error type: "' + response.statusText + '". Error code: ' + response.status + ').');
+                        throw Error('Something unexpected happened! Error type: "' + response.statusText + '". Error code: ' + response.status + '.');
                     }
                 }
             })
