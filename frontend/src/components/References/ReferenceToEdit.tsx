@@ -21,6 +21,7 @@ function ReferenceToEdit(props: ReferenceItemProps) {
 
     const editReference = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        // todo: implement error thrown. Here and elsewhere.
         let responseStatus: number;
         fetch(`${process.env.REACT_APP_BASE_URL}/api/collections/edit/` + props.reference.id, {
             method: 'PUT',
@@ -77,28 +78,44 @@ function ReferenceToEdit(props: ReferenceItemProps) {
             })
     }
 
+    const hideReference = (id: string) => {
+        fetch(`${process.env.REACT_APP_BASE_URL}/api/collections/edit/hide/` + id, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+            .then(response => {
+                if (response.status === 200) {
+                    console.log('Reference "' + props.reference.title + '" now is hidden.');
+                } else  {
+                    throw Error(response.statusText);
+                }
+            })
+            .then(props.doCancel)
+            .catch((e) =>
+                props.displayMsg(NewMessage.create(e.message, MessageType.RED)))
+    }
+
     const deleteReference = (id: string) => {
-        let responseStatus: number;
         fetch(`${process.env.REACT_APP_BASE_URL}/api/collections/edit/` + id, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         }).then(response => {
-            responseStatus = response.status;
-            return response.json();
+            if (response.status === 200) {
+                props.displayMsg(NewMessage.create(
+                    'Your reference "' + props.reference.title + '" was deleted.',
+                    MessageType.GREEN
+                ));
+            } else  {
+                throw Error(response.statusText);
+            }
         })
-            .then((responseBody) => {
-                if (responseStatus === 200) {
-                    props.displayMsg(NewMessage.create(
-                        'Your reference "' + props.reference.title + '" was deleted.',
-                        MessageType.GREEN
-                    ));
-                } else {
-                    props.displayMsg(NewMessage.create(responseBody.message, MessageType.RED));
-                }
-            })
             .then(props.doCancel)
+            .catch((e) =>
+                props.displayMsg(NewMessage.create(e.message, MessageType.RED)))
     }
 
     const checkIfEscapeKey = (key: string) => {
@@ -143,7 +160,10 @@ function ReferenceToEdit(props: ReferenceItemProps) {
                     </button>
                     <button id={'editRef_buttonCancel'} onClick={() => {
                         props.doCancel()
-                    }}> &#10008; cancel
+                    }}> cancel
+                    </button>
+                    <button id={'editRef_buttonHide'} type={'button'}
+                            onClick={() => hideReference(props.reference.id!)}>&#10008; hide
                     </button>
                     <button id={'editRef_buttonDelete'} type={'button'}
                             onClick={() => deleteReference(props.reference.id!)}>&#10008; delete

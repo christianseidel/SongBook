@@ -48,7 +48,9 @@ function References(props: Props) {
             }
         })
             .then(response => response.json())
-            .then((responseBody: ReferencesDTO) => setReferencesDTO(responseBody));
+            .then((responseBody: ReferencesDTO) => {
+                setReferencesDTO(responseBody)
+            });
         setToggleDisplaySearchResultsButNotReference(true);
     }
 

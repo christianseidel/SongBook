@@ -97,7 +97,7 @@ public class SongCollectionController {
     public ResponseEntity<Object> hideReference(@PathVariable String id) {
         try {
             songCollectionService.hideReference(id);
-            return ResponseEntity.ok(SongBookMessage.jsonify("Your reference now is HIDDEN."));
+            return ResponseEntity.ok().build();
         } catch (NoSuchIdException e) {
             return ResponseEntity.status(404).body(SongBookMessage.jsonify(e.getMessage()));
         }
