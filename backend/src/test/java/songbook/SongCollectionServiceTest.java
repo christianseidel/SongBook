@@ -303,7 +303,7 @@ class SongCollectionServiceTest {
                 "text/plain",
                 "".getBytes(StandardCharsets.UTF_8)
         );
-        songCollectionService.setRootDirectory("D:\\Ukulele\\SongBook\\backend\\target\\test-classes");
+        songCollectionService.setRootDirectory("\\Ukulele\\SongBook\\backend\\target\\test-classes");
 
         Exception exception = assertThrows(EmptyFileException.class,
                 () -> {

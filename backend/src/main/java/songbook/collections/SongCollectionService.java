@@ -25,7 +25,7 @@ import static songbook.collections.models.SongCollection.*;
 public class SongCollectionService {
 
     private final ReferencesRepository referencesRepository;
-    // In order to make all methods testable, this value is introduced.
+    // In order to make all methods testable, this following variable is introduced.
     @Value("${root.directory}")
     private String rootDirectory;
 
