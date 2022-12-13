@@ -4,10 +4,14 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
+import songbook.exceptions.NoSuchUserException;
 import songbook.exceptions.PasswordsDoNotMatchException;
 import songbook.exceptions.UserAlreadyExistsException;
 import songbook.users.User;
@@ -15,6 +19,7 @@ import songbook.users.UserCreationData;
 import songbook.users.UserRepository;
 import songbook.users.UserService;
 
+import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -24,7 +29,7 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 class UserServiceTest {
 
     @Test
-    @DisplayName("user gets created")
+    @DisplayName("user created")
     void shouldCreateUser() {
         // given
         UserCreationData newUserCreationData = new UserCreationData(null, "Cynthia", "cyn2cyn", "cyn2cyn");
@@ -62,7 +67,7 @@ class UserServiceTest {
 
         // then
         assertThatExceptionOfType(PasswordsDoNotMatchException.class)
-                .isThrownBy(()-> userService.createUser(newUser))
+                .isThrownBy(() -> userService.createUser(newUser))
                 .withMessage("Passwords do not match.");
     }
 
@@ -92,7 +97,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("user account creation date retrieved")
+    @DisplayName("retrieved user account creation date")
     void shouldFetchUserAccountCreationDate() {
         // given
         User user = new User("Alice", "RabbitHole00");
@@ -114,8 +119,28 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("user not found when trying to retrieve creation date")
+    void shouldThrowErrorWhenTryingToFetchCreationDateOfNonExistingUser() {
+
+        // given
+        UserRepository userRepository = Mockito.mock(UserRepository.class);
+        PasswordEncoder passwordEncoder = mock(PasswordEncoder.class);
+        when(passwordEncoder.encode("123456789")).thenReturn("PrimeSecuredPassword");
+        UserService userService = new UserService(userRepository, passwordEncoder);
+
+        when(userRepository.findByUsername("Santa")).thenReturn(Optional.empty());
+
+        // then
+        Exception exception = assertThrows(NoSuchUserException.class, () ->
+                userService.getDateCreated("Santa"));
+        assertEquals("Server is unable to find this username.",
+                exception.getMessage());
+    }
+
+    @Test
     @DisplayName("user deleted")
     void shouldDeleteUser() {
+
         // given
         User existingUser = new User("Alice", "RabbitHole03");
         existingUser.setId("123456789");
@@ -132,5 +157,24 @@ class UserServiceTest {
 
         // then
         Mockito.verify(userRepository).deleteById("123456789");
+    }
+
+    @Test
+    @DisplayName("user not found when trying to delete")
+    void shouldThrowErrorWhenTryingToDeleteUser() {
+
+        // given
+        UserRepository userRepository = Mockito.mock(UserRepository.class);
+        PasswordEncoder passwordEncoder = mock(PasswordEncoder.class);
+        when(passwordEncoder.encode("123456789")).thenReturn("PrimeSecuredPassword");
+        UserService userService = new UserService(userRepository, passwordEncoder);
+
+        when(userRepository.findByUsername("Santa")).thenReturn(Optional.empty());
+
+        // then
+        Exception exception = assertThrows(NoSuchUserException.class, () ->
+                userService.deleteUser("Santa"));
+        assertEquals("Server is unable to find this username.",
+                exception.getMessage());
     }
 }

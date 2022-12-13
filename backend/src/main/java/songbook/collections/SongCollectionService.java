@@ -22,14 +22,16 @@ import java.util.*;
 import static songbook.collections.models.SongCollection.*;
 
 @Service
-@RequiredArgsConstructor
 public class SongCollectionService {
 
     private final ReferencesRepository referencesRepository;
-
+    // In order to make all methods testable, this value is introduced.
     @Value("${root.directory}")
     private String rootDirectory;
 
+    public SongCollectionService(ReferencesRepository referencesRepository) {
+        this.referencesRepository = referencesRepository;
+    }
 
     public ReferencesDTO getAllReferences() {
         List<Reference> list = referencesRepository.findAll().stream()
@@ -239,5 +241,9 @@ public class SongCollectionService {
             case "test collection #3" -> TEST_COLLECTION_3;
             default -> throw new IllegalSongCollectionException();
         };
+    }
+
+    public void setRootDirectory(String rootDirectory) {
+        this.rootDirectory = rootDirectory;
     }
 }

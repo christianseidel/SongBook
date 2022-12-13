@@ -28,8 +28,8 @@ import static songbook.collections.models.SongCollection.*;
 
 class SongCollectionServiceTest {
     
-    private final ReferencesRepository repo = Mockito.mock(ReferencesRepository.class);
-    private final SongCollectionService service = new SongCollectionService(repo);
+    private final ReferencesRepository referencesRepository = Mockito.mock(ReferencesRepository.class);
+    private final SongCollectionService songCollectionService = new SongCollectionService(referencesRepository);
 
     @Test
     void shouldReturnAllReferences() {
@@ -41,9 +41,9 @@ class SongCollectionServiceTest {
         List<Reference> listUnsorted = List.of(ref03, ref02, ref01, ref04);
         List<Reference> listSorted = List.of(ref01, ref02, ref03, ref04);
         ReferencesDTO referencesSorted = new ReferencesDTO(listSorted);
-        Mockito.when(repo.findAll()).thenReturn(listUnsorted);
+        Mockito.when(referencesRepository.findAll()).thenReturn(listUnsorted);
 
-        ReferencesDTO actual = service.getAllReferences();
+        ReferencesDTO actual = songCollectionService.getAllReferences();
 
         assertEquals(referencesSorted, actual);
     }
@@ -56,9 +56,9 @@ class SongCollectionServiceTest {
         Reference ref03 = new Reference("Oh, Here Comes Your Ice Cream", collection, 320);
         List<Reference> list = List.of(ref01, ref02, ref03);
         ReferencesDTO referencesDTO = new ReferencesDTO(list);
-        Mockito.when(repo.findAll()).thenReturn(list);
+        Mockito.when(referencesRepository.findAll()).thenReturn(list);
 
-        ReferencesDTO actual = service.getReferencesByTitle("Here Comes");
+        ReferencesDTO actual = songCollectionService.getReferencesByTitle("Here Comes");
 
         assertEquals(referencesDTO, actual);
     }
@@ -67,18 +67,18 @@ class SongCollectionServiceTest {
     void shouldCreateReference() {
         Reference ref = new Reference("There Goes My Music", THE_DAILY_UKULELE_BLUE, 32);
 
-        service.createReference(ref);
+        songCollectionService.createReference(ref);
 
-        verify(repo).save(ref);
+        verify(referencesRepository).save(ref);
     }
 
     @Test
     void shouldFindReferenceById() {
         Reference ref = new Reference("Never Heard This Song Before", THE_DAILY_UKULELE_YELLOW, 12);
         ReferencesDTO referencesDTO = new ReferencesDTO(List.of(ref));
-        Mockito.when(repo.findById("334455")).thenReturn(Optional.of(ref));
+        Mockito.when(referencesRepository.findById("334455")).thenReturn(Optional.of(ref));
 
-        ReferencesDTO actual = service.getReferenceById("334455");
+        ReferencesDTO actual = songCollectionService.getReferenceById("334455");
 
         assertEquals(referencesDTO, actual);
     }
@@ -86,10 +86,10 @@ class SongCollectionServiceTest {
     @Test
     void shouldThrowExceptionWhenLookingUpReferenceWithWrongId() {
         String myId = "454566";
-        Mockito.when(repo.findById(myId)).thenReturn(Optional.empty());
+        Mockito.when(referencesRepository.findById(myId)).thenReturn(Optional.empty());
 
         Assertions.assertThatExceptionOfType(NoSuchIdException.class)
-                .isThrownBy(()->service.getReferenceById(myId));
+                .isThrownBy(()-> songCollectionService.getReferenceById(myId));
     }
 
     @Test
@@ -97,17 +97,17 @@ class SongCollectionServiceTest {
         String myId = "234234234";
         Reference myReference = new Reference(" You May Sing My Song, Brother", THE_DAILY_UKULELE_BLUE, 123);
         myReference.setId(myId);
-        Mockito.when(repo.findById(myId)).thenReturn(Optional.of(myReference));
+        Mockito.when(referencesRepository.findById(myId)).thenReturn(Optional.of(myReference));
 
-        service.deleteReference(myId);
+        songCollectionService.deleteReference(myId);
 
-        verify(repo).deleteById(myId);
+        verify(referencesRepository).deleteById(myId);
     }
 
     @Test
     void shouldThrowExceptionWhenTryingToDeleteItemWithWrongId() {
         Assertions.assertThatExceptionOfType(NoSuchIdException.class)
-                .isThrownBy(()->service.deleteReference("890-980"));
+                .isThrownBy(()-> songCollectionService.deleteReference("890-980"));
     }
 
     @Test
@@ -115,10 +115,10 @@ class SongCollectionServiceTest {
         Reference initialReference = new Reference("All The Leaves Are Green", THE_DAILY_UKULELE_BLUE, 334);
         String id = initialReference.getId();
         Reference changedReference = new Reference("All The Leaves Are Brown", THE_DAILY_UKULELE_BLUE, 222);
-        Mockito.when(repo.findById(id)).thenReturn(Optional.of(initialReference));
-        Mockito.when(repo.save(changedReference)).thenReturn(changedReference);
+        Mockito.when(referencesRepository.findById(id)).thenReturn(Optional.of(initialReference));
+        Mockito.when(referencesRepository.save(changedReference)).thenReturn(changedReference);
 
-        Reference actual = service.editReference(id, changedReference);
+        Reference actual = songCollectionService.editReference(id, changedReference);
 
         assertEquals(changedReference, actual);
     }
@@ -127,24 +127,23 @@ class SongCollectionServiceTest {
     void shouldThrowExceptionWhenTryingToEditItemWithWrongId() {
         Reference changedRef = new Reference("All The Leaves Are Gone", THE_DAILY_UKULELE_BLUE, 222);
         Assertions.assertThatExceptionOfType(NoSuchIdException.class)
-                .isThrownBy(()->service.editReference("55555-25", changedRef));
+                .isThrownBy(()-> songCollectionService.editReference("55555-25", changedRef));
     }
 
     @Test
     void shouldSaveCopyOfReference() {
         Reference initialRef = new Reference("All The Leaves Are Brown", THE_DAILY_UKULELE_YELLOW, 100);
         Reference copiedRef = new Reference("All The Leaves Are Brown", THE_DAILY_UKULELE_YELLOW, 100);
-        Mockito.when(repo.findById(initialRef.getId())).thenReturn(Optional.of(initialRef));
-        Mockito.when(repo.save(any())).thenReturn(copiedRef);
+        Mockito.when(referencesRepository.findById(initialRef.getId())).thenReturn(Optional.of(initialRef));
+        Mockito.when(referencesRepository.save(any())).thenReturn(copiedRef);
 
-        ReferencesDTO actual = service.copyReferenceById(initialRef.getId());
+        ReferencesDTO actual = songCollectionService.copyReferenceById(initialRef.getId());
 
         assertEquals(copiedRef.getId(), actual.getReferenceList().get(0).getId());
-        verify(repo).save(any());
+        verify(referencesRepository).save(any());
     }
 
     @Test
-    @Disabled
     void shouldAddNewReferenceToCollection() {
         MockMultipartFile oneRefUpload = new MockMultipartFile(
                 "importOneReference.txt",
@@ -153,16 +152,17 @@ class SongCollectionServiceTest {
                 "This Is My Song, Yeah; The Daily Ukulele (Blue); 477"
                         .getBytes(StandardCharsets.UTF_8)
         );
+        songCollectionService.setRootDirectory("D:\\Ukulele\\SongBook\\backend\\target\\test-classes");
 
         Collection<Reference> collection = List.of();
-        Mockito.when(repo.findAllByTitleAndSongCollection("This Is My Song, Yeah", THE_DAILY_UKULELE_BLUE)).thenReturn(collection);
+        Mockito.when(referencesRepository.findAllByTitleAndSongCollection("This Is My Song, Yeah", THE_DAILY_UKULELE_BLUE)).thenReturn(collection);
         CollectionUploadResponse collectionUploadResponse = new CollectionUploadResponse();
         collectionUploadResponse.setNumberOfReferencesAccepted(1);
         collectionUploadResponse.setTotalNumberOfReferences(1);
 
         CollectionUploadResponse actual = new CollectionUploadResponse();
         try {
-            actual = service.processCollectionUpload(oneRefUpload);
+            actual = songCollectionService.processCollectionUpload(oneRefUpload);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -171,7 +171,6 @@ class SongCollectionServiceTest {
     }
 
     @Test
-    @Disabled
     void shouldAddFourNewReferenceToCollection() {
         MockMultipartFile oneRefUpload = new MockMultipartFile(
                 "importOneReference.txt",
@@ -183,6 +182,7 @@ class SongCollectionServiceTest {
                         "i forgot to sing my song today; Liederbuch ; 2" )
                         .getBytes(StandardCharsets.UTF_8)
         );
+        songCollectionService.setRootDirectory("D:\\Ukulele\\SongBook\\backend\\target\\test-classes");
 
         String title1 = "This Is My Song, Yeah";
         String title2 = " What Is This You Are Singing";
@@ -190,10 +190,10 @@ class SongCollectionServiceTest {
         String title4 = "i forgot to sing my song today";
 
         Collection<Reference> collection = List.of();
-        Mockito.when(repo.findAllByTitleAndSongCollection(title1, THE_DAILY_UKULELE_BLUE)).thenReturn(collection);
-        Mockito.when(repo.findAllByTitleAndSongCollection(title2, THE_DAILY_UKULELE_YELLOW)).thenReturn(collection);
-        Mockito.when(repo.findAllByTitleAndSongCollection(title3, LIEDERBUCH_1)).thenReturn(collection);
-        Mockito.when(repo.findAllByTitleAndSongCollection(title4, LIEDERBUCH_1)).thenReturn(collection);
+        Mockito.when(referencesRepository.findAllByTitleAndSongCollection(title1, THE_DAILY_UKULELE_BLUE)).thenReturn(collection);
+        Mockito.when(referencesRepository.findAllByTitleAndSongCollection(title2, THE_DAILY_UKULELE_YELLOW)).thenReturn(collection);
+        Mockito.when(referencesRepository.findAllByTitleAndSongCollection(title3, LIEDERBUCH_1)).thenReturn(collection);
+        Mockito.when(referencesRepository.findAllByTitleAndSongCollection(title4, LIEDERBUCH_1)).thenReturn(collection);
 
         CollectionUploadResponse collectionUploadResponse = new CollectionUploadResponse();
         collectionUploadResponse.setNumberOfReferencesAccepted(4);
@@ -201,7 +201,7 @@ class SongCollectionServiceTest {
 
         CollectionUploadResponse actual = new CollectionUploadResponse();
         try {
-            actual = service.processCollectionUpload(oneRefUpload);
+            actual = songCollectionService.processCollectionUpload(oneRefUpload);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -210,7 +210,6 @@ class SongCollectionServiceTest {
     }
 
     @Test
-    @Disabled
     void shouldRefuseToAddExistingReferenceToCollection() {
         MockMultipartFile oneRefUpload = new MockMultipartFile(
                 "importOneReference.txt",
@@ -219,10 +218,11 @@ class SongCollectionServiceTest {
                 "This Is My Song, Yeah; The Daily Ukulele (Blue); 477"
                         .getBytes(StandardCharsets.UTF_8)
         );
+        songCollectionService.setRootDirectory("D:\\Ukulele\\SongBook\\backend\\target\\test-classes");
 
         String title = "This Is My Song, Yeah";
         Collection<Reference> collection = List.of(new Reference("This Is My Song, Yeah", THE_DAILY_UKULELE_BLUE));
-        Mockito.when(repo.findAllByTitleAndSongCollection(title, THE_DAILY_UKULELE_BLUE)).thenReturn(collection);
+        Mockito.when(referencesRepository.findAllByTitleAndSongCollection(title, THE_DAILY_UKULELE_BLUE)).thenReturn(collection);
         CollectionUploadResponse collectionUploadResponse = new CollectionUploadResponse();
         collectionUploadResponse.setNumberOfReferencesAccepted(0);
         collectionUploadResponse.setNumberOfExistingReferences(1);
@@ -230,7 +230,7 @@ class SongCollectionServiceTest {
 
         CollectionUploadResponse actual = new CollectionUploadResponse();
         try {
-            actual = service.processCollectionUpload(oneRefUpload);
+            actual = songCollectionService.processCollectionUpload(oneRefUpload);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -239,7 +239,6 @@ class SongCollectionServiceTest {
     }
 
     @Test
-    @Disabled
     void shouldRefuseToAddReferenceWithMalformedPageDatum() {
         MockMultipartFile oneRefUpload = new MockMultipartFile(
                 "importOneReference.txt",
@@ -247,6 +246,7 @@ class SongCollectionServiceTest {
                 "text/plain",
                 "This Is Not My Song, Bro; The Daily Ukulele (Blue); ab23ab".getBytes(StandardCharsets.UTF_8)
         );
+        songCollectionService.setRootDirectory("D:\\Ukulele\\SongBook\\backend\\target\\test-classes");
 
         CollectionUploadResponse collectionUploadResponse = new CollectionUploadResponse();
         collectionUploadResponse.setNumberOfReferencesAccepted(0);
@@ -257,7 +257,7 @@ class SongCollectionServiceTest {
 
         CollectionUploadResponse actual = new CollectionUploadResponse();
         try {
-            actual = service.processCollectionUpload(oneRefUpload);
+            actual = songCollectionService.processCollectionUpload(oneRefUpload);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -266,7 +266,6 @@ class SongCollectionServiceTest {
     }
 
     @Test
-    @Disabled
     void shouldRejectReferencesWithIllegalCollectionName() {
         MockMultipartFile oneRefUpload = new MockMultipartFile(
                 "importOneReference.txt",
@@ -276,6 +275,7 @@ class SongCollectionServiceTest {
                         "This Isn't My Song Either, Sister; The Daily Song Book; 444")
                         .getBytes(StandardCharsets.UTF_8)
         );
+        songCollectionService.setRootDirectory("D:\\Ukulele\\SongBook\\backend\\target\\test-classes");
 
         CollectionUploadResponse collectionUploadResponse = new CollectionUploadResponse();
         collectionUploadResponse.setNumberOfReferencesAccepted(0);
@@ -287,7 +287,7 @@ class SongCollectionServiceTest {
 
         CollectionUploadResponse actual = new CollectionUploadResponse();
         try {
-            actual = service.processCollectionUpload(oneRefUpload);
+            actual = songCollectionService.processCollectionUpload(oneRefUpload);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -296,7 +296,6 @@ class SongCollectionServiceTest {
     }
 
     @Test
-    @Disabled
     void shouldThrowEmptyFileException() {
         MockMultipartFile zeroRefUpload = new MockMultipartFile(
                 "importZeroReference.txt",
@@ -304,10 +303,11 @@ class SongCollectionServiceTest {
                 "text/plain",
                 "".getBytes(StandardCharsets.UTF_8)
         );
+        songCollectionService.setRootDirectory("D:\\Ukulele\\SongBook\\backend\\target\\test-classes");
 
         Exception exception = assertThrows(EmptyFileException.class,
                 () -> {
-                    service.processCollectionUpload(zeroRefUpload);
+                    songCollectionService.processCollectionUpload(zeroRefUpload);
                 });
         assertEquals("EmptyFileException", exception.getClass().getSimpleName());
         assertEquals("The file 'importZeroReference.txt' is empty. There are no references to process.", exception.getMessage());
@@ -317,14 +317,14 @@ class SongCollectionServiceTest {
     void shouldSetReferenceToHidden() {
         Reference initialReference = new Reference("Singing In The Rain", THE_DAILY_UKULELE_YELLOW, 35);
         String id = initialReference.getId();
-        Mockito.when(repo.findById(id)).thenReturn(Optional.of(initialReference));
+        Mockito.when(referencesRepository.findById(id)).thenReturn(Optional.of(initialReference));
         Reference hiddenReference = new Reference("Singing In The Rain", THE_DAILY_UKULELE_YELLOW, 35);
         hiddenReference.setId(id);
         hiddenReference.setHidden(true);
 
-        service.hideReference(id);
+        songCollectionService.hideReference(id);
 
-        verify(repo).save(hiddenReference);
+        verify(referencesRepository).save(hiddenReference);
     }
 
     @Test
@@ -332,14 +332,14 @@ class SongCollectionServiceTest {
         Reference initialReference = new Reference("Singing In The Rain", THE_DAILY_UKULELE_YELLOW, 35);
         String id = initialReference.getId();
         initialReference.setHidden(true);
-        Mockito.when(repo.findById(id)).thenReturn(Optional.of(initialReference));
+        Mockito.when(referencesRepository.findById(id)).thenReturn(Optional.of(initialReference));
         Reference unhiddenReference = new Reference("Singing In The Rain", THE_DAILY_UKULELE_YELLOW, 35);
         unhiddenReference.setId(id);
         unhiddenReference.setHidden(false);
 
-        service.unhideReference(id);
+        songCollectionService.unhideReference(id);
 
-        verify(repo).save(unhiddenReference);
+        verify(referencesRepository).save(unhiddenReference);
     }
 
     @Test
@@ -352,9 +352,9 @@ class SongCollectionServiceTest {
         Reference ref07 = new Reference("Here Comes My Silent Music", collection, 7);
         ref07.setHidden(true);
         List<Reference> fullList = List.of(ref02, ref01, ref04, ref07);
-        Mockito.when(repo.findAll()).thenReturn(fullList);
+        Mockito.when(referencesRepository.findAll()).thenReturn(fullList);
 
-        ReferencesDTO actual = service.getAllReferences();
+        ReferencesDTO actual = songCollectionService.getAllReferences();
 
         assertEquals(new ReferencesDTO(List.of(ref01, ref02, ref04)), actual);
     }
@@ -368,9 +368,9 @@ class SongCollectionServiceTest {
         Reference ref07 = new Reference("Here Comes My Silent Music", collection, 7);
         ref07.setHidden(true);
         List<Reference> list = List.of(ref01, ref02, ref03, ref07);
-        Mockito.when(repo.findAll()).thenReturn(list);
+        Mockito.when(referencesRepository.findAll()).thenReturn(list);
 
-        ReferencesDTO actual = service.getReferencesByTitle("Here Comes");
+        ReferencesDTO actual = songCollectionService.getReferencesByTitle("Here Comes");
 
         assertEquals(new ReferencesDTO(List.of(ref01, ref03, ref02)), actual);
     }
