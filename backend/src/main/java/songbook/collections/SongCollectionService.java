@@ -98,6 +98,8 @@ public class SongCollectionService {
         System.out.println(rootDirectory);
         Path tempDir = Path.of(rootDirectory, "temporary");
         System.out.println(tempDir);
+        String basePath = new File("").getAbsolutePath();
+        System.out.println("Base: " + basePath);
 
         try {
             Files.createDirectory(tempDir);
