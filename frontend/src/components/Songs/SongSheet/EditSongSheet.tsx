@@ -4,6 +4,7 @@ import ChooseKey from "../ChooseKey";
 import {message, MessageType, NewMessage} from "../../messageModel";
 import {SongSheet} from "./modelsSongSheet";
 import {Mood} from "../modelsSong";
+import {useAuth} from "../../UserManagement/AuthProvider";
 
 interface SongSheetProps {
     toggleCreateOrUpdate: string;
@@ -19,6 +20,7 @@ interface SongSheetProps {
 
 function EditSongSheet(props: SongSheetProps) {
 
+    const {token} = useAuth();
     const [name, setName] = useState('');
     const [source, setSource] = useState('');
     const [description, setDescription] = useState('');
@@ -70,6 +72,9 @@ function EditSongSheet(props: SongSheetProps) {
                     let responseStatus = 0;
                     fetch('api/sheets/upload/', {
                         method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        },
                         body: formData,
                     })
                         .then((response) => {
@@ -157,24 +162,13 @@ function EditSongSheet(props: SongSheetProps) {
     const doDiscardSongSheetFile = () => {
         props.onDeleteSongSheetFile(fileId);
         if (props.toggleCreateOrUpdate === 'update') {
-            /*
-                if (props.songSheets !== undefined) {
-                    let songSheet: SongSheet = props.songSheets[props.sheetIndex];
-                    songSheet.name = name;
-                    songSheet.source = source;
-                    songSheet.description = description;
-                    songSheet.key = songKeyReturned;*/
                 props.songSheets![props.sheetIndex].fileId = ``;
                 props.songSheets![props.sheetIndex].fileName = ``;
                 props.songSheets![props.sheetIndex].fileUrl = '';
-
-                    /*props.songSheets[props.sheetIndex] = songSheet;*/
         }
         setFileId('');
         setFileName('');
         setFileUrl('');
-
-/*        props.returnAndSave();*/
     }
 
     return(
@@ -188,7 +182,7 @@ function EditSongSheet(props: SongSheetProps) {
                 <span className={'nextLine'}>
                     <label>Name:</label>
                     <input id={'inputSongSheetName'} type='text' value={name} placeholder={'Name'}
-                           onChange={ev => setName(ev.target.value)} autoFocus tabIndex={1} required/>
+                           onChange={ev => setName(ev.target.value)} autoFocus tabIndex={1}/>
                     <label className={'labelSecondInLine'}>Source:</label>
                     <input id={'inputSongSheetSource'} type='text' value={source} placeholder={'Source'}
                            onChange={ev => setSource(ev.target.value)} tabIndex={2}/>

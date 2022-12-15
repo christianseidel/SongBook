@@ -18,7 +18,7 @@ interface SongItemProps {
     song: Song;
     onItemRevision: (song: Song) => void;
     doReturn: () => void;
-    clear: () => void;
+    onClear: () => void;
     displayMsg: (msg: message | undefined) => void;
 }
 
@@ -67,7 +67,7 @@ function SongItemDetails(props: SongItemProps) {
         handleTitleLine = <DisplaySongTitle
             song={props.song}
             updateDetailsView={() => setSongState(props.song.status)}
-            clear={props.clear}
+            onClear={props.onClear}
         />;
     } else if (songState === 'edit') {
         handleTitleLine = <EditSongTitle
@@ -81,7 +81,7 @@ function SongItemDetails(props: SongItemProps) {
             song={props.song}
             onItemCreation={(song) => props.onItemRevision(song)}
             displayMsg={(msg) => props.displayMsg(msg)}
-            clear={props.clear}
+            onClear={props.onClear}
         />;
     }
 
@@ -595,7 +595,7 @@ function SongItemDetails(props: SongItemProps) {
                             {props.song.songSheets.map((item, index) =>
                                 <div key={index}>
                                     <span className={toggleCreateOrUpdate === 'create' ?'songSheet' : 'songSheetDeaf'} onClick={() => openUpdateSongSheet(index)}>
-                                        <span><span className={'songSheetIndicator'}>&#x266b;</span>&nbsp; &nbsp;{item.name} </span>
+                                        <span><span className={'songSheetIndicator'}>&#x266b;</span>&nbsp; &nbsp;{item.name}</span>
                                         {item.key && <span> – <span className={'displayKey'}>({item.key})</span></span>}
                                     </span>
                                     <span className={'songSheetDescriptive'}>
@@ -606,7 +606,7 @@ function SongItemDetails(props: SongItemProps) {
                                     </span>
                                     <span className={'songSheetDescriptive'}>
                                         {item.fileName && <span className={'displayFileName'}>
-                                            <span className={'separatorFileName'}>&#x266b;</span>
+                                        {/*    <span className={'separatorFileName'}></span>*/}
                                         <a href={item.fileUrl} target={'_blank'} rel={'noreferrer'}
                                              className={'coloredSongSheetLink'}>{item.fileName}</a>
                                             </span>}

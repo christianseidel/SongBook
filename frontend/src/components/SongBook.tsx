@@ -120,9 +120,10 @@ function SongBook() {
                     clearInterval(shimmerInterval);
                     // final glow
                     if (i < songsDTO.songList.length) {
-                        setTimeout(function () {
+                        const timeoutId = setTimeout(function () {
                             unglowItem(document.getElementById(songsDTO.songList[i].id));
                         }, 110);
+                        return () => clearTimeout(timeoutId);
                     }
                 }
             }, 100);
@@ -234,7 +235,7 @@ function SongBook() {
         <div>
             <h1>
                 <img src={ukulele} alt='Ukulele' id={'ukulele'}/>
-                My Song Book v3
+                My Song Book
 
                 <div id='dropdownUser'>
                     <button id='buttonDropdownUser' type={'button'}>user</button>
@@ -254,7 +255,7 @@ function SongBook() {
                          onDragLeave={handleDragOverEndLeft}
                          style={dragOverLeft ? {backgroundColor: 'rgb(243, 217, 167)'} : {}}
                     >
-                        <h2 className={'inline'}>List of Songs</h2>
+                        <h2 className={'inline'}>Songs</h2>
                         <span onClick={createItem} className={'doSomething'} id={'addANewSong'}>
                         + add new song
                     </span>
@@ -297,7 +298,7 @@ function SongBook() {
                                                    getAllSongs(true);
                                                    trigger()
                                                }}
-                                               clear={() => setSongChosen({} as Song)}
+                                               onClear={() => setSongChosen({} as Song)}
                                                displayMsg={(msg) => setMessage(msg)}
                             />
                             : <span className={'doSomething'}

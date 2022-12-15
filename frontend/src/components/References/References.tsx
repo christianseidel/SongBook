@@ -143,7 +143,7 @@ function References(props: Props) {
 
     return (
         <div>
-            {toggleDisplaySearchResultsButNotReference && <h2>List of References</h2>}
+            {toggleDisplaySearchResultsButNotReference && <h2>References</h2>}
 
             {toggleDisplaySearchResultsButNotReference
                 ? <div>

@@ -4,7 +4,7 @@ import {Song} from "../modelsSong";
 interface SongItemProps {
     song: Song;
     updateDetailsView: () => void;
-    clear: () => void;
+    onClear: () => void;
 }
 
 function DisplaySongTitle(props: SongItemProps) {
@@ -28,7 +28,7 @@ function DisplaySongTitle(props: SongItemProps) {
                 {(props.song.year !== 0) && <label>Year:</label>}
                 {(props.song.year !== 0) && <span id={'displayYear'}> {props.song.year} </span>}
                 <button id={'buttonCloseDisplaySong'} type={'button'} onClick={() => {
-                        props.clear();
+                        props.onClear();
                     }}>
                     close
                     </button>

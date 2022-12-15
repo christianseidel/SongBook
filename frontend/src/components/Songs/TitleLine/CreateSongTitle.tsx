@@ -9,7 +9,7 @@ interface SongItemProps {
     song: Song;
     onItemCreation: (song: Song) => void;
     displayMsg: (msg: message) => void;
-    clear: () => void;
+    onClear: () => void;
 }
 
 function CreateSongTitle(props: SongItemProps) {
@@ -67,7 +67,7 @@ function CreateSongTitle(props: SongItemProps) {
                            onChange={ev => setYear(Number(ev.target.value))}/>
                     <button id={'buttonCancelCreateSong'} type={'button'}
                             onClick={() => {
-                                props.clear()
+                                props.onClear()
                             }}> <span className={'cancel'}>cancel</span>
                     </button>
                 </div>
