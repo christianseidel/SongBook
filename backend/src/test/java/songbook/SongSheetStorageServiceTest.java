@@ -72,9 +72,9 @@ class SongSheetStorageServiceTest {
     void shouldRetrieveSongSheetFile() {
 
         SongSheetFile testFile = new SongSheetFile();
-        Mockito.when(songSheetRepository.findByFileName("/mockURL/mockSongSheet.pdf")).thenReturn(Optional.of(testFile));
+        Mockito.when(songSheetRepository.findById("/mockURL/mockSongSheet12345DieMausLäuftWeg")).thenReturn(Optional.of(testFile));
 
-        SongSheetFile actual = songSheetStorageService.retrieveSongSheetFile("/mockURL/mockSongSheet.pdf");
+        SongSheetFile actual = songSheetStorageService.retrieveSongSheetFile("/mockURL/mockSongSheet12345DieMausLäuftWeg");
 
         Assertions.assertEquals(testFile, actual);
     }

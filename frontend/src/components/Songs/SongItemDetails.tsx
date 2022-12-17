@@ -377,11 +377,11 @@ function SongItemDetails(props: SongItemProps) {
         })
             .then((response) => {
                 if (response.status === 200) {
-                    return response.blob()
+                    return response.blob();
                 } else if (response.status === 404) {
-                    throw Error('Unable to fetch this ressource (error code: ' + response.status + ').')
+                    throw Error('Unable to fetch this ressource (error code: ' + response.status + ').');
                 } else {
-                    throw Error(response.statusText + " : " + response.status)
+                    throw Error(response.statusText + " : " + response.status);
                 }
             })
             .then((blob) => {
@@ -395,7 +395,7 @@ function SongItemDetails(props: SongItemProps) {
                 }
             })
             .catch(e => {
-                props.displayMsg(NewMessage.create(e.message, MessageType.RED))
+                props.displayMsg(NewMessage.create(e.message, MessageType.RED));
             })
     }
 
