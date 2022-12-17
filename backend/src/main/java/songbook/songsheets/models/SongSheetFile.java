@@ -9,6 +9,7 @@ public class SongSheetFile {
     @Id
     private String id;
     private String fileName;
+    private String contentType;
     private byte[] file;
 
     public SongSheetFile() {
@@ -36,5 +37,13 @@ public class SongSheetFile {
 
     public void setFile(byte[] file) {
         this.file = file;
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
     }
 }

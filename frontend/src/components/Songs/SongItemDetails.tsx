@@ -93,7 +93,7 @@ function SongItemDetails(props: SongItemProps) {
         });
         unhideAllReferencesAttached(id)
             .then(() => {
-                    fetch('/api/songbook/' + id, {
+                    fetch(`${process.env.REACT_APP_BASE_URL}/api/songbook/` + id, {
                         method: 'DELETE',
                         headers: {
                             'Authorization': `Bearer ${token}`
@@ -118,7 +118,7 @@ function SongItemDetails(props: SongItemProps) {
     }
 
     const deleteSongSheetFile = (fileId: string) => {
-        fetch('api/sheets/' + fileId, {
+        fetch(`${process.env.REACT_APP_BASE_URL}/api/sheets/` + fileId, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -137,7 +137,7 @@ function SongItemDetails(props: SongItemProps) {
     // Hence, this Promise //
     const unhideAllReferencesAttached = (songId: string) => {
         return new Promise((resolve, failure) => {
-            fetch('api/songbook/unhideReferences/' + songId, {
+            fetch(`${process.env.REACT_APP_BASE_URL}/api/songbook/unhideReferences/` + songId, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -155,7 +155,7 @@ function SongItemDetails(props: SongItemProps) {
 
     function saveSongItem() {
         let responseStatus: number;
-        fetch('api/songbook/' + props.song.id, {
+        fetch(`${process.env.REACT_APP_BASE_URL}/api/songbook/` + props.song.id, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -366,6 +366,37 @@ function SongItemDetails(props: SongItemProps) {
             setToggleEditSongSheet(true);
             setToggleCreateOrUpdate('update')
         }
+    }
+
+    const downloadSongSheetFile = (id: string) => {
+        fetch(`${process.env.REACT_APP_BASE_URL}/api/sheets/download/` + id, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+        })
+            .then((response) => {
+                if (response.status === 200) {
+                    return response.blob()
+                } else if (response.status === 404) {
+                    throw Error('Unable to fetch this ressource (error code: ' + response.status + ').')
+                } else {
+                    throw Error(response.statusText + " : " + response.status)
+                }
+            })
+            .then((blob) => {
+                if (blob) {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    document.body.appendChild(a);
+                    window.open(url, '_blank');
+                    window.URL.revokeObjectURL(url);
+                }
+            })
+            .catch(e => {
+                props.displayMsg(NewMessage.create(e.message, MessageType.RED))
+            })
     }
 
 
@@ -604,11 +635,9 @@ function SongItemDetails(props: SongItemProps) {
                                         {item.description && <span className={'displayDescription'}><span
                                             className={'separator'}></span>({item.description})</span>}
                                     </span>
-                                    <span className={'songSheetDescriptive'}>
+                                    <span className={'songSheetDescriptive'} onClick={() => downloadSongSheetFile(item.fileId!)}>
                                         {item.fileName && <span className={'displayFileName'}>
-                                        {/*    <span className={'separatorFileName'}></span>*/}
-                                        <a href={item.fileUrl} target={'_blank'} rel={'noreferrer'}
-                                             className={'coloredSongSheetLink'}>{item.fileName}</a>
+                                        {/*    <span className={'separatorFileName'}></span>*/}{item.fileName}
                                             </span>}
                                     </span>
                                 </div>)}

@@ -7,11 +7,10 @@ public class SongSheetUploadResponse {
     private String contentType;
     private String url;
 
-    public SongSheetUploadResponse(String fileName, String contentType, String id, String url) {
+    public SongSheetUploadResponse(String id, String fileName, String contentType) {
         this.id = id;
         this.fileName = fileName;
         this.contentType = contentType;
-        this.url = url;
     }
 
     public String getFileName() {
@@ -36,13 +35,5 @@ public class SongSheetUploadResponse {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
     }
 }

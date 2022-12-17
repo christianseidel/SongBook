@@ -6,17 +6,15 @@ export class SongSheet {
     key?: string;
     fileId?: string;
     fileName?: string;
-    fileUrl?: string;
     dateUploaded: string;
 
-    constructor(name: string, source: string, description: string, key: string, fileId: string, fileName: string, fileUrl: string) {
+    constructor(name: string, source: string, description: string, key: string, fileId: string, fileName: string) {
         this.name = name;
         this.source = source;
         this.description = description;
         this.key = key;
         this.fileId = fileId;
         this.fileName = fileName;
-        this.fileUrl = fileUrl;
         this.dateUploaded = getCurrentDate();
     }
 }
@@ -32,5 +30,4 @@ export interface SongSheetUploadResponse {
     id: string;
     fileName: string;
     contentType: string;
-    url: string;
 }

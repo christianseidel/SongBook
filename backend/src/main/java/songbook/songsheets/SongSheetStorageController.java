@@ -12,7 +12,11 @@ import songbook.songsheets.models.SongSheetUploadResponse;
 import songbook.songsheets.models.SongSheetFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.io.IOException;
+import java.net.URLConnection;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Objects;
 
 @RestController
@@ -27,33 +31,26 @@ public class SongSheetStorageController {
     }
 
     @PostMapping("/upload")
-    ResponseEntity<Object> uploadSongSheetFile(@RequestParam("file") MultipartFile file) throws IOException {
+    ResponseEntity<Object> uploadSongSheetFile(@RequestParam("file") MultipartFile file) {
         try {
             SongSheetFile songSheetFile = songSheetStorageService.saveSongSheetFile(file);
-            String contentType = file.getContentType();
-            String name = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
-            String url = ServletUriComponentsBuilder.fromCurrentContextPath()
-                    .path("/api/sheets/download/")
-                    .path(songSheetFile.getFileName())
-                    .toUriString();
-            return ResponseEntity.ok().body(new SongSheetUploadResponse(songSheetFile.getFileName(), contentType, songSheetFile.getId(), url));
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(500).body(SongBookMessage.jsonify(e.getMessage()));
+            return ResponseEntity.ok().body(new SongSheetUploadResponse(songSheetFile.getId(), songSheetFile.getFileName(), file.getContentType()));
+        } catch (RuntimeException | IOException e) {
+            return ResponseEntity.status(406).body(SongBookMessage.jsonify(e.getMessage()));
         }
     }
 
-    @GetMapping("/download/{fileName}")
-    ResponseEntity<Object> downloadSongSheetFile(@PathVariable String fileName, HttpServletRequest request) {
+    @GetMapping("/download/{id}")
+    ResponseEntity<Object> downloadSongSheetFile(@PathVariable String id) {
         try {
-            SongSheetFile file = songSheetStorageService.retrieveSongSheetFile(fileName);
-            String mimeType= request.getServletContext().getMimeType(file.getFileName());
+            SongSheetFile file = songSheetStorageService.retrieveSongSheetFile(id);
 
             return ResponseEntity.ok()
-                    .contentType(MediaType.parseMediaType(mimeType))
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline;fileName=" + file.getFileName())
+                    .contentType(MediaType.parseMediaType(file.getContentType()))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; fileName=" + file.getFileName())
                     .body(file.getFile());
         } catch (RuntimeException e) {
-            return ResponseEntity.status(500).body(e.getMessage());
+            return ResponseEntity.status(404).body(e.getMessage());
         }
     }
 

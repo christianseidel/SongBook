@@ -18,7 +18,7 @@ public class SongSheetStorageService {
         this.songSheetRepository = songSheetRepository;
     }
 
-    public SongSheetFile saveSongSheetFile(MultipartFile file) throws IOException, RuntimeException {
+    public SongSheetFile saveSongSheetFile(MultipartFile file) throws RuntimeException, IOException {
         // check maximum maximum file size isn't exceeded
         if (file.getSize() > 8_000_000) {
             throw new RuntimeException("The size of your file exceeds 8 MB!");
@@ -45,18 +45,18 @@ public class SongSheetStorageService {
         }
         SongSheetFile songSheetFile = new SongSheetFile();
         songSheetFile.setFileName(name);
+        songSheetFile.setContentType(file.getContentType());
         songSheetFile.setFile(file.getBytes());
         return songSheetRepository.save(songSheetFile);
     }
 
-    public SongSheetFile retrieveSongSheetFile(String fileName) throws RuntimeException {
-        SongSheetFile file = songSheetRepository
-                .findByFileName(fileName)
+    public SongSheetFile retrieveSongSheetFile(String id) throws RuntimeException {
+        return songSheetRepository
+                .findById(id)
                 .orElseThrow(() -> new RuntimeException("Server is unable to find your song sheet."));
-        return file;
     }
 
-    public void deleteSongSheetFile(String id) {
+    public void deleteSongSheetFile(String id) throws RuntimeException {
         if (songSheetRepository.findById(id).isEmpty()) {
             throw new RuntimeException("Song sheet file with Id No. \"" + id + "\" could not be found.");
         };

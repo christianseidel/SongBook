@@ -29,8 +29,6 @@ function EditSongSheet(props: SongSheetProps) {
     const [songMood, setSongMood] = useState(0);
     const [fileId, setFileId] =  useState('');
     const [fileName, setFileName] =  useState('');
-    const [fileUrl, setFileUrl] =  useState('');
-
 
     const clearSheet = () => {
         setName('');
@@ -38,7 +36,6 @@ function EditSongSheet(props: SongSheetProps) {
         setDescription('');
         setFileId('');
         setFileName('');
-        setFileUrl('');
         setSongMood(0);
         setSongKey('');
     }
@@ -52,7 +49,6 @@ function EditSongSheet(props: SongSheetProps) {
             setSongMood(Mood.checkIfMajorOrEmpty(songKey) ? 0 : 1);
             setFileId(props.songSheets[props.sheetIndex].fileId ?? ``);
             setFileName(props.songSheets[props.sheetIndex].fileName ?? ``);
-            setFileUrl(props.songSheets[props.sheetIndex].fileUrl ?? '');
         }
     }, [props.sheetIndex, props.songSheets, props.toggleCreateOrUpdate, songKey]);
 
@@ -70,7 +66,7 @@ function EditSongSheet(props: SongSheetProps) {
                     const formData = new FormData();
                     formData.append('file', files[0]);
                     let responseStatus = 0;
-                    fetch('api/sheets/upload/', {
+                    fetch(`${process.env.REACT_APP_BASE_URL}/api/sheets/upload/`, {
                         method: 'POST',
                         headers: {
                             'Authorization': `Bearer ${token}`
@@ -86,12 +82,10 @@ function EditSongSheet(props: SongSheetProps) {
                                 if (props.toggleCreateOrUpdate === 'update' && props.songSheets !== undefined) {
                                     props.songSheets[props.sheetIndex].fileId = responseBody.id;
                                     props.songSheets[props.sheetIndex].fileName = responseBody.fileName;
-                                    props.songSheets[props.sheetIndex].fileUrl = responseBody.url;
                                 }
                                 props.save();
                                 setFileId(responseBody.id);
                                 setFileName(responseBody.fileName);
-                                setFileUrl(responseBody.url);
                             } else if (responseStatus === 400) {
                                 props.displayMsg(NewMessage.create(
                                     'The server did not accept your request (Bad Request).',
@@ -116,7 +110,7 @@ function EditSongSheet(props: SongSheetProps) {
 
     const doCreateSongSheet = (ev: FormEvent<HTMLFormElement>) => {
         ev.preventDefault();
-        let songSheet = new SongSheet(name, source, description, songKeyReturned, fileId, fileName, fileUrl);
+        let songSheet = new SongSheet(name, source, description, songKeyReturned, fileId, fileName);
         if (props.songSheets !== undefined) {
             let next: number;
             next = props.songSheets.length;
@@ -135,7 +129,6 @@ function EditSongSheet(props: SongSheetProps) {
             songSheet.key = songKeyReturned;
             songSheet.fileId = fileId;
             songSheet.fileName = fileName;
-            songSheet.fileUrl = fileUrl;
             props.songSheets[props.sheetIndex] = songSheet;
         }
         clearSheet();
@@ -164,11 +157,9 @@ function EditSongSheet(props: SongSheetProps) {
         if (props.toggleCreateOrUpdate === 'update') {
                 props.songSheets![props.sheetIndex].fileId = ``;
                 props.songSheets![props.sheetIndex].fileName = ``;
-                props.songSheets![props.sheetIndex].fileUrl = '';
         }
         setFileId('');
         setFileName('');
-        setFileUrl('');
     }
 
     return(
@@ -234,9 +225,8 @@ function EditSongSheet(props: SongSheetProps) {
                                onChange={event => uploadSongSheet(event.target.files)}/>
                     </form>
                 : <span id={'fileNameContainer'}>
-                    <span id={'fileName'}><a href={fileUrl} target={'_blank'} rel={'noreferrer'}
-                        className={'coloredSongSheetLink'}>
-                    {fileName}</a></span>
+                    <span id={'fileName'} className={'coloredSongSheetLink'}>
+                    {fileName}</span>
                     <button onClick={doDiscardSongSheetFile} id={'buttonDiscardSongSheetFile'}
                         >&#9986; discard</button>
                   </span>
