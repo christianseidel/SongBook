@@ -24,6 +24,7 @@ public class Song {
     private List<Reference> references = new ArrayList<>();
     private List<Link> links = new ArrayList<>();
     private List<SongSheet> songSheets = new ArrayList<>();
+    private String user;
 
     public Song() {
         this.id = UUID.randomUUID().toString();

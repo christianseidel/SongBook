@@ -21,7 +21,7 @@ function CreateSongTitle(props: SongItemProps) {
 
     const doCreateSong = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        fetch('api/songbook', {
+        fetch(`${process.env.REACT_APP_BASE_URL}/api/songbook`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

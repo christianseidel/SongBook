@@ -16,6 +16,7 @@ interface SongSheetProps {
     onCancel: () => void;
     onClear: () => void;
     onDeleteSongSheetFile: (fileId: string) => void;
+    downloadSheet: (fileId: string) => void;
 }
 
 function EditSongSheet(props: SongSheetProps) {
@@ -172,8 +173,8 @@ function EditSongSheet(props: SongSheetProps) {
                     : <span>Edit your</span>} Song Sheet File</label><label>:</label>
                 <span className={'nextLine'}>
                     <label>Name:</label>
-                    <input id={'inputSongSheetName'} type='text' value={name} placeholder={'Name'}
-                           onChange={ev => setName(ev.target.value)} autoFocus tabIndex={1}/>
+                    <input id={'inputSongSheetName'} type='text' value={fileName} placeholder={'Name'}
+                           onChange={ev => setFileName(ev.target.value)} autoFocus tabIndex={1}/>
                     <label className={'labelSecondInLine'}>Source:</label>
                     <input id={'inputSongSheetSource'} type='text' value={source} placeholder={'Source'}
                            onChange={ev => setSource(ev.target.value)} tabIndex={2}/>
@@ -225,7 +226,7 @@ function EditSongSheet(props: SongSheetProps) {
                                onChange={event => uploadSongSheet(event.target.files)}/>
                     </form>
                 : <span id={'fileNameContainer'}>
-                    <span id={'fileName'} className={'coloredSongSheetLink'}>
+                    <span id={'fileName'} className={'coloredSongSheetLink'} onClick={() => props.downloadSheet(props.songSheets![props.sheetIndex].fileId!)}>
                     {fileName}</span>
                     <button onClick={doDiscardSongSheetFile} id={'buttonDiscardSongSheetFile'}
                         >&#9986; discard</button>

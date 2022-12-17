@@ -51,10 +51,11 @@ class SongBookServiceTest {
     void shouldDeleteSong() {
         Song song = new Song("testSong", "me and myself");
         song.setId("123456");
-        Mockito.when(songsRepository.findById("123456")).thenReturn(Optional.of(song));
+        song.setUser("Hans");
+        Mockito.when(songsRepository.findByIdAndUser("123456", "Hans")).thenReturn(Optional.of(song));
 
         songBookService.createSong(song);
-        songBookService.deleteSong("123456");
+        songBookService.deleteSong("123456", "Hans");
 
         verify(songsRepository).deleteById("123456");
     }
@@ -65,9 +66,9 @@ class SongBookServiceTest {
         Mockito.when(songsRepository.findById(id)).thenReturn(Optional.empty());
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
-            songBookService.deleteSong(id);
+            songBookService.deleteSong(id, "Hans");
         });
-        assertEquals("This song has NOT been DELETED! A song with Id no. \"21312131\" could not be found.",
+        assertEquals("This song has not been deleted! A song with Id no. \"21312131\" could not be found.",
                 exception.getMessage());
     }
 
@@ -76,18 +77,20 @@ class SongBookServiceTest {
         // given
         Song song01new = new Song("testSong 1", "me and myself");
         song01new.setId("123456_1");
+        song01new.setUser("Franz");
 
         Song song01edited = new Song("testSong edited", "you and me");
         song01edited.setId("123456_2");
+        song01edited.setUser("Franz");
 
-        Mockito.when(songsRepository.findById("123456_1")).thenReturn(Optional.of(song01new));
+        Mockito.when(songsRepository.findByIdAndUser("123456_1", "Franz")).thenReturn(Optional.of(song01new));
         Mockito.when(songsRepository.save(song01edited)).thenReturn(song01edited);
 
         songBookService.createSong(song01new);
-        songBookService.editSong(song01new.getId(), song01edited);
+        songBookService.editSong(song01new.getId(), song01edited, "Franz");
 
         // when
-        Optional<Song> actual = songBookService.editSong("123456_1", song01edited);
+        Optional<Song> actual = songBookService.editSong("123456_1", song01edited, "Franz");
 
         // then
         Assertions.assertThat(actual).contains(song01edited);
@@ -101,7 +104,7 @@ class SongBookServiceTest {
         Song songEdited = new Song("simple test song");
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
-            songBookService.editSong(id, songEdited);
+            songBookService.editSong(id, songEdited, "Paulina");
         });
         assertEquals("A song with Id no. \"45678\" could not be found. " +
                         "Consequently, your song has not been changed!",
@@ -112,14 +115,17 @@ class SongBookServiceTest {
     void shouldRetrieveAllSongs() {
         Song song01 = new Song("testSong 1", "Alphonse");
         song01.setId("123456_1");
+        song01.setUser("Mathias");
         Song song02 = new Song("testSong 2", "Bertrand");
         song02.setId("123456_2");
+        song02.setUser("Mathias");
         Song song03 = new Song("testSong 3", "Claude");
         song03.setId("123456_3");
+        song03.setUser("Mathias");
         List<Song> songList = List.of(song01, song02, song03);
         Mockito.when(songsRepository.findAll()).thenReturn(songList);
 
-        List<Song> actual = songBookService.getAllSongs();
+        List<Song> actual = songBookService.getAllSongs("Mathias");
 
         Assertions.assertThat(actual).isEqualTo(songList);
     }
@@ -129,9 +135,10 @@ class SongBookServiceTest {
         Song song = new Song("My Test Song", "Me and Myeself", 2022);
         String id = "123456789";
         song.setId(id);
-        Mockito.when(songsRepository.findById(id)).thenReturn(Optional.of(song));
+        song.setUser("Florian");
+        Mockito.when(songsRepository.findByIdAndUser(id, "Florian")).thenReturn(Optional.of(song));
 
-        Optional<Song> actual = songBookService.getSingleSong(id);
+        Optional<Song> actual = songBookService.getSingleSong(id, "Florian");
 
         Assertions.assertThat(Optional.of(song)).isEqualTo(actual);
     }
@@ -142,13 +149,14 @@ class SongBookServiceTest {
         Reference reference = new Reference("Here Comes The Sun", THE_DAILY_UKULELE_YELLOW, 22);
         String id = reference.getId();
         Mockito.when(referencesRepository.findById(id)).thenReturn(Optional.of(reference));
-        Mockito.when(songsRepository.findByTitle("Here Comes The Sun")).thenReturn(Optional.empty());
+        Mockito.when(songsRepository.findByTitleAndUser("Here Comes The Sun", "Sandra")).thenReturn(Optional.empty());
         Song newSong = new Song("Here Comes The Sun");
+        newSong.setUser("Sandra");
         newSong.setReferences(List.of(reference));
         Mockito.when(songsRepository.save(any())).thenReturn(newSong);
 
         // check creates song
-        Song actual = songBookService.createSongFromReference(id);
+        Song actual = songBookService.createSongFromReference(id, "Sandra");
         assertEquals(newSong, actual);
 
         // check adds reference
@@ -164,7 +172,7 @@ class SongBookServiceTest {
         Mockito.when(referencesRepository.findById(id)).thenReturn(Optional.empty());
 
         Exception exception = assertThrows(NoSuchIdException.class, () -> {
-            songBookService.createSongFromReference(id);
+            songBookService.createSongFromReference(id, "Barbara");
         });
         assertEquals("Server is unable to find your reference's ID.", exception.getMessage());
     }
@@ -179,11 +187,12 @@ class SongBookServiceTest {
                 "Here Comes The Sun",
                 "The Beatles",
                 1969);
-        Mockito.when(songsRepository.findByTitle("Here Comes The Sun"))
+        existingSong.setUser("Hermine");
+        Mockito.when(songsRepository.findByTitleAndUser("Here Comes The Sun", "Hermine"))
                 .thenReturn(Optional.of(existingSong));
         Mockito.when(songsRepository.save(existingSong)).thenReturn(existingSong);
 
-        Song actual = songBookService.createSongFromReference(referenceId);
+        Song actual = songBookService.createSongFromReference(referenceId, "Hermine");
 
         // check updates song
         verify(songsRepository).save(existingSong);
@@ -200,7 +209,7 @@ class SongBookServiceTest {
                 1969);
         Reference reference = new Reference("Here Comes The Sun", THE_DAILY_UKULELE_YELLOW, 24);
 
-        Song actual = songBookService.addOneReferenceToSong(song, reference);
+        Song actual = songBookService.addOneReferenceToSong(song, reference, "Gabi");
         assertTrue(actual.getReferences().size() == 1);
     }
 
@@ -210,13 +219,14 @@ class SongBookServiceTest {
                 "Here Comes The Sun",
                 "The Beatles",
                 1969);
+        song.setUser("Bernd");
         Reference firstReference = new Reference("Here Comes The Sun", THE_DAILY_UKULELE_YELLOW, 24);
         ArrayList<Reference> references = new ArrayList<>();
         references.add(firstReference);
         song.setReferences(references);
         Reference secondReference = new Reference("Here Comes The Sun", LIEDERGARTEN_12, 12);
 
-        Song actual = songBookService.addOneReferenceToSong(song, secondReference);
+        Song actual = songBookService.addOneReferenceToSong(song, secondReference, "Bernd");
         assertTrue(actual.getReferences().size() == 2);
     }
 
@@ -227,6 +237,7 @@ class SongBookServiceTest {
         Reference referenceAddedManually = new Reference("Here Comes The Sun", MANUALLY_ADDED_COLLECTION, 48);
         referenceAddedManually.setId(null);
         Song singSunSong = new Song("Here Comes The Sun", "The Beatles", 1969);
+        singSunSong.setUser("Stefanie");
         List<Reference> references = List.of(referenceFromCollection, referenceAddedManually);
         singSunSong.setReferences(references);
         Mockito.when(songsRepository.findById(singSunSong.getId())).thenReturn(Optional.of(singSunSong));

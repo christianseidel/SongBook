@@ -33,50 +33,51 @@ public class SongBookService {
         return songsRepository.save(song);
     }
 
-    public void deleteSong(String id) {
-        var item = songsRepository.findById(id);
+    public void deleteSong(String id, String user) {
+        var item = songsRepository.findByIdAndUser(id, user);
         if (item.isEmpty()) {
-            throw new RuntimeException("This song has NOT been DELETED! " +
+            throw new RuntimeException("This song has not been deleted! " +
                     "A song with Id no. \"" + id + "\" could not be found.");
         } else {
             songsRepository.deleteById(id);
         }
     }
 
-    public Optional<Song> editSong(String id, Song song) {
-        var item = songsRepository.findById(id);
+    public Optional<Song> editSong(String id, Song song, String user) {
+        var item = songsRepository.findByIdAndUser(id, user);
         if (item.isEmpty()) {
             throw new RuntimeException("A song with Id no. \"" + id + "\" could not be found. " +
                     "Consequently, your song has not been changed!");
         } else {
-            return songsRepository.findById(id).map(e -> songsRepository.save(song));
+            return songsRepository.findByIdAndUser(id, user).map(e -> songsRepository.save(song));
         }
     }
 
-    public List<Song> getAllSongs() {
-        return songsRepository.findAll().stream().sorted(Comparator.comparing(Song::getTitle)).toList();
+    public List<Song> getAllSongs(String user) {
+        return songsRepository.findAll().stream().filter(element -> element.getUser().equals(user)).sorted(Comparator.comparing(Song::getTitle)).toList();
     }
 
-    public Optional<Song> getSingleSong(String id) {
-        return songsRepository.findById(id);
+    public Optional<Song> getSingleSong(String id, String user) {
+        return songsRepository.findByIdAndUser(id, user);
     }
 
-    public Song createSongFromReference(String id) {
+    public Song createSongFromReference(String id, String user) {
         Reference reference = referencesRepository.findById(id).orElseThrow(NoSuchIdException::new);
         reference.setHidden(true);
-        Optional<Song> existingSong = songsRepository.findByTitle(reference.getTitle());
+        Optional<Song> existingSong = songsRepository.findByTitleAndUser(reference.getTitle(), user);
         if (existingSong.isPresent()) {
-            Song song = addOneReferenceToSong(existingSong.get(), reference);
+            Song song = addOneReferenceToSong(existingSong.get(), reference, user);
             return songsRepository.save(song);
         } else {
             referencesRepository.save(reference);
             Song song = new Song(reference.getTitle(), reference.getAuthor(), reference.getYear());
             song.setReferences(List.of(reference));
+            song.setUser(user);
             return songsRepository.save(song);
         }
     }
 
-    public Song addOneReferenceToSong(Song song, Reference reference) {
+    public Song addOneReferenceToSong(Song song, Reference reference, String user) {
         if (song.getReferences().isEmpty()) {
             song.setReferences(List.of(reference));
         } else {

@@ -35,7 +35,7 @@ function SongBook() {
 
     useEffect(() => {
         if (localStorage.getItem('jwt')) {
-            fetch('/api/songbook', {
+            fetch(`${process.env.REACT_APP_BASE_URL}/api/songbook`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -47,7 +47,7 @@ function SongBook() {
     }, [token])
 
     function displaySongChosen(id: string) {
-        fetch('/api/songbook/' + id, {
+        fetch(`${process.env.REACT_APP_BASE_URL}/api/songbook/` + id, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -76,7 +76,7 @@ function SongBook() {
     }
 
     function getAllSongs(clearSong: boolean) {
-        fetch('/api/songbook', {
+        fetch(`${process.env.REACT_APP_BASE_URL}/api/songbook`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -155,7 +155,7 @@ function SongBook() {
 
         // get reference
         let referenceRetrieved: Reference;
-        fetch('api/collections/edit/' + id, {
+        fetch(`${process.env.REACT_APP_BASE_URL}/api/collections/edit/` + id, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -167,7 +167,7 @@ function SongBook() {
             .then(() => {
                 // create new Song from Reference Retrieved
                 let responseStatus: number;
-                fetch(`api/songbook/add/${id}`, {
+                fetch(`${process.env.REACT_APP_BASE_URL}/api/songbook/add/${id}`, {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${token}`
@@ -190,7 +190,7 @@ function SongBook() {
                     .then(() => {
 
                         // hide Reference Retrieved
-                        fetch('api/collections/edit/hide/' + referenceRetrieved.id, {
+                        fetch(`${process.env.REACT_APP_BASE_URL}/api/collections/edit/hide/` + referenceRetrieved.id, {
                             method: 'PUT',
                             headers: {
                                 'Authorization': `Bearer ${token}`

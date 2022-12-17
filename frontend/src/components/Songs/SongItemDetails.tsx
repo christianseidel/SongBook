@@ -390,7 +390,8 @@ function SongItemDetails(props: SongItemProps) {
                     const a = document.createElement('a');
                     a.href = url;
                     document.body.appendChild(a);
-                    window.open(url, '_blank');
+                    /*window.open(url, '_blank');*/
+                    window.open(url, '_blank')
                     window.URL.revokeObjectURL(url);
                 }
             })
@@ -581,6 +582,7 @@ function SongItemDetails(props: SongItemProps) {
                         setToggleCreateOrUpdate('create');
                     }}
                     onDeleteSongSheetFile={(fileId) => deleteSongSheetFile(fileId)}
+                    downloadSheet={(fileId) =>  downloadSongSheetFile(fileId)}
                 />}
             </div>
 

@@ -17,4 +17,8 @@ public interface SongsRepository extends MongoRepository<Song, String> {
     <S extends Song> S save(S entity);
 
     Optional<Song> findByTitle(String title);
+
+    Optional<Song> findByIdAndUser(String id, String user);
+
+    Optional<Song> findByTitleAndUser(String id, String user);
 }

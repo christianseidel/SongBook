@@ -688,7 +688,7 @@
 .coloredSongSheetLink {
     color: rgb(157, 54, 210);
     font-weight: normal;
-    /*color: #237323;*/
+    cursor: pointer;
 }
 
 #buttonDiscardSongSheetFile {
