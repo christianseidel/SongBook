@@ -44,7 +44,6 @@ public class SongCollectionController {
     public ResponseEntity<Object> uploadCollection(@RequestParam("file") MultipartFile file, Principal principal) {
         System.out.println("\n-> Received file \"" + file.getOriginalFilename()
                 + "\" with Content Type: \"" + file.getContentType() + "\"");
-        System.out.println("root path is: " + Paths.get("").toAbsolutePath());
         try {
             return new ResponseEntity<>(songCollectionService.processCollectionUpload(file, principal.getName()), HttpStatus.CREATED);
         } catch (MalformedFileException e) { // wrong file encoding
