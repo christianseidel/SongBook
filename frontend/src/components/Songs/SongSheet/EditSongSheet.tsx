@@ -226,7 +226,7 @@ function EditSongSheet(props: SongSheetProps) {
                                onChange={event => uploadSongSheet(event.target.files)}/>
                     </form>
                 : <span id={'fileNameContainer'}>
-                    <span id={'fileName'} className={'coloredSongSheetLink'} onClick={() => props.downloadSheet(props.songSheets![props.sheetIndex].fileId!)}>
+                    <span id={'fileName'} className={'coloredSongSheetLink'} onClick={() => props.downloadSheet(fileId)}>
                     {fileName}</span>
                     <button onClick={doDiscardSongSheetFile} id={'buttonDiscardSongSheetFile'}
                         >&#9986; discard</button>

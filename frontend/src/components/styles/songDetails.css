@@ -1,11 +1,13 @@
 .songDataSheetElement {
     position: relative;
     min-width: 450px;
+    max-height: 200px;
     border: 1px solid darkgoldenrod;
     border-radius: 8px;
     padding: 18px;
     background-color: #f0c579;
     box-shadow: -2px -2px darkgoldenrod;
+    overflow: auto;
 }
 
 #songHead {
@@ -24,14 +26,13 @@
 
 #songFooter {
     position: absolute;
-    bottom: 0;
-    margin-top: 18px;
-    padding: 18px;
+    bottom: 18px;
     color: darkslategray;
     font-family: "Times New Roman", sans-serif;
     font-size: 12px;
     font-weight: normal;
     background-color: #eaba5e;
+    z-index: 0;
 }
 
 /*  COMMON ELEMENTS  */
@@ -701,6 +702,6 @@
 #buttonDeleteSong {
     position: absolute;
     right: 18px;
-    bottom: 18px;
+    bottom: 14px;
 }
 
