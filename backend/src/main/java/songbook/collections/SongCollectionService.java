@@ -98,12 +98,12 @@ public class SongCollectionService {
 
         Path tempDir = Path.of(rootDirectory, "/temporary");
 
-//        System.out.println("Root path is: " + Paths.get("").toAbsolutePath());
-//        System.out.println("Path is: " + tempDir);
-
         try {
             Files.createDirectory(tempDir);
+            System.out.println("Created tempDir: " + tempDir);
         } catch (IOException e) {
+            System.out.println("Root path is: " + Paths.get("").toAbsolutePath());
+            System.out.println("Path is: " + tempDir);
             throw new RuntimeException("The server could not create the temporary directory needed.");
         }
 
