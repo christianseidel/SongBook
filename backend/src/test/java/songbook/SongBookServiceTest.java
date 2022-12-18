@@ -244,7 +244,7 @@ class SongBookServiceTest {
         Mockito.when(referencesRepository.findById(referenceFromCollection.getId())).thenReturn(Optional.of(referenceFromCollection));
         Mockito.when(referencesRepository.findById(referenceAddedManually.getId())).thenReturn(Optional.of(referenceAddedManually));
 
-        String actual = songBookService.unhideAllReferencesOfASong(singSunSong.getId());
+        String actual = songBookService.unhideAllReferencesOfASong(singSunSong.getId(), "Paula");
 
         assertEquals("All references are reinserted into Reference Index. References with no existing record were created.", actual);
         assertNotNull(referenceAddedManually.getId());
@@ -254,7 +254,7 @@ class SongBookServiceTest {
     void shouldReturnIdNotFoundMessageWhenTryingToUnhideNonExistingReference() {
         Mockito.when(songsRepository.findById("7755577")).thenReturn(Optional.empty());
 
-        String actual = songBookService.unhideAllReferencesOfASong("7755577");
+        String actual = songBookService.unhideAllReferencesOfASong("7755577", "Paula");
 
         assertEquals("A song with id # \"7755577\" could not be found.", actual);
     }

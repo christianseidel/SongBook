@@ -86,7 +86,7 @@ public class SongBookService {
         return song;
     }
 
-    public String unhideAllReferencesOfASong(String id) {
+    public String unhideAllReferencesOfASong(String id, String user) {
         Optional<Song> lookupResult = songsRepository.findById(id);
         if (lookupResult.isEmpty()) {
             return "A song with id # \"" + id + "\" could not be found.";
@@ -99,6 +99,7 @@ public class SongBookService {
                 ref.setYear(song.getYear());
                 if (ref.getId() == null) {
                     ref.setId(UUID.randomUUID().toString());
+                    ref.setUser(user);
                 } else {
                     ref.setHidden(false);
                 }

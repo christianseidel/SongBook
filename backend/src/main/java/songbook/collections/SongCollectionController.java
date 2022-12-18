@@ -13,6 +13,7 @@ import songbook.collections.models.Reference;
 import songbook.collections.models.ReferencesDTO;
 
 import java.io.IOException;
+import java.security.Principal;
 
 import static org.springframework.http.ResponseEntity.status;
 
@@ -29,21 +30,21 @@ public class SongCollectionController {
     }
 
     @GetMapping
-    public ResponseEntity<ReferencesDTO> getAllReferences(){
-        return status(200).body((songCollectionService.getAllReferences()));
+    public ResponseEntity<ReferencesDTO> getAllReferences(Principal principal){
+        return status(200).body((songCollectionService.getAllReferences(principal.getName())));
     }
 
     @GetMapping("/{title}")
-    public ResponseEntity<ReferencesDTO> getReferencesByTitle(@PathVariable String title){
-        return status(200).body((songCollectionService.getReferencesByTitle(title)));
+    public ResponseEntity<ReferencesDTO> getReferencesByTitle(@PathVariable String title, Principal principal){
+        return status(200).body((songCollectionService.getReferencesByTitle(title, principal.getName())));
     }
 
     @PostMapping(path = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Object> uploadCollection(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<Object> uploadCollection(@RequestParam("file") MultipartFile file, Principal principal) {
         System.out.println("\n-> Received file \"" + file.getOriginalFilename()
                 + "\" with Content Type: \"" + file.getContentType() + "\"");
         try {
-            return new ResponseEntity<>(songCollectionService.processCollectionUpload(file), HttpStatus.CREATED);
+            return new ResponseEntity<>(songCollectionService.processCollectionUpload(file, principal.getName()), HttpStatus.CREATED);
         } catch (MalformedFileException e) { // wrong file encoding
             return ResponseEntity.status(406).body(SongBookMessage.jsonify(e.getMessage()));
         } catch (RuntimeException e) {
@@ -54,7 +55,8 @@ public class SongCollectionController {
 }
 
     @PostMapping("/upload")
-    public Reference createReference(@RequestBody Reference reference) {
+    public Reference createReference(@RequestBody Reference reference, Principal principal) {
+        reference.setUser(principal.getName());
         return songCollectionService.createReference(reference);
     }
 

@@ -33,16 +33,18 @@ public class SongCollectionService {
         this.referencesRepository = referencesRepository;
     }
 
-    public ReferencesDTO getAllReferences() {
+    public ReferencesDTO getAllReferences(String user) {
         List<Reference> list = referencesRepository.findAll().stream()
+                .filter(e -> e.getUser().equals(user))
                 .filter(e -> !e.isHidden())
                 .sorted(Comparator.comparing(Reference::getTitle))
                 .toList();
         return new ReferencesDTO(list);
     }
 
-    public ReferencesDTO getReferencesByTitle(String title) {
+    public ReferencesDTO getReferencesByTitle(String title, String user) {
         List<Reference> list = referencesRepository.findAll().stream()
+                .filter(e -> e.getUser().equals(user))
                 .filter(e -> !e.isHidden())
                 .filter(element -> element.getTitle().toLowerCase().contains(title.toLowerCase()))
                 .sorted(Comparator.comparing(Reference::getTitle))
@@ -93,7 +95,7 @@ public class SongCollectionService {
         return new ReferencesDTO(list);
     }
 
-    public CollectionUploadResponse processCollectionUpload(MultipartFile file) throws IOException {
+    public CollectionUploadResponse processCollectionUpload(MultipartFile file, String user) throws IOException {
 
         Path tempDir = Path.of(rootDirectory, "temporary");
 
@@ -111,7 +113,7 @@ public class SongCollectionService {
         // process new SongCollection
         CollectionUploadResponse collectionUploadResponse;
         try {
-            collectionUploadResponse = importNewSongCollection(storedSongCollection.toPath());
+            collectionUploadResponse = importNewSongCollection(storedSongCollection.toPath(), user);
         } catch (MalformedFileException e) {
             deleteFileAndTempDir(fileLocation);
             throw e;
@@ -123,7 +125,7 @@ public class SongCollectionService {
         return collectionUploadResponse;
     }
 
-    private CollectionUploadResponse importNewSongCollection(Path filePath) {
+    private CollectionUploadResponse importNewSongCollection(Path filePath, String user) {
         CollectionUploadResponse collectionUploadResponse = new CollectionUploadResponse();
         List<String> listOfItems = readListOfReferences(filePath);
         for (String line : listOfItems) {
@@ -144,8 +146,9 @@ public class SongCollectionService {
             }
             // create reference
             Reference item = new Reference(elements[0], songCollection);
+            item.setUser(user);
             // check for double
-            if (!checkIfReferenceExists(item.getTitle(), item.getSongCollection())) {
+            if (!checkIfReferenceExists(item.getTitle(), item.getSongCollection(), user)) {
                 // set page
                 if (elements.length > 2) {
                     try {
@@ -166,8 +169,8 @@ public class SongCollectionService {
         return collectionUploadResponse;
     }
 
-    private boolean checkIfReferenceExists(String title, SongCollection collection1) {
-        Collection<Reference> collection = referencesRepository.findAllByTitleAndSongCollection(title, collection1);
+    private boolean checkIfReferenceExists(String title, SongCollection collection1, String user) {
+        Collection<Reference> collection = referencesRepository.findAllByTitleAndSongCollectionAndUser(title, collection1, user);
         return !collection.isEmpty();
     }
 

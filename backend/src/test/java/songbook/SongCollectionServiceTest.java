@@ -37,15 +37,19 @@ class SongCollectionServiceTest {
     void shouldReturnAllReferences() {
         SongCollection collection = THE_DAILY_UKULELE_YELLOW;
         Reference ref01 = new Reference("Here Comes My Music", collection, 123);
+        ref01.setUser("Jan");
         Reference ref02 = new Reference("Here Comes Your Music", collection, 144);
+        ref02.setUser("Jan");
         Reference ref03 = new Reference("Here Is Our Music", collection, 75);
+        ref03.setUser("Jan");
         Reference ref04 = new Reference("Oh, When The Music Ends", collection, 320);
+        ref04.setUser("Jan");
         List<Reference> listUnsorted = List.of(ref03, ref02, ref01, ref04);
         List<Reference> listSorted = List.of(ref01, ref02, ref03, ref04);
         ReferencesDTO referencesSorted = new ReferencesDTO(listSorted);
         Mockito.when(referencesRepository.findAll()).thenReturn(listUnsorted);
 
-        ReferencesDTO actual = songCollectionService.getAllReferences();
+        ReferencesDTO actual = songCollectionService.getAllReferences("Jan");
 
         assertEquals(referencesSorted, actual);
     }
@@ -54,13 +58,16 @@ class SongCollectionServiceTest {
     void shouldFindReferenceByTitle() {
         SongCollection collection = THE_DAILY_UKULELE_YELLOW;
         Reference ref01 = new Reference("Here Comes My Music", collection, 123);
+        ref01.setUser("Nina");
         Reference ref02 = new Reference("Here Comes Your Music", collection, 144);
+        ref02.setUser("Nina");
         Reference ref03 = new Reference("Oh, Here Comes Your Ice Cream", collection, 320);
+        ref03.setUser("Nina");
         List<Reference> list = List.of(ref01, ref02, ref03);
         ReferencesDTO referencesDTO = new ReferencesDTO(list);
         Mockito.when(referencesRepository.findAll()).thenReturn(list);
 
-        ReferencesDTO actual = songCollectionService.getReferencesByTitle("Here Comes");
+        ReferencesDTO actual = songCollectionService.getReferencesByTitle("Here Comes", "Nina");
 
         assertEquals(referencesDTO, actual);
     }
@@ -157,14 +164,14 @@ class SongCollectionServiceTest {
         songCollectionService.setRootDirectory(base + "/target/test-classes");
 
         Collection<Reference> collection = List.of();
-        Mockito.when(referencesRepository.findAllByTitleAndSongCollection("This Is My Song, Yeah", THE_DAILY_UKULELE_BLUE)).thenReturn(collection);
+        Mockito.when(referencesRepository.findAllByTitleAndSongCollectionAndUser("This Is My Song, Yeah", THE_DAILY_UKULELE_BLUE, "Meredith")).thenReturn(collection);
         CollectionUploadResponse collectionUploadResponse = new CollectionUploadResponse();
         collectionUploadResponse.setNumberOfReferencesAccepted(1);
         collectionUploadResponse.setTotalNumberOfReferences(1);
 
         CollectionUploadResponse actual = new CollectionUploadResponse();
         try {
-            actual = songCollectionService.processCollectionUpload(oneRefUpload);
+            actual = songCollectionService.processCollectionUpload(oneRefUpload, "Meredith");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -192,10 +199,10 @@ class SongCollectionServiceTest {
         String title4 = "i forgot to sing my song today";
 
         Collection<Reference> collection = List.of();
-        Mockito.when(referencesRepository.findAllByTitleAndSongCollection(title1, THE_DAILY_UKULELE_BLUE)).thenReturn(collection);
-        Mockito.when(referencesRepository.findAllByTitleAndSongCollection(title2, THE_DAILY_UKULELE_YELLOW)).thenReturn(collection);
-        Mockito.when(referencesRepository.findAllByTitleAndSongCollection(title3, LIEDERBUCH_1)).thenReturn(collection);
-        Mockito.when(referencesRepository.findAllByTitleAndSongCollection(title4, LIEDERBUCH_1)).thenReturn(collection);
+        Mockito.when(referencesRepository.findAllByTitleAndSongCollectionAndUser(title1, THE_DAILY_UKULELE_BLUE, "Meredith")).thenReturn(collection);
+        Mockito.when(referencesRepository.findAllByTitleAndSongCollectionAndUser(title2, THE_DAILY_UKULELE_YELLOW, "Meredith")).thenReturn(collection);
+        Mockito.when(referencesRepository.findAllByTitleAndSongCollectionAndUser(title3, LIEDERBUCH_1, "Meredith")).thenReturn(collection);
+        Mockito.when(referencesRepository.findAllByTitleAndSongCollectionAndUser(title4, LIEDERBUCH_1, "Meredith")).thenReturn(collection);
 
         CollectionUploadResponse collectionUploadResponse = new CollectionUploadResponse();
         collectionUploadResponse.setNumberOfReferencesAccepted(4);
@@ -203,7 +210,7 @@ class SongCollectionServiceTest {
 
         CollectionUploadResponse actual = new CollectionUploadResponse();
         try {
-            actual = songCollectionService.processCollectionUpload(oneRefUpload);
+            actual = songCollectionService.processCollectionUpload(oneRefUpload, "Meredith");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -224,7 +231,7 @@ class SongCollectionServiceTest {
 
         String title = "This Is My Song, Yeah";
         Collection<Reference> collection = List.of(new Reference("This Is My Song, Yeah", THE_DAILY_UKULELE_BLUE));
-        Mockito.when(referencesRepository.findAllByTitleAndSongCollection(title, THE_DAILY_UKULELE_BLUE)).thenReturn(collection);
+        Mockito.when(referencesRepository.findAllByTitleAndSongCollectionAndUser(title, THE_DAILY_UKULELE_BLUE, "Meredith")).thenReturn(collection);
         CollectionUploadResponse collectionUploadResponse = new CollectionUploadResponse();
         collectionUploadResponse.setNumberOfReferencesAccepted(0);
         collectionUploadResponse.setNumberOfExistingReferences(1);
@@ -232,7 +239,7 @@ class SongCollectionServiceTest {
 
         CollectionUploadResponse actual = new CollectionUploadResponse();
         try {
-            actual = songCollectionService.processCollectionUpload(oneRefUpload);
+            actual = songCollectionService.processCollectionUpload(oneRefUpload, "Meredith");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -259,7 +266,7 @@ class SongCollectionServiceTest {
 
         CollectionUploadResponse actual = new CollectionUploadResponse();
         try {
-            actual = songCollectionService.processCollectionUpload(oneRefUpload);
+            actual = songCollectionService.processCollectionUpload(oneRefUpload, "Meredith");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -289,7 +296,7 @@ class SongCollectionServiceTest {
 
         CollectionUploadResponse actual = new CollectionUploadResponse();
         try {
-            actual = songCollectionService.processCollectionUpload(oneRefUpload);
+            actual = songCollectionService.processCollectionUpload(oneRefUpload, "Meredith");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -309,7 +316,7 @@ class SongCollectionServiceTest {
 
         Exception exception = assertThrows(EmptyFileException.class,
                 () -> {
-                    songCollectionService.processCollectionUpload(zeroRefUpload);
+                    songCollectionService.processCollectionUpload(zeroRefUpload, "LeNéant");
                 });
         assertEquals("EmptyFileException", exception.getClass().getSimpleName());
         assertEquals("The file 'importZeroReference.txt' is empty. There are no references to process.", exception.getMessage());
@@ -348,15 +355,19 @@ class SongCollectionServiceTest {
     void shouldNotReturnHiddenReferenceWhenLookingUpAllReferences() {
         SongCollection collection = THE_DAILY_UKULELE_YELLOW;
         Reference ref01 = new Reference("Here Comes My Music", collection, 123);
+        ref01.setUser("Jan");
         Reference ref02 = new Reference("Here Comes Your Music", collection, 144);
+        ref02.setUser("Jan");
         Reference ref04 = new Reference("Oh, When The Music Ends", collection, 320);
+        ref04.setUser("Jan");
         ref04.setHidden(false);
         Reference ref07 = new Reference("Here Comes My Silent Music", collection, 7);
+        ref07.setUser("Jan");
         ref07.setHidden(true);
         List<Reference> fullList = List.of(ref02, ref01, ref04, ref07);
         Mockito.when(referencesRepository.findAll()).thenReturn(fullList);
 
-        ReferencesDTO actual = songCollectionService.getAllReferences();
+        ReferencesDTO actual = songCollectionService.getAllReferences("Jan");
 
         assertEquals(new ReferencesDTO(List.of(ref01, ref02, ref04)), actual);
     }
@@ -365,14 +376,18 @@ class SongCollectionServiceTest {
     void shouldNotFindHiddenReferenceWhenSearchingByTitle() {
         SongCollection collection = THE_DAILY_UKULELE_YELLOW;
         Reference ref01 = new Reference("Here Comes My Music", collection, 123);
+        ref01.setUser("Nina");
         Reference ref02 = new Reference("Oh, Here Comes Your Ice Cream", collection, 320);
+        ref02.setUser("Nina");
         Reference ref03 = new Reference("Here Comes Your Music", collection, 144);
+        ref03.setUser("Nina");
         Reference ref07 = new Reference("Here Comes My Silent Music", collection, 7);
+        ref07.setUser("Nina");
         ref07.setHidden(true);
         List<Reference> list = List.of(ref01, ref02, ref03, ref07);
         Mockito.when(referencesRepository.findAll()).thenReturn(list);
 
-        ReferencesDTO actual = songCollectionService.getReferencesByTitle("Here Comes");
+        ReferencesDTO actual = songCollectionService.getReferencesByTitle("Here Comes", "Nina");
 
         assertEquals(new ReferencesDTO(List.of(ref01, ref03, ref02)), actual);
     }

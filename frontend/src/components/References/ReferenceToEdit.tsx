@@ -50,6 +50,7 @@ function ReferenceToEdit(props: ReferenceItemProps) {
                 author: author,
                 year: year,
                 key: key,
+                user: props.reference.user,
             })
         })
             .then(response => {

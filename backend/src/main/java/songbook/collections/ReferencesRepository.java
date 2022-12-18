@@ -15,7 +15,7 @@ public interface ReferencesRepository extends MongoRepository<Reference, String>
     @Override
     List<Reference> findAll();
 
-    Collection<Reference> findAllByTitleAndSongCollection(String title, SongCollection songCollection);
+    Collection<Reference> findAllByTitleAndSongCollectionAndUser(String title, SongCollection songCollection, String user);
 
     @Override
     <S extends Reference> S save(S entity);

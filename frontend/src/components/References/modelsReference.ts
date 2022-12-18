@@ -8,6 +8,7 @@ export class Reference {
     key?: string;
     hidden?: boolean;
     addedCollection: string;
+    user?: string;
 
     constructor(title: string, collection: string,
                 page: number, author?: string, year?: number, key?: string) {

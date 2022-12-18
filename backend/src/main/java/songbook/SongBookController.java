@@ -70,8 +70,8 @@ public class SongBookController {
     }
 
     @PutMapping("/unhideReferences/{songId}")
-    public ResponseEntity<String> unhideAllReferences(@PathVariable String songId) {
-        return status(200).body(jsonifyToMessage(songBookService.unhideAllReferencesOfASong(songId)));
+    public ResponseEntity<String> unhideAllReferences(@PathVariable String songId, Principal principal) {
+        return status(200).body(jsonifyToMessage(songBookService.unhideAllReferencesOfASong(songId, principal.getName())));
     }
 
     @PostMapping(path = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

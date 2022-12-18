@@ -21,6 +21,7 @@ public class Reference {
     private String key;
     private boolean hidden;
     private String addedCollection;
+    private String user;
 
 
     public Reference(String title, SongCollection songCollection) {
@@ -46,5 +47,6 @@ public class Reference {
         this.key = toCopy.key;
         this.hidden = toCopy.hidden;
         this.addedCollection = toCopy.addedCollection;
+        this.user = toCopy.user;
     }
 }
