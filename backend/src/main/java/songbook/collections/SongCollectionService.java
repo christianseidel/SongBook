@@ -1,6 +1,5 @@
 package songbook.collections;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -97,8 +96,15 @@ public class SongCollectionService {
 
     public CollectionUploadResponse processCollectionUpload(MultipartFile file, String user) throws IOException {
 
+        /*Path tempDir = Path.of(rootDirectory, "temporary");*/
+        /*Path root = Path.of("");
         Path tempDir = Path.of("/temporary");
 
+        System.out.println("Here, root path is: " + root.toAbsolutePath());
+        System.out.println("temp is: " + root + tempDir);
+*/
+        Path tempDir = Path.of("/temporary");
+        System.out.println("Path is: " + tempDir);
         try {
             Files.createDirectory(tempDir);
         } catch (IOException e) {
