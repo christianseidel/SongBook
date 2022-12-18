@@ -97,7 +97,7 @@ public class SongCollectionService {
 
     public CollectionUploadResponse processCollectionUpload(MultipartFile file, String user) throws IOException {
 
-        Path tempDir = Path.of(rootDirectory, "temporary");
+        Path tempDir = Path.of("/temporary");
 
         try {
             Files.createDirectory(tempDir);
