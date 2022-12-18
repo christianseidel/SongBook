@@ -24,8 +24,8 @@ import static songbook.collections.models.SongCollection.*;
 public class SongCollectionService {
 
     private final ReferencesRepository referencesRepository;
-    // In order to make all methods testable, this following variable is introduced.
-    @Value("${ROOT_PATH}")
+    // In order to allow for unit tests, this following variable has been introduced.
+    @Value("${root.path}")
     private String rootDirectory;
 
     public SongCollectionService(ReferencesRepository referencesRepository) {
@@ -97,15 +97,10 @@ public class SongCollectionService {
     public CollectionUploadResponse processCollectionUpload(MultipartFile file, String user) throws IOException {
 
         Path tempDir = Path.of(rootDirectory, "/temporary");
-        /*Path root = Path.of("");
-        Path tempDir = Path.of("/temporary");
 
-        System.out.println("Here, root path is: " + root.toAbsolutePath());
-        System.out.println("temp is: " + root + tempDir);
-*/
+//        System.out.println("Root path is: " + Paths.get("").toAbsolutePath());
+//        System.out.println("Path is: " + tempDir);
 
-        System.out.println("root path is: " + Paths.get("").toAbsolutePath());
-        System.out.println("Path is: " + tempDir);
         try {
             Files.createDirectory(tempDir);
         } catch (IOException e) {
