@@ -26,7 +26,7 @@ public class SongCollectionService {
 
     private final ReferencesRepository referencesRepository;
     // In order to make all methods testable, this following variable is introduced.
-    @Value("${root.directory}")
+    @Value("${server.context-path}")
     private String rootDirectory;
 
     public SongCollectionService(ReferencesRepository referencesRepository) {
