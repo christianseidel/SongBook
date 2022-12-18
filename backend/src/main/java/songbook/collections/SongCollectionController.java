@@ -13,6 +13,7 @@ import songbook.collections.models.Reference;
 import songbook.collections.models.ReferencesDTO;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.security.Principal;
 
 import static org.springframework.http.ResponseEntity.status;
@@ -43,6 +44,7 @@ public class SongCollectionController {
     public ResponseEntity<Object> uploadCollection(@RequestParam("file") MultipartFile file, Principal principal) {
         System.out.println("\n-> Received file \"" + file.getOriginalFilename()
                 + "\" with Content Type: \"" + file.getContentType() + "\"");
+        System.out.println("root path is: " + Paths.get("").toAbsolutePath());
         try {
             return new ResponseEntity<>(songCollectionService.processCollectionUpload(file, principal.getName()), HttpStatus.CREATED);
         } catch (MalformedFileException e) { // wrong file encoding
