@@ -25,11 +25,6 @@ import static org.springframework.http.ResponseEntity.status;
 public class SongCollectionController {
 
     private final SongCollectionService songCollectionService;
-    String fileName = "";
-    long lastTimeReceived = System.currentTimeMillis();
-    long idleTimeNeeded = 60_000 * 5;
-    boolean skipThisTime = false;
-    boolean breakLoop = false;
 
     public SongCollectionController(SongCollectionService songCollectionService) {
         this.songCollectionService = songCollectionService;
@@ -49,51 +44,14 @@ public class SongCollectionController {
     public ResponseEntity<Object> uploadCollection(@RequestParam("file") MultipartFile file, Principal principal) {
         System.out.println("\n-> Received file \"" + file.getOriginalFilename()
                 + "\" with Content Type: \"" + file.getContentType() + "\"");
-
-        // make sure the same file does not get processed a second time, when the first time is still running.
-        if (fileName != "" && !Objects.equals(file.getOriginalFilename(), fileName)) {
-            breakLoop = true;
-        }
-
-        long sinceLastTimeReceived = System.currentTimeMillis() - lastTimeReceived;
-        if ((Objects.equals(file.getOriginalFilename(), fileName)) && (sinceLastTimeReceived < idleTimeNeeded)) {
-            System.out.println("\nThis file name \"" + file.getOriginalFilename() + "\" and the file name of");
-            System.out.println("the file last received \"" + fileName + "\" are equal (" + (Objects.equals(file.getOriginalFilename(), fileName)) + ").");
-            System.out.println("\nAnd the time since you last uploaded this file amounts to " + sinceLastTimeReceived + " milliseconds and");
-            System.out.println("therefore is smaller than the requested idle time of " + idleTimeNeeded + " milliseconds " +
-                    "(" + (sinceLastTimeReceived < idleTimeNeeded) + ").\n");
-            skipThisTime = true;
-        }
-
-        if (!skipThisTime) {
-            try {
-                fileName = file.getOriginalFilename();
-                lastTimeReceived = System.currentTimeMillis();
-                return new ResponseEntity<>(songCollectionService.processCollectionUpload(file, principal.getName()), HttpStatus.CREATED);
-            } catch (MalformedFileException e) { // wrong file encoding
-                return ResponseEntity.status(406).body(SongBookMessage.jsonify(e.getMessage()));
-            } catch (RuntimeException e) {
-                return ResponseEntity.status(500).body(SongBookMessage.jsonify(e.getMessage()));
-            } catch (IOException e) {  // could not create directory
-                return ResponseEntity.status(500).body(SongBookMessage.jsonify(e.getMessage() + " (" + e.getClass().getSimpleName() + ")"));
-            }
-        } else {
-            System.out.println("Therefor your request got ignored.");
-            long minuteCounter = 1;
-            while (sinceLastTimeReceived < idleTimeNeeded && breakLoop) {
-                sinceLastTimeReceived = System.currentTimeMillis() - lastTimeReceived;
-                if (sinceLastTimeReceived - (minuteCounter * 1000 * 60) > 1000 * 60) {
-                    if (minuteCounter == 1) {
-                        System.out.println(1 + " minute has past.");
-                    } else {
-                        System.out.println(minuteCounter + " minutes have past.");
-                    }
-                    ++minuteCounter;
-                }
-            }
-            System.out.println("While loop ended.");
-            skipThisTime = false;
-            return status(207).body(SongBookMessage.jsonify("Your request was sent twice. The first time should have been processed fine."));
+        try {
+            return new ResponseEntity<>(songCollectionService.processCollectionUpload(file, principal.getName()), HttpStatus.CREATED);
+        } catch (MalformedFileException e) { // wrong file encoding
+            return ResponseEntity.status(406).body(SongBookMessage.jsonify(e.getMessage()));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(500).body(SongBookMessage.jsonify(e.getMessage()));
+        } catch (IOException e) {  // could not create directory
+            return ResponseEntity.status(500).body(SongBookMessage.jsonify(e.getMessage() + " (" + e.getClass().getSimpleName() + ")"));
         }
     }
 
