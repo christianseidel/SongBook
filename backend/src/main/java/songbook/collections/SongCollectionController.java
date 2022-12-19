@@ -56,6 +56,7 @@ public class SongCollectionController {
             return ResponseEntity.status(500).body(SongBookMessage.jsonify(e.getMessage() + " (" + e.getClass().getSimpleName() + ")"));
         } catch (Exception e) {
             System.out.println("References File Upload produced exception with error code: " + e.getClass() + ".");
+            return ResponseEntity.status(500).body(SongBookMessage.jsonify(e.getMessage() + " (" + e.getClass().getSimpleName() + ")"));
         }
     }
 
