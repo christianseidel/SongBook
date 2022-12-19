@@ -45,6 +45,8 @@ public class SongCollectionController {
         System.out.println("\n-> Received file \"" + file.getOriginalFilename()
                 + "\" with Content Type: \"" + file.getContentType() + "\"");
         try {
+            // working on Heroku I need to send a
+
             return new ResponseEntity<>(songCollectionService.processCollectionUpload(file, principal.getName()), HttpStatus.CREATED);
         } catch (MalformedFileException e) { // wrong file encoding
             return ResponseEntity.status(406).body(SongBookMessage.jsonify(e.getMessage()));
