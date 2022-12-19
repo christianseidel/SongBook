@@ -234,6 +234,8 @@ public class SongCollectionService {
             case "liederwelt_14" -> LIEDERWELT_14;
             case "liederfest_15" -> LIEDERFEST_15;
             case "frohe weihnachten" -> FROHE_WEIHNACHTEN;
+            case "weihnachten mit der ukulele" -> WEIHNACHTEN_MIT_DER_UKULELE_1;
+            case "weihnachten mit der ukulele 2" -> WEIHNACHTEN_MIT_DER_UKULELE_2;
             case "test collection #1" -> TEST_COLLECTION_1;
             case "test collection #2" -> TEST_COLLECTION_2;
             case "test collection #3" -> TEST_COLLECTION_3;

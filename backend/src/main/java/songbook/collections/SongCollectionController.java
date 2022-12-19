@@ -57,7 +57,7 @@ public class SongCollectionController {
 
         long sinceLastTimeReceived = System.currentTimeMillis() - lastTimeReceived;
         if ((Objects.equals(file.getOriginalFilename(), fileName)) && (sinceLastTimeReceived < idleTimeNeeded)) {
-            System.out.println("\nThis file name \"" + file.getOriginalFilename() + "\" and file name of");
+            System.out.println("\nThis file name \"" + file.getOriginalFilename() + "\" and the file name of");
             System.out.println("the file last received \"" + fileName + "\" are equal (" + (Objects.equals(file.getOriginalFilename(), fileName)) + ").");
             System.out.println("\nAnd the time since you last uploaded this file amounts to " + sinceLastTimeReceived + " milliseconds and");
             System.out.println("therefore is smaller than the requested idle time of " + idleTimeNeeded + " milliseconds " +

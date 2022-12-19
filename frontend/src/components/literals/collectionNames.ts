@@ -1,4 +1,4 @@
-export function songCollectionToRealName (volume: string) {
+export function songCollectionToRealName(volume: string) {
     switch (volume) {
         case 'THE_DAILY_UKULELE_YELLOW':
             return 'The Daily Ukulele Yellow';
@@ -36,6 +36,10 @@ export function songCollectionToRealName (volume: string) {
             return 'Liederfest (15)';
         case 'FROHE_WEIHNACHTEN':
             return 'Frohe Weihnachten';
+        case 'WEIHNACHTEN_MIT_DER_UKULELE_1':
+            return 'Weihnachten mit der Ukulele';
+        case 'WEIHNACHTEN_MIT_DER_UKULELE_2':
+            return 'Weihnachten mit der Ukulele (Wilfried Welti)';
         case 'TEST_COLLECTION_1':
             return 'Your Test Collection #1'
         case 'TEST_COLLECTION_2':
