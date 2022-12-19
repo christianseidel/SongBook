@@ -101,7 +101,7 @@ function References(props: Props) {
 
 
     function uploadFile(files: FileList | null) {       // ToDo: Introduce Check Sum
-        if (files === null) {                           // ToDo: Add Info with Upload Requirements
+        if (files === null) {                           // ToDo: Add User Info with Upload Requirements
             alert('Somehow the FormData Object did not work properly.')
         } else if (!files[0].name.endsWith('.txt')) {
             setMessage(NewMessage.create(
