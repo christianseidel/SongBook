@@ -49,9 +49,13 @@ public class SongCollectionController {
         } catch (MalformedFileException e) { // wrong file encoding
             return ResponseEntity.status(406).body(SongBookMessage.jsonify(e.getMessage()));
         } catch (RuntimeException e) {
+            System.out.println("ups: RuntimeException...");
             return ResponseEntity.status(500).body(SongBookMessage.jsonify(e.getMessage()));
         } catch (IOException e) {  // could not create directory
+            System.out.println("ups: Input/OutputException...");
             return ResponseEntity.status(500).body(SongBookMessage.jsonify(e.getMessage() + " (" + e.getClass().getSimpleName() + ")"));
+        } catch (Exception e) {
+            System.out.println("References File Upload produced exception with error code: " + e.getClass() + ".");
         }
     }
 
