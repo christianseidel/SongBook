@@ -9,16 +9,17 @@ import songbook.models.Song;
 
 
 @Repository
-public interface SongsRepository extends MongoRepository<Song, String> {
+public interface SongRepository extends MongoRepository<Song, String> {
 
     Collection<Song> findAllByTitle(String title);
 
     @Override
     <S extends Song> S save(S entity);
 
-    Optional<Song> findByTitle(String title);
-
     Optional<Song> findByIdAndUser(String id, String user);
 
     Optional<Song> findByTitleAndUser(String id, String user);
+
+    Optional<Song[]> findAllByUser(String user);
+
 }

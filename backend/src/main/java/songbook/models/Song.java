@@ -4,6 +4,7 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import songbook.collections.models.Reference;
+import songbook.songsheets.models.SongSheet;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

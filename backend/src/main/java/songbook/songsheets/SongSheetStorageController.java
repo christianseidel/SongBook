@@ -3,21 +3,13 @@ package songbook.songsheets;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import songbook.exceptions.SongBookMessage;
 import songbook.songsheets.models.SongSheetUploadResponse;
 import songbook.songsheets.models.SongSheetFile;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.File;
 import java.io.IOException;
-import java.net.URLConnection;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/sheets")

@@ -2,6 +2,7 @@ package songbook.songsheets.models;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.web.multipart.MultipartFile;
 
 @Document(collection = "SongSheetFiles")
 public class SongSheetFile {
@@ -11,6 +12,10 @@ public class SongSheetFile {
     private String fileName;
     private String contentType;
     private byte[] file;
+
+    public SongSheetFile(MultipartFile file) {
+        this.fileName = file.getOriginalFilename();
+    }
 
     public SongSheetFile() {
     }

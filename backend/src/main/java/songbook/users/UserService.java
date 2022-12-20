@@ -1,15 +1,18 @@
 package songbook.users;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
-import songbook.exceptions.SongBookMessage;
+import songbook.SongRepository;
+import songbook.SongSheetsRepository;
+import songbook.collections.ReferencesRepository;
 import songbook.exceptions.NoSuchUserException;
 import songbook.exceptions.PasswordsDoNotMatchException;
 import songbook.exceptions.UserAlreadyExistsException;
+import songbook.models.Song;
+import songbook.songsheets.models.SongSheet;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -19,6 +22,9 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ReferencesRepository referencesRepository;
+    private final SongRepository songRepository;
+    private final SongSheetsRepository songSheetsRepository;
 
     public User createUser(UserCreationData userCreationData) {
         if (userCreationDataIsValid(userCreationData)) {
@@ -40,15 +46,47 @@ public class UserService {
         return userRepository.findByUsername(username);
     }
 
-    public String getDateCreated(String username) {
+    public UserInfoDTO getUserInfo(String username) {
+        UserInfoDTO userInfo = new UserInfoDTO(username);
         User user = userRepository.findByUsername(username)
                 .orElseThrow(NoSuchUserException::new);
-        return user.getDateCreated().toString();
+        userInfo.setDateCreated(user.getDateCreated().toString());
+        userInfo.setNumberOfReferences(referencesRepository.findAllByUser(username).size());
+        Optional<Song[]> songsOptional = songRepository.findAllByUser(username);
+        if (songsOptional.isPresent()) {
+            // set number of songs
+            Song[] songs = songsOptional.get();
+            int numberOfSongs = songs.length;
+            userInfo.setNumberOfSongs(numberOfSongs);
+            // set number of song sheet files
+            int numberOfSongSheetFiles = 0;
+            for (Song song : songs) {
+                numberOfSongSheetFiles += song.getSongSheets().size();
+            }
+            userInfo.setNumberOfSongSheetFiles(numberOfSongSheetFiles);
+        }
+        return userInfo;
     }
 
     public void deleteUser(String username) throws NoSuchUserException {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(NoSuchUserException::new);
+        referencesRepository.deleteAllByUser(username);
+        // delete all song sheet files which belong to user
+        Optional<Song[]> songs = songRepository.findAllByUser(username);
+        songs.ifPresent(song -> {
+            for (Song value : song) {
+                int numberOfSongSheetFiles = value.getSongSheets().size();
+                if (numberOfSongSheetFiles > 0) {
+                    List<SongSheet> songSheetList = value.getSongSheets();
+                    for (int k = 0; k < numberOfSongSheetFiles; k++) {
+                        songSheetsRepository.deleteById(songSheetList.get(k).getFileId());
+                    }
+                }
+                // delete this song sheet
+                songRepository.deleteById(value.getId());
+            }
+        });
         userRepository.deleteById(user.getId());
     }
 }

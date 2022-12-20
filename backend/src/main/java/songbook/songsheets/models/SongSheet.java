@@ -1,4 +1,4 @@
-package songbook.models;
+package songbook.songsheets.models;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 

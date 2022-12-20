@@ -116,7 +116,6 @@ function References(props: Props) {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
-                    'Connection': 'Keep-Alive'
                 },
                 body: formData,
             })
@@ -136,12 +135,7 @@ function References(props: Props) {
                 .then((responseBody) => {
                     setUploadResult(responseBody);
                     setToggleDisplayUploadResult(true);
-                    fetch(`${process.env.REACT_APP_BASE_URL}/api/collections/upload/`, {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Connection': 'Close'
-                        }})})
+                })
                 .then(getAllReferences)
                 .catch(e => setMessage(NewMessage.create(e.message, MessageType.RED)));
         }

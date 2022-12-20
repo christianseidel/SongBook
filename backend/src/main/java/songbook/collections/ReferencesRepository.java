@@ -14,10 +14,13 @@ public interface ReferencesRepository extends MongoRepository<Reference, String>
 
     @Override
     List<Reference> findAll();
+    List<Reference> findAllByUser(String user);
 
     Collection<Reference> findAllByTitleAndSongCollectionAndUser(String title, SongCollection songCollection, String user);
 
     @Override
     <S extends Reference> S save(S entity);
+
+    void deleteAllByUser(String username);
 
 }

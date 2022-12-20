@@ -7,11 +7,13 @@ import DisplayMessage from "../DisplayMessage";
 import {DayOfCreation} from "../Songs/modelsSong";
 import '../styles/users.css';
 import '../styles/common.css';
+import {UserDTO} from "./modelsUser";
 
 function InfoUser() {
 
     const nav = useNavigate();
     const {token} = useAuth();
+    const [userDTO, setUserDTO] = useState({} as UserDTO);
     const [dateCreated, setDateCreated] = useState('');
     const [message, setMessage] = useState<message | undefined>(undefined);
 
@@ -28,8 +30,9 @@ function InfoUser() {
             } else {
                 throw Error ('Something unexpected happened. Error code: ' + response.status + '.')
             }})
-            .then(message => {
-                let date = new DayOfCreation(message.message);
+            .then(userDTO => {
+                setUserDTO(userDTO);
+                let date = new DayOfCreation(userDTO.dateCreated);
                 setDateCreated(date.day + '.' + date.month + '.' + date.year);
             })
             .catch(e => setMessage(NewMessage.create(e.message, MessageType.RED)))
@@ -67,27 +70,25 @@ function InfoUser() {
     }
 
     return (
-        <div id={'welcomeContainer'}>
+        <div id={'InfoContainer'}>
             <div id={'welcomeTitle'}>
                 <div id={'welcomeTitleLeft'}>
                     <img src={ukulele} alt="Ukulele" id={'ukuleleLogin'}/>
                 </div>
                 <h1 id={'welcomeTitleRight'}>
-                    <div id={'titleLogout'}> My Song Book </div>
+                    <div id={'titleUserInfo'}> My Song Book </div>
                 </h1>
-
             </div>
 
-            <div>
-                <h3>
-                    User Name: <span>{localStorage.getItem('username')}</span>
-                </h3>
-            </div>
+            <h3 id={'displayUsername'}>
+                User Name: <span id={'userName'}>{localStorage.getItem('username')}</span>
+            </h3>
 
             <div className={'workingSpaceUserInfo'}>
-                <div>
-                    <label>account created:</label> <span>{dateCreated}</span>
-                </div>
+                <label>account created:</label> <span id={'dateUserCreated'}>{dateCreated}</span>
+                <div id={'titleUserDataPoint'}>number of references: <span id={'userNumberOfReferences'}>{userDTO.numberOfReferences}</span></div>
+                <div id={'titleUserDataPoint'}>number of Songs: <span id={'userNumberOfSongs'}>{userDTO.numberOfSongs}</span></div>
+                <div id={'titleUserDataPoint'}>number of Song Sheets: <span id={'userNumberOfSongSheetFiles'}>{userDTO.numberOfSongSheetFiles}</span></div>
                 <div id={'deleteUserLine'}>
                     <button id={'buttonDeleteUser'} onClick={deleteUser}>
                         delete</button> this user account
@@ -95,7 +96,7 @@ function InfoUser() {
             </div>
 
             <div>
-                <button id={"buttonBackToMain"} className={'buttonUserMgt'}
+                <button id={"buttonReturn"} className={'buttonUserMgt'}
                         type={'button'} onClick={() => nav('/songbook')}>
                     <span id={'textButtonReturn'}>
                         <span className={'leftArrowOnLeft'}>&#10140; </span>

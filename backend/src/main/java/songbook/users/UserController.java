@@ -1,13 +1,11 @@
 package songbook.users;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import songbook.exceptions.NoSuchUserException;
 import songbook.exceptions.PasswordsDoNotMatchException;
 import songbook.exceptions.SongBookMessage;
@@ -56,8 +54,8 @@ public class UserController {
     }
 
     @GetMapping("/info/{username}")
-    public String getDateCreated(@PathVariable String username) {
-        return SongBookMessage.jsonify(userService.getDateCreated(username));
+    public UserInfoDTO getUserInfo(@PathVariable String username) {
+        return userService.getUserInfo(username);
     }
 
     @DeleteMapping("/info/{username}")
