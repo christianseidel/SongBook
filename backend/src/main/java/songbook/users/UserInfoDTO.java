@@ -1,17 +1,19 @@
 package songbook.users;
 
-import lombok.Data;
-
 public class UserInfoDTO {
 
-    private String userName;
+    private final String username;
     private String dateCreated;
     private int numberOfReferences;
     private int numberOfSongs;
     private int numberOfSongSheetFiles;
 
-    public UserInfoDTO(String userName) {
-        this.userName = userName;
+    public UserInfoDTO(String username) {
+        this.username = username;
+    }
+
+    public String getUsername() {
+        return this.username;
     }
 
     public void setDateCreated(String dateCreated) {

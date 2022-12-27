@@ -63,6 +63,10 @@ form {
     line-height: 24px;
 }
 
+.expandedLineHeight {
+    line-height: 1.8;
+}
+
 label {
     color: black;
     font-weight: bold;

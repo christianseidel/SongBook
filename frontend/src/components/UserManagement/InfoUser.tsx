@@ -27,6 +27,8 @@ function InfoUser() {
             .then(response => {
             if (response.status === 200) {
                 return response.json()
+            } else if (response.status === 500) {
+                throw Error ('Server unavailable (error code 500)');
             } else {
                 throw Error ('Something unexpected happened. Error code: ' + response.status + '.')
             }})
@@ -38,42 +40,11 @@ function InfoUser() {
             .catch(e => setMessage(NewMessage.create(e.message, MessageType.RED)))
     }, [token])
 
-    function deleteUser() {
-        fetch(`${process.env.REACT_APP_BASE_URL}/api/user/info/` + localStorage.getItem('username'), {
-            method: 'DELETE',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
-            .then(response => {
-                if (response.status !== 200) {
-                    if (response.status === 404) {
-                        throw Error('User could not be found.');
-                    } else {
-                        throw Error('Something unexpected happened! Error type: "' + response.statusText + '". Error code: ' + response.status + '.');
-                    }
-                }
-            })
-            .then(() => {
-                localStorage.removeItem('jwt');
-                localStorage.removeItem('username');
-                setMessage(NewMessage.createAndWait(
-                    'This user account now is deleted. ' +
-                    'Thank you for using "My Song Book" App.',
-                    'user/login'))
-            })
-            .catch(e => {
-                localStorage.removeItem('jwt');
-                localStorage.removeItem('username');
-                setMessage(NewMessage.create(e.message, MessageType.RED));
-            });
-    }
-
     return (
-        <div id={'InfoContainer'}>
-            <div id={'welcomeTitle'}>
+        <div id={'userInfoContainer'}>
+            <div>
                 <div id={'welcomeTitleLeft'}>
-                    <img src={ukulele} alt="Ukulele" id={'ukuleleLogin'}/>
+                    <img src={ukulele} alt="Ukulele" id={'ukuleleUserPage'}/>
                 </div>
                 <h1 id={'welcomeTitleRight'}>
                     <div id={'titleUserInfo'}> My Song Book </div>
@@ -84,13 +55,13 @@ function InfoUser() {
                 User Name: <span id={'userName'}>{localStorage.getItem('username')}</span>
             </h3>
 
-            <div className={'workingSpaceUserInfo'}>
+            <div className={'userInfoBox'}>
                 <label>account created:</label> <span id={'dateUserCreated'}>{dateCreated}</span>
-                <div id={'titleUserDataPoint'}>number of references: <span id={'userNumberOfReferences'}>{userDTO.numberOfReferences}</span></div>
-                <div id={'titleUserDataPoint'}>number of Songs: <span id={'userNumberOfSongs'}>{userDTO.numberOfSongs}</span></div>
-                <div id={'titleUserDataPoint'}>number of Song Sheets: <span id={'userNumberOfSongSheetFiles'}>{userDTO.numberOfSongSheetFiles}</span></div>
+                <div className={'labelUserInfo'}>number of references: <span id={'userNumberOfReferences'}>{userDTO.numberOfReferences}</span></div>
+                <div className={'labelUserInfo'}>number of songs: <span id={'userNumberOfSongs'}>{userDTO.numberOfSongs}</span></div>
+                <div className={'labelUserInfo'}>number of song sheets: <span id={'userNumberOfSongSheetFiles'}>{userDTO.numberOfSongSheetFiles}</span></div>
                 <div id={'deleteUserLine'}>
-                    <button id={'buttonDeleteUser'} onClick={deleteUser}>
+                    <button id={'buttonDeleteUser'} onClick={() => nav('/users/delete')}>
                         delete</button> this user account
                 </div>
             </div>

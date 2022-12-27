@@ -10,7 +10,7 @@ function LogoutUser() {
         <div id={'welcomeContainer'}>
             <div id={'welcomeTitle'}>
                 <div id={'welcomeTitleLeft'}>
-                    <img src={ukulele} alt="Ukulele" id={'ukuleleLogin'}/>
+                    <img src={ukulele} alt="Ukulele" id={'ukuleleUserPage'}/>
                 </div>
                 <h1 id={'welcomeTitleRight'}>
                     <div id={'titleLogout'}> My Song Book </div>

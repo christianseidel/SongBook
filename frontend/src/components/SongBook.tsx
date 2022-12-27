@@ -11,6 +11,7 @@ import {DayOfCreation, Song, SongsDTO} from './Songs/modelsSong';
 import {Reference, ReferencesDTO} from './References/modelsReference';
 import {useAuth} from './UserManagement/AuthProvider';
 import {useNavigate} from 'react-router-dom';
+import {checkLogin} from "./UserManagement/modelsUser";
 
 function SongBook() {
 
@@ -30,21 +31,21 @@ function SongBook() {
     useEffect(() => {
         if (!localStorage.getItem('jwt')) {
             nav('/users/login')
-        }
-    }, [nav])
-
-    useEffect(() => {
-        if (localStorage.getItem('jwt')) {
+        } else {
             fetch(`${process.env.REACT_APP_BASE_URL}/api/songbook`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             })
-                .then(response => response.json())
+                .then(response => {
+                    checkLogin(response.status);
+                    return response.json();
+                })
                 .then((responseBody: SongsDTO) => setSongsDTO(responseBody))
+                .catch(() => nav('/users/login'))
         }
-    }, [token])
+    }, [nav, token])
 
     function displaySongChosen(id: string) {
         fetch(`${process.env.REACT_APP_BASE_URL}/api/songbook/` + id, {
@@ -234,7 +235,7 @@ function SongBook() {
     return (
         <div>
             <h1>
-                <img src={ukulele} alt='Ukulele' id={'ukulele'}/>
+                <img src={ukulele} alt='Ukulele' id={'ukuleleMainPage'}/>
                 My Song Book
 
                 <div id='dropdownUser'>

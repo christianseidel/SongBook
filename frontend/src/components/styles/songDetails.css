@@ -1,4 +1,4 @@
-.songDataSheetElement {
+.dataSheetElement {
     position: relative;
     min-width: 450px;
     max-height: 200px;
@@ -272,7 +272,7 @@
     text-decoration-thickness: 2px;
 }
 
-#displayReferences, #displayLinks, #displaySongSheets {
+#displayReferences, #displaySongSheets {
     display: block;
     /*border: 1px solid darkgoldenrod;*/
     padding: 5px;
@@ -290,7 +290,7 @@
 */
 
 
-#displayLinks:nth-of-type(1), #displaySongSheets:nth-of-type(1) {
+#displaySongSheets:nth-of-type(1) {
     margin-top: 20px;
 }
 
@@ -409,6 +409,13 @@
 
 
 /*  LINK  */
+#displayLinks {
+    display: block;
+    padding: 0 5px 0 5px;
+}
+#displayLinks:nth-of-type(1) {
+    margin-top: 8px;
+}
 
 .editLinkTitle {
     text-decoration: underline;

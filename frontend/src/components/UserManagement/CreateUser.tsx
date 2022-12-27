@@ -53,7 +53,7 @@ function CreateUser() {
         <div id={'welcomeContainer'}>
             <div id={'welcomeTitle'}>
                 <div id={'welcomeTitleLeft'}>
-                    <img src={ukulele} alt="Ukulele" id={'ukuleleLogin'}/>
+                    <img src={ukulele} alt="Ukulele" id={'ukuleleUserPage'}/>
                 </div>
                 <h1 id={'welcomeTitleRight'}>
                     <div> My Song Book <span className={'italic'}> App</span></div>

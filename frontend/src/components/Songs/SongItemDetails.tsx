@@ -403,7 +403,7 @@ function SongItemDetails(props: SongItemProps) {
 
     return (
         <div>
-            <div id={'songHead'} className={'songDataSheetElement'}>
+            <div id={'songHead'} className={'dataSheetElement'}>
                 <div>{handleTitleLine}</div>
             </div>
 
@@ -427,7 +427,7 @@ function SongItemDetails(props: SongItemProps) {
                     </span>
             </div>
 
-            <div id={'workingSpace'} className={'songDataSheetElement'}>
+            <div id={'workingSpace'} className={'dataSheetElement'}>
 
                 {props.song.description && !toggleEditDescription && displayDescription &&
                     <div id={'displayDescription'} className={'workingSpaceElement'}
@@ -587,20 +587,7 @@ function SongItemDetails(props: SongItemProps) {
             </div>
 
 
-            <div id={'displaySpace'} className={'songDataSheetElement'}>
-
-                {props.song.references !== undefined && props.song.references.length > 0 && // display References
-                    <div id={'displayReferences'}>
-                        {props.song.references.map((item, index) =>
-                            <div key={index} className={'reference'}
-                                 onClick={() => openUpdateReference(index)}>
-                                <span className={'referenceIndicator'}>&ndash;&#129174;</span>&nbsp; {(item.addedCollection === null) ?
-                                <span>{songCollectionToRealName(item.songCollection)}</span> :
-                                <span>{item.addedCollection}</span>}
-                                {item.page !== 0 && <span>, page {item.page} </span>}
-                                {item.key && <span> – <span className={'displayKey'}>({item.key})</span></span>}
-                            </div>)}
-                    </div>}
+            <div id={'displaySpace'} className={'dataSheetElement'}>
 
                 <div>
                     {(props.song.links !== undefined && props.song.links?.length > 0)
@@ -647,6 +634,21 @@ function SongItemDetails(props: SongItemProps) {
                         </div>
                     }
                 </div>
+
+                {props.song.references !== undefined && props.song.references.length > 0 && // display References
+                    <div id={'displayReferences'}>
+                        {props.song.references.map((item, index) =>
+                            <div key={index}>
+                                <span className={'reference'} onClick={() => openUpdateReference(index)}>
+                                    <span className={'referenceIndicator'}>&ndash;&#129174;</span>&nbsp; {(item.addedCollection === null) ?
+                                    <span>{songCollectionToRealName(item.songCollection)}</span> :
+                                    <span>{item.addedCollection}</span>}
+                                    {item.page !== 0 && <span>, page {item.page} </span>}
+                                </span>
+                                {item.key && <span> – <span className={'displayKey'}>({item.key})</span></span>}
+                            </div>)}
+                    </div>}
+
             </div>
 
 

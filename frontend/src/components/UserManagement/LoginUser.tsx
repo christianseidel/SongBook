@@ -29,7 +29,7 @@ function LoginUser() {
         <div id={'welcomeContainer'}>
             <div id={'welcomeTitle'}>
                 <div id={'welcomeTitleLeft'}>
-                    <img src={ukulele} alt="Ukulele" id={'ukuleleLogin'}/>
+                    <img src={ukulele} alt="Ukulele" id={'ukuleleUserPage'}/>
                 </div>
                     <h1 id={'welcomeTitleRight'}>
                         <span className={'italic'}>Welcome to </span>
