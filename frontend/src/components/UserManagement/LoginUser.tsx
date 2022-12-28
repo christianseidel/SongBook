@@ -1,6 +1,6 @@
 import React, {FormEvent, useState} from "react";
 import {message, MessageType, NewMessage} from "../messageModel";
-import DisplayMessage from "../DisplayMessage";
+import MessageBox from "../MessageBox";
 import "../styles/users.css";
 import {useAuth} from "./AuthProvider";
 import {useNavigate} from "react-router-dom";
@@ -71,7 +71,7 @@ function LoginUser() {
 
 
 
-            <DisplayMessage message={message}/>
+            <MessageBox message={message}/>
         </div>
     )
 }

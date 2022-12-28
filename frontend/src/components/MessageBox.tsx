@@ -7,7 +7,7 @@ interface MessageProps {
     message: message | undefined;
 }
 
-function DisplayMessage(props: MessageProps) {
+function MessageBox(props: MessageProps) {
 
     const [textLine, setTextLine] = useState(props.message?.text);
     const [icon, setIcon] = useState(props.message?.icon);
@@ -62,4 +62,4 @@ function DisplayMessage(props: MessageProps) {
     )
 }
 
-export default DisplayMessage
+export default MessageBox

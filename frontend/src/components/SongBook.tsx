@@ -6,7 +6,7 @@ import SongItemDetails from './Songs/SongItemDetails';
 import ukulele from './media/images/ukulele.png';
 import References from './References/References';
 import {message, MessageType, NewMessage} from './messageModel';
-import DisplayMessage from './DisplayMessage';
+import MessageBox from './MessageBox';
 import {DayOfCreation, Song, SongsDTO} from './Songs/modelsSong';
 import {Reference, ReferencesDTO} from './References/modelsReference';
 import {useAuth} from './UserManagement/AuthProvider';
@@ -308,7 +308,7 @@ function SongBook() {
                 </div>
             </div>
 
-            <DisplayMessage message={message}/>
+            <MessageBox message={message}/>
         </div>
     );
 }

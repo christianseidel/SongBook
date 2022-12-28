@@ -4,7 +4,7 @@ import React, {FormEvent, useEffect, useState} from "react";
 import ReferenceItemWithinList from "./ReferenceItemWithinList";
 import ReferenceToEdit from "./ReferenceToEdit";
 import DisplayUploadResult from "./MsgReferencesUpload";
-import DisplayMessage from "../DisplayMessage";
+import MessageBox from '../MessageBox';
 import {message, MessageType, NewMessage} from "../messageModel";
 import {ReferencesDTO, UploadResult} from "./modelsReference";
 import {useAuth} from "../UserManagement/AuthProvider";
@@ -216,7 +216,7 @@ function References(props: Props) {
                 />}
             </div>
 
-            <DisplayMessage message={message}/>
+            <MessageBox message={message}/>
 
         </div>
 

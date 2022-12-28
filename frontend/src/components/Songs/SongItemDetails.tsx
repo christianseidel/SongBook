@@ -12,6 +12,7 @@ import {message, MessageType, NewMessage} from "../messageModel";
 import {Mood, Song} from "./modelsSong";
 import {Reference} from "../References/modelsReference";
 import {useAuth} from "../UserManagement/AuthProvider";
+import ConfirmationBox from "../ConfirmationBox";
 
 
 interface SongItemProps {
@@ -29,6 +30,7 @@ function SongItemDetails(props: SongItemProps) {
     useEffect(() => setSongState(props.song.status), [props.song.status]);
     const [description, setDescription] = useState(sessionStorage.getItem('description') ?? '');
     useEffect(() => sessionStorage.setItem('description', description), [description]);
+    const [message, setMessage] = useState('');
 
     const [displayDescription, setDisplayDescription] = useState(true);
     const [toggleEditDescription, setToggleEditDescription] = useState(false);
@@ -85,8 +87,41 @@ function SongItemDetails(props: SongItemProps) {
         />;
     }
 
-    const getConfirmation = (id: string) => {
-        console.log('to be continued');
+    const promptConfirmDeletionBox = () => {
+        const numberOfSongSheets = props.song.songSheets!.length;
+        const numberOfLinks = props.song.links!.length;
+        let msgText = '';
+
+        if (numberOfSongSheets + numberOfLinks > 0) {
+            msgText = 'There ';
+            if (numberOfSongSheets + numberOfLinks === 1) {
+                msgText += 'is '
+            } else {
+                msgText += 'are '
+            }
+            if (numberOfSongSheets === 1) {
+                msgText += 'one song sheet '
+            } else if (numberOfSongSheets > 1) {
+                msgText += numberOfSongSheets + ' song sheets '
+            }
+            if (numberOfSongSheets > 0 && numberOfLinks > 0) {
+                msgText += 'and '
+            }
+            if (numberOfLinks === 1) {
+                msgText += 'one link '
+            } else if (numberOfLinks > 1) {
+                msgText += numberOfLinks + ' links '
+            }
+            msgText += 'attached to this song. '
+            if (numberOfSongSheets + numberOfLinks === 1) {
+                msgText += 'This item will be lost. '
+            } else {
+                msgText += 'All attachments will be lost. '
+            }
+            setMessage(msgText);
+        } else {
+            setMessage(' ');
+        }
     }
 
     function deleteSongItem(id: string) {
@@ -663,7 +698,9 @@ function SongItemDetails(props: SongItemProps) {
             <span id={'buttonDeleteSong'}>
 
 
-                <button type='button' onClick={() => getConfirmation(props.song.id)}>
+                <button type='button' onClick={() =>
+                    promptConfirmDeletionBox()
+                }>
                     &#10008; delete
                 </button>
 
@@ -675,6 +712,11 @@ function SongItemDetails(props: SongItemProps) {
 */}
 
             </span>
+            <ConfirmationBox
+                message={message}
+                doDelete={() => deleteSongItem(props.song.id)}
+                cancelDelete={() => setMessage('')}
+            />
         </div>
     )
 }

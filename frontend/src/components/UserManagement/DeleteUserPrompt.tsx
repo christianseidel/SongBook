@@ -3,7 +3,7 @@ import React, {useEffect, useState} from "react";
 import ukulele from "../media/images/ukulele.png";
 import {useAuth} from "./AuthProvider";
 import {message, MessageType, NewMessage} from "../messageModel";
-import DisplayMessage from "../DisplayMessage";
+import MessageBox from "../MessageBox";
 import '../styles/users.css';
 import '../styles/common.css';
 import {UserDTO} from "./modelsUser";
@@ -103,7 +103,7 @@ function InfoUser() {
             </div>
 
 
-            <DisplayMessage message={message}/>
+            <MessageBox message={message}/>
         </div>
     );
 }

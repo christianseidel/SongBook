@@ -1,7 +1,7 @@
 import React, {FormEvent, useEffect, useState} from "react";
 import {useAuth} from "./AuthProvider";
 import {message, MessageType, NewMessage} from "../messageModel";
-import DisplayMessage from "../DisplayMessage";
+import MessageBox from "../MessageBox";
 import icon_eyes from "../media/images/eyes.png"
 import '../styles/users.css'
 import {useNavigate} from "react-router-dom";
@@ -93,7 +93,7 @@ function CreateUser() {
             </button>
 
 
-            <DisplayMessage message={message}/>
+            <MessageBox message={message}/>
         </div>
     )
 

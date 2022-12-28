@@ -9,7 +9,7 @@ interface ResultProps {
     fileName: string;
 }
 
-function DisplayMessage(props: ResultProps) {
+function MessageBox(props: ResultProps) {
 
     useEffect(() => {
         let messageIcon = document.getElementById('messageIcon') as HTMLDivElement | null;
@@ -82,4 +82,4 @@ function DisplayMessage(props: ResultProps) {
     )
 }
 
-export default DisplayMessage
+export default MessageBox

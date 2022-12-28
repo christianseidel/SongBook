@@ -93,20 +93,34 @@
     cursor: pointer;
 }
 
-/*
-.listOfErrorItems {
+/*   LOGOUT   */
+
+#ConfirmationContainer {
+    display: flex;
+    position: absolute;
+    left: 4%;
+    top: 88%;
+    width: 500px;
+    background-color: blanchedalmond;
     font-family: Verdana, Trebuchet MS, Lucida Sans Unicode, Lucida Grande, Lucida Sans, Arial, sans-serif;
-    font-size: 8pt;
-    line-height: .8;
-    margin-left: 24px;
-    color: darkblue;
-    margin-top: 0;
-    margin-bottom: 0;
-    padding: 0;
-    max-height: 120px;
-    max-width: 452px;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow-y: auto;
-    overflow-x: visible;
-}*/
+    font-size: 12px;
+    color: black;
+    line-height: 1.6;
+    border-width: 3px 22px;
+    border-style: solid;
+    border-radius: 8px;
+    padding: 15px 28px 18px 15px;
+    box-shadow: 12px 8px 16px 0 dimgray, 0 6px 20px 0 dimgray;
+    max-width: 580px;
+    transition: 400ms;
+    z-index: 3;
+}
+
+#buttonCancelDeleteSong {
+    margin-top: 16px;
+}
+
+#buttonConfirmDeleteSong {
+    margin-top: 16px;
+    margin-left: 238px;
+}
