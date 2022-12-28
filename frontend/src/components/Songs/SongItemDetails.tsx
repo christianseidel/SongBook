@@ -85,6 +85,10 @@ function SongItemDetails(props: SongItemProps) {
         />;
     }
 
+    const getConfirmation = (id: string) => {
+        console.log('to be continued');
+    }
+
     function deleteSongItem(id: string) {
         props.song.songSheets?.forEach((file) => {
             if (file.fileId !== undefined) {
@@ -630,7 +634,6 @@ function SongItemDetails(props: SongItemProps) {
                                             </span>}
                                     </span>
                                 </div>)}
-
                         </div>
                     }
                 </div>
@@ -653,14 +656,24 @@ function SongItemDetails(props: SongItemProps) {
 
 
             <div id={'songFooter'}>
-                <span id={'crea'}>created:</span> {props.song.dayOfCreation.day}.
+                <span>created:</span> {props.song.dayOfCreation.day}.
                 {props.song.dayOfCreation.month}.
                 {props.song.dayOfCreation.year}
             </div>
             <span id={'buttonDeleteSong'}>
+
+
+                <button type='button' onClick={() => getConfirmation(props.song.id)}>
+                    &#10008; delete
+                </button>
+
+
+                {/*
                 <button type='button' onClick={() => deleteSongItem(props.song.id)}>
                     &#10008; delete
                 </button>
+*/}
+
             </span>
         </div>
     )

@@ -60,7 +60,7 @@ function InfoUser() {
                 document.getElementById('deleteUserContainer')!.style.animation = 'none';
                 document.getElementById('deleteUserBox')!.style.animation = 'none';
                 setMessage(NewMessage.createAndWait(
-                    'User account "' + username + '" is now deleted. ' +
+                    'User account "' + username + '" has been deleted. ' +
                     'Thank you for using "My Song Book" App.',
                     'user/login'))
             })

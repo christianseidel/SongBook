@@ -241,8 +241,8 @@ function SongBook() {
                 <div id='dropdownUser'>
                     <button id='buttonDropdownUser' type={'button'}>user</button>
                     <div className='contentDropdownUser'>
-                        <span className={'menuItem'} onClick={() => nav('/users/info')}>Info</span>
                         <span className={'menuItem'} onClick={logout}>&#10140; logout </span>
+                        <span className={'menuItem'} onClick={() => nav('/users/info')}>Info</span>
                     </div>
                 </div>
             </h1>

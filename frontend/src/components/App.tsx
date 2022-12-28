@@ -15,16 +15,15 @@ function App() {
             <Suspense fallback={"Loading..."}>
                 <BrowserRouter>
                     <AuthProvider>
-                    <Routes>
-                        <Route path={'/*'} element={<SongBook />} />
-                        <Route path={'/songbook'} element={<SongBook />} />
-
-                        <Route path={'/users/register'} element={<CreateUser />} />
-                        <Route path={'/users/login'} element={<LoginUser />} />
-                        <Route path={'/users/info'} element={<InfoUser />} />
-                        <Route path={'/users/delete'} element={<DeleteUserPrompt />} />
-                        <Route path={'/users/logout'} element={<LogoutUser />}/>
-                    </Routes>
+                        <Routes>
+                            <Route path={'/*'} element={<SongBook/>}/>
+                            <Route path={'/songbook'} element={<SongBook/>}/>
+                            <Route path={'/users/register'} element={<CreateUser/>}/>
+                            <Route path={'/users/login'} element={<LoginUser/>}/>
+                            <Route path={'/users/info'} element={<InfoUser/>}/>
+                            <Route path={'/users/delete'} element={<DeleteUserPrompt/>}/>
+                            <Route path={'/users/logout'} element={<LogoutUser/>}/>
+                        </Routes>
                     </AuthProvider>
                 </BrowserRouter>
             </Suspense>
