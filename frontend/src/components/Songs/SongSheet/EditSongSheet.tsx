@@ -29,14 +29,14 @@ function EditSongSheet(props: SongSheetProps) {
     const [songKeyReturned, setSongKeyReturned] = useState('')
     const [songMood, setSongMood] = useState(0);
     const [fileId, setFileId] =  useState('');
-    const [fileName, setFileName] =  useState('');
+    const [filename, setFilename] =  useState('');
 
     const clearSheet = () => {
         setName('');
         setSource('');
         setDescription('');
         setFileId('');
-        setFileName('');
+        setFilename('');
         setSongMood(0);
         setSongKey('');
     }
@@ -49,7 +49,7 @@ function EditSongSheet(props: SongSheetProps) {
             setSongKey(props.songSheets[props.sheetIndex].key ?? ``);
             setSongMood(Mood.checkIfMajorOrEmpty(songKey) ? 0 : 1);
             setFileId(props.songSheets[props.sheetIndex].fileId ?? ``);
-            setFileName(props.songSheets[props.sheetIndex].fileName ?? ``);
+            setFilename(props.songSheets[props.sheetIndex].filename ?? ``);
         }
     }, [props.sheetIndex, props.songSheets, props.toggleCreateOrUpdate, songKey]);
 
@@ -82,11 +82,11 @@ function EditSongSheet(props: SongSheetProps) {
                             if (responseStatus === 200) {
                                 if (props.toggleCreateOrUpdate === 'update' && props.songSheets !== undefined) {
                                     props.songSheets[props.sheetIndex].fileId = responseBody.id;
-                                    props.songSheets[props.sheetIndex].fileName = responseBody.fileName;
+                                    props.songSheets[props.sheetIndex].filename = responseBody.filename;
                                 }
                                 props.save();
                                 setFileId(responseBody.id);
-                                setFileName(responseBody.fileName);
+                                setFilename(responseBody.filename);
                             } else if (responseStatus === 400) {
                                 props.displayMsg(NewMessage.create(
                                     'The server did not accept your request (Bad Request).',
@@ -111,7 +111,7 @@ function EditSongSheet(props: SongSheetProps) {
 
     const doCreateSongSheet = (ev: FormEvent<HTMLFormElement>) => {
         ev.preventDefault();
-        let songSheet = new SongSheet(name, source, description, songKeyReturned, fileId, fileName);
+        let songSheet = new SongSheet(name, source, description, songKeyReturned, fileId, filename);
         if (props.songSheets !== undefined) {
             let next: number;
             next = props.songSheets.length;
@@ -129,7 +129,7 @@ function EditSongSheet(props: SongSheetProps) {
             songSheet.description = description;
             songSheet.key = songKeyReturned;
             songSheet.fileId = fileId;
-            songSheet.fileName = fileName;
+            songSheet.filename = filename;
             props.songSheets[props.sheetIndex] = songSheet;
         }
         clearSheet();
@@ -157,10 +157,10 @@ function EditSongSheet(props: SongSheetProps) {
         props.onDeleteSongSheetFile(fileId);
         if (props.toggleCreateOrUpdate === 'update') {
                 props.songSheets![props.sheetIndex].fileId = ``;
-                props.songSheets![props.sheetIndex].fileName = ``;
+                props.songSheets![props.sheetIndex].filename = ``;
         }
         setFileId('');
-        setFileName('');
+        setFilename('');
     }
 
     return(
@@ -173,8 +173,8 @@ function EditSongSheet(props: SongSheetProps) {
                     : <span>Edit your</span>} Song Sheet File</label><label>:</label>
                 <span className={'nextLine'}>
                     <label>Name:</label>
-                    <input id={'inputSongSheetName'} type='text' value={fileName} placeholder={'Name'}
-                           onChange={ev => setFileName(ev.target.value)} autoFocus tabIndex={1}/>
+                    <input id={'inputSongSheetName'} type='text' value={filename} placeholder={'Name'}
+                           onChange={ev => setFilename(ev.target.value)} autoFocus tabIndex={1}/>
                     <label className={'labelSecondInLine'}>Source:</label>
                     <input id={'inputSongSheetSource'} type='text' value={source} placeholder={'Source'}
                            onChange={ev => setSource(ev.target.value)} tabIndex={2}/>
@@ -225,9 +225,9 @@ function EditSongSheet(props: SongSheetProps) {
                         <input type={'file'} id={'inputAddSongSheet'} accept={'application/pdf'}
                                onChange={event => uploadSongSheet(event.target.files)}/>
                     </form>
-                : <span id={'fileNameContainer'}>
-                    <span id={'fileName'} className={'coloredSongSheetLink'} onClick={() => props.downloadSheet(fileId)}>
-                    {fileName}</span>
+                : <span id={'filenameContainer'}>
+                    <span id={'filename'} className={'coloredSongSheetLink'} onClick={() => props.downloadSheet(fileId)}>
+                    {filename}</span>
                     <button onClick={doDiscardSongSheetFile} id={'buttonDiscardSongSheetFile'}
                         >&#9986; discard</button>
                   </span>

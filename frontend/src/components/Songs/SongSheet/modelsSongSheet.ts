@@ -5,16 +5,16 @@ export class SongSheet {
     description?: string;
     key?: string;
     fileId?: string;
-    fileName?: string;
+    filename?: string;
     dateUploaded: string;
 
-    constructor(name: string, source: string, description: string, key: string, fileId: string, fileName: string) {
+    constructor(name: string, source: string, description: string, key: string, fileId: string, filename: string) {
         this.name = name;
         this.source = source;
         this.description = description;
         this.key = key;
         this.fileId = fileId;
-        this.fileName = fileName;
+        this.filename = filename;
         this.dateUploaded = getCurrentDate();
     }
 }
@@ -28,6 +28,6 @@ const getCurrentDate = () => {
 
 export interface SongSheetUploadResponse {
     id: string;
-    fileName: string;
+    filename: string;
     contentType: string;
 }

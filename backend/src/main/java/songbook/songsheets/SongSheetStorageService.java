@@ -26,11 +26,11 @@ public class SongSheetStorageService {
         String name = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
 
         // check file name doesn't exist // if so, add counter to name
-        boolean checkedThatFileNameIsUnique = false;
+        boolean checkedThatFilenameIsUnique = false;
         int counter = 0;
-        while (!checkedThatFileNameIsUnique) {
+        while (!checkedThatFilenameIsUnique) {
             counter++;
-            if (songSheetRepository.findByFileName(name).isPresent()) {
+            if (songSheetRepository.findByFilename(name).isPresent()) {
                 int startFileExtension = name.lastIndexOf(".");
                 String fileExtension = name.substring(startFileExtension);
                 name = name.substring(0, startFileExtension);
@@ -40,11 +40,11 @@ public class SongSheetStorageService {
                 }
                 name += "_" + counter + fileExtension;
             } else {
-                checkedThatFileNameIsUnique = true;
+                checkedThatFilenameIsUnique = true;
             }
         }
         SongSheetFile songSheetFile = new SongSheetFile();
-        songSheetFile.setFileName(name);
+        songSheetFile.setFilename(name);
         songSheetFile.setContentType(file.getContentType());
         songSheetFile.setFile(file.getBytes());
         return songSheetRepository.save(songSheetFile);

@@ -140,8 +140,6 @@
 .icon:hover {
     box-shadow: 3px 3px darkgoldenrod, 3px 3px 5px #e5c18b;
     transform: translate(1px, -0.5px);
-    /*background-color: lightblue;*/
-    /*background-color: #ffc671;*/
 }
 
 .icon:active {
@@ -150,8 +148,7 @@
 }
 
 #iconInfo {
-    border-color: #936b09;  /* brown */
-    /*border-color: dimgray;*/
+    border-color: #936b09;
     font-size: 12px;
     font-weight: bold;
 }
@@ -278,20 +275,9 @@
     padding: 5px;
 }
 
-/*
-.displayLinks {
-    display: block;
-    margin-top: 20px;
-    border: 1px solid darkgoldenrod;
-    font-size: 3pt;
-    padding: 5px;
-    z-index: 1;
-}
-*/
-
 
 #displaySongSheets:nth-of-type(1) {
-    margin-top: 20px;
+    margin-top: 8px;
 }
 
 .reference {
@@ -429,7 +415,6 @@
 .linkIndicator {
     color: #4280c9;
     font-weight: bold;
-    margin-right: 2px;
     z-index: 2;
 }
 
@@ -440,16 +425,15 @@
     border-width: 2px;
     border-color: darkgoldenrod;
     border-radius: 2px;
-    width: fit-content;
     box-shadow: 3px 3px darkgoldenrod;
     cursor: pointer;
     user-select: none;
-    padding: 1px 8px 1px 36px;
+    padding: 1px 0;
     z-index: 2;
 }
 
 .linkIndicator:hover + a {
-    margin-left: -43px;
+    margin-left: -40px;
     z-index: 1;
 }
 
@@ -457,8 +441,7 @@
     font-weight: normal;
     color: black;
     content: 'edit ';
-    margin-left: -28px;
-    letter-spacing: -1px;
+    margin-left: 8px;
     z-index: 2;
 }
 
@@ -486,14 +469,6 @@
     padding: 1px 6px 2px 6px;
     margin-left: -4px;
 }
-
-/*.linkText:hover:before {
-    content: '\2013\1F896\00A0 ';
-    font-weight: bold;
-   !* color: darkorchid;*!
-    line-height: 0.9;
-
-}*/
 
 .link {
     font-family: Verdana, Trebuchet MS, Lucida Sans Unicode, Lucida Grande, Lucida Sans, Arial, sans-serif;
@@ -549,7 +524,7 @@
 #displayLinkDescription {}
 
 
-/*  SONG SHEETS  */
+/*  SONG SHEETS: workingSpace  */
 
 .editSongSheetTitle {
     text-decoration: underline;
@@ -580,19 +555,34 @@
 }
 
 
-.songSheet, .songSheetDeaf {
+/*  SONG SHEETS: displaySpace  */
+
+.songSheet, .songSheetDeactivated {
     font-family: Verdana, Trebuchet MS, Lucida Sans Unicode, Lucida Grande, Lucida Sans, Arial, sans-serif;
-    font-size: 8pt;
+    font-size: 8px;
     color: #3b6363;
     margin-left: 27px;
 }
-.songSheetDeaf:hover {
+.songSheetDeactivated:hover {
     cursor: auto;
 }
 
 .songSheetIndicator {
-    color: rgb(157, 54, 210);
+    color: darkorchid;
+    font-size: 12px;
     font-weight: bold;
+    z-index: 2;
+}
+.songSheetIndicator:hover {
+    cursor: pointer;
+}
+
+.songSheetIndicator:hover:before {
+    font-weight: normal;
+    color: black;
+    content: 'edit ';
+    margin-left: 8px;
+    z-index: 2;
 }
 
 .songSheetDescriptive {
@@ -602,16 +592,12 @@
     /*border: 1px solid greenyellow;*/
 }
 
-.songSheetDescriptive:hover {
-    font-family: Verdana, Trebuchet MS, Lucida Sans Unicode, Lucida Grande, Lucida Sans, Arial, sans-serif;
-    font-size: 8pt;
-    color: #3b6363;
-    cursor: pointer;
-}
 
+/*
 .songSheet:hover + .songSheetDescriptive {
     margin-left: -16px;
 }
+*/
 
 .separator {
     margin-left: 12px;
@@ -622,17 +608,17 @@
     margin-left: 14px;
 }
 
-.separatorFileName {
+.separatorFilename {
     margin-right: 6px;
     font-weight: bold;
 }
 
-.displayFileName {
+.displayFilename {
     color: darkorchid;
     margin-left: 12px;
 }
 
-.displayFileName:hover {
+.displayFilename:hover {
     font-weight: normal;
     /*background-color: #eaba5e;*/
     font-style: italic;
@@ -649,7 +635,7 @@
     padding: 1px 6px 2px 6px;
 }
 
-.displayFileName:hover > .separatorFileName {
+.displayFilename:hover > .separatorFilename {
     color: #3b6363;
 }
 
@@ -681,12 +667,12 @@
     margin-left: 54px;
 }
 
-#fileNameContainer {
+#filenameContainer {
     float: right;
     margin-top: 6px;
 }
 
-#fileName {
+#filename {
     display: inline-block;
     margin-right: 46px;
     margin-top: 6px;

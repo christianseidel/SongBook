@@ -198,12 +198,12 @@ public class SongCollectionService {
 
     public void deleteFileAndTempDir(String fileLocation) {
         int end = fileLocation.lastIndexOf("/");
-        String fileName = fileLocation.substring(end + 1);
+        String filename = fileLocation.substring(end + 1);
         Path path = Paths.get(fileLocation);
         try {
             Files.delete(path);
         } catch (IOException e) {
-            throw new RuntimeException("File \"" + fileName + "\" could not be deleted.");
+            throw new RuntimeException("File \"" + filename + "\" could not be deleted.");
         }
         Path parent = path.getParent();
         try {

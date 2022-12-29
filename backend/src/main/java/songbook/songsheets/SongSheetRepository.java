@@ -9,5 +9,5 @@ import java.util.Optional;
 @Repository
 public interface SongSheetRepository extends MongoRepository<SongSheetFile, String> {
 
-    Optional<SongSheetFile> findByFileName(String fileName);
+    Optional<SongSheetFile> findByFilename(String filename);
 }

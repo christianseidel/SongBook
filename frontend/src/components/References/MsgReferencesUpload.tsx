@@ -6,7 +6,7 @@ import {UploadResult} from "./modelsReference";
 interface ResultProps {
     uploadResult: UploadResult
     onClose: () => void;
-    fileName: string;
+    filename: string;
 }
 
 function MessageBox(props: ResultProps) {
@@ -24,7 +24,7 @@ function MessageBox(props: ResultProps) {
                 <div id={'resultIcon'}>&#10003;</div>
                 <div className={'message'}>
                     <p>
-                        Your file {props.fileName} was successfully uploaded.
+                        Your file {props.filename} was successfully uploaded.
                     </p>
                     <p>
                         Your song list contains a <span className={"bold"}>

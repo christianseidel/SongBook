@@ -26,7 +26,7 @@ public class SongSheetStorageController {
     ResponseEntity<Object> uploadSongSheetFile(@RequestParam("file") MultipartFile file) {
         try {
             SongSheetFile songSheetFile = songSheetStorageService.saveSongSheetFile(file);
-            return ResponseEntity.ok().body(new SongSheetUploadResponse(songSheetFile.getId(), songSheetFile.getFileName(), file.getContentType()));
+            return ResponseEntity.ok().body(new SongSheetUploadResponse(songSheetFile.getId(), songSheetFile.getFilename(), file.getContentType()));
         } catch (RuntimeException | IOException e) {
             return ResponseEntity.status(406).body(SongBookMessage.jsonify(e.getMessage()));
         }
@@ -39,7 +39,7 @@ public class SongSheetStorageController {
 
             return ResponseEntity.ok()
                     .contentType(MediaType.parseMediaType(file.getContentType()))
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; fileName=" + file.getFileName())
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=" + file.getFilename())
                     .body(file.getFile());
         } catch (RuntimeException e) {
             return ResponseEntity.status(404).body(e.getMessage());

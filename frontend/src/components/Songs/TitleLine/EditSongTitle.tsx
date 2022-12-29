@@ -9,7 +9,6 @@ interface SongItemProps {
     onItemRevision: (song: Song) => void;
     displayMsg: (msg: message) => void;
 }
-// TODO: I still need to go via session storage in order to not loose entered data inadvertently
 
 function EditSongTitle(props: SongItemProps) {
 
@@ -32,9 +31,10 @@ function EditSongTitle(props: SongItemProps) {
                 author: author,
                 year: year,
                 dateCreated: props.song.dateCreated,
-                references: props.song.references,
                 description: props.song.description,
+                references: props.song.references,
                 links: props.song.links,
+                songSheets: props.song.songSheets,
             })
         })
             .then(response => {

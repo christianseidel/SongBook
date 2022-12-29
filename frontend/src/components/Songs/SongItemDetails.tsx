@@ -204,8 +204,8 @@ function SongItemDetails(props: SongItemProps) {
                 id: props.song.id,
                 title: props.song.title,
                 author: props.song.author,
-                dateCreated: props.song.dateCreated,
                 year: props.song.year,
+                dateCreated: props.song.dateCreated,
                 description: props.song.description,
                 references: props.song.references,
                 links: props.song.links,
@@ -442,7 +442,7 @@ function SongItemDetails(props: SongItemProps) {
 
     return (
         <div>
-            <div id={'songHead'} className={'dataSheetElement'}>
+            <div className={'dataSheetElement'} id={'songHead'}>
                 <div>{handleTitleLine}</div>
             </div>
 
@@ -466,7 +466,7 @@ function SongItemDetails(props: SongItemProps) {
                     </span>
             </div>
 
-            <div id={'workingSpace'} className={'dataSheetElement'}>
+            <div className={'dataSheetElement'} id={'workingSpace'}>
 
                 {props.song.description && !toggleEditDescription && displayDescription &&
                     <div id={'displayDescription'} className={'workingSpaceElement'}
@@ -626,20 +626,20 @@ function SongItemDetails(props: SongItemProps) {
             </div>
 
 
-            <div id={'displaySpace'} className={'dataSheetElement'}>
-
+            <div className={'dataSheetElement'} id={'displaySpace'}>
                 <div>
                     {(props.song.links !== undefined && props.song.links?.length > 0)
                         && <div id={'displayLinks'}>
                             {props.song.links.map((item, index) =>
                                 <div key={index} className={'link'}>
                                     <span className={'linkIndicator'}
-                                          onClick={() => openUpdateLink(index)}>&#8734;</span>&nbsp;
+                                          onClick={() => openUpdateLink(index)}>
+                                        &#8734; &nbsp;</span>
                                     <a href={item.linkTarget} target={'_blank'} rel={'noreferrer'}>
                                         <span className={'linkText'}>{item.linkText}</span></a>
                                     {item.linkKey &&
                                         <span> – <span className={'displayKey'}>({item.linkKey})</span></span>}
-                                    {item.linkAuthor && <span id={'displayLinkAuthor'}> – by: {item.linkAuthor}</span>}
+                                    {item.linkAuthor && <span id={'displayLinkAuthor'}> – {item.linkAuthor}</span>}
                                     {item.linkStrumming &&
                                         <span id={'displayLinkStrumming'}> – {item.linkStrumming}</span>}
                                 </div>)
@@ -653,10 +653,12 @@ function SongItemDetails(props: SongItemProps) {
                         && <div id={'displaySongSheets'}>
                             {props.song.songSheets.map((item, index) =>
                                 <div key={index}>
-                                    <span className={toggleCreateOrUpdate === 'create' ?'songSheet' : 'songSheetDeaf'} onClick={() => openUpdateSongSheet(index)}>
-                                        <span><span className={'songSheetIndicator'}>&#x266b;</span>&nbsp; &nbsp;{item.name}</span>
-                                        {item.key && <span> – <span className={'displayKey'}>({item.key})</span></span>}
-                                    </span>
+                                    <span className={toggleCreateOrUpdate === 'create' ?'songSheet' : 'songSheetDeactivated'}
+                                          onClick={() => openUpdateSongSheet(index)}>
+                                        <span className={'songSheetIndicator'}>
+                                            &#x266b; &nbsp;
+                                        </span>{item.name}</span>
+                                    {item.key && <span> – <span className={'displayKey'}>({item.key})</span></span>}
                                     <span className={'songSheetDescriptive'}>
                                         {item.source && <span className={'displaySource'}><span
                                             className={'separator'}></span>source: {item.source}</span>}
@@ -664,8 +666,8 @@ function SongItemDetails(props: SongItemProps) {
                                             className={'separator'}></span>({item.description})</span>}
                                     </span>
                                     <span className={'songSheetDescriptive'} onClick={() => downloadSongSheetFile(item.fileId!)}>
-                                        {item.fileName && <span className={'displayFileName'}>
-                                        {/*    <span className={'separatorFileName'}></span>*/}{item.fileName}
+                                        {item.filename && <span className={'displayFilename'}>
+                                        {/*    <span className={'separatorFilename'}></span>*/}{item.filename}
                                             </span>}
                                     </span>
                                 </div>)}

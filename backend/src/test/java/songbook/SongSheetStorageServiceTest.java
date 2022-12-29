@@ -44,23 +44,23 @@ class SongSheetStorageServiceTest {
 
         String fileOrigin = "src/test/resources/songSheets/mockSongSheet.pdf";
         SongSheetFile testFile = new SongSheetFile();
-        Mockito.when(songSheetRepository.findByFileName("mockSongSheet.pdf")).thenReturn(Optional.of(testFile));
-        Mockito.when(songSheetRepository.findByFileName("mockSongSheet_1.pdf")).thenReturn(Optional.of(testFile));
-        Mockito.when(songSheetRepository.findByFileName("mockSongSheet_2.pdf")).thenReturn(Optional.of(testFile));
+        Mockito.when(songSheetRepository.findByFilename("mockSongSheet.pdf")).thenReturn(Optional.of(testFile));
+        Mockito.when(songSheetRepository.findByFilename("mockSongSheet_1.pdf")).thenReturn(Optional.of(testFile));
+        Mockito.when(songSheetRepository.findByFilename("mockSongSheet_2.pdf")).thenReturn(Optional.of(testFile));
         SongSheetFile fileCreated = new SongSheetFile();
-        fileCreated.setFileName("mockSongSheet_3.pdf");
+        fileCreated.setFilename("mockSongSheet_3.pdf");
         Mockito.when(songSheetRepository.save(any(SongSheetFile.class))).thenReturn(fileCreated);
 
         try {
             MultipartFile testMultiPartFile = new MockMultipartFile("mock.pdf", "mockSongSheet.pdf", "application/pdf", new FileInputStream(fileOrigin));
             SongSheetFile fileReturned = songSheetStorageService.saveSongSheetFile(testMultiPartFile);
 
-            verify(songSheetRepository).findByFileName("mockSongSheet.pdf");
-            verify(songSheetRepository).findByFileName("mockSongSheet_1.pdf");
-            verify(songSheetRepository).findByFileName("mockSongSheet_2.pdf");
-            verify(songSheetRepository).findByFileName("mockSongSheet_3.pdf");
+            verify(songSheetRepository).findByFilename("mockSongSheet.pdf");
+            verify(songSheetRepository).findByFilename("mockSongSheet_1.pdf");
+            verify(songSheetRepository).findByFilename("mockSongSheet_2.pdf");
+            verify(songSheetRepository).findByFilename("mockSongSheet_3.pdf");
             verify(songSheetRepository).save(any(SongSheetFile.class));
-            Assertions.assertEquals("mockSongSheet_3.pdf", fileReturned.getFileName());
+            Assertions.assertEquals("mockSongSheet_3.pdf", fileReturned.getFilename());
 
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
@@ -83,7 +83,7 @@ class SongSheetStorageServiceTest {
     @DisplayName("song sheet file cannot be found")
     void shouldThrowExceptionWhenLookingUpNonExistingSongSheetFile() {
 
-        Mockito.when(songSheetRepository.findByFileName("/mockURL/mockSongSheet.pdf")).thenReturn(Optional.empty());
+        Mockito.when(songSheetRepository.findByFilename("/mockURL/mockSongSheet.pdf")).thenReturn(Optional.empty());
 
         Exception exception = assertThrows(RuntimeException.class,
                 () -> {

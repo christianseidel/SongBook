@@ -3,22 +3,22 @@ package songbook.songsheets.models;
 public class SongSheetUploadResponse {
 
     private String id;
-    private String fileName;
+    private String filename;
     private String contentType;
     private String url;
 
-    public SongSheetUploadResponse(String id, String fileName, String contentType) {
+    public SongSheetUploadResponse(String id, String filename, String contentType) {
         this.id = id;
-        this.fileName = fileName;
+        this.filename = filename;
         this.contentType = contentType;
     }
 
-    public String getFileName() {
-        return fileName;
+    public String getFilename() {
+        return filename;
     }
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
 
     public String getContentType() {

@@ -9,12 +9,12 @@ public class SongSheetFile {
 
     @Id
     private String id;
-    private String fileName;
+    private String filename;
     private String contentType;
     private byte[] file;
 
     public SongSheetFile(MultipartFile file) {
-        this.fileName = file.getOriginalFilename();
+        this.filename = file.getOriginalFilename();
     }
 
     public SongSheetFile() {
@@ -28,12 +28,12 @@ public class SongSheetFile {
         this.id = id;
     }
 
-    public String getFileName() {
-        return fileName;
+    public String getFilename() {
+        return filename;
     }
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
 
     public byte[] getFile() {

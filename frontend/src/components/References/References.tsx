@@ -25,7 +25,7 @@ function References(props: Props) {
     const [uploadResult, setUploadResult] = useState({} as UploadResult);
     const [referencesDTO, setReferencesDTO] = useState({} as ReferencesDTO);
 
-    var fileName = '';
+    var filename = '';
 
     useEffect(() => {
         if (localStorage.getItem('jwt')) {
@@ -111,7 +111,7 @@ function References(props: Props) {
         } else {
             const formData = new FormData();
             formData.append('file', files[0]);
-            fileName = files[0].name
+            filename = files[0].name
             fetch(`${process.env.REACT_APP_BASE_URL}/api/collections/upload/`, {
                 method: 'POST',
                 headers: {
@@ -209,7 +209,7 @@ function References(props: Props) {
             <div>
                 {toggleDisplayUploadResult && <DisplayUploadResult
                     uploadResult={uploadResult}
-                    fileName={fileName}
+                    filename={filename}
                     onClose={() => {
                         setToggleDisplayUploadResult(false);
                     }}
