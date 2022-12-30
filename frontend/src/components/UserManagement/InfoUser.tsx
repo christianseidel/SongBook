@@ -29,8 +29,10 @@ function InfoUser() {
                 return response.json()
             } else if (response.status === 500) {
                 throw Error ('Server unavailable (error code 500)');
+            } else if (response.status === 403) {
+                nav('users/login');
             } else {
-                throw Error ('Something unexpected happened. Error code: ' + response.status + '.')
+                throw Error ('Something unexpected happened. Error code: ' + response.status + '.');
             }})
             .then(userDTO => {
                 setUserDTO(userDTO);
@@ -38,7 +40,7 @@ function InfoUser() {
                 setDateCreated(date.day + '.' + date.month + '.' + date.year);
             })
             .catch(e => setMessage(NewMessage.create(e.message, MessageType.RED)))
-    }, [token])
+    }, [token, nav])
 
     return (
         <div id={'userInfoContainer'}>

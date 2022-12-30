@@ -168,7 +168,7 @@ function EditSongSheet(props: SongSheetProps) {
             <form onSubmit={ev => {
                 props.toggleCreateOrUpdate === 'create' ? doCreateSongSheet(ev) : doUpdateSongSheet();
             }}>
-                <label className={'editSongSheetTitle'}>{props.toggleCreateOrUpdate === 'create'
+                <label id={'titleEditSongSheet'}>{props.toggleCreateOrUpdate === 'create'
                     ? <span>Add a</span>
                     : <span>Edit your</span>} Song Sheet File</label><label>:</label>
                 <span className={'nextLine'}>

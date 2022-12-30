@@ -99,8 +99,12 @@
 }
 
 #notRegistered {
-    margin-top: 42px;
-    margin-bottom: 10px;
+    margin-top: 30px;
+    margin-bottom: 8px;
+}
+
+#testApp {
+    margin-top: 20px;
 }
 
 

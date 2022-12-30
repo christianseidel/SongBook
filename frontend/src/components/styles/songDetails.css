@@ -81,9 +81,9 @@
 
 #displayAuthor {
     display: inline-block;
-    margin-left: 6px;
+    margin-left: 12px;
     min-width: 187px;
-    margin-right: 12px;
+    margin-right: 6px;
 }
 
 #inputAuthor {
@@ -203,40 +203,22 @@
 }
 
 
-/*  WORKING SPACE  */
-
+/*  WORKING SPACE  / general */
 
 .workingSpaceElement {
     min-width: 546px;
+    /*border: 1px solid deeppink;*/
 }
 
+/*  WORKING SPACE: Description  */
 
-/*  DISPLAY SPACE  */
+#addDescription {}
 
-.displayThis {
-    margin-top: 18px;
-    border: 1px solid darkgoldenrod;
-    border-radius: 8px;
-    padding: 18px;
-}
-
-
-/*  DESCRIPTION  */
-
-.editDescriptionTitle {
+#titleEditDescription {
     text-decoration: underline;
     text-decoration-color: #936b09;
     text-decoration-thickness: 2px;
 }
-
-#displayDescription {
-    margin-top: 6px;
-    font-weight: lighter;
-    font-style: italic;
-}
-
-
-#addADescription {}
 
 #inputDescription {
     margin-top: 12px;
@@ -261,13 +243,227 @@
 }
 
 
-/*  REFERENCE  */
+/*  WORKING SPACE: Reference  */
 
-.editReferenceTitle {
+.titleEditReference {
     text-decoration: underline;
     text-decoration-color: green;
     text-decoration-thickness: 2px;
 }
+
+.nextLine {
+    display: block;
+    margin-top: 6px;
+}
+
+#buttonAddReference, #buttonCancelAddReference {
+    float: right;
+}
+
+#buttonDeleteReference, #buttonDeleteLink {
+    margin-left: 12px;
+}
+
+#buttonClearReference, #buttonClearLink {
+    margin-top: 8px;
+    margin-left: 54px;
+}
+
+#inputRefCollection {
+    margin-left: 21px;
+    width: 172px;
+}
+
+#labelInputRefPage {
+    margin-left: 12px;
+}
+
+#inputRefPage {
+    margin-left: 8px;
+    width: 70px;
+}
+
+#inputRefAuthor {
+    margin-left: 6px;
+    width: 172px;
+}
+
+#labelInputRefYear {
+    margin-left: 12px;
+}
+
+#inputRefYear {
+    margin-left: 9px;
+    width: 70px;
+}
+
+#inputKey {
+    margin-left: 25px;
+    max-height: 60px;
+    background-color: blanchedalmond;
+    border-color: darkgoldenrod;
+}
+
+.inputMajorOrMinor {
+    margin-left: 10px;
+    width: revert;
+    background-color: goldenrod;
+    transition: 0ms;
+}
+
+.labelInputMajorOrMinor {
+    font-weight: normal;
+}
+
+#major {
+    margin-left: 26px;
+}
+
+
+/*  WORKING SPACE: Link (EditLink.tsx) */
+
+#inputFormLink {}
+
+#buttonEditLink {
+    float: right;
+}
+
+#buttonCancelEditLink {
+    float: right;
+    clear: right;
+}
+
+#titleEditLink {
+    text-decoration: underline;
+    text-decoration-color: #4280c9;
+    text-decoration-thickness: 2px;
+}
+
+#inputLinkText {
+    margin-left: 21px;
+    width: 147px;
+}
+
+.labelSecondInLine {
+    margin-left: 12px;
+}
+
+#inputLinkTarget {
+    margin-left: 8px;
+    width: 169px;
+}
+
+#inputLinkAuthor {
+    margin-left: 6px;
+    width: 147px;
+}
+
+#inputLinkStrumming {
+    margin-left: 11px;
+    width: 169px;
+}
+
+
+/*  WORKING SPACE: Song Sheet (EditSongSheet.tsx) */
+
+#titleEditSongSheet {
+    text-decoration: underline;
+    text-decoration-color: rgb(157, 54, 210);
+    text-decoration-thickness: 2px;
+}
+
+#inputSongSheetName {
+    margin-left: 12px;
+    width: 147px;
+}
+
+#inputSongSheetSource {
+    margin-left: 8px;
+    width: 166px;
+}
+
+#inputSongSheetDescription {
+    margin-left: 8px;
+    width: 392px;
+}
+
+#ContainerInsertingDateUploaded {
+    height: 24px;
+}
+
+#dateUploaded {
+    position: relative;
+    left: 359px;
+    top: -24px;
+    color: darkslategray;
+    font-family: "Times New Roman", sans-serif;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+#uploadSongSheetForm {
+    float: right;
+    margin-top: 8px;
+}
+
+#labelUploadSongSheetForm {
+    margin-right: 18px;
+}
+
+#inputAddSongSheet {
+    float: right;
+    width: 96px;
+    background-color: #f0c579;
+}
+
+#filenameContainer {
+    float: right;
+    margin-top: 6px;
+}
+
+#filename {
+    display: inline-block;
+    margin-right: 46px;
+    margin-top: 6px;
+    text-align: right;
+}
+
+.coloredSongSheetLink {
+    color: rgb(157, 54, 210);
+    font-weight: normal;
+    cursor: pointer;
+}
+
+#buttonClearSongSheet, #buttonDeleteSongSheet {
+    margin-top: 8px;
+    margin-left: 54px;
+}
+
+#buttonDiscardSongSheetFile {
+    float: right;
+}
+
+
+/*  DISPLAY SPACE  */
+/*  DISPLAY SPACE: Description  */
+
+#displayDescription {
+    margin-top: 6px;
+    font-weight: lighter;
+    font-style: italic;
+}
+
+.displayThis {
+    margin-top: 18px;
+    border: 1px solid darkgoldenrod;
+    border-radius: 8px;
+    padding: 18px;
+}
+
+/*// I am Here*/
+
+/*  REFERENCE  */
+
 
 #displayReferences, #displaySongSheets {
     display: block;
@@ -317,51 +513,7 @@
     margin-bottom: -2px;
 }
 
-.nextLine {
-    display: block;
-    margin-top: 6px;
-}
 
-#buttonAddReference, #buttonCancelAddReference {
-    float: right;
-}
-
-#buttonDeleteReference, #buttonDeleteLink {
-    margin-left: 12px;
-}
-
-#buttonClearReference, #buttonClearLink {
-    margin-top: 8px;
-    margin-left: 54px;
-}
-
-#inputRefCollection {
-    margin-left: 21px;
-    width: 172px;
-}
-
-#labelInputRefPage {
-    margin-left: 12px;
-}
-
-#inputRefPage {
-    margin-left: 8px;
-    width: 70px;
-}
-
-#inputRefAuthor {
-    margin-left: 6px;
-    width: 172px;
-}
-
-#labelInputRefYear {
-    margin-left: 12px;
-}
-
-#inputRefYear {
-    margin-left: 9px;
-    width: 70px;
-}
 
 #displayRefAuthor {}
 
@@ -371,30 +523,12 @@
     font-weight: normal;
 }
 
-#inputKey {
-    margin-left: 25px;
-    max-height: 60px;
-    background-color: blanchedalmond;
-    border-color: darkgoldenrod;
-}
-
-.labelInputMajorOrMinor {
-    font-weight: normal;
-}
-
-.inputMajorOrMinor {
-    margin-left: 10px;
-    width: revert;
-    background-color: goldenrod;
-    transition: 0ms;
-}
-
-#major {
-    margin-left: 26px;
-}
 
 
-/*  LINK  */
+
+
+
+
 #displayLinks {
     display: block;
     padding: 0 5px 0 5px;
@@ -403,11 +537,6 @@
     margin-top: 8px;
 }
 
-.editLinkTitle {
-    text-decoration: underline;
-    text-decoration-color: #4280c9;
-    text-decoration-thickness: 2px;
-}
 
 #listOfLinks {
 }
@@ -478,41 +607,6 @@
     margin-bottom: 3px;
 }
 
-#inputFormLink {}
-
-#buttonEditLink {
-    float: right;
-}
-
-#buttonCancelEditLink {
-    float: right;
-    clear: right;
-}
-
-#inputLinkText {
-    margin-left: 21px;
-    width: 147px;
-}
-
-.labelSecondInLine {
-    margin-left: 12px;
-}
-
-#inputLinkTarget {
-    margin-left: 8px;
-    width: 169px;
-}
-
-#inputLinkAuthor {
-    margin-left: 6px;
-    width: 147px;
-}
-
-#inputLinkStrumming {
-    margin-left: 11px;
-    width: 169px;
-}
-
 #displayLinkAuthor {
     font-style: italic;
 }
@@ -526,33 +620,7 @@
 
 /*  SONG SHEETS: workingSpace  */
 
-.editSongSheetTitle {
-    text-decoration: underline;
-    text-decoration-color: rgb(157, 54, 210);
-    text-decoration-thickness: 2px;
-}
 
-#inputSongSheetName {
-    margin-left: 12px;
-    width: 147px;
-}
-
-#inputSongSheetSource {
-    margin-left: 8px;
-    width: 166px;
-}
-
-#inputSongSheetDescription {
-    margin-left: 8px;
-    width: 392px;
-}
-
-#inputAddSongSheet {
-    float: right;
-
-    width: 96px;
-    background-color: #f0c579;
-}
 
 
 /*  SONG SHEETS: displaySpace  */
@@ -639,56 +707,6 @@
     color: #3b6363;
 }
 
-#ContainerInsertingDateUploaded {
-    height: 24px;
-}
-
-#dateUploaded {
-    position: relative;
-    left: 359px;
-    top: -24px;
-    color: darkslategray;
-    font-family: "Times New Roman", sans-serif;
-    font-size: 12px;
-    font-weight: normal;
-}
-
-#uploadSongSheetForm {
-    float: right;
-    margin-top: 8px;
-}
-
-#labelUploadSongSheetForm {
-    margin-right: 18px;
-}
-
-#buttonClearSongSheet, #buttonDeleteSongSheet {
-    margin-top: 8px;
-    margin-left: 54px;
-}
-
-#filenameContainer {
-    float: right;
-    margin-top: 6px;
-}
-
-#filename {
-    display: inline-block;
-    margin-right: 46px;
-    margin-top: 6px;
-    text-align: right;
-}
-
-.coloredSongSheetLink {
-    color: rgb(157, 54, 210);
-    font-weight: normal;
-    cursor: pointer;
-}
-
-#buttonDiscardSongSheetFile {
-    float: right;
-    /*margin-top: 6px;*/
-}
 
 /*  FOOTER  */
 

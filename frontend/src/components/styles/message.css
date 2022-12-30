@@ -116,11 +116,11 @@
     z-index: 3;
 }
 
-#buttonCancelDeleteSong {
+#buttonConfirmDeleteSong {
     margin-top: 16px;
 }
 
-#buttonConfirmDeleteSong {
+#buttonCancelDeleteSong {
     margin-top: 16px;
-    margin-left: 238px;
+    margin-left: 248px;
 }

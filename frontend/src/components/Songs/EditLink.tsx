@@ -92,7 +92,7 @@ function EditLink(props: SongItemLinksProps) {
             <form id={'inputFormLink'} onSubmit={ev => {
                 props.toggleCreateOrUpdate === 'create' ? doCreateLink(ev) : doUpdateLink();
             }}>
-                <label className={'editLinkTitle'}>{props.toggleCreateOrUpdate === 'create'
+                <label id={'titleEditLink'}>{props.toggleCreateOrUpdate === 'create'
                     ? <span>Add a</span>
                     : <span>Edit your</span>} Link</label><label>:</label>
                 <span className={'nextLine'}>

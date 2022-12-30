@@ -28,47 +28,55 @@ function InfoUser() {
                 return response.json()
             } else if (response.status === 500) {
                 throw Error ('Server unavailable (error code 500)');
+            } else if (response.status === 403) {
+                nav('/users/login')
             } else {
-                throw Error ('Something unexpected happened. Error code: ' + response.status + '.')
+                throw Error ('Something unexpected happened. Error code: ' + response.status + '.');
             }})
             .then(userDTO => {
                 setUserDTO(userDTO);
                 setUsername(userDTO.username);
             })
             .catch(e => setMessage(NewMessage.create(e.message, MessageType.RED)))
-    }, [token])
+    }, [token, nav])
 
     function deleteUser() {
-        fetch(`${process.env.REACT_APP_BASE_URL}/api/user/info/` + localStorage.getItem('username'), {
-            method: 'DELETE',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
-            .then(response => {
-                if (response.status !== 200) {
-                    if (response.status === 404) {
-                        throw Error('User could not be found.');
-                    } else {
-                        throw Error('Something unexpected happened! Error type: "' + response.statusText + '". Error code: ' + response.status + '.');
-                    }
+        if (userDTO.username === 'test') {
+            setMessage(NewMessage.create('This is a test account. You can do anything using it, except deleting the account itself. However, you may set up your own account and then delete it.', MessageType.RED));
+        } else if (userDTO.username === 'christian') {
+            setMessage(NewMessage.create('No. You do not want to do this!', MessageType.RED));
+        } else {
+            fetch(`${process.env.REACT_APP_BASE_URL}/api/user/info/` + localStorage.getItem('username'), {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
                 }
             })
-            .then(() => {
-                localStorage.removeItem('jwt');
-                localStorage.removeItem('username');
-                document.getElementById('deleteUserContainer')!.style.animation = 'none';
-                document.getElementById('deleteUserBox')!.style.animation = 'none';
-                setMessage(NewMessage.createAndWait(
-                    'User account "' + username + '" has been deleted. ' +
-                    'Thank you for using "My Song Book" App.',
-                    'user/login'))
-            })
-            .catch(e => {
-                localStorage.removeItem('jwt');
-                localStorage.removeItem('username');
-                setMessage(NewMessage.create(e.message, MessageType.RED));
-            });
+                .then(response => {
+                    if (response.status !== 200) {
+                        if (response.status === 404) {
+                            throw Error('User could not be found.');
+                        } else {
+                            throw Error('Something unexpected happened! Error type: "' + response.statusText + '". Error code: ' + response.status + '.');
+                        }
+                    }
+                })
+                .then(() => {
+                    localStorage.removeItem('jwt');
+                    localStorage.removeItem('username');
+                    document.getElementById('deleteUserContainer')!.style.animation = 'none';
+                    document.getElementById('deleteUserBox')!.style.animation = 'none';
+                    setMessage(NewMessage.createAndWait(
+                        'User account "' + username + '" has been deleted. ' +
+                        'Thank you for using "My Song Book" App.',
+                        'user/login'))
+                })
+                .catch(e => {
+                    localStorage.removeItem('jwt');
+                    localStorage.removeItem('username');
+                    setMessage(NewMessage.create(e.message, MessageType.RED));
+                });
+        }
     }
 
     return (

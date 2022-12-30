@@ -93,7 +93,7 @@ function SongBook() {
     }
 
     let newSong: Song = {
-        title: 'no title', author: '', id: '', status: 'create',
+        title: 'no title', author: '', id: '', status: 'create', description: '',
         dayOfCreation: new DayOfCreation(new Date().toISOString().slice(0, 10))
     };
 

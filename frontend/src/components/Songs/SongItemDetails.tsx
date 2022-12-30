@@ -232,11 +232,15 @@ function SongItemDetails(props: SongItemProps) {
     // --- DESCRIPTION ELEMENTS --- //
 
     const openOrCloseAddDescription = () => {
-        setToggleEditDescription(!toggleEditDescription);
-        setToggleEditReference(false);
-        setToggleEditLink(false);
-        setToggleEditSongSheet(false);
-        setDescription(props.song.description ?? '');
+        if (props.song.status === 'create') {
+            props.displayMsg(NewMessage.create('Please, create song item first.', MessageType.RED));
+        } else {
+            setToggleEditDescription(!toggleEditDescription);
+            setToggleEditReference(false);
+            setToggleEditLink(false);
+            setToggleEditSongSheet(false);
+            setDescription(props.song.description ?? '');
+        }
     }
 
     const doAddDescription = (ev: FormEvent<HTMLFormElement>) => {
@@ -259,11 +263,15 @@ function SongItemDetails(props: SongItemProps) {
     // --- REFERENCES ELEMENTS --- //
 
     const openOrCloseAddReference = () => {
-        setToggleEditDescription(false);
-        setToggleEditLink(false);
-        setToggleEditSongSheet(false);
-        setToggleEditReference(!toggleEditReference);
-        setToggleCreateOrUpdate('create');
+        if (props.song.status === 'create') {
+            props.displayMsg(NewMessage.create('Please, create song item first.', MessageType.RED));
+        } else {
+            setToggleEditDescription(false);
+            setToggleEditLink(false);
+            setToggleEditSongSheet(false);
+            setToggleEditReference(!toggleEditReference);
+            setToggleCreateOrUpdate('create');
+        }
     }
 
     const [collection, setCollection] = useState('');
@@ -367,11 +375,15 @@ function SongItemDetails(props: SongItemProps) {
     const [linkIndex, setLinkIndex] = useState(-1)
 
     const openOrCloseAddLink = () => {
-        setToggleEditDescription(false);
-        setToggleEditReference(false);
-        setToggleEditSongSheet(false);
-        setToggleEditLink(!toggleEditLink);
-        setToggleCreateOrUpdate('create');
+        if (props.song.status === 'create') {
+            props.displayMsg(NewMessage.create('Please, create song item first.', MessageType.RED));
+        } else {
+            setToggleEditDescription(false);
+            setToggleEditReference(false);
+            setToggleEditSongSheet(false);
+            setToggleEditLink(!toggleEditLink);
+            setToggleCreateOrUpdate('create');
+        }
     }
 
     const openUpdateLink = (index: number) => {
@@ -389,11 +401,15 @@ function SongItemDetails(props: SongItemProps) {
     const [sheetIndex, setSheetIndex] = useState(-1)
 
     const openOrCloseAddSongSheet = () => {
-        setToggleEditDescription(false);
-        setToggleEditReference(false);
-        setToggleEditSongSheet(!toggleEditSongSheet);
-        setToggleEditLink(false);
-        setToggleCreateOrUpdate('create');
+        if (props.song.status === 'create') {
+            props.displayMsg(NewMessage.create('Please, create song item first.', MessageType.RED));
+        } else {
+            setToggleEditDescription(false);
+            setToggleEditReference(false);
+            setToggleEditSongSheet(!toggleEditSongSheet);
+            setToggleEditLink(false);
+            setToggleCreateOrUpdate('create');
+        }
     }
 
     const openUpdateSongSheet = (index: number) => {
@@ -476,9 +492,9 @@ function SongItemDetails(props: SongItemProps) {
                 }
 
                 {toggleEditDescription && <div>
-                    <form id={'addADescription'} className={'workingSpaceElement'}
+                    <form id={'addDescription'} className={'workingSpaceElement'}
                           onSubmit={ev => doAddDescription(ev)}>
-                        <label className={'editDescriptionTitle'}>{((props.song.description !== null
+                        <label id={'titleEditDescription'}>{((props.song.description !== null
                             && props.song.description!.length > 0) && true)
                             ? <span>Edit your </span>
                             : <span>Add a </span>}
@@ -502,12 +518,11 @@ function SongItemDetails(props: SongItemProps) {
                     </button>
                 </div>}
 
-
                 {toggleEditReference && <div>
                     <form onSubmit={ev => {
                         toggleCreateOrUpdate === 'create' ? createReference(ev) : doUpdateReference();
                     }}>
-                        <label className={'editReferenceTitle'}>{toggleCreateOrUpdate === 'create'
+                        <label className={'titleEditReference'}>{toggleCreateOrUpdate === 'create'
                             ? <span>Add a</span>
                             : <span>Edit your</span>}
                             Song Sheet Reference</label><label>:</label>
@@ -697,23 +712,21 @@ function SongItemDetails(props: SongItemProps) {
                 {props.song.dayOfCreation.month}.
                 {props.song.dayOfCreation.year}
             </div>
+
             <span id={'buttonDeleteSong'}>
-
-
-                <button type='button' onClick={() =>
-                    promptConfirmDeletionBox()
-                }>
+                <button type='button' onClick={() => {
+                    if (props.song.songSheets?.length === 0
+                        && props.song.links?.length === 0
+                        && (props.song.description == null || props.song.description.length < 51)) {
+                            deleteSongItem(props.song.id)
+                    } else {
+                        promptConfirmDeletionBox()
+                    }
+                }}>
                     &#10008; delete
                 </button>
-
-
-                {/*
-                <button type='button' onClick={() => deleteSongItem(props.song.id)}>
-                    &#10008; delete
-                </button>
-*/}
-
             </span>
+
             <ConfirmationBox
                 message={message}
                 doDelete={() => deleteSongItem(props.song.id)}

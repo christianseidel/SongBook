@@ -18,13 +18,13 @@ function ConfirmationBox(props: MessageProps) {
                             Do you really want to delete your song? {props.message}
                             Please confirm:
                         <div id={'buttonOKContainer'}>
-                            <button id={'buttonCancelDeleteSong'} type={'button'}
-                                    onClick={props.cancelDelete}>
-                                cancel
-                            </button>
                             <button id={'buttonConfirmDeleteSong'} type={'button'}
                                     onClick={props.doDelete}>
                                 delete
+                            </button>
+                            <button id={'buttonCancelDeleteSong'} type={'button'}
+                                    onClick={props.cancelDelete}>
+                                cancel
                             </button>
                         </div>
                     </div>

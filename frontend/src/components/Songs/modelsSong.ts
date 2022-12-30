@@ -9,7 +9,7 @@ export interface Song {
     year?: number;
     dateCreated?: string;
     dayOfCreation: DayOfCreation;
-    description?: string;
+    description: string;
     status: string;
     references?: Array<Reference>;
     links?: Array<Link>;

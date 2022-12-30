@@ -31,10 +31,10 @@ function LoginUser() {
                 <div id={'welcomeTitleLeft'}>
                     <img src={ukulele} alt="Ukulele" id={'ukuleleUserPage'}/>
                 </div>
-                    <h1 id={'welcomeTitleRight'}>
-                        <span className={'italic'}>Welcome to </span>
-                        <div id={'titleSecondPart'}> My Song Book <span className={'italic'}> App</span></div>
-                    </h1>
+                <h1 id={'welcomeTitleRight'}>
+                    <span className={'italic'}>Welcome to </span>
+                    <div id={'titleSecondPart'}> My Song Book <span className={'italic'}> App</span></div>
+                </h1>
             </div>
 
             <h3>Login User</h3>
@@ -42,18 +42,20 @@ function LoginUser() {
                 <input type="text" placeholder={'user name'} value={loginUsername} autoFocus required
                        onChange={ev => setLoginUsername(ev.target.value)} tabIndex={1}/>
                 <button id={'buttonLogin'} className={'buttonUserMgt'} type="submit">
-                    &#10004; login</button>
+                    &#10004; login
+                </button>
                 <span id={'lineBeforePassword'}>
                     <input type={passwordToggle} placeholder={'password'} value={loginPassword} required
                            onChange={ev => setLoginPassword(ev.target.value)} tabIndex={2}/>
                     <button id={'buttonCoverPassword'} className={'buttonUserMgt'} type='button'
-                            onClick={() => ((passwordToggle==='text')
+                            onClick={() => ((passwordToggle === 'text')
                                 ? setPasswordToggle('password')
                                 : setPasswordToggle('text'))}>
-                        {passwordToggle==='text' && <span id={'coverPassword'}>
+                        {passwordToggle === 'text' && <span id={'coverPassword'}>
                             <span id={'sign01CoverPassword'}>( </span><span id={'sign02CoverPassword'}> ( </span>
                                 hide</span>}
-                        {passwordToggle==='password' && <><img id={'iconUncoverPassword'} src={icon_eyes} alt={'eyes closed'} />
+                        {passwordToggle === 'password' && <><img id={'iconUncoverPassword'} src={icon_eyes}
+                                                                 alt={'eyes closed'}/>
                             show </>}
                     </button>
                 </span>
@@ -69,7 +71,15 @@ function LoginUser() {
                         onClick={() => nav('/users/register')}>&#10140; register</button>
             </div>
 
-
+            <div id={'testApp'}>
+                Alternatively, you may first want to <button
+                    onClick={() => {
+                        login('test', 'test')
+                            .then(() => nav('/songbook'))
+                            .catch(e => setMessage(NewMessage.create(e.message, MessageType.RED)))
+                    }}
+                >test</button> this app.
+            </div>
 
             <MessageBox message={message}/>
         </div>
