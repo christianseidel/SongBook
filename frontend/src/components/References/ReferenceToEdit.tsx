@@ -35,7 +35,6 @@ function ReferenceToEdit(props: ReferenceItemProps) {
         event.preventDefault();
         // todo: implement error thrown. Here and elsewhere.
         let responseStatus: number;
-        console.log(key)
         fetch(`${process.env.REACT_APP_BASE_URL}/api/collections/edit/` + props.reference.id, {
             method: 'PUT',
             headers: {

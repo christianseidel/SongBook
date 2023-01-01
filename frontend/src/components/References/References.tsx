@@ -1,6 +1,6 @@
 import '../styles/references.css';
 import '../styles/common.css';
-import React, {FormEvent, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import ReferenceItemWithinList from "./ReferenceItemWithinList";
 import ReferenceToEdit from "./ReferenceToEdit";
 import DisplayUploadResult from "./MsgReferencesUpload";
@@ -56,9 +56,8 @@ function References(props: Props) {
 
     props.receiverRerenderSignal(getAllReferences)
 
-    const searchReference = (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        fetch(`${process.env.REACT_APP_BASE_URL}/api/collections/` + searchWord, {
+    const getReferencesMatchingSearchWord = (searchString: string) => {
+        fetch(`${process.env.REACT_APP_BASE_URL}/api/collections/` + searchString, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -66,7 +65,6 @@ function References(props: Props) {
         })
             .then(response => response.json())
             .then((responseBody: ReferencesDTO) => setReferencesDTO(responseBody));
-        setSearchWord('');
     }
 
     const undoSearch = () => {
@@ -148,19 +146,20 @@ function References(props: Props) {
             {toggleDisplaySearchResultsButNotReference
                 ? <div>
                     <div id={'searchForm'}>
-                        <form onSubmit={ev => searchReference(ev)}>
+                        <form>
                             <div className={'header'}>
                                 <input id={'inputSearchWord'} type="text" value={searchWord}
                                        placeholder={'your search word here...'}
-                                       onChange={(ev) =>
-                                           setSearchWord(ev.target.value)
-                                       }
+                                       onChange={(ev) => {
+                                           setSearchWord(ev.target.value);
+                                           getReferencesMatchingSearchWord(ev.target.value);
+                                           console.log(searchWord);
+                                       }}
                                        onKeyDown={(event) => {
                                            if (event.key === "Escape") {
                                                undoSearch()
                                            }
-                                       }}
-                                       required/>
+                                       }}/>
                             </div>
                         </form>
                         <div>
@@ -193,7 +192,11 @@ function References(props: Props) {
                 :
                 referencesDTO.referenceList.map(item =>
                     <ReferenceToEdit key={item.id} reference={item}
-                                     doCancel={getAllReferences}
+                                     doCancel={() => {
+                                         setToggleDisplaySearchResultsButNotReference(true);
+                                         getReferencesMatchingSearchWord(searchWord);
+                                     }
+                    }
                                      displayMsg={(msg) => setMessage(msg)}
                     />)
             }
@@ -219,7 +222,6 @@ function References(props: Props) {
             <MessageBox message={message}/>
 
         </div>
-
     )
 }
 
