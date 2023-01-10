@@ -653,7 +653,7 @@ function SongItemDetails(props: SongItemProps) {
                                     <a href={item.linkTarget} target={'_blank'} rel={'noreferrer'}>
                                         <span className={'linkText'}>{item.linkText}</span></a>
                                     {item.linkKey &&
-                                        <span> – <span className={'displayKey'}>({item.linkKey})</span></span>}
+                                        <span> – <span className={'displayKey'}>{item.linkKey}</span></span>}
                                     {item.linkAuthor && <span id={'displayLinkAuthor'}> – {item.linkAuthor}</span>}
                                     {item.linkStrumming &&
                                         <span id={'displayLinkStrumming'}> – {item.linkStrumming}</span>}
@@ -673,7 +673,7 @@ function SongItemDetails(props: SongItemProps) {
                                         <span className={'songSheetIndicator'}>
                                             &#x266b; &nbsp;
                                         </span>{item.name}</span>
-                                    {item.key && <span> – <span className={'displayKey'}>({item.key})</span></span>}
+                                    {item.key && <span> – <span className={'displayKey'}>{item.key}</span></span>}
                                     <span className={'songSheetDescriptive'}>
                                         {item.source && <span className={'displaySource'}><span
                                             className={'separator'}></span>source: {item.source}</span>}
@@ -700,7 +700,7 @@ function SongItemDetails(props: SongItemProps) {
                                     <span>{item.addedCollection}</span>}
                                     {item.page !== 0 && <span>, page {item.page} </span>}
                                 </span>
-                                {item.key && <span> – <span className={'displayKey'}>({item.key})</span></span>}
+                                {item.key && <span> – <span className={'displayKey'}>{item.key}</span></span>}
                             </div>)}
                     </div>}
 
