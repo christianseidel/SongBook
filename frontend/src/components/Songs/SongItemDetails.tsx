@@ -492,7 +492,7 @@ function SongItemDetails(props: SongItemProps) {
                 }
 
                 {toggleEditDescription && <div>
-                    <form id={'addDescription'} className={'workingSpaceElement'}
+                    <form className={'workingSpaceElement'}
                           onSubmit={ev => doAddDescription(ev)}>
                         <label id={'titleEditDescription'}>{((props.song.description !== null
                             && props.song.description!.length > 0) && true)
@@ -644,19 +644,19 @@ function SongItemDetails(props: SongItemProps) {
             <div className={'dataSheetElement'} id={'displaySpace'}>
                 <div>
                     {(props.song.links !== undefined && props.song.links?.length > 0)
-                        && <div id={'displayLinks'}>
+                        && <div id={'linkContainer'}>
                             {props.song.links.map((item, index) =>
-                                <div key={index} className={'link'}>
+                                <div key={index} className={'linkItem'}>
                                     <span className={'linkIndicator'}
                                           onClick={() => openUpdateLink(index)}>
-                                        &#8734; &nbsp;</span>
-                                    <a href={item.linkTarget} target={'_blank'} rel={'noreferrer'}>
-                                        <span className={'linkText'}>{item.linkText}</span></a>
+                                        &nbsp; &#8734;</span> &nbsp;
+                                    <a href={item.linkTarget} className={'linkText'} target={'_blank'} rel={'noreferrer'}>
+                                        {item.linkText}</a><span className={'positionTextAfterLinkText'}></span>
                                     {item.linkKey &&
-                                        <span> – <span className={'displayKey'}>{item.linkKey}</span></span>}
-                                    {item.linkAuthor && <span id={'displayLinkAuthor'}> – {item.linkAuthor}</span>}
+                                        <span> – <span className={'showKey'}>{item.linkKey}</span></span>}
+                                    {item.linkAuthor && <span id={'showLinkAuthor'}> – {item.linkAuthor}</span>}
                                     {item.linkStrumming &&
-                                        <span id={'displayLinkStrumming'}> – {item.linkStrumming}</span>}
+                                        <span id={'showLinkStrumming'}> – {item.linkStrumming}</span>}
                                 </div>)
                             }
                         </div>
@@ -673,7 +673,7 @@ function SongItemDetails(props: SongItemProps) {
                                         <span className={'songSheetIndicator'}>
                                             &#x266b; &nbsp;
                                         </span>{item.name}</span>
-                                    {item.key && <span> – <span className={'displayKey'}>{item.key}</span></span>}
+                                    {item.key && <span> – <span className={'showKey'}>{item.key}</span></span>}
                                     <span className={'songSheetDescriptive'}>
                                         {item.source && <span className={'displaySource'}><span
                                             className={'separator'}></span>source: {item.source}</span>}
@@ -700,7 +700,7 @@ function SongItemDetails(props: SongItemProps) {
                                     <span>{item.addedCollection}</span>}
                                     {item.page !== 0 && <span>, page {item.page} </span>}
                                 </span>
-                                {item.key && <span> – <span className={'displayKey'}>{item.key}</span></span>}
+                                {item.key && <span> – <span className={'showKey'}>{item.key}</span></span>}
                             </div>)}
                     </div>}
 

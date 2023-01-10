@@ -15,13 +15,13 @@
 }
 
 #workingSpace {
-    height: 148px;
     margin-top: 18px;
+    height: 148px;
 }
 
 #displaySpace {
-    min-height: 140px;
     margin-top: 18px;
+    min-height: 140px;
 }
 
 #songFooter {
@@ -35,13 +35,13 @@
     z-index: 0;
 }
 
-/*  COMMON ELEMENTS  */
+/* ---- COMMON ELEMENTS ---- */
 
 .buttonFloatRight {
     float: right;
 }
 
-/*  SONG HEAD /// DISPLAY / EDIT / CREATE TITLE  */
+/* ---- SONG HEAD /// DISPLAY / EDIT / CREATE TITLE ---- */
 
 #displayTitle {
     font-style: italic;
@@ -113,7 +113,7 @@
 }
 
 
-/*  ICON LINE   */
+/* ---- ICON LINE  ---- */
 
 #iconContainer {
     margin-top: 24px;
@@ -159,13 +159,13 @@
 }
 
 #iconLink {
-    border-color: #4280c9;  /* blue */
+    border-color: #4280c9;  /* ----blue---- */
     font-weight: bold;
     font-size: 13px;
 }
 
 #iconSongSheetFile {
-    border-color: rgb(157, 54, 210);  /* magenta */
+    border-color: rgb(157, 54, 210);  /* ----magenta---- */
     font-size: 10px;
 }
 
@@ -194,7 +194,7 @@
 .tooltip .tooltipText::after {
     content: " ";
     position: absolute;
-    top: 50%; /* At the bottom of the tooltip */
+    top: 50%; /* ----At the bottom of the tooltip---- */
     right: 100%;
     margin-top: -6px;
     border-width: 6px;
@@ -203,16 +203,20 @@
 }
 
 
-/*  WORKING SPACE  / general */
+/* ---- WORKING SPACE  / general---- */
 
 .workingSpaceElement {
     min-width: 546px;
     /*border: 1px solid deeppink;*/
 }
 
-/*  WORKING SPACE: Description  */
+/* ---- WORKING SPACE: Description ---- */
 
-#addDescription {}
+#displayDescription {
+    margin-top: 6px;
+    font-weight: lighter;
+    font-style: italic;
+}
 
 #titleEditDescription {
     text-decoration: underline;
@@ -243,7 +247,7 @@
 }
 
 
-/*  WORKING SPACE: Reference  */
+/* ---- WORKING SPACE: Reference ---- */
 
 .titleEditReference {
     text-decoration: underline;
@@ -320,7 +324,7 @@
 }
 
 
-/*  WORKING SPACE: Link (EditLink.tsx) */
+/* ---- WORKING SPACE: Link (EditLink.tsx)---- */
 
 #inputFormLink {}
 
@@ -364,7 +368,7 @@
 }
 
 
-/*  WORKING SPACE: Song Sheet (EditSongSheet.tsx) */
+/* ---- WORKING SPACE: Song Sheet (EditSongSheet.tsx)---- */
 
 #titleEditSongSheet {
     text-decoration: underline;
@@ -444,26 +448,107 @@
 }
 
 
-/*  DISPLAY SPACE  */
-/*  DISPLAY SPACE: Description  */
+/* ----  DISPLAY SPACE  ---- */
 
-#displayDescription {
-    margin-top: 6px;
-    font-weight: lighter;
+.showKey {
+    font-size: 12px;
+    color: #850808;
+}
+
+
+/* ---- DISPLAY SPACE: LINKS ---- */
+
+#linkContainer {
+    display: block;
+    padding: 0 5px 0 5px;
+}
+
+.linkItem {
+    font-family: Verdana, Trebuchet MS, Lucida Sans Unicode, Lucida Grande, Lucida Sans, Arial, sans-serif;
+    font-size: 11px;
+    color: #3b6363;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    padding-left: 46px;
+    text-indent: -46px;
+    line-height: 1.2;
+}
+
+.linkIndicator {
+    margin-left: 18px;
+    color: #4280c9;
+    font-weight: bold;
+    z-index: 2;
+}
+
+.linkIndicator:hover {
+    position: relative;
+    background-color: lightyellow;
+    border-style: solid;
+    border-width: 2px;
+    border-color: darkgoldenrod;
+    border-radius: 4px;
+    box-shadow: 3px 3px darkgoldenrod;
+    cursor: pointer;
+    user-select: none;
+    padding: 1px 12px 1px 8px;
+    margin-left: 0;
+    z-index: 2;
+}
+
+.linkIndicator:hover + a {
+    margin-left: -27px;
+    z-index: 1;
+}
+
+.linkIndicator:hover:before {
+    font-weight: normal;
+    color: black;
+    content: 'edit';
+    z-index: 2;
+}
+
+a.linkText {
+    color: #4280c9;
+    text-decoration: none;
+    text-decoration-color: #4280c9;
+    margin-right: 2px;
+}
+
+a.linkText:hover {
+    position: relative;
+    background-color: lightyellow;
+    color: #0066ff;
+    font-style: italic;
+    border-style: solid;
+    border-width: 1px;
+    border-color: darkgoldenrod;
+    border-radius: 2px;
+    width: fit-content;
+    box-shadow: 1px 1px darkgoldenrod;
+    cursor: pointer;
+    user-select: none;
+    padding: 1px 6px 2px 6px;
+    margin-left: -4px;
+    z-index: 2;
+}
+
+a.linkText:hover + .positionTextAfterLinkText {
+    margin-left: -10px;
+}
+
+#showLinkAuthor {
     font-style: italic;
 }
 
-.displayThis {
-    margin-top: 18px;
-    border: 1px solid darkgoldenrod;
-    border-radius: 8px;
-    padding: 18px;
+#showLinkStrumming {
+    color: #3b6363;
 }
 
-/*// I am Here*/
+#displayLinkDescription {}
 
-/*  REFERENCE  */
 
+/* ---- DISPLAY SPACE: REFERENCES ---- */
 
 #displayReferences, #displaySongSheets {
     display: block;
@@ -517,109 +602,16 @@
 
 #displayRefAuthor {}
 
-.displayKey {
-    color: #850808;
-}
 
 
 
 
-
-#displayLinks {
-    display: block;
-    padding: 0 5px 0 5px;
-}
-#displayLinks:nth-of-type(1) {
-    margin-top: 8px;
-}
-
-
-#listOfLinks {
-}
-
-.linkIndicator {
-    color: #4280c9;
-    font-weight: bold;
-    z-index: 2;
-}
-
-.linkIndicator:hover {
-    position: relative;
-    background-color: lightyellow;
-    border-style: solid;
-    border-width: 2px;
-    border-color: darkgoldenrod;
-    border-radius: 2px;
-    box-shadow: 3px 3px darkgoldenrod;
-    cursor: pointer;
-    user-select: none;
-    padding: 1px 0;
-    z-index: 2;
-}
-
-.linkIndicator:hover + a {
-    margin-left: -40px;
-    z-index: 1;
-}
-
-.linkIndicator:hover:before {
-    font-weight: normal;
-    color: black;
-    content: 'edit ';
-    margin-left: 8px;
-    z-index: 2;
-}
-
-.linkText {
-    font-size: 8pt;
-    /*color: #3b6363;*/
-    color: #4280c9;
-    text-decoration: underline;
-    text-decoration-color: #4280c9;
-    z-index: 1;
-}
-
-.linkText:hover {
-    background-color: lightyellow;
-    color: #0066ff;
-    font-style: italic;
-    border-style: solid;
-    border-width: 1px;
-    border-color: darkgoldenrod;
-    border-radius: 2px;
-    width: fit-content;
-    box-shadow: 1px 1px darkgoldenrod;
-    cursor: pointer;
-    user-select: none;
-    padding: 1px 6px 2px 6px;
-    margin-left: -4px;
-}
-
-.link {
-    font-family: Verdana, Trebuchet MS, Lucida Sans Unicode, Lucida Grande, Lucida Sans, Arial, sans-serif;
-    color: #3b6363;
-    margin-left: 26px;
-    margin-top: 3px;
-    margin-bottom: 3px;
-}
-
-#displayLinkAuthor {
-    font-style: italic;
-}
-
-#displayLinkStrumming {
-    color: #3b6363;
-}
-
-#displayLinkDescription {}
-
-
-/*  SONG SHEETS: workingSpace  */
+/* ---- SONG SHEETS: workingSpace ---- */
 
 
 
 
-/*  SONG SHEETS: displaySpace  */
+/* ---- SONG SHEETS: displaySpace ---- */
 
 .songSheet, .songSheetDeactivated {
     font-family: Verdana, Trebuchet MS, Lucida Sans Unicode, Lucida Grande, Lucida Sans, Arial, sans-serif;
@@ -714,7 +706,7 @@
 }
 
 
-/*  FOOTER  */
+/* ---- FOOTER ---- */
 
 #buttonDeleteSong {
     position: absolute;
