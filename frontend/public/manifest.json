@@ -1,6 +1,6 @@
 {
-  "short_name": "Front- & Backend",
-  "name": "Demo project to deploy front- and backend together",
+  "short_name": "My Song Book",
+  "name": "My Song Book: Build Your Personal Song Collection",
   "icons": [],
   "start_url": ".",
   "display": "standalone",
