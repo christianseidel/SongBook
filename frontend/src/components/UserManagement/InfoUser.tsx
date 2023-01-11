@@ -4,7 +4,7 @@ import ukulele from "../media/images/ukulele.png";
 import {useAuth} from "./AuthProvider";
 import {message, MessageType, NewMessage} from "../messageModel";
 import MessageBox from "../MessageBox";
-import {DayOfCreation} from "../Songs/modelsSong";
+import {DayOfCreation} from "../Songs/songModels";
 import '../styles/users.css';
 import '../styles/common.css';
 import {UserDTO} from "./modelsUser";

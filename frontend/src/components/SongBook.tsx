@@ -7,7 +7,7 @@ import ukulele from './media/images/ukulele.png';
 import References from './References/References';
 import {message, MessageType, NewMessage} from './messageModel';
 import MessageBox from './MessageBox';
-import {DayOfCreation, Song, SongsDTO} from './Songs/modelsSong';
+import {DayOfCreation, Song, SongsDTO} from './Songs/songModels';
 import {Reference, ReferencesDTO} from './References/modelsReference';
 import {useAuth} from './UserManagement/AuthProvider';
 import {useNavigate} from 'react-router-dom';
@@ -187,7 +187,7 @@ function SongBook() {
                                 + '" was successfully created!', MessageType.GREEN));
                         } else {
                             setMessage(NewMessage.create('Your reference could not be retrieved ' +
-                                'form the server (error code: ' + responseStatus + ')', MessageType.RED));
+                                'from the server (error code: ' + responseStatus + ')', MessageType.RED));
                         }
                     })
                     .then(() => {

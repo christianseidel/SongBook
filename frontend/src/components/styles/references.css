@@ -181,6 +181,14 @@ h2 {
     margin-top: 2px;
 }
 
+#editRef_buttonCreateSong {
+    grid-area: finalButtons;
+    margin-left: 295px;
+    margin-top: 2px;
+    width: 124px;
+}
+
+
 #editRef_labelKey {
     grid-area: labelKey;
 }

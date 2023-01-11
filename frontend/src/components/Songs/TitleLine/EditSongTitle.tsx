@@ -1,6 +1,6 @@
 import React, {FormEvent, useState} from "react";
 import {message, MessageType, NewMessage} from "../../messageModel";
-import {Song} from "../modelsSong";
+import {Song} from "../songModels";
 import {useAuth} from "../../UserManagement/AuthProvider";
 
 interface SongItemProps {

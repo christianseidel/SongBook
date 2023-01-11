@@ -1,5 +1,5 @@
 import '../styles/landingPage.css'
-import {Song} from "./modelsSong";
+import {Song} from "./songModels";
 
 
 interface SongItemProps {

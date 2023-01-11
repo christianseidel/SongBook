@@ -3,7 +3,7 @@ import React, {FormEvent, useEffect, useState} from "react";
 import ChooseKey from "../ChooseKey";
 import {message, MessageType, NewMessage} from "../../messageModel";
 import {SongSheet} from "./modelsSongSheet";
-import {Mood} from "../modelsSong";
+import {Mood} from "../songModels";
 import {useAuth} from "../../UserManagement/AuthProvider";
 
 interface SongSheetProps {

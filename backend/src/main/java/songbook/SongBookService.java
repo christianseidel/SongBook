@@ -64,12 +64,12 @@ public class SongBookService {
     public Song createSongFromReference(String id, String user) {
         Reference reference = referencesRepository.findById(id).orElseThrow(NoSuchIdException::new);
         reference.setHidden(true);
+        referencesRepository.save(reference);
         Optional<Song> existingSong = songRepository.findByTitleAndUser(reference.getTitle(), user);
         if (existingSong.isPresent()) {
             Song song = addOneReferenceToSong(existingSong.get(), reference, user);
             return songRepository.save(song);
         } else {
-            referencesRepository.save(reference);
             Song song = new Song(reference.getTitle(), reference.getAuthor(), reference.getYear());
             song.setReferences(List.of(reference));
             song.setUser(user);

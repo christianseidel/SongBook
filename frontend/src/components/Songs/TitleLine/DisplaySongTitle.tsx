@@ -1,5 +1,5 @@
 import React from "react";
-import {Song} from "../modelsSong";
+import {Song} from "../songModels";
 
 interface SongItemProps {
     song: Song;

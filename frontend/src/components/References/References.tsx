@@ -103,7 +103,7 @@ function References(props: Props) {
             alert('Somehow the FormData Object did not work properly.')
         } else if (!files[0].name.endsWith('.txt')) {
             setMessage(NewMessage.create(
-                'Unfortunately, file "' + files[0].name + '" will not work...\nPlease, choose a regular text file.',
+                'Unfortunately, the file "' + files[0].name + '" will not work...\nPlease, choose a regular text file.',
                 MessageType.RED
             ));
         } else {
@@ -153,7 +153,6 @@ function References(props: Props) {
                                        onChange={(ev) => {
                                            setSearchWord(ev.target.value);
                                            getReferencesMatchingSearchWord(ev.target.value);
-                                           console.log(searchWord);
                                        }}
                                        onKeyDown={(event) => {
                                            if (event.key === "Escape") {

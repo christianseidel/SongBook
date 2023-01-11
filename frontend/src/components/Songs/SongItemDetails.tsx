@@ -9,7 +9,7 @@ import {keys} from "../literals/keys";
 import EditLink from "./EditLink";
 import EditSongSheet from "./SongSheet/EditSongSheet";
 import {message, MessageType, NewMessage} from "../messageModel";
-import {Mood, Song} from "./modelsSong";
+import {Mood, Song} from "./songModels";
 import {Reference} from "../References/modelsReference";
 import {useAuth} from "../UserManagement/AuthProvider";
 import ConfirmationBox from "../ConfirmationBox";
@@ -290,8 +290,8 @@ function SongItemDetails(props: SongItemProps) {
             next = props.song.references.length;
             props.song.references[next] = reference;
         } else {
-            alert("the resources array is undefined!");
-            console.log("the resources array is undefined!");
+            alert("The resources array is undefined!");
+            console.log("The resources array is undefined!");
         }
         saveSongItem();
         setToggleEditReference(false);

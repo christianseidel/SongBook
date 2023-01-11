@@ -5,8 +5,9 @@ import {message, MessageType, NewMessage} from "../messageModel";
 import {Reference} from "./modelsReference";
 import {useAuth} from "../UserManagement/AuthProvider";
 import {keys} from "../literals/keys";
-import {Mood} from "../Songs/modelsSong";
+import {Mood} from "../Songs/songModels";
 import hide from '../media/images/hide.png';
+import {useSong} from "../Songs/SongProvider"
 
 interface ReferenceItemProps {
     reference: Reference;
@@ -17,10 +18,11 @@ interface ReferenceItemProps {
 function ReferenceToEdit(props: ReferenceItemProps) {
 
     const {token} = useAuth();
+    const {createSongFromReference} = useSong();
     const [title, setTitle] = useState(props.reference.title);
     const [page, setPage] = useState(props.reference.page !== 0 ? props.reference.page : '');
     const [author, setAuthor] = useState(props.reference.author == null ? '' : props.reference.author);
-    const [year, setYear] = useState(props.reference.year !== 0 ? props.reference.year : '');
+    const [year, setYear] = useState(props.reference.year !== 0 && props.reference.year !== undefined ? (props.reference.year).toString() : '');
 
     const [key, setKey] = useState('');
     const [mood, setMood] = useState(0);
@@ -132,6 +134,14 @@ function ReferenceToEdit(props: ReferenceItemProps) {
                 props.displayMsg(NewMessage.create(e.message, MessageType.RED)))
     }
 
+    const doCreateSongFromReference = async (id: string) => {
+        props.displayMsg(await createSongFromReference(id));
+        props.doCancel();
+        /*todo: I need to
+           1) display the song just created
+           2) re-render the list of songs*/
+    }
+
     const checkIfEscapeKey = (key: string) => {
         if (key === "Escape") {
             props.doCancel()
@@ -198,7 +208,7 @@ function ReferenceToEdit(props: ReferenceItemProps) {
                     <button id={'editRef_buttonUpdate'} type={'submit'}> &#10004; update</button>
 
                     <button id={'editRef_buttonCopy'} type={'button'}
-                            onClick={() => copyReference(props.reference.id!)}>&#10004; copy
+                            onClick={() => copyReference(props.reference.id!)}>copy
                     </button>
                     <button id={'editRef_buttonCancel'} onClick={() => {
                         props.doCancel()
@@ -213,6 +223,11 @@ function ReferenceToEdit(props: ReferenceItemProps) {
                             onClick={() => deleteReference(props.reference.id!)}>
                         &#10008; delete
                     </button>
+                    <button id={'editRef_buttonCreateSong'} type={'button'}
+                            onClick={() => doCreateSongFromReference(props.reference.id!)}>
+                        &#10140; make it a song
+                    </button>
+
                 </form>
 
             </div>
