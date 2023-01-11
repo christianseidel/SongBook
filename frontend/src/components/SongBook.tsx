@@ -47,6 +47,13 @@ function SongBook() {
         }
     }, [nav, token])
 
+    useEffect(() => {
+        const highlightSongList = document.getElementById('chooseASong') as HTMLSpanElement | null;
+        if (highlightSongList != null) {
+            highlightSongList.addEventListener('mouseover', highlightSongsToChooseFrom)
+        }
+    })
+
     function displaySongChosen(id: string) {
         fetch(`${process.env.REACT_APP_BASE_URL}/api/songbook/` + id, {
             method: 'GET',
@@ -99,11 +106,6 @@ function SongBook() {
 
     function createItem() {
         setSongChosen(newSong);
-    }
-
-    const highlightSongList = document.getElementById('chooseASong') as HTMLSpanElement | null;
-    if (highlightSongList != null) {
-        highlightSongList.addEventListener('mouseover', highlightSongsToChooseFrom)
     }
 
     function highlightSongsToChooseFrom() {
