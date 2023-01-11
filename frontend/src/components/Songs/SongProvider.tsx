@@ -1,5 +1,5 @@
-import {message, MessageType, NewMessage} from "../messageModel";
-import {useContext, useState} from "react";
+import {MessageType, NewMessage} from "../messageModel";
+import {useContext} from "react";
 import {useAuth} from "../UserManagement/AuthProvider";
 import SongContext from "./SongContext";
 import {Song} from "./songModels";
