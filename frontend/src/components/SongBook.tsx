@@ -8,14 +8,15 @@ import References from './References/References';
 import {message, MessageType, NewMessage} from './messageModel';
 import MessageBox from './MessageBox';
 import {DayOfCreation, Song, SongsDTO} from './Songs/songModels';
-import {Reference, ReferencesDTO} from './References/modelsReference';
 import {useAuth} from './UserManagement/AuthProvider';
 import {useNavigate} from 'react-router-dom';
 import {checkLogin} from "./UserManagement/modelsUser";
+import {useSong} from "./Songs/SongProvider";
 
 function SongBook() {
 
     const {token, logout} = useAuth();
+    const {createSongFromReference} = useSong();
     const nav = useNavigate();
     const [songsDTO, setSongsDTO] = useState({} as SongsDTO);
     const [songChosen, setSongChosen] = useState({} as Song);
@@ -151,73 +152,28 @@ function SongBook() {
         event.preventDefault();
     }
 
-    // HAVE NEW SONG ITEMS CREATED BY DRAGGING & DROPPING A REFERENCE
+    // create new song item by dragging & dropping a reference:
     const handleDropAndCreateSongFromReference = (event: React.DragEvent<HTMLDivElement>) => {
         const id = event.dataTransfer.getData('text');
         let songCreatedFromReference: Song;
-
-        // get reference
-        let referenceRetrieved: Reference;
-        fetch(`${process.env.REACT_APP_BASE_URL}/api/collections/edit/` + id, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
-            .then(response => response.json())
-            .then((responseBody: ReferencesDTO) =>
-                referenceRetrieved = responseBody.referenceList[0])
+        createSongFromReference(id)
+            .then((result: Song) => {
+                songCreatedFromReference = result;
+                setMessage(NewMessage.create('Your song "' + result.title
+                    + '" was successfully created!', MessageType.GREEN));
+                songCreatedFromReference.status = 'display';
+                songCreatedFromReference.dayOfCreation = new DayOfCreation( // = displayable format of "dateCreated"
+                songCreatedFromReference.dateCreated as string);
+            })
             .then(() => {
-                // create new Song from Reference Retrieved
-                let responseStatus: number;
-                fetch(`${process.env.REACT_APP_BASE_URL}/api/songbook/add/${id}`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                })
-                    .then(response => {
-                        responseStatus = response.status;
-                        return response.json();
-                    })
-                    .then((responseBody) => {
-                        if (responseStatus === 200) {
-                            songCreatedFromReference = responseBody;
-                            setMessage(NewMessage.create('Your song "' + responseBody.title
-                                + '" was successfully created!', MessageType.GREEN));
-                        } else {
-                            setMessage(NewMessage.create('Your reference could not be retrieved ' +
-                                'from the server (error code: ' + responseStatus + ')', MessageType.RED));
-                        }
-                    })
-                    .then(() => {
-
-                        // hide Reference Retrieved
-                        fetch(`${process.env.REACT_APP_BASE_URL}/api/collections/edit/hide/` + referenceRetrieved.id, {
-                            method: 'PUT',
-                            headers: {
-                                'Authorization': `Bearer ${token}`
-                            }
-                        })
-                            .then(response => {
-                                    if (response.status !== 200) {
-                                        setMessage(NewMessage.create('Your source reference could not be hidden!', MessageType.RED));
-                                    }
-                                }
-                            )
-                    })
-                    .then(() => {
-
-                        // display freshly created Song
-                        songCreatedFromReference.status = 'display';
-                        songCreatedFromReference.dayOfCreation = new DayOfCreation( // = displayable format of "dateCreated"
-                            songCreatedFromReference.dateCreated as string
-                        );
-                        setSongChosen(songCreatedFromReference);
-                        getAllSongs(false);
-                        // rerenders Reference List:
-                        trigger();
-                    });
+                setSongChosen(songCreatedFromReference);
+                getAllSongs(false);
+                // rerenders Reference List:
+                trigger();
+            })
+            .catch((e) => {
+                setMessage(NewMessage.create('Your reference could not be retrieved ' +
+                    'from the server (error code: ' + e.status + ')', MessageType.RED))
             })
         setDragOverLeft(false);
         setDragOverRight(false);

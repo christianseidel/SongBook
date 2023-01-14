@@ -62,14 +62,18 @@ public class SongBookService {
     }
 
     public Song createSongFromReference(String id, String user) {
+        // find reference
         Reference reference = referencesRepository.findById(id).orElseThrow(NoSuchIdException::new);
+        // hide reference
         reference.setHidden(true);
         referencesRepository.save(reference);
+        // check if song already exists
         Optional<Song> existingSong = songRepository.findByTitleAndUser(reference.getTitle(), user);
         if (existingSong.isPresent()) {
             Song song = addOneReferenceToSong(existingSong.get(), reference, user);
             return songRepository.save(song);
         } else {
+            // if it doesn't exist, then create
             Song song = new Song(reference.getTitle(), reference.getAuthor(), reference.getYear());
             song.setReferences(List.of(reference));
             song.setUser(user);

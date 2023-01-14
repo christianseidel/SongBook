@@ -5,7 +5,7 @@ import {message, MessageType, NewMessage} from "../messageModel";
 import {Reference} from "./modelsReference";
 import {useAuth} from "../UserManagement/AuthProvider";
 import {keys} from "../literals/keys";
-import {Mood} from "../Songs/songModels";
+import {Mood, Song} from "../Songs/songModels";
 import hide from '../media/images/hide.png';
 import {useSong} from "../Songs/SongProvider"
 
@@ -135,7 +135,16 @@ function ReferenceToEdit(props: ReferenceItemProps) {
     }
 
     const doCreateSongFromReference = async (id: string) => {
-        props.displayMsg(await createSongFromReference(id));
+        createSongFromReference(id)
+            .then((result: Song) => {
+                props.displayMsg(NewMessage.create('Your song "' + result.title
+                    + '" was successfully created!', MessageType.GREEN));
+            })
+            .catch((e) => {
+                props.displayMsg(NewMessage.create('Your reference could not be retrieved ' +
+                    'from the server (error code: ' + e.status + ')', MessageType.RED))
+            })
+
         props.doCancel();
         /*todo: I need to
            1) display the song just created

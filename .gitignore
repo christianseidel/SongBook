@@ -65,3 +65,5 @@ yarn-error.log*
 /backend/.env.development
 /fileStorage/
 /frontend/src/components/media/images/bak/
+
+/backend/src/main/java/songbook/collections/lifesAlgorithms/

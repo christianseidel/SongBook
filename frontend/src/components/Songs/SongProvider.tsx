@@ -1,4 +1,3 @@
-import {MessageType, NewMessage} from "../messageModel";
 import {useContext} from "react";
 import {useAuth} from "../UserManagement/AuthProvider";
 import SongContext from "./SongContext";
@@ -25,14 +24,20 @@ export default function SongProvider({children}: Param) {
                         + '". Error code: ' + response.status + '.')
                 }
                 return response.json();
+
+// todo: I am here
+/// I need to return the song, and I need to catch error in target method...
+
             })
-            .then((responseBody: Song) => {
+            .then((responseBody: Song) => {return responseBody})
+
+            /*{
                 return NewMessage.create('Your song "' + responseBody.title + '" was successfully created.', MessageType.GREEN);
             })
             .catch(e => {
                 return NewMessage.create('Your reference could not be retrieved ' +
                     'from the server (error code: ' + e.status + ')', MessageType.RED);
-            })
+            })*/
     }
 
     return (

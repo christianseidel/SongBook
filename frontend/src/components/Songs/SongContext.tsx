@@ -1,8 +1,8 @@
 import {createContext} from "react";
-import {message} from "../messageModel";
+import {Song} from "./songModels";
 
 export interface Context {
-    createSongFromReference: (id: string) => Promise<message>;
+    createSongFromReference: (id: string) => Promise<Song>;
 }
 
 export default createContext({} as Context)
