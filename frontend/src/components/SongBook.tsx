@@ -112,7 +112,7 @@ function SongBook() {
     function highlightSongsToChooseFrom() {
         if (songsDTO.songList.length > 1) {
             let i: number = 0;
-            let lastI: number = Math.min(songsDTO.songList.length, 8) - 1;
+            let lastI: number = Math.min(songsDTO.songList.length, 7) - 1;
             // initial glow
             glowItem(document.getElementById(songsDTO.songList[0].id));
             // glow rush

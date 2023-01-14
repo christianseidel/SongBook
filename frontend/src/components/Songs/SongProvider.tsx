@@ -20,24 +20,13 @@ export default function SongProvider({children}: Param) {
         })
             .then(response => {
                 if (response.status !== 200) {
-                    throw Error('Something unexpected happened! Error type: "' + response.statusText
+                    throw Error('Something unexpected happened! '
+                        + 'Error type: "' + response.statusText
                         + '". Error code: ' + response.status + '.')
                 }
                 return response.json();
-
-// todo: I am here
-/// I need to return the song, and I need to catch error in target method...
-
             })
             .then((responseBody: Song) => {return responseBody})
-
-            /*{
-                return NewMessage.create('Your song "' + responseBody.title + '" was successfully created.', MessageType.GREEN);
-            })
-            .catch(e => {
-                return NewMessage.create('Your reference could not be retrieved ' +
-                    'from the server (error code: ' + e.status + ')', MessageType.RED);
-            })*/
     }
 
     return (

@@ -141,8 +141,8 @@ function ReferenceToEdit(props: ReferenceItemProps) {
                     + '" was successfully created!', MessageType.GREEN));
             })
             .catch((e) => {
-                props.displayMsg(NewMessage.create('Your reference could not be retrieved ' +
-                    'from the server (error code: ' + e.status + ')', MessageType.RED))
+                props.displayMsg(NewMessage.create('Your reference could not be retrieved '
+                    + 'from the server (error code: ' + e.status + ')', MessageType.RED))
             })
 
         props.doCancel();
