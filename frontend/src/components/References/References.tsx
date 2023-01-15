@@ -11,6 +11,7 @@ import {useAuth} from "../UserManagement/AuthProvider";
 
 interface Props {
     receiverRerenderSignal: (getAllReferences: () => void) => void;
+    displaySongCreated: (id: string) => void;
 }
 
 function References(props: Props) {
@@ -197,6 +198,7 @@ function References(props: Props) {
                                      }
                     }
                                      displayMsg={(msg) => setMessage(msg)}
+                                     displaySongCreated={(id) => props.displaySongCreated(id)}
                     />)
             }
 

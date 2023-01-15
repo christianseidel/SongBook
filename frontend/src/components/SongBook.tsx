@@ -57,32 +57,30 @@ function SongBook() {
 
     function displaySongChosen(id: string) {
         fetch(`${process.env.REACT_APP_BASE_URL}/api/songbook/` + id, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        })
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            })
             .then(response => {
                 if (response.ok) {
                     return response.json()
                 } else {
-                    setMessage(NewMessage.create(
-                        'An Item with Id no. ' + id + ' could not be found.',
-                        MessageType.RED));
+                    throw Error('Server could not retrieve a song with Id no. ' + id + '.');
                 }
             })
             .then((responseBody: Song) => {
-                responseBody.dayOfCreation = new DayOfCreation( // = displayable format of "dateCreated"
+                // convert "dateCreated" into displayable format
+                responseBody.dayOfCreation = new DayOfCreation(
                     responseBody.dateCreated as string
                 );
                 responseBody.status = 'display';
                 setSongChosen(responseBody);
             })
-            .catch((e) => {
-                setMessage(NewMessage.create(e.message, MessageType.RED));
-            });
-    }
+            .catch((e) => setMessage(
+            NewMessage.create(e.message, MessageType.RED))
+        )}
 
     function getAllSongs(clearSong: boolean) {
         fetch(`${process.env.REACT_APP_BASE_URL}/api/songbook`, {
@@ -232,7 +230,12 @@ function SongBook() {
 
                     <div className={'flex-child'}>
                         <References
-                            receiverRerenderSignal={receiverRerenderSignal}/>
+                            receiverRerenderSignal={receiverRerenderSignal}
+                            displaySongCreated={(id) => {
+                                displaySongChosen(id);
+                                getAllSongs(false);
+                            }}
+                        />
                     </div>
                 </div>
 

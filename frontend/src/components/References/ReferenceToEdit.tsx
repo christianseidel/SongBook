@@ -13,6 +13,7 @@ interface ReferenceItemProps {
     reference: Reference;
     doCancel: () => void;
     displayMsg: (msg: message | undefined) => void;
+    displaySongCreated: (id: string) => void;
 }
 
 function ReferenceToEdit(props: ReferenceItemProps) {
@@ -139,13 +140,15 @@ function ReferenceToEdit(props: ReferenceItemProps) {
             .then((result: Song) => {
                 props.displayMsg(NewMessage.create('Your song "' + result.title
                     + '" was successfully created!', MessageType.GREEN));
+                props.displaySongCreated(result.id);
+                props.doCancel();
             })
             .catch((e) => {
                 props.displayMsg(NewMessage.create('Your reference could not be retrieved '
                     + 'from the server (error code: ' + e.status + ')', MessageType.RED))
             })
 
-        props.doCancel();
+
         /*todo: I need to
            1) display the song just created
            2) re-render the list of songs*/
