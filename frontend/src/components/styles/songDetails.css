@@ -455,13 +455,13 @@
     color: #850808;
 }
 
-
-/* ---- DISPLAY SPACE: LINKS ---- */
-
-#linkContainer {
+#elementContainer {
     display: block;
     padding: 0 5px 0 5px;
 }
+
+
+/* ---- DISPLAY SPACE: LINKS ---- */
 
 .linkItem {
     font-family: Verdana, Trebuchet MS, Lucida Sans Unicode, Lucida Grande, Lucida Sans, Arial, sans-serif;
@@ -503,7 +503,7 @@
 
 .linkIndicator:hover:before {
     font-weight: normal;
-    color: black;
+    color: #4280c9;
     content: 'edit';
     z-index: 2;
 }
@@ -547,34 +547,22 @@ a.linkText:hover + .positionTextAfterLinkText {
 
 #displayLinkDescription {}
 
+/* ---- DISPLAY SPACE: SONG SHEETS ---- */
 
-/* ---- DISPLAY SPACE: REFERENCES ---- */
 
-#displayReferences, #displaySongSheets {
+
+
+#displaySongSheets {
     display: block;
     /*border: 1px solid darkgoldenrod;*/
     padding: 5px;
 }
 
-
 #displaySongSheets:nth-of-type(1) {
     margin-top: 8px;
 }
 
-.reference {
-    font-family: Verdana, Trebuchet MS, Lucida Sans Unicode, Lucida Grande, Lucida Sans, Arial, sans-serif;
-    font-size: 8pt;
-    color: #3b6363;
-    margin-left: 26px;
-    font-style: italic;
-}
-
-.referenceIndicator {
-    color: green;
-    font-weight: bold;
-}
-
-.reference:hover, .songSheet:hover {
+.songSheet:hover {
     background-color: lightyellow;
     border-style: solid;
     border-width: 2px;
@@ -589,29 +577,18 @@ a.linkText:hover + .positionTextAfterLinkText {
     z-index: 2;
 }
 
-.reference:hover + .reference, .songSheet:hover + .songSheet {
+.songSheet:hover + .songSheet {
     margin-top: -6px;
 }
 
-.reference:hover:last-child, .songSheet:hover:last-child {
+.songSheet:hover:last-child {
     margin-top: -4px;
     margin-bottom: -2px;
 }
 
 
 
-#displayRefAuthor {}
 
-
-
-
-
-/* ---- SONG SHEETS: workingSpace ---- */
-
-
-
-
-/* ---- SONG SHEETS: displaySpace ---- */
 
 .songSheet, .songSheetDeactivated {
     font-family: Verdana, Trebuchet MS, Lucida Sans Unicode, Lucida Grande, Lucida Sans, Arial, sans-serif;
@@ -659,11 +636,7 @@ a.linkText:hover + .positionTextAfterLinkText {
 }
 
 
-/*
-.songSheet:hover + .songSheetDescriptive {
-    margin-left: -16px;
-}
-*/
+
 
 .separator {
     margin-left: 12px;
@@ -703,6 +676,60 @@ a.linkText:hover + .positionTextAfterLinkText {
 
 .displayFilename:hover > .separatorFilename {
     color: #3b6363;
+}
+
+
+
+/* ---- DISPLAY SPACE: REFERENCES ---- */
+
+.reference {
+    font-family: Verdana, Trebuchet MS, Lucida Sans Unicode, Lucida Grande, Lucida Sans, Arial, sans-serif;
+    font-size: 11px;
+    color: #3b6363;
+    font-style: italic;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    padding-left: 46px;
+    text-indent: -46px;
+    line-height: 1.2;
+}
+
+.referenceIndicator {
+    margin-left: 18px;
+    color: green;
+    font-weight: bold;
+    z-index: 2;
+}
+
+.referenceIndicator:hover {
+    position: relative;
+    background-color: lightyellow;
+    border-style: solid;
+    border-width: 2px;
+    border-color: darkgoldenrod;
+    border-radius: 4px;
+    box-shadow: 3px 3px darkgoldenrod;
+    cursor: pointer;
+    user-select: none;
+    padding: 1px 12px 1px 8px;
+    margin-left: 0;
+    z-index: 2;
+}
+
+.referenceIndicator:hover + .referenceText {
+    margin-left: -27px;
+    z-index: 1;
+}
+
+.referenceIndicator:hover:before {
+    font-weight: normal;
+    color: green;
+    content: 'edit';
+    z-index: 2;
+}
+
+.referenceText {
+    margin-right: 2px;
 }
 
 

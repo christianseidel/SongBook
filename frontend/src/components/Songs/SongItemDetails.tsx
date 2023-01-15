@@ -462,7 +462,6 @@ function SongItemDetails(props: SongItemProps) {
                 <div>{handleTitleLine}</div>
             </div>
 
-
             <div id={'iconContainer'}>
                     <span className={'icon tooltip'} id={'iconInfo'} onClick={openOrCloseAddDescription}>
                         i
@@ -644,7 +643,7 @@ function SongItemDetails(props: SongItemProps) {
             <div className={'dataSheetElement'} id={'displaySpace'}>
                 <div>
                     {(props.song.links !== undefined && props.song.links?.length > 0)
-                        && <div id={'linkContainer'}>
+                        && <div id={'elementContainer'}>
                             {props.song.links.map((item, index) =>
                                 <div key={index} className={'linkItem'}>
                                     <span className={'linkIndicator'}
@@ -691,15 +690,19 @@ function SongItemDetails(props: SongItemProps) {
                 </div>
 
                 {props.song.references !== undefined && props.song.references.length > 0 && // display References
-                    <div id={'displayReferences'}>
+                    <div id={'elementContainer'}>
                         {props.song.references.map((item, index) =>
-                            <div key={index}>
-                                <span className={'reference'} onClick={() => openUpdateReference(index)}>
-                                    <span className={'referenceIndicator'}>&ndash;&#129174;</span>&nbsp; {(item.addedCollection === null) ?
+                            <div key={index} className={'reference'}>
+                                <span className={'referenceIndicator'}
+                                      onClick={() => openUpdateReference(index)}>
+                                    &nbsp; &ndash;&#129174;</span> &nbsp;
+                                <span className={'referenceText'}>
+                                    {(item.addedCollection === null) ?
                                     <span>{songCollectionToRealName(item.songCollection)}</span> :
                                     <span>{item.addedCollection}</span>}
                                     {item.page !== 0 && <span>, page {item.page} </span>}
                                 </span>
+
                                 {item.key && <span> – <span className={'showKey'}>{item.key}</span></span>}
                             </div>)}
                     </div>}
