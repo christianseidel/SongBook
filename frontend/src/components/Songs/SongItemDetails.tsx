@@ -643,14 +643,14 @@ function SongItemDetails(props: SongItemProps) {
             <div className={'dataSheetElement'} id={'displaySpace'}>
                 <div>
                     {(props.song.links !== undefined && props.song.links?.length > 0)
-                        && <div id={'elementContainer'}>
+                        && <div className={'elementContainer'} id={'withoutTopMargin'}>
                             {props.song.links.map((item, index) =>
                                 <div key={index} className={'linkItem'}>
                                     <span className={'linkIndicator'}
                                           onClick={() => openUpdateLink(index)}>
                                         &nbsp; &#8734;</span> &nbsp;
                                     <a href={item.linkTarget} className={'linkText'} target={'_blank'} rel={'noreferrer'}>
-                                        {item.linkText}</a><span className={'positionTextAfterLinkText'}></span>
+                                        {item.linkText}</a><span className={'positionTextAfterClickableText'}></span>
                                     {item.linkKey &&
                                         <span> – <span className={'showKey'}>{item.linkKey}</span></span>}
                                     {item.linkAuthor && <span id={'showLinkAuthor'}> – {item.linkAuthor}</span>}
@@ -664,33 +664,30 @@ function SongItemDetails(props: SongItemProps) {
 
                 <div>
                     {(props.song.songSheets !== undefined && props.song.songSheets?.length > 0)
-                        && <div id={'displaySongSheets'}>
+                        && <div className={'elementContainer'}>
                             {props.song.songSheets.map((item, index) =>
-                                <div key={index}>
-                                    <span className={toggleCreateOrUpdate === 'create' ?'songSheet' : 'songSheetDeactivated'}
-                                          onClick={() => openUpdateSongSheet(index)}>
-                                        <span className={'songSheetIndicator'}>
-                                            &#x266b; &nbsp;
-                                        </span>{item.name}</span>
+                                <div key={index} className={toggleCreateOrUpdate === 'create'
+                                    ? 'songSheet'
+                                    : 'songSheetDeactivated'}>
+                                        <span className={'songSheetIndicator'}
+                                              onClick={() => openUpdateSongSheet(index)}>
+                                            &nbsp; &nbsp;&#x266b;</span> &nbsp;
+                                        <span className={'songSheetName'}
+                                              onClick={() => downloadSongSheetFile(item.fileId!)}
+                                        >{item.filename && <span>{item.filename}</span>}
+                                        </span><span className={'positionTextAfterClickableText'}></span>
+                                        {item.name}
                                     {item.key && <span> – <span className={'showKey'}>{item.key}</span></span>}
-                                    <span className={'songSheetDescriptive'}>
-                                        {item.source && <span className={'displaySource'}><span
-                                            className={'separator'}></span>source: {item.source}</span>}
-                                        {item.description && <span className={'displayDescription'}><span
-                                            className={'separator'}></span>({item.description})</span>}
-                                    </span>
-                                    <span className={'songSheetDescriptive'} onClick={() => downloadSongSheetFile(item.fileId!)}>
-                                        {item.filename && <span className={'displayFilename'}>
-                                        {/*    <span className={'separatorFilename'}></span>*/}{item.filename}
-                                            </span>}
-                                    </span>
+                                    {item.source && <span className={'songSheetSource'}> – {item.source}</span>}
+                                    {item.description && <span> – {item.description}</span>}
+
                                 </div>)}
                         </div>
                     }
                 </div>
 
-                {props.song.references !== undefined && props.song.references.length > 0 && // display References
-                    <div id={'elementContainer'}>
+                {props.song.references !== undefined && props.song.references.length > 0
+                    && <div className={'elementContainer'}>
                         {props.song.references.map((item, index) =>
                             <div key={index} className={'reference'}>
                                 <span className={'referenceIndicator'}

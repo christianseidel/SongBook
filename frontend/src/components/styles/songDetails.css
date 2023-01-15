@@ -455,9 +455,15 @@
     color: #850808;
 }
 
-#elementContainer {
+.elementContainer {
     display: block;
     padding: 0 5px 0 5px;
+    margin-top: 12px;
+    /*border: 1px solid blue;*/
+}
+
+#withoutTopMargin {
+    margin-top: 0;
 }
 
 
@@ -472,6 +478,7 @@
     padding-left: 46px;
     text-indent: -46px;
     line-height: 1.2;
+    /*border: 1px solid deeppink;*/
 }
 
 .linkIndicator {
@@ -479,6 +486,7 @@
     color: #4280c9;
     font-weight: bold;
     z-index: 2;
+    /*border: 1px solid black;*/
 }
 
 .linkIndicator:hover {
@@ -497,14 +505,14 @@
 }
 
 .linkIndicator:hover + a {
-    margin-left: -27px;
+    margin-left: -31px;
     z-index: 1;
 }
 
 .linkIndicator:hover:before {
     font-weight: normal;
     color: #4280c9;
-    content: 'edit';
+    content: 'edit ';
     z-index: 2;
 }
 
@@ -520,12 +528,10 @@ a.linkText:hover {
     background-color: lightyellow;
     color: #0066ff;
     font-style: italic;
-    border-style: solid;
-    border-width: 1px;
-    border-color: darkgoldenrod;
-    border-radius: 2px;
+    border: 2px solid darkgoldenrod;
+    border-radius: 4px;
     width: fit-content;
-    box-shadow: 1px 1px darkgoldenrod;
+    box-shadow: 3px 3px darkgoldenrod;
     cursor: pointer;
     user-select: none;
     padding: 1px 6px 2px 6px;
@@ -533,8 +539,8 @@ a.linkText:hover {
     z-index: 2;
 }
 
-a.linkText:hover + .positionTextAfterLinkText {
-    margin-left: -10px;
+a.linkText:hover + .positionTextAfterClickableText {
+    margin-left: -12px;
 }
 
 #showLinkAuthor {
@@ -547,26 +553,84 @@ a.linkText:hover + .positionTextAfterLinkText {
 
 #displayLinkDescription {}
 
+
 /* ---- DISPLAY SPACE: SONG SHEETS ---- */
 
-
-
-
-#displaySongSheets {
-    display: block;
-    /*border: 1px solid darkgoldenrod;*/
-    padding: 5px;
+.songSheet {
+    font-family: Verdana, Trebuchet MS, Lucida Sans Unicode, Lucida Grande, Lucida Sans, Arial, sans-serif;
+    font-size: 11px;
+    color: #3b6363;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    padding-left: 46px;
+    text-indent: -46px;
+    line-height: 1.2;
 }
 
-#displaySongSheets:nth-of-type(1) {
-    margin-top: 8px;
+.songSheetDeactivated {
+    font-family: Verdana, Trebuchet MS, Lucida Sans Unicode, Lucida Grande, Lucida Sans, Arial, sans-serif;
+    font-size: 11px;
+    color: #3b6363;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    padding-left: 46px;
+    text-indent: -46px;
+    line-height: 1.2;
+    /*ToDo: Deactive the Deactivated*/
+    /*border: 1px solid crimson;*/
 }
+
+.songSheetIndicator {
+    margin-left: 18px;
+    margin-right: 1px;
+    color: darkorchid;
+    font-weight: bold;
+    z-index: 2;
+    /*border: 1px solid black;*/
+}
+.songSheetIndicator:hover {
+    position: relative;
+    background-color: lightyellow;
+    border: 2px solid darkgoldenrod;
+    border-radius: 4px;
+    box-shadow: 3px 3px darkgoldenrod;
+    cursor: pointer;
+    user-select: none;
+    padding: 1px 17px 1px 8px;
+    margin-left: 0;
+    z-index: 2;
+}
+
+.songSheetIndicator:hover + .songSheetName {
+    margin-left: -32px;
+    z-index: 1;
+}
+
+.songSheetIndicator:hover:before {
+    font-weight: normal;
+    color: darkorchid;
+    content: 'edit';
+    z-index: 2;
+}
+
+.songSheetName {
+    color: darkorchid;
+    margin-right: 2px;
+}
+
+.songSheetSource {
+    font-style: italic;
+}
+
+
+
+/*
 
 .songSheet:hover {
     background-color: lightyellow;
     border-style: solid;
     border-width: 2px;
-    border-color: darkgoldenrod;
+    border-color: black;
     border-radius: 2px;
     width: fit-content;
     box-shadow: 3px 3px darkgoldenrod;
@@ -577,6 +641,10 @@ a.linkText:hover + .positionTextAfterLinkText {
     z-index: 2;
 }
 
+.songSheetDeactivated:hover {
+    cursor: auto;
+}
+
 .songSheet:hover + .songSheet {
     margin-top: -6px;
 }
@@ -585,55 +653,13 @@ a.linkText:hover + .positionTextAfterLinkText {
     margin-top: -4px;
     margin-bottom: -2px;
 }
+*/
 
 
 
 
 
-.songSheet, .songSheetDeactivated {
-    font-family: Verdana, Trebuchet MS, Lucida Sans Unicode, Lucida Grande, Lucida Sans, Arial, sans-serif;
-    font-size: 8px;
-    color: #3b6363;
-    margin-left: 27px;
-}
-.songSheetDeactivated:hover {
-    cursor: auto;
-}
 
-.songSheetIndicator {
-    color: darkorchid;
-    font-size: 12px;
-    font-weight: bold;
-    z-index: 2;
-}
-.songSheetIndicator:hover {
-    position: relative;
-    background-color: lightyellow;
-    border-style: solid;
-    border-width: 2px;
-    border-color: darkgoldenrod;
-    border-radius: 2px;
-    box-shadow: 3px 3px darkgoldenrod;
-    cursor: pointer;
-    user-select: none;
-    padding: 1px 0;
-    z-index: 2;
-}
-
-.songSheetIndicator:hover:before {
-    font-weight: normal;
-    color: black;
-    content: 'edit ';
-    margin-left: 8px;
-    z-index: 2;
-}
-
-.songSheetDescriptive {
-    font-family: Verdana, Trebuchet MS, Lucida Sans Unicode, Lucida Grande, Lucida Sans, Arial, sans-serif;
-    font-size: 8pt;
-    color: #3b6363;
-    /*border: 1px solid greenyellow;*/
-}
 
 
 
@@ -647,37 +673,32 @@ a.linkText:hover + .positionTextAfterLinkText {
     margin-left: 14px;
 }
 
-.separatorFilename {
-    margin-right: 6px;
-    font-weight: bold;
-}
 
 .displayFilename {
     color: darkorchid;
     margin-left: 12px;
 }
 
-.displayFilename:hover {
+.songSheetName:hover {
+    position: relative;
     font-weight: normal;
-    /*background-color: #eaba5e;*/
     font-style: italic;
     background-color: lightyellow;
     color: darkorchid;
-    border-style: solid;
-    border-width: 1px;
-    border-color: darkgoldenrod;
-    border-radius: 2px;
+    border: 2px solid darkgoldenrod;
+    border-radius: 4px;
     width: fit-content;
-    box-shadow: 1px 1px darkgoldenrod;
+    box-shadow: 3px 3px darkgoldenrod;
     cursor: pointer;
     user-select: none;
     padding: 1px 6px 2px 6px;
+    margin-left: -4px;
+    z-index: 2;
 }
 
-.displayFilename:hover > .separatorFilename {
-    color: #3b6363;
+.songSheetName:hover  + .positionTextAfterClickableText {
+    margin-left: -12px;
 }
-
 
 
 /* ---- DISPLAY SPACE: REFERENCES ---- */
@@ -704,20 +725,18 @@ a.linkText:hover + .positionTextAfterLinkText {
 .referenceIndicator:hover {
     position: relative;
     background-color: lightyellow;
-    border-style: solid;
-    border-width: 2px;
-    border-color: darkgoldenrod;
+    border: 2px solid darkgoldenrod;
     border-radius: 4px;
     box-shadow: 3px 3px darkgoldenrod;
     cursor: pointer;
     user-select: none;
-    padding: 1px 12px 1px 8px;
+    padding: 1px 16px 1px 8px;
     margin-left: 0;
     z-index: 2;
 }
 
 .referenceIndicator:hover + .referenceText {
-    margin-left: -27px;
+    margin-left: -31px;
     z-index: 1;
 }
 
@@ -725,6 +744,7 @@ a.linkText:hover + .positionTextAfterLinkText {
     font-weight: normal;
     color: green;
     content: 'edit';
+    font-style: normal;
     z-index: 2;
 }
 
