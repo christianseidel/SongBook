@@ -91,7 +91,6 @@
     width: 157px;
 }
 
-
 #displayYear {
     margin-left: 6px;
 }
@@ -99,7 +98,6 @@
 #inputYear {
     margin-left: 8px;
     width: 90px;
-    -moz-appearance: textfield;
 }
 
 #buttonCloseDisplaySong {

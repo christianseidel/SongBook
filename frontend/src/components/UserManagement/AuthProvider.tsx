@@ -62,7 +62,8 @@ export default function AuthProvider({children}: Param) {
         return fetch(`${process.env.REACT_APP_BASE_URL}/api/user/login`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
             },
             body: JSON.stringify({
                 username: username,
