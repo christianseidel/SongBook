@@ -406,6 +406,7 @@
 #uploadSongSheetForm {
     float: right;
     margin-top: 8px;
+    border: 1px solid forestgreen;
 }
 
 #labelUploadSongSheetForm {
@@ -414,8 +415,12 @@
 
 #inputAddSongSheet {
     float: right;
-    width: 96px;
+    -moz-width: 96px;
+    -webkit-width: 116px;
+    -o-width: 116px;
+    -ms-width: 116px;
     background-color: #f0c579;
+    border: 1px solid red;
 }
 
 #filenameContainer {
