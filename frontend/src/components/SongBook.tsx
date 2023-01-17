@@ -4,6 +4,7 @@ import './styles/common.css';
 import SongItemWithinList from './Songs/SongItemWithinList';
 import SongItemDetails from './Songs/SongItemDetails';
 import ukulele from './media/images/ukulele.png';
+import infoIcon from './media/images/information.png';
 import References from './References/References';
 import {message, MessageType, NewMessage} from './messageModel';
 import MessageBox from './MessageBox';
@@ -197,8 +198,14 @@ function SongBook() {
                 <div id='dropdownUser'>
                     <button id='buttonDropdownUser' type={'button'}>user</button>
                     <div className='contentDropdownUser'>
-                        <span className={'menuItem'} onClick={logout}>&#10140; logout </span>
-                        <span className={'menuItem'} onClick={() => nav('/users/info')}>Info</span>
+                        <span className={'menuItem'}
+                              onClick={logout}>
+                            &#10140; <span id={'labelLogout'}>logout</span>
+                        </span>
+                        <span className={'menuItem'}
+                              onClick={() => nav('/users/info')}>
+                            <img src={infoIcon} id={'infoIcon'} alt={''}/>Info
+                        </span>
                     </div>
                 </div>
             </h1>

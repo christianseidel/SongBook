@@ -1,7 +1,6 @@
 package songbook;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -16,7 +15,6 @@ import songbook.collections.ReferencesRepository;
 import songbook.exceptions.NoSuchUserException;
 import songbook.exceptions.PasswordsDoNotMatchException;
 import songbook.exceptions.UserAlreadyExistsException;
-import songbook.models.Song;
 import songbook.users.*;
 
 import java.time.LocalDate;
