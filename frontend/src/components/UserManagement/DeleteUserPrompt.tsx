@@ -42,7 +42,7 @@ function InfoUser() {
 
     function deleteUser() {
         if (userDTO.username === 'test') {
-            setMessage(NewMessage.create('This is a test account. You can do anything using it, except deleting the account itself. However, you may set up your own account and then delete it.', MessageType.RED));
+            setMessage(NewMessage.create('This is a Test Account. You may do anything using it, except deleting the account itself. However, you may set up your own account and then delete it.', MessageType.RED));
         } else if (userDTO.username === 'christian') {
             setMessage(NewMessage.create('No. You do not want to do this!', MessageType.RED));
         } else {

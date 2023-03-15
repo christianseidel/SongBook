@@ -34,6 +34,8 @@ export function songCollectionToRealName(volume: string) {
             return 'Liederwelt (14)';
         case 'LIEDERFEST_15':
             return 'Liederfest (15)';
+        case 'HITBOOK':
+            return 'Hitbook Singer-Songwriter';
         case 'FROHE_WEIHNACHTEN':
             return 'Frohe Weihnachten';
         case 'WEIHNACHTEN_MIT_DER_UKULELE_1':

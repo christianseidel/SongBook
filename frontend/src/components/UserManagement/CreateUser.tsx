@@ -60,7 +60,7 @@ function CreateUser() {
                 </h1>
             </div>
 
-            <h3 id={'plsCreate'}>Please, create your personal user account:</h3>
+            <h3 id={'plsCreate'}>Create your account:</h3>
             <form onSubmit={ev => doRegister(ev)}>
                 <span className={'nextLineUsers'}>
                     <input type="text" placeholder={'user name'} value={username} autoFocus required

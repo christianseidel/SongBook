@@ -233,6 +233,7 @@ public class SongCollectionService {
             case "liederzug_13" -> LIEDERZUG_13;
             case "liederwelt_14" -> LIEDERWELT_14;
             case "liederfest_15" -> LIEDERFEST_15;
+            case "hitbook singer-songwriter" -> HITBOOK;
             case "frohe weihnachten" -> FROHE_WEIHNACHTEN;
             case "weihnachten mit der ukulele" -> WEIHNACHTEN_MIT_DER_UKULELE_1;
             case "weihnachten mit der ukulele 2" -> WEIHNACHTEN_MIT_DER_UKULELE_2;
