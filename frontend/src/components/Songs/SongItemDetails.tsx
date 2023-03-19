@@ -28,8 +28,10 @@ function SongItemDetails(props: SongItemProps) {
     const {token} = useAuth();
     const [songState, setSongState] = useState(props.song.status);
     useEffect(() => setSongState(props.song.status), [props.song.status]);
-    const [description, setDescription] = useState(sessionStorage.getItem('description') ?? '');
+    /*const [description, setDescription] = useState(sessionStorage.getItem('description') ?? '');
     useEffect(() => sessionStorage.setItem('description', description), [description]);
+    */
+    const [description, setDescription] = useState(props.song.description);
     const [message, setMessage] = useState('');
 
     const [displayDescription, setDisplayDescription] = useState(true);
@@ -245,17 +247,15 @@ function SongItemDetails(props: SongItemProps) {
 
     const doAddDescription = (ev: FormEvent<HTMLFormElement>) => {
         ev.preventDefault();
+        setToggleEditDescription(false);
         props.song.description = description;
         saveSongItem();
-        setToggleEditDescription(false);
         setDescription('');
-        sessionStorage.removeItem('description');
     }
 
     const clearDescription = () => {
         setDescription('');
         props.song.description = '';
-        sessionStorage.removeItem('description');
         saveSongItem();
     }
 
@@ -453,6 +453,7 @@ function SongItemDetails(props: SongItemProps) {
             .catch(e => {
                 props.displayMsg(NewMessage.create(e.message, MessageType.RED));
             })
+
     }
 
 

@@ -205,15 +205,13 @@
 
 .workingSpaceElement {
     min-width: 546px;
-    /*border: 1px solid deeppink;*/
 }
 
 /* ---- WORKING SPACE: Description ---- */
 
 #displayDescription {
     margin-top: 6px;
-    font-weight: lighter;
-    font-style: italic;
+    white-space: pre-wrap;
 }
 
 #titleEditDescription {
