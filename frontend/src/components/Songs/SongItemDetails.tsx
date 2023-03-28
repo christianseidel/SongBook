@@ -432,9 +432,14 @@ function SongItemDetails(props: SongItemProps) {
         })
             .then((response) => {
                 if (response.status === 200) {
-                    return response.blob();
+
+                    // >>>>>>>>>>>>>
+                    // Hier mal mit FormData probieren !!!
+                    // >>>>>>>>>>>>>
+
+                    return response.blob()
                 } else if (response.status === 404) {
-                    throw Error('Unable to fetch this ressource (error code: ' + response.status + ').');
+                    throw Error('Unable to fetch this resource (error code: ' + response.status + ').');
                 } else {
                     throw Error(response.statusText + " : " + response.status);
                 }
@@ -445,7 +450,6 @@ function SongItemDetails(props: SongItemProps) {
                     const a = document.createElement('a');
                     a.href = url;
                     document.body.appendChild(a);
-                    /*window.open(url, '_blank');*/
                     window.open(url, '_blank')
                     window.URL.revokeObjectURL(url);
                 }

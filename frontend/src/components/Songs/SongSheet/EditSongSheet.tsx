@@ -55,9 +55,10 @@ function EditSongSheet(props: SongSheetProps) {
 
     function uploadSongSheet(files: FileList | null) {
         if (files === null) {
-            alert('Ops, somehow the FormData Object produced a glitch.')
+            alert('The FormData object produced a glitch.')
         } else {
             let fileExt = files[0].name.slice(files[0].name.length-3, files[0].name.length);
+            // Todo: Check what happens with capitalized file extensions.
             if (fileExt !== 'pdf' && fileExt !== 'jpg') {
                 props.displayMsg(NewMessage.create(
                     'Please, choose a PDF or a JPG file.',
@@ -72,7 +73,7 @@ function EditSongSheet(props: SongSheetProps) {
                         headers: {
                             'Authorization': `Bearer ${token}`
                         },
-                        body: formData,
+                        body: formData
                     })
                         .then((response) => {
                             responseStatus = response.status;
