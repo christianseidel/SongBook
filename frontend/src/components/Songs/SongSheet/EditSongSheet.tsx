@@ -174,7 +174,7 @@ function EditSongSheet(props: SongSheetProps) {
                     : <span>Edit your</span>} Song Sheet File</label><label>:</label>
                 <span className={'nextLine'}>
                     <label>Name:</label>
-                    <input id={'inputSongSheetName'} type='text' value={filename} placeholder={'Name'}
+                    <input id={'inputSongSheetName'} type='text' value={filename} placeholder={'Name (set automatically)'}
                            onChange={ev => setFilename(ev.target.value)} autoFocus tabIndex={1}/>
                     <label className={'labelSecondInLine'}>Source:</label>
                     <input id={'inputSongSheetSource'} type='text' value={source} placeholder={'Source'}
