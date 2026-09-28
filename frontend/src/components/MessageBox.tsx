@@ -1,5 +1,5 @@
 import {message} from "./messageModel";
-import "./styles/message.css"
+import "./styles/message.css";
 import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 

@@ -36,7 +36,6 @@ public class SongSheetStorageController {
     ResponseEntity<Object> downloadSongSheetFile(@PathVariable String id) {
         try {
             SongSheetFile file = songSheetStorageService.retrieveSongSheetFile(id);
-
             return ResponseEntity.ok()
                     .contentType(MediaType.parseMediaType(file.getContentType()))
                     .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=" + file.getFilename())

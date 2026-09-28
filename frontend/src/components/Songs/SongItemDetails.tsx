@@ -423,7 +423,7 @@ function SongItemDetails(props: SongItemProps) {
         }
     }
 
-    const downloadSongSheetFile = (id: string) => {
+    const displaySongSheetFile = (id: string, title: string) => {
         fetch(`${process.env.REACT_APP_BASE_URL}/api/sheets/download/` + id, {
             method: 'GET',
             headers: {
@@ -432,11 +432,6 @@ function SongItemDetails(props: SongItemProps) {
         })
             .then((response) => {
                 if (response.status === 200) {
-
-                    // >>>>>>>>>>>>>
-                    // Hier mal mit FormData probieren !!!
-                    // >>>>>>>>>>>>>
-
                     return response.blob()
                 } else if (response.status === 404) {
                     throw Error('Unable to fetch this resource (error code: ' + response.status + ').');
@@ -446,18 +441,22 @@ function SongItemDetails(props: SongItemProps) {
             })
             .then((blob) => {
                 if (blob) {
-                    const url = window.URL.createObjectURL(blob);
+                    // // Seems, I cannot define the tab title myself
+                    // // -- it's just the title set hard in the pdf.
+                    // // The browser shows the title of the pdf. Plus the name I set here.
+                    const file = new File([blob], title, {type: blob.type})
+                    const url = window.URL.createObjectURL(file);
                     const a = document.createElement('a');
                     a.href = url;
                     document.body.appendChild(a);
-                    window.open(url, '_blank')
+                    let zoom = 90;
+                    window.open(url + "#zoom=" + zoom, "_blank");
                     window.URL.revokeObjectURL(url);
                 }
             })
             .catch(e => {
                 props.displayMsg(NewMessage.create(e.message, MessageType.RED));
             })
-
     }
 
 
@@ -640,7 +639,7 @@ function SongItemDetails(props: SongItemProps) {
                         setToggleCreateOrUpdate('create');
                     }}
                     onDeleteSongSheetFile={(fileId) => deleteSongSheetFile(fileId)}
-                    downloadSheet={(fileId) =>  downloadSongSheetFile(fileId)}
+                    displaySheet={(fileId) =>  displaySongSheetFile(fileId, props.song.title)}
                 />}
             </div>
 
@@ -678,7 +677,7 @@ function SongItemDetails(props: SongItemProps) {
                                               onClick={() => openUpdateSongSheet(index)}>
                                             &nbsp; &nbsp;&#x266b;</span> &nbsp;
                                         <span className={'songSheetName'}
-                                              onClick={() => downloadSongSheetFile(item.fileId!)}
+                                              onClick={() => displaySongSheetFile(item.fileId!, props.song.title)}
                                         >{item.filename && <span>{item.filename}</span>}
                                         </span><span className={'positionTextAfterClickableText'}></span>
                                         {item.name}
