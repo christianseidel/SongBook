@@ -56,7 +56,7 @@ function CreateUser() {
                     <img src={ukulele} alt="Ukulele" id={'ukuleleUserPage'}/>
                 </div>
                 <h1 id={'welcomeTitleRight'}>
-                    <div> My Song Book 2 <span className={'italic'}> App</span></div>
+                    <div> My Song Book <span className={'italic'}> App</span></div>
                 </h1>
             </div>
 
