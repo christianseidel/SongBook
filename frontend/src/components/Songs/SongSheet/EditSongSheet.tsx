@@ -68,7 +68,7 @@ function EditSongSheet(props: SongSheetProps) {
                     const formData = new FormData();
                     formData.append('file', files[0]);
                     let responseStatus = 0;
-                    fetch(`${process.env.REACT_APP_BASE_URL}/api/sheets/upload/`, {
+                    fetch(`${import.meta.env.VITE_BASE_URL}/api/sheets/upload/`, {
                         method: 'POST',
                         headers: {
                             'Authorization': `Bearer ${token}`

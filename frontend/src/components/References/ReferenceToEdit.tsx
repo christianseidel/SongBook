@@ -38,7 +38,7 @@ function ReferenceToEdit(props: ReferenceItemProps) {
         event.preventDefault();
         // todo: implement error thrown. Here and elsewhere.
         let responseStatus: number;
-        fetch(`${process.env.REACT_APP_BASE_URL}/api/collections/edit/` + props.reference.id, {
+        fetch(`${import.meta.env.VITE_BASE_URL}/api/collections/edit/` + props.reference.id, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -73,7 +73,7 @@ function ReferenceToEdit(props: ReferenceItemProps) {
     }
 
     const copyReference = (id: string) => {
-        fetch(`${process.env.REACT_APP_BASE_URL}/api/collections/edit/` + id, {
+        fetch(`${import.meta.env.VITE_BASE_URL}/api/collections/edit/` + id, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -96,7 +96,7 @@ function ReferenceToEdit(props: ReferenceItemProps) {
     }
 
     const hideReference = (id: string) => {
-        fetch(`${process.env.REACT_APP_BASE_URL}/api/collections/edit/hide/` + id, {
+        fetch(`${import.meta.env.VITE_BASE_URL}/api/collections/edit/hide/` + id, {
             method: 'PUT',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -115,7 +115,7 @@ function ReferenceToEdit(props: ReferenceItemProps) {
     }
 
     const deleteReference = (id: string) => {
-        fetch(`${process.env.REACT_APP_BASE_URL}/api/collections/edit/` + id, {
+        fetch(`${import.meta.env.VITE_BASE_URL}/api/collections/edit/` + id, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${token}`

@@ -21,7 +21,7 @@ export default function AuthProvider({children}: Param) {
 
 
     const register = (username: string, password: string, passwordAgain: string) => {
-        return fetch(`${process.env.REACT_APP_BASE_URL}/api/user/register`, {
+        return fetch(`${import.meta.env.VITE_BASE_URL}/api/user/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -59,7 +59,7 @@ export default function AuthProvider({children}: Param) {
     }
 
     const login = (username: string, password: string) => {
-        return fetch(`${process.env.REACT_APP_BASE_URL}/api/user/login`, {
+        return fetch(`${import.meta.env.VITE_BASE_URL}/api/user/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

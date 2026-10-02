@@ -12,7 +12,7 @@ export default function SongProvider({children}: Param) {
     const {token} = useAuth();
 
     const createSongFromReference = (id: string) => {
-        return fetch(`${process.env.REACT_APP_BASE_URL}/api/songbook/add/${id}`, {
+        return fetch(`${import.meta.env.VITE_BASE_URL}/api/songbook/add/${id}`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`

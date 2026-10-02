@@ -17,7 +17,7 @@ function InfoUser() {
     const [message, setMessage] = useState<message | undefined>(undefined);
 
     useEffect(() => {
-        fetch(`${process.env.REACT_APP_BASE_URL}/api/user/info/` + localStorage.getItem('username'), {
+        fetch(`${import.meta.env.VITE_BASE_URL}/api/user/info/` + localStorage.getItem('username'), {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -46,7 +46,7 @@ function InfoUser() {
         } else if (userDTO.username === 'christian') {
             setMessage(NewMessage.create('No. You do not want to do this!', MessageType.RED));
         } else {
-            fetch(`${process.env.REACT_APP_BASE_URL}/api/user/info/` + localStorage.getItem('username'), {
+            fetch(`${import.meta.env.VITE_BASE_URL}/api/user/info/` + localStorage.getItem('username'), {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`

@@ -134,7 +134,7 @@ function SongItemDetails(props: SongItemProps) {
         });
         unhideAllReferencesAttached(id)
             .then(() => {
-                    fetch(`${process.env.REACT_APP_BASE_URL}/api/songbook/` + id, {
+                    fetch(`${import.meta.env.VITE_BASE_URL}/api/songbook/` + id, {
                         method: 'DELETE',
                         headers: {
                             'Authorization': `Bearer ${token}`
@@ -159,7 +159,7 @@ function SongItemDetails(props: SongItemProps) {
     }
 
     const deleteSongSheetFile = (fileId: string) => {
-        fetch(`${process.env.REACT_APP_BASE_URL}/api/sheets/` + fileId, {
+        fetch(`${import.meta.env.VITE_BASE_URL}/api/sheets/` + fileId, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -178,7 +178,7 @@ function SongItemDetails(props: SongItemProps) {
     // Hence, this Promise //
     const unhideAllReferencesAttached = (songId: string) => {
         return new Promise((resolve, failure) => {
-            fetch(`${process.env.REACT_APP_BASE_URL}/api/songbook/unhideReferences/` + songId, {
+            fetch(`${import.meta.env.VITE_BASE_URL}/api/songbook/unhideReferences/` + songId, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -196,7 +196,7 @@ function SongItemDetails(props: SongItemProps) {
 
     function saveSongItem() {
         let responseStatus: number;
-        fetch(`${process.env.REACT_APP_BASE_URL}/api/songbook/` + props.song.id, {
+        fetch(`${import.meta.env.VITE_BASE_URL}/api/songbook/` + props.song.id, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -424,7 +424,7 @@ function SongItemDetails(props: SongItemProps) {
     }
 
     const displaySongSheetFile = (id: string, title: string) => {
-        fetch(`${process.env.REACT_APP_BASE_URL}/api/sheets/download/` + id, {
+        fetch(`${import.meta.env.VITE_BASE_URL}/api/sheets/download/` + id, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`
