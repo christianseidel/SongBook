@@ -11,7 +11,8 @@
   },
   "scripts": {
     "start": "vite",
-    "build": "vite build"
+    "build": "vite build",
+    "test:ci": "echo No frontend tests configured"
   },
   "browserslist": {
     "production": [
