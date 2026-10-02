@@ -10,8 +10,7 @@
   },
   "scripts": {
     "start": "vite",
-    "build": "vite build",
-    "test:ci": "echo No frontend tests configured"
+    "build": "vite build"
   },
   "devDependencies": {
     "@types/node": "^24.19.1",
