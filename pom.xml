@@ -13,9 +13,12 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>SongBook-parent</name>
 	<packaging>pom</packaging>
-	
+
 	<properties>
 		<java.version>22</java.version>
+		<logback.version>1.6.5</logback.version>
+		<log4j2.version>2.26.1</log4j2.version>
+		<tomcat.version>10.1.60</tomcat.version>
 	</properties>
 	
 	<modules>
