@@ -193,7 +193,7 @@ function SongBook() {
         <div>
             <h1>
                 <img src={ukulele} alt='Ukulele' id={'ukuleleMainPage'}/>
-                My Song Book - 2 -
+                My Song Book
 
                 <div id='dropdownUser'>
                     <button id='buttonDropdownUser' type={'button'}>user</button>
