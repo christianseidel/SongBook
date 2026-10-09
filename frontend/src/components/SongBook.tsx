@@ -221,7 +221,7 @@ function SongBook() {
                     >
                         <h2 className={'inline'}>Songs</h2>
                         <span onClick={createItem} className={'doSomething'} id={'addANewSong'}>
-                        + add new song
+                        + add new song - ti-tim-ti-tim
                     </span>
 
                         <div id={'displaySongList'}>
