@@ -59,3 +59,5 @@ yarn-error.log*
 /backend/src/main/java/songbook/collections/lifesAlgorithms/
 
 Update 2026.docx
+
+application.properties
