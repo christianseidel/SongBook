@@ -44,7 +44,8 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<Object> loginUser(@RequestBody UserLoginData userLoginData) {
-        try {
+        System.out.println("LOGIN CONTROLLER REACHED");
+         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     userLoginData.getUsername(), userLoginData.getPassword()));
             return ResponseEntity.ok(new Token(jwtUtils.createToken(new HashMap<>(), userLoginData.getUsername())));
