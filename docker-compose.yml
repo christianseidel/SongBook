@@ -1,0 +1,30 @@
+services:
+  songbook:
+    build: .
+    container_name: songbook
+    image: songbook
+    restart: unless-stopped
+
+    environment:
+      TZ: "Europe/Berlin"
+      APP_JWT_SECRET: ${APP_JWT_SECRET}
+      MONGODB_URI: ${MONGODB_URI}
+      PORT: ${PORT}
+      NODE_ENV: production
+      LOG_DIRECTORY: /app/logs/
+
+    networks:
+      - startseite
+
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.songbook.rule=Host(`songbook.parameter5.de`)"
+      - "traefik.http.routers.songbook.entrypoints=websecure"
+      - "traefik.http.routers.songbook.tls=true"
+      - "traefik.http.routers.songbook.tls.certresolver=lets-encrypt"
+      - "traefik.http.services.songbook.loadbalancer.server.port=3000"
+
+networks:
+  startseite:
+    name: startseite
+    external: true
