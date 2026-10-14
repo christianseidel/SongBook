@@ -18,6 +18,7 @@ services:
 
     labels:
       - "traefik.enable=true"
+      - "traefik.docker.network=startseite"
       - "traefik.http.routers.songbook.rule=Host(`songbook.parameter5.de`)"
       - "traefik.http.routers.songbook.entrypoints=websecure"
       - "traefik.http.routers.songbook.tls=true"
