@@ -30,7 +30,7 @@ function References(props: Props) {
 
     useEffect(() => {
         if (localStorage.getItem('jwt')) {
-            fetch(`${import.meta.env.VITE_BASE_URL}/api/collections/`, {
+            fetch(`${import.meta.env.VITE_BASE_URL}/api/collections`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -42,7 +42,7 @@ function References(props: Props) {
     }, [token]);
 
     const getAllReferences = () => {
-        fetch(`${import.meta.env.VITE_BASE_URL}/api/collections/`, {
+        fetch(`${import.meta.env.VITE_BASE_URL}/api/collections`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -58,7 +58,7 @@ function References(props: Props) {
     props.receiverRerenderSignal(getAllReferences)
 
     const getReferencesMatchingSearchWord = (searchString: string) => {
-        fetch(`${import.meta.env.VITE_BASE_URL}/api/collections/` + searchString, {
+        fetch(`${import.meta.env.VITE_BASE_URL}/api/collections` + searchString, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`

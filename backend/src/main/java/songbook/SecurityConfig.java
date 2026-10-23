@@ -19,7 +19,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import songbook.users.authentification.JwtAuthFilter;
 import org.springframework.security.authentication.ProviderManager;
 
-
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -40,9 +39,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(
-            DaoAuthenticationProvider authenticationProvider) {
-
+    public AuthenticationManager authenticationManager(DaoAuthenticationProvider authenticationProvider) {
         return new ProviderManager(authenticationProvider);
     }
 
@@ -50,6 +47,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
+                .authenticationProvider(authenticationProvider())
+
                 .csrf(csrf -> csrf.disable())
 
                 .cors(cors -> cors
@@ -93,8 +92,8 @@ public class SecurityConfig {
     private CorsConfigurationSource corsConfigurationSource() {
 
         CorsConfiguration configuration = new CorsConfiguration();
-
-        configuration.addAllowedOrigin("http://localhost:8080");
+        configuration.addAllowedOrigin("http://localhost:5173");
+        configuration.addAllowedOrigin("https://songbook.parameter5.de");
         configuration.addAllowedMethod(CorsConfiguration.ALL);
         configuration.addAllowedHeader(CorsConfiguration.ALL);
 

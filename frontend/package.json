@@ -9,7 +9,7 @@
     "react-router-dom": "^7.18.4"
   },
   "scripts": {
-    "start": "vite",
+    "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
   },

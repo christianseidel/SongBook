@@ -29,7 +29,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             try {
                 Claims claims = jwtService.extractClaims(token);
                 setSecurityContext(claims.getSubject());
-                ;
                 filterChain.doFilter(request, response);
             } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException |
                      IllegalArgumentException e) {

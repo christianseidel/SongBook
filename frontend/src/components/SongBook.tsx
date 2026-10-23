@@ -193,7 +193,7 @@ function SongBook() {
         <div>
             <h1>
                 <img src={ukulele} alt='Ukulele' id={'ukuleleMainPage'}/>
-                My Song Book 2
+                My Song Book 2.0
 
                 <div id='dropdownUser'>
                     <button id='buttonDropdownUser' type={'button'}>user</button>
@@ -221,7 +221,7 @@ function SongBook() {
                     >
                         <h2 className={'inline'}>Songs</h2>
                         <span onClick={createItem} className={'doSomething'} id={'addANewSong'}>
-                        + add new song - ti-tim-ti-tim
+                        + add new song
                     </span>
 
                         <div id={'displaySongList'}>
