@@ -63,13 +63,16 @@ public class SecurityConfig {
 
                         .requestMatchers(
                                 HttpMethod.GET,
-                                "/index*",
+                                "/index.html",
+                                "/assets/**",
                                 "/locales/**",
                                 "/static/**",
                                 "/*.js",
+                                "/*.css",
                                 "/*.json",
                                 "/*.ico",
-                                "/*.png"
+                                "/*.png",
+                                "/*.svg"
                         ).permitAll()
 
                         .requestMatchers(HttpMethod.GET, "/").permitAll()
