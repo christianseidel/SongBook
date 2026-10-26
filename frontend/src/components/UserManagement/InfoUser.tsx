@@ -18,7 +18,7 @@ function InfoUser() {
     const [message, setMessage] = useState<message | undefined>(undefined);
 
     useEffect(() => {
-        fetch(`${process.env.REACT_APP_BASE_URL}/api/user/info/` + localStorage.getItem('username'), {
+        fetch(`${import.meta.env.VITE_BASE_URL}/api/user/info/` + localStorage.getItem('username'), {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`

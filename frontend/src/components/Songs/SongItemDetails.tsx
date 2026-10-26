@@ -134,7 +134,7 @@ function SongItemDetails(props: SongItemProps) {
         });
         unhideAllReferencesAttached(id)
             .then(() => {
-                    fetch(`${process.env.REACT_APP_BASE_URL}/api/songbook/` + id, {
+                    fetch(`${import.meta.env.VITE_BASE_URL}/api/songbook/` + id, {
                         method: 'DELETE',
                         headers: {
                             'Authorization': `Bearer ${token}`
@@ -159,7 +159,7 @@ function SongItemDetails(props: SongItemProps) {
     }
 
     const deleteSongSheetFile = (fileId: string) => {
-        fetch(`${process.env.REACT_APP_BASE_URL}/api/sheets/` + fileId, {
+        fetch(`${import.meta.env.VITE_BASE_URL}/api/sheets/` + fileId, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -178,7 +178,7 @@ function SongItemDetails(props: SongItemProps) {
     // Hence, this Promise //
     const unhideAllReferencesAttached = (songId: string) => {
         return new Promise((resolve, failure) => {
-            fetch(`${process.env.REACT_APP_BASE_URL}/api/songbook/unhideReferences/` + songId, {
+            fetch(`${import.meta.env.VITE_BASE_URL}/api/songbook/unhideReferences/` + songId, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -196,7 +196,7 @@ function SongItemDetails(props: SongItemProps) {
 
     function saveSongItem() {
         let responseStatus: number;
-        fetch(`${process.env.REACT_APP_BASE_URL}/api/songbook/` + props.song.id, {
+        fetch(`${import.meta.env.VITE_BASE_URL}/api/songbook/` + props.song.id, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -423,8 +423,8 @@ function SongItemDetails(props: SongItemProps) {
         }
     }
 
-    const downloadSongSheetFile = (id: string) => {
-        fetch(`${process.env.REACT_APP_BASE_URL}/api/sheets/download/` + id, {
+    const displaySongSheetFile = (id: string, title: string) => {
+        fetch(`${import.meta.env.VITE_BASE_URL}/api/sheets/download/` + id, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -432,11 +432,6 @@ function SongItemDetails(props: SongItemProps) {
         })
             .then((response) => {
                 if (response.status === 200) {
-
-                    // >>>>>>>>>>>>>
-                    // Hier mal mit FormData probieren !!!
-                    // >>>>>>>>>>>>>
-
                     return response.blob()
                 } else if (response.status === 404) {
                     throw Error('Unable to fetch this resource (error code: ' + response.status + ').');
@@ -446,18 +441,22 @@ function SongItemDetails(props: SongItemProps) {
             })
             .then((blob) => {
                 if (blob) {
-                    const url = window.URL.createObjectURL(blob);
+                    // // Seems, I cannot define the tab title myself
+                    // // -- it's just the title set hard in the pdf.
+                    // // The browser shows the title of the pdf. Plus the name I set here.
+                    const file = new File([blob], title, {type: blob.type})
+                    const url = window.URL.createObjectURL(file);
                     const a = document.createElement('a');
                     a.href = url;
                     document.body.appendChild(a);
-                    window.open(url, '_blank')
+                    let zoom = 90;
+                    window.open(url + "#zoom=" + zoom, "_blank");
                     window.URL.revokeObjectURL(url);
                 }
             })
             .catch(e => {
                 props.displayMsg(NewMessage.create(e.message, MessageType.RED));
             })
-
     }
 
 
@@ -640,7 +639,7 @@ function SongItemDetails(props: SongItemProps) {
                         setToggleCreateOrUpdate('create');
                     }}
                     onDeleteSongSheetFile={(fileId) => deleteSongSheetFile(fileId)}
-                    downloadSheet={(fileId) =>  downloadSongSheetFile(fileId)}
+                    displaySheet={(fileId) =>  displaySongSheetFile(fileId, props.song.title)}
                 />}
             </div>
 
@@ -678,7 +677,7 @@ function SongItemDetails(props: SongItemProps) {
                                               onClick={() => openUpdateSongSheet(index)}>
                                             &nbsp; &nbsp;&#x266b;</span> &nbsp;
                                         <span className={'songSheetName'}
-                                              onClick={() => downloadSongSheetFile(item.fileId!)}
+                                              onClick={() => displaySongSheetFile(item.fileId!, props.song.title)}
                                         >{item.filename && <span>{item.filename}</span>}
                                         </span><span className={'positionTextAfterClickableText'}></span>
                                         {item.name}

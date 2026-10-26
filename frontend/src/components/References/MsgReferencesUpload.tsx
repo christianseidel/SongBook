@@ -1,4 +1,4 @@
-import '../styles/msgRefUpload.css'
+import '../styles/msgRefUpload.css';
 import {useEffect} from "react";
 import {UploadResult} from "./modelsReference";
 

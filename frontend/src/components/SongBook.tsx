@@ -34,7 +34,7 @@ function SongBook() {
         if (!localStorage.getItem('jwt')) {
             nav('/users/login')
         } else {
-            fetch(`${process.env.REACT_APP_BASE_URL}/api/songbook`, {
+            fetch(`${import.meta.env.VITE_BASE_URL}/api/songbook`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -57,7 +57,7 @@ function SongBook() {
     })
 
     function displaySongChosen(id: string) {
-        fetch(`${process.env.REACT_APP_BASE_URL}/api/songbook/` + id, {
+        fetch(`${import.meta.env.VITE_BASE_URL}/api/songbook/` + id, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -84,7 +84,7 @@ function SongBook() {
         )}
 
     function getAllSongs(clearSong: boolean) {
-        fetch(`${process.env.REACT_APP_BASE_URL}/api/songbook`, {
+        fetch(`${import.meta.env.VITE_BASE_URL}/api/songbook`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -193,7 +193,7 @@ function SongBook() {
         <div>
             <h1>
                 <img src={ukulele} alt='Ukulele' id={'ukuleleMainPage'}/>
-                My Song Book
+                My Song Book 2.0
 
                 <div id='dropdownUser'>
                     <button id='buttonDropdownUser' type={'button'}>user</button>

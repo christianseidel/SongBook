@@ -19,7 +19,7 @@ function EditSongTitle(props: SongItemProps) {
 
     const doEditSong = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        fetch(`${process.env.REACT_APP_BASE_URL}/api/songbook/` + props.song.id, {
+        fetch(`${import.meta.env.VITE_BASE_URL}/api/songbook/` + props.song.id, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

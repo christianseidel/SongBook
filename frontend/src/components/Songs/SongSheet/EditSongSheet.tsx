@@ -16,7 +16,7 @@ interface SongSheetProps {
     onCancel: () => void;
     onClear: () => void;
     onDeleteSongSheetFile: (fileId: string) => void;
-    downloadSheet: (fileId: string) => void;
+    displaySheet: (fileId: string) => void;
 }
 
 function EditSongSheet(props: SongSheetProps) {
@@ -68,7 +68,7 @@ function EditSongSheet(props: SongSheetProps) {
                     const formData = new FormData();
                     formData.append('file', files[0]);
                     let responseStatus = 0;
-                    fetch(`${process.env.REACT_APP_BASE_URL}/api/sheets/upload/`, {
+                    fetch(`${import.meta.env.VITE_BASE_URL}/api/sheets/upload/`, {
                         method: 'POST',
                         headers: {
                             'Authorization': `Bearer ${token}`
@@ -227,7 +227,7 @@ function EditSongSheet(props: SongSheetProps) {
                                onChange={event => uploadSongSheet(event.target.files)}/>
                     </form>
                 : <span id={'filenameContainer'}>
-                    <span id={'filename'} className={'coloredSongSheetLink'} onClick={() => props.downloadSheet(fileId)}>
+                    <span id={'filename'} className={'coloredSongSheetLink'} onClick={() => props.displaySheet(fileId)}>
                     {filename}</span>
                     <button onClick={doDiscardSongSheetFile} id={'buttonDiscardSongSheetFile'}
                         >&#9986; discard</button>

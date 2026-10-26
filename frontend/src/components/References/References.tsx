@@ -30,7 +30,7 @@ function References(props: Props) {
 
     useEffect(() => {
         if (localStorage.getItem('jwt')) {
-            fetch(`${process.env.REACT_APP_BASE_URL}/api/collections/`, {
+            fetch(`${import.meta.env.VITE_BASE_URL}/api/collections`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -42,7 +42,7 @@ function References(props: Props) {
     }, [token]);
 
     const getAllReferences = () => {
-        fetch(`${process.env.REACT_APP_BASE_URL}/api/collections/`, {
+        fetch(`${import.meta.env.VITE_BASE_URL}/api/collections`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -58,7 +58,7 @@ function References(props: Props) {
     props.receiverRerenderSignal(getAllReferences)
 
     const getReferencesMatchingSearchWord = (searchString: string) => {
-        fetch(`${process.env.REACT_APP_BASE_URL}/api/collections/` + searchString, {
+        fetch(`${import.meta.env.VITE_BASE_URL}/api/collections` + searchString, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -80,7 +80,7 @@ function References(props: Props) {
     }
 
     const editItem = (id: string) => {
-        fetch(`${process.env.REACT_APP_BASE_URL}/api/collections/edit/` + id, {
+        fetch(`${import.meta.env.VITE_BASE_URL}/api/collections/edit/` + id, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -111,7 +111,7 @@ function References(props: Props) {
             const formData = new FormData();
             formData.append('file', files[0]);
             filename = files[0].name
-            fetch(`${process.env.REACT_APP_BASE_URL}/api/collections/upload/`, {
+            fetch(`${import.meta.env.VITE_BASE_URL}/api/collections/upload/`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,

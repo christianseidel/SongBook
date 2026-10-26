@@ -1,11 +1,13 @@
 package songbook.songsheets;
 
-
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import songbook.songsheets.models.SongSheetFile;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Objects;
 
@@ -21,7 +23,7 @@ public class SongSheetStorageService {
     public SongSheetFile saveSongSheetFile(MultipartFile file) throws RuntimeException, IOException {
         // check maximum maximum file size isn't exceeded
         if (file.getSize() > 8_000_000) {
-            throw new RuntimeException("The size of your file exceeds 8 MB!");
+            throw new RuntimeException("The size of your file exceeds 8 MB.");
         }
         String name = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
 
@@ -44,10 +46,44 @@ public class SongSheetStorageService {
             }
         }
         SongSheetFile songSheetFile = new SongSheetFile();
+        String contentType = file.getContentType();
+
+        byte[] fileBytes = file.getBytes();
+
+        if ("application/pdf".equals(contentType)) {
+            fileBytes = configurePDF(file);
+        }
+
+        songSheetFile.setFile(fileBytes);
+
+        songSheetFile.setContentType(contentType);
         songSheetFile.setFilename(name);
-        songSheetFile.setContentType(file.getContentType());
-        songSheetFile.setFile(file.getBytes());
         return songSheetRepository.save(songSheetFile);
+    }
+
+    public byte[] configurePDF(MultipartFile file) throws IOException {
+
+        PDDocument document = PDDocument.load(file.getBytes());
+
+        try {
+
+            // get document information
+            PDDocumentInformation info = document.getDocumentInformation();
+
+            // set title of the PDF document
+            String title = "lala";
+            info.setTitle(title);
+
+
+            // save the modified PDF into memory
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            document.save(outputStream);
+
+            return outputStream.toByteArray();
+
+        } finally {
+            document.close();
+        }
     }
 
     public SongSheetFile retrieveSongSheetFile(String id) throws RuntimeException {
