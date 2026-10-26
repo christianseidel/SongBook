@@ -10,8 +10,8 @@ COPY . .
 RUN chmod +x mvnw \
   && ./mvnw -B package
 
-# Runtime stage: Java 17 only
-FROM eclipse-temurin:17-jre
+# Runtime stage: Java 22
+FROM eclipse-temurin:22-jre
 
 WORKDIR /app
 
