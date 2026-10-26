@@ -7,8 +7,8 @@ WORKDIR /app
 COPY . .
 
 # Make Maven Wrapper executable and build the application
-RUN mvn -B package
-
+RUN chmod +x mvnw \
+&& ./mvnw -B package
 
 # Runtime stage: Java 17 only
 FROM eclipse-temurin:17-jre
