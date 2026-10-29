@@ -79,7 +79,7 @@
                 <version>2.0.2</version>
                 <configuration>
                     <nodeVersion>v24.21.0</nodeVersion>
-                    <npmVersion>11.9.0</npmVersion>
+                    <npmVersion>11.12.1</npmVersion>
                     <workingDirectory>${project.parent.basedir}/frontend</workingDirectory>
                 </configuration>
                 <executions>
@@ -91,11 +91,14 @@
                         </goals>
                     </execution>
                     <execution>
-                        <id>npm install</id>
+                        <id>npm ci</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>npm</goal>
                         </goals>
+                        <configuration>
+                            <arguments>ci</arguments>
+                        </configuration>
                     </execution>
                     <execution>
                         <id>npm run build</id>
